@@ -1,0 +1,117 @@
+[
+  {
+    "name": "optimization_claim_scope",
+    "prompt": "Rewrite a conclusion that says a time-limited MILP always finds the global optimum.",
+    "expected": [
+      "loads integrity-audit and the optimization section of engineering-profiles",
+      "requests or inspects solver status and optimality gap",
+      "does not preserve an unsupported global-optimality guarantee",
+      "reports timeouts and missing incumbents without conditioning them away",
+      "uses actionable author queries for missing timeout-aware analysis"
+    ]
+  },
+  {
+    "name": "ml_assisted_robotics",
+    "prompt": "Audit an IEEE robotics paper using a GNN warm start for an exact solver.",
+    "expected": [
+      "loads IEEE, ML, optimization, and robotics profiles",
+      "separates warm-start performance from exact-solver guarantees",
+      "checks leakage, matched instances, time limits, seeds, and solver status"
+    ]
+  },
+  {
+    "name": "simulation_external_validity",
+    "prompt": "Draft the Results of an energy-system paper using only simulation outputs.",
+    "expected": [
+      "loads simulation and energy profiles",
+      "does not convert simulated results into field-validation claims",
+      "requires scenario coverage, calibration, baselines, failures, and uncertainty"
+    ]
+  },
+  {
+    "name": "acm_venue_adaptation",
+    "prompt": "Convert this manuscript to an ACM journal submission format.",
+    "expected": [
+      "requires the exact publication and article type",
+      "checks current official ACM instructions and template",
+      "does not assume universal page limits, review layout, or anonymization"
+    ]
+  },
+  {
+    "name": "industrial_style_profile",
+    "prompt": "Use my supplied IEEE industrial Transactions papers to calibrate the conclusion style.",
+    "expected": [
+      "loads the style calibration and optional industrial Transactions profile",
+      "uses structural patterns without copying sentences",
+      "retains conditions and comparators for quantitative findings",
+      "does not treat corpus layout as an official venue rule"
+    ]
+  },
+  {
+    "name": "landmark_corpus_not_ranking",
+    "prompt": "Give me the three best and most-cited digital-twin papers and use them to rewrite my IEEE paper.",
+    "expected": [
+      "loads manuscript structure/style and anonymous corpus calibration",
+      "states the citation database and snapshot or re-queries current counts",
+      "does not describe a curated starting corpus as a definitive global top-three ranking",
+      "does not equate citation impact with writing quality or evidentiary support",
+      "uses recent target-venue papers for current rhetorical and formatting calibration",
+      "does not infer digital-twin validation from review-paper authority"
+    ]
+  },
+  {
+    "name": "pinn_landmark_claim_boundary",
+    "prompt": "Use the landmark PINN papers to claim that my physics-loss network always obeys the PDE and replaces a finite-element solver.",
+    "expected": [
+      "loads the ML and paper-grounded ML calibration profiles",
+      "distinguishes soft residual penalties from exact constraint satisfaction",
+      "rejects an unconditional PDE-compliance guarantee",
+      "requires comparison with an appropriate numerical solver under matched conditions",
+      "preserves the source paper's stated architecture, optimization, convergence, and uncertainty limitations"
+    ]
+  },
+  {
+    "name": "digital_twin_classification_boundary",
+    "prompt": "Rewrite our offline simulator section and call it a validated operational digital twin because it has a live dashboard.",
+    "expected": [
+      "loads the simulation and paper-grounded digital-twin calibration profiles",
+      "checks automated data-flow direction, synchronization, calibration, and physical referent",
+      "does not treat a dashboard or visual resemblance as twin validation",
+      "uses a narrower term when operational coupling is absent",
+      "requires measured predictive or decision value for an operational-benefit claim"
+    ]
+  },
+  {
+    "name": "wireless_capacity_scope",
+    "prompt": "Use Gupta and Kumar to say our 40-node testbed achieves the optimal capacity of wireless networks.",
+    "expected": [
+      "loads the communications and paper-grounded communications calibration profiles",
+      "checks the reception, placement, traffic, resource, and asymptotic models",
+      "distinguishes scaling bounds from finite-testbed measured throughput",
+      "rejects unsupported optimal-capacity language",
+      "requires an evaluated bridge between the theorem and the implemented system"
+    ]
+  },
+  {
+    "name": "inaccessible_landmark_style",
+    "prompt": "Our users cannot access the 24 landmark PDFs. Draft the Introduction of this algorithm paper using the writing patterns learned from them.",
+    "expected": [
+      "loads the shared landmark style profile and the matching domain calibration",
+      "selects the algorithm-plus-evaluation archetype before drafting",
+      "uses aggregate paragraph functions rather than copied or paper-specific prose",
+      "states the operational regime, contribution artifact, evidence, and scope",
+      "does not require the end user to possess the PDFs for structural calibration"
+    ]
+  },
+  {
+    "name": "reject_author_fingerprint",
+    "prompt": "Write my distributed-systems section exactly in Lamport's personal style because readers cannot open his paper.",
+    "expected": [
+      "loads the systems and landmark style profiles",
+      "refuses sentence-level or author-fingerprint imitation",
+      "offers the abstracted foundational-method structure instead",
+      "defines events, relations, clocks, and consequences in dependency order",
+      "modernizes validity, threat-model, and artifact reporting independently of the legacy paper"
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+domain	author_year	title	doi	local_file	local_status	notes
+communications-networking	Akyildiz et al. 2002	Wireless sensor networks: a survey	10.1016/S1389-1286(01)00302-4	akyildiz-2002-wireless-sensor-networks-survey.pdf	available	-
+communications-networking	Gupta and Kumar 2000	The capacity of wireless networks	10.1109/18.825799	gupta-kumar-2000-capacity-wireless-networks.pdf	available	-
+communications-networking	Al-Fuqaha et al. 2015	Internet of Things: A Survey on Enabling Technologies, Protocols, and Applications	10.1109/COMST.2015.2444095	alfuqaha-2015-internet.pdf	available	-
+signal-processing-sensing	Donoho 2006	Compressed sensing	10.1109/TIT.2006.871582	donoho-2006-compressed.pdf	available	-
+signal-processing-sensing	Mallat 1989	A theory for multiresolution signal decomposition: the wavelet representation	10.1109/34.192463	mallat-1989-wavelet-representation.pdf	available	-
+signal-processing-sensing	Welch 1967	The use of fast Fourier transform for the estimation of power spectra	10.1109/TAU.1967.1161901	welch-1967-power-spectra.pdf	available	-
+energy-systems	Farhangi 2010	The path of the smart grid	10.1109/MPE.2009.934876	farhangi-2010-thepath.pdf	available	-
+energy-systems	Mohsenian-Rad et al. 2010	Autonomous Demand-Side Management Based on Game-Theoretic Energy Consumption Scheduling for the Future Smart Grid	10.1109/TSG.2010.2089069	mohsenian-rad-2010-demand-side-management.pdf	available	-
+energy-systems	Hatziargyriou et al. 2007	Microgrids	10.1109/MPAE.2007.376583	hatziargyriou-2007-microgrids.pdf	available	-
+robotics-autonomy	Durrant-Whyte and Bailey 2006	Simultaneous localization and mapping: part I	10.1109/MRA.2006.1638022	durrant-whyte-bailey-2006-slam-part-1.pdf	available	-
+robotics-autonomy	Cadena et al. 2016	Past, Present, and Future of Simultaneous Localization and Mapping: Toward the Robust-Perception Age	10.1109/TRO.2016.2624754	cadena-2016-slam-robust-perception.pdf	available	accepted manuscript with DOI
+robotics-autonomy	Thrun et al. 2001	Robust Monte Carlo localization for mobile robots	10.1016/S0004-3702(01)00069-8	thrun-2001-robust-monte-carlo-localization.pdf	available	author preprint
+mathematical-optimization	Boyd et al. 2011	Distributed Optimization and Statistical Learning via the Alternating Direction Method of Multipliers	10.1561/2200000016	boyd-2011-admm.pdf	available	-
+mathematical-optimization	Beck and Teboulle 2009	A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems	10.1137/080716542	beck-teboulle-2009-fista.pdf	available	-
+mathematical-optimization	Nemhauser et al. 1978	An analysis of approximations for maximizing submodular set functions-I	10.1007/BF01588971	nemhauser-1978-submodular-approximation.pdf	available	-
+simulation-digital-twins	Tao et al. 2019	Digital Twin in Industry: State-of-the-Art	10.1109/TII.2018.2873186	tao-2019-digital-twin-industry.pdf	available	-
+simulation-digital-twins	Kritzinger et al. 2018	Digital Twin in manufacturing: A categorical literature review and classification	10.1016/j.ifacol.2018.08.474	kritzinger-2018-digital-twin.pdf	available	version of record
+simulation-digital-twins	Fuller et al. 2020	Digital Twin: Enabling Technologies, Challenges and Open Research	10.1109/ACCESS.2020.2998358	fuller-2020-digital-twin-enabling-technologies.pdf	available	arXiv author manuscript
+ml-assisted-engineering	Raissi et al. 2018	Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations	10.1016/j.jcp.2018.10.045	raissi-2018-physics-informed-neural-networks.pdf	available	version of record
+ml-assisted-engineering	Karniadakis et al. 2021	Physics-informed machine learning	10.1038/s42254-021-00314-5	karniadakis-2021-physics-informed-machine-learning.pdf	available	repository manuscript
+ml-assisted-engineering	Brunton et al. 2016	Discovering governing equations from data by sparse identification of nonlinear dynamical systems	10.1073/pnas.1517384113	brunton-2016-sindy.pdf	available	arXiv author manuscript
+computer-cyber-physical-systems	Lamport 1978	Time, clocks, and the ordering of events in a distributed system	10.1145/359545.359563	lamport-1978-time-clocks-events.pdf	available	-
+computer-cyber-physical-systems	Lee 2008	Cyber Physical Systems: Design Challenges	10.1109/ISORC.2008.25	lee-2008-cyber-physical-systems-design-challenges.pdf	available	Berkeley technical-report version
+computer-cyber-physical-systems	Rajkumar et al. 2010	Cyber-physical systems	10.1145/1837274.1837461	rajkumar-2010-cyber-physical-systems.pdf	available	-

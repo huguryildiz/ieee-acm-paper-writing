@@ -1,0 +1,10 @@
+.DS_Store
+tmp/
+__pycache__/
+*.pyc
+assets/hero.png
+
+# Local paper corpus. Keep only the directory skeleton in Git.
+docs/papers/library/**
+!docs/papers/library/**/
+!docs/papers/library/**/.gitkeep

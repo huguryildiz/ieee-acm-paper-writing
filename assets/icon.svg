@@ -1,0 +1,92 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="IEEE / ACM Paper Writing emblem">
+  <title>IEEE / ACM Paper Writing</title>
+  <defs>
+    <!-- Medallion body -->
+    <radialGradient id="disc" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#1b2333"/>
+      <stop offset="55%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#080b12"/>
+    </radialGradient>
+    <!-- Gold foil -->
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f6e7b4"/>
+      <stop offset="35%" stop-color="#e8c86a"/>
+      <stop offset="70%" stop-color="#c69a3f"/>
+      <stop offset="100%" stop-color="#9b7526"/>
+    </linearGradient>
+    <linearGradient id="goldSoft" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4e3a8"/>
+      <stop offset="100%" stop-color="#bd8f38"/>
+    </linearGradient>
+    <!-- Parchment page -->
+    <linearGradient id="page" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbf7ec"/>
+      <stop offset="100%" stop-color="#e7dcc4"/>
+    </linearGradient>
+    <linearGradient id="pageEdge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d9cbab"/>
+      <stop offset="100%" stop-color="#b9a578"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Hexagonal medallion -->
+  <g filter="url(#soft)">
+    <polygon points="256,28 430,128 430,384 256,484 82,384 82,128"
+             fill="url(#disc)" stroke="url(#gold)" stroke-width="10"/>
+    <polygon points="256,58 404,143 404,369 256,454 108,369 108,143"
+             fill="none" stroke="url(#goldSoft)" stroke-width="2" opacity="0.55"/>
+  </g>
+
+  <!-- Circuit / engineering traces -->
+  <g stroke="url(#goldSoft)" stroke-width="2.4" opacity="0.5" fill="none" stroke-linecap="round">
+    <path d="M108 210 H150 M150 210 V176 M150 176 H188"/>
+    <path d="M404 302 H362 M362 302 V336 M362 336 H324"/>
+    <path d="M132 300 H170"/>
+    <path d="M380 212 H342"/>
+  </g>
+  <g fill="url(#gold)" opacity="0.7">
+    <circle cx="188" cy="176" r="4.5"/>
+    <circle cx="324" cy="336" r="4.5"/>
+    <circle cx="132" cy="300" r="4"/>
+    <circle cx="380" cy="212" r="4"/>
+  </g>
+
+  <!-- Manuscript page -->
+  <g transform="rotate(-7 256 250)">
+    <rect x="176" y="118" width="160" height="204" rx="10" fill="url(#pageEdge)"/>
+    <rect x="168" y="110" width="160" height="204" rx="10" fill="url(#page)" stroke="#c9b98f" stroke-width="1.5"/>
+    <!-- Title bar -->
+    <rect x="188" y="132" width="120" height="9" rx="4.5" fill="#2b3446"/>
+    <rect x="188" y="150" width="86" height="6" rx="3" fill="#8a93a6"/>
+    <!-- Sigma — the mathematical core -->
+    <path d="M250 178 H206 L232 200 L206 224 H252"
+          fill="none" stroke="#b6892f" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- Body text lines -->
+    <g fill="#98a1b3">
+      <rect x="262" y="180" width="46" height="6" rx="3"/>
+      <rect x="262" y="196" width="40" height="6" rx="3"/>
+      <rect x="262" y="212" width="46" height="6" rx="3"/>
+      <rect x="188" y="238" width="120" height="6" rx="3"/>
+      <rect x="188" y="254" width="120" height="6" rx="3"/>
+      <rect x="188" y="270" width="92" height="6" rx="3"/>
+    </g>
+  </g>
+
+  <!-- Integrity seal: verified claim chain -->
+  <g transform="translate(300 300)">
+    <circle r="46" fill="#0d1117" stroke="url(#gold)" stroke-width="6"/>
+    <circle r="34" fill="none" stroke="url(#goldSoft)" stroke-width="1.6" opacity="0.6"/>
+    <path d="M-19 2 l12 13 22 -27" fill="none" stroke="url(#gold)"
+          stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Crest banner -->
+  <g>
+    <path d="M150 420 h212 l-22 34 h-168 z" fill="url(#gold)"/>
+    <text x="256" y="444" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
+          font-size="22" font-weight="700" letter-spacing="4" fill="#1a1206">IEEE · ACM</text>
+  </g>
+</svg>
