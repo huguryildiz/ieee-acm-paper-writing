@@ -139,6 +139,31 @@ into the skills directory used by your agent environment.
   renderer fixture is generated from the JSON; the live showcase is maintained separately. Neither
   is behavioral evidence about an agent run.
 
+### Section-audit map gallery
+
+The same synthetic fixture makes the three-concern separation inspectable: scientific support,
+method/domain reporting, and verified venue style remain distinct while every numbered finding
+links its source text to a bounded response.
+
+<a href="https://ieee-acm-paper-writing.vercel.app/examples/section-audit-map.html">
+  <img src="assets/screenshots/section-audit-map-scientific-support.png" alt="Interactive section-audit map focused on an unscoped optimality claim in the scientific-support layer" width="100%">
+</a>
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="assets/screenshots/section-audit-map-method-reporting.png" alt="Section-audit map focused on a potentially leaking evaluation split in the method and domain reporting layer" width="100%">
+    </td>
+    <td width="50%">
+      <img src="assets/screenshots/section-audit-map-venue-compliance.png" alt="Section-audit map focused on an IEEE figure-citation correction in the venue-compliance layer" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Method / domain reporting</strong> — split integrity and reproducibility</td>
+    <td align="center"><strong>Venue compliance</strong> — verified IEEE figure-citation style</td>
+  </tr>
+</table>
+
 ## Calibration corpus
 
 The local catalog contains 24 papers spanning the [eight supported technical
@@ -238,10 +263,6 @@ tests/                       # Evaluation-runner and validator regression tests
 vercel.json                  # Static-site build and output configuration
 ```
 
-## Citation
-
-Release metadata is provided in [`CITATION.cff`](CITATION.cff).
-
 ## License
 
-[MIT](LICENSE) © Hüseyin Uğur Yıldız
+[MIT](LICENSE) 2026 © Hüseyin Uğur Yıldız
