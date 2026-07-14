@@ -7,7 +7,10 @@
 - The MIT license text to the installable skill directory so CLI and manual copies retain the
   distribution terms.
 - Regression tests that bind evaluation verdicts to the current case definition and agent-output
-  artifact, plus HTML-anchor and reference-style link checks.
+  artifact, plus HTML-anchor, reference-style link, path-containment, strict-frontmatter, and
+  calibration-identity checks.
+- Three behavioral cases that exercise embedded-directive handling in drafting, rewriting, and
+  venue-adaptation modes.
 - "IEEE editorial style essentials" subsection in `references/venue-guidance.md`, summarizing the
   IEEE Editorial Style Manual for Authors (spelling, acronym definition, reference numbering,
   figure/table citation, Acknowledgment placement, number and date formats, inclusive language),
@@ -21,7 +24,8 @@
   `references/manuscript-structure-style.md`, distilling IEEE Publication Operations' *Editing
   Mathematics* guide: equation-as-sentence punctuation, in-line math constraints, display-equation
   break/alignment rules, consecutive numbering, Roman-function and boldface conventions, and
-  near-equality symbol semantics (≈, ≃, ∼, ≅), with venue templates taking precedence.
+  context-sensitive near-equality symbol handling, with manuscript definitions and venue templates
+  taking precedence over stylistic normalization.
 - "ACM reference format essentials" subsection in `references/venue-guidance.md`, distilling ACM's
   master submission template (numeric vs. author-year citation modes, reference-list mechanics,
   schematic formats for the common source types, DOI resolver form, acknowledgment/history-date
@@ -44,26 +48,43 @@
 - `examples/section-audit-example.md`, a live-test fixture: a synthetic flawed Results and
   Conclusion excerpt (ML-warm-started MILP microgrid dispatch) with an 11-item planted-flaw
   answer key spanning all three concern layers, expected must/must-never behavior, a run
-  protocol, and the audit plus evidence-scoped rewrite produced verbatim by a live skill run
-  (11/11 flaws caught, no false positives); linked from the SKILL.md router and the README.
+  protocol, and an illustrative evidence-scoped rewrite; linked from the SKILL.md router and the
+  README without presenting the unretained live session as behavioral evidence.
 
 ### Changed
 
-- Prepared the citation metadata for v0.1.1 and clarified that calibration modifies a drafting,
-  audit, outline, or venue-adaptation mode rather than defining a ninth output mode.
+- Kept citation metadata aligned with the latest published tag, v0.1.0, while the next release
+  remains under Unreleased; clarified that calibration modifies a drafting, audit, outline, or
+  venue-adaptation mode rather than defining a ninth output mode.
 - Rephrased public integrity statements as behavioral requirements instead of unconditional model
   guarantees.
 - Regenerated the agent interface prompt to keep scientific-evidence audit separate from optional
   exposition calibration.
+- Reclassified corpus calibration as de-identified rather than guaranteed anonymous and removed
+  several single-source-like exposition sequences.
+- Recast publisher-level venue summaries as screening heuristics that require exact-venue
+  verification before they become compliance findings.
+- Expanded skill routing to evidence-grounded peer-review reports while continuing to exclude
+  unsupported editorial accept/reject advocacy.
 
 ### Fixed
 
 - Evaluation-runner regression tests now derive the expected case count from `cases.json` instead
   of a hardcoded 15, which had broken CI when the three reference-format cases were added.
+- Evaluation case names are restricted to safe slugs, every output path is contained within the
+  selected output directory, and failed collections preserve prior response artifacts.
 - Evaluation reports now reject missing, replaced, or prompt-stale agent outputs; manual verdicts
   are preserved only while both case and output hashes match.
-- The repository validator now aligns both evaluation schemas, rejects duplicate frontmatter keys,
-  validates the generated agent interface, and checks HTML, reference-style, and anchored links.
+- The repository validator now aligns both evaluation schemas, strictly validates its supported
+  flat frontmatter subset, enforces direct calibration-identity exclusions, validates the generated
+  agent interface, and checks HTML, reference-style, and anchored links.
+- The digital-twin case now recognizes its supplied weekly manual cadence and rejects the stronger
+  digital-shadow label; the inaccessible-corpus case now supplies the method and failure-regime
+  evidence its passing criteria require.
+- Embedded directives now have an external `Integrity findings` output channel in every mode,
+  overriding manuscript-only output restrictions.
+- Near-equality symbols retain their manuscript- and domain-defined meanings instead of being
+  normalized to one universal mapping.
 - Routing expectations now follow the router's mandatory references, and the ACM venue case carries
   the manuscript excerpt it asks the agent to adapt.
 - The installable calibration reference no longer discloses corpus-specific counts.

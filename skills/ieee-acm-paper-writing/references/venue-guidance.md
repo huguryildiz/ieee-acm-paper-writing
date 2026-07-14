@@ -48,9 +48,10 @@ what content can move to permitted supplementary material without hiding load-be
 
 ### IEEE editorial style essentials
 
-The following defaults derive from the IEEE Editorial Style Manual for Authors. Apply them when
-adapting or auditing an IEEE manuscript; the current edition of the manual and venue-specific
-author instructions override this summary.
+The following screening heuristics derive from the IEEE Editorial Style Manual for Authors. They
+help locate items to verify; they are not compliance findings by themselves. Apply a rule only
+after confirming it in the current manual and the exact venue's author instructions. Until then,
+label it `unverified venue rule`.
 
 Text mechanics:
 
@@ -75,9 +76,10 @@ Text mechanics:
 
 Structure and apparatus:
 
-- Abstract: one paragraph of roughly 150-250 words with no citations, numbered equations, or
-  footnotes. Index terms follow as the final paragraph of the abstract, in alphabetical order,
-  first word capitalized, acronyms defined.
+- Abstract: IEEE author-facing material commonly uses a one-paragraph 150-250-word form with no
+  citations, numbered equations, or footnotes, but do not enforce that range or structure unless
+  the exact venue confirms it. Likewise, verify whether index terms are required and how they are
+  ordered before treating their form as compliance.
 - Number equations consecutively through the article. Refer to an equation in text as "in (1)";
   write out "Equation (1)" only at the start of a sentence.
 - Use one reference per number; grouping several references under one number is not permitted.
@@ -94,9 +96,9 @@ Structure and apparatus:
 
 ### IEEE reference style essentials
 
-The following defaults derive from the IEEE Reference Style Guide for Authors (IEEE Publication
-Operations). Apply them when building or auditing an IEEE reference list; the current edition of
-the guide and venue-specific author instructions override this summary.
+The following screening heuristics derive from the IEEE Reference Style Guide for Authors (IEEE
+Publication Operations). Verify the current guide and exact venue before reporting compliance or
+rewriting a disputed field; this summary does not override source metadata.
 
 In-text citations:
 
@@ -134,8 +136,9 @@ Canonical formats for common source types:
 - Conference paper (presentation only): J. K. Author, "Title of paper," presented at the Abbrev.
   Name of Conf., City, State, Country, Month and day(s), year, Paper number.
 - Proceedings paper: J. K. Author, "Title of paper," in Abbrev. Name of Conf., year,
-  pp. xxx–xxx, doi: xxx. The location is optional; every published proceedings paper has page
-  numbers; the trailing year may be dropped when it already appears in the conference title.
+  pp. xxx–xxx, doi: xxx. The location is optional. Preserve an article number or other locator when
+  the proceedings do not use page ranges; never invent pages. The trailing year may be dropped
+  when it already appears in the conference title and the current guide permits that form.
 - Book or chapter: J. K. Author, "Title of chapter," in Title of Published Book, X. Editor, Ed.,
   xth ed. City, State (U.S. only), Country: Abbrev. of Publisher, year, ch. x, sect. x,
   pp. xxx–xxx. Mark untranslated foreign publications "(in Language)" after the publisher;
@@ -205,9 +208,9 @@ Online references:
 
 ### ACM reference format essentials
 
-The following defaults derive from the ACM master submission template's "ACM Reference Format" and
-its worked reference examples. Apply them when building or auditing an ACM reference list; the
-current official template and venue-specific author instructions override this summary.
+The following screening heuristics derive from the ACM master submission template's "ACM Reference
+Format" and its worked reference examples. Verify the current official template, citation mode,
+and exact venue before reporting compliance or rewriting a disputed field.
 
 In-text citations:
 

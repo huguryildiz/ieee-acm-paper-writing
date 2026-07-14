@@ -28,14 +28,17 @@ report aggregate numbers without the denominator and the failed-case list.
 import argparse
 import hashlib
 import json
+import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 CASES = HERE / "cases.json"
 REFERENCES = HERE.parent / "skills" / "ieee-acm-paper-writing" / "references"
 SKILL_DIR = HERE.parent / "skills" / "ieee-acm-paper-writing"
+CASE_NAME_RE = re.compile(r"[a-z0-9][a-z0-9_-]*")
 
 SKILL_PREAMBLE = (
     "You have the 'ieee-acm-paper-writing' agent skill installed. Read its "
@@ -65,6 +68,10 @@ def case_problems(cases):
         if not isinstance(name, str) or not name.strip():
             problems.append(f"case[{index}]: name must be a non-empty string")
             name = f"case[{index}]"
+        elif not CASE_NAME_RE.fullmatch(name):
+            problems.append(
+                f"{name}: name must match {CASE_NAME_RE.pattern!r}"
+            )
         if name in names:
             problems.append(f"duplicate case name: {name}")
         names.add(name)
@@ -123,6 +130,15 @@ def selected(cases, only):
     return cases
 
 
+def case_output_path(outdir, name):
+    """Return a case output path contained directly within outdir."""
+    root = Path(outdir).resolve()
+    candidate = (root / f"{name}.md").resolve()
+    if candidate.parent != root:
+        raise ValueError(f"unsafe case output path for {name!r}")
+    return candidate
+
+
 def valid_verdict(value):
     return value is True or value is False or value is None
 
@@ -165,14 +181,13 @@ def skill_hash():
 
 
 def cmd_collect(args):
-    outdir = Path(args.outdir)
+    outdir = Path(args.outdir).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
     failures = []
     for case in selected(validated_cases(), args.case):
         prompt = SKILL_PREAMBLE + case["prompt"]
         print(f"collect: {case['name']} ...", flush=True)
-        output_file = outdir / f"{case['name']}.md"
-        output_file.unlink(missing_ok=True)
+        output_file = case_output_path(outdir, case["name"])
         try:
             result = subprocess.run(args.agent_cmd, shell=True, input=prompt,
                                     capture_output=True, text=True, timeout=args.timeout)
@@ -189,7 +204,17 @@ def cmd_collect(args):
             failures.append(case["name"])
             print("  error: agent returned an empty response")
             continue
-        output_file.write_text(result.stdout, encoding="utf-8")
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                    mode="w", encoding="utf-8", dir=outdir,
+                    prefix=f".{case['name']}.", suffix=".tmp", delete=False) as handle:
+                handle.write(result.stdout)
+                temporary = Path(handle.name)
+            temporary.replace(output_file)
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
     print(f"outputs in {outdir}")
     if failures:
         print(f"failed collections: {', '.join(failures)}")
@@ -207,7 +232,7 @@ def cmd_score(args):
     valid_names = {case["name"] for case in cases}
     scores = {name: entry for name, entry in scores.items() if name in valid_names}
     for case in selected(cases, args.case):
-        output_file = outdir / f"{case['name']}.md"
+        output_file = case_output_path(outdir, case["name"])
         if not output_file.exists():
             print(f"skip {case['name']}: no output file")
             scores.pop(case["name"], None)
@@ -265,7 +290,7 @@ def cmd_report(args):
             missing += 1
             print(f"MISSING   {name}")
             continue
-        output_file = Path(args.outdir) / f"{name}.md"
+        output_file = case_output_path(args.outdir, name)
         if not output_file.exists():
             missing += 1
             print(f"MISSING   {name} (agent output)")

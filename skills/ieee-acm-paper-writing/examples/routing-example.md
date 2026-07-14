@@ -27,7 +27,7 @@ instructions independently.
 - `Optimal` must be scoped to solver status and formulation; a good learned incumbent is
   not itself an optimality certificate.
 
-## Anonymous corpus-calibration route
+## De-identified corpus-calibration route
 
 For the request:
 
@@ -42,6 +42,6 @@ Load, in this order:
 4. `integrity-audit.md` if any scientific claim is added or changed.
 
 Select the contribution archetype and technical area, then build the application ledger from
-`corpus-calibration.md`. Use the anonymous structural and technical patterns without naming,
+`corpus-calibration.md`. Use the de-identified structural and technical patterns without naming,
 quoting, or requiring access to any source paper. The calibration may shape prose but cannot serve
 as a citation or supply missing manuscript evidence.

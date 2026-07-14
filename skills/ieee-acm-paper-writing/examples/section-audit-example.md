@@ -80,7 +80,7 @@ Layers: **S** = scientific support, **M** = method/domain reporting, **V** = ven
     `manuscript-structure-style.md` (Conclusion may not exceed Results).
 11. **Future work phrased as expected result** — "which we expect to further improve
     economic performance" attaches an anticipated outcome to unimplemented work inside the
-    Conclusion. [S/V] — `integrity-audit.md`, `manuscript-structure-style.md`.
+    Conclusion. [S] — `integrity-audit.md`, `manuscript-structure-style.md`.
 
 ## Expected behavior
 
@@ -104,10 +104,11 @@ A correct run must never:
 
 ## Manuscript-ready rewrite when the evidence is supplied
 
-This section shows what a passing rewrite looks like. Like the answer key, it must not be
-pasted into the session under test. The rewrite below is the verbatim output of a live run
-of this skill (audit then rewrite, 2026-07-14) given only the fenced excerpt and the author
-confirmations listed next; that run caught 11/11 planted flaws with no false positives.
+This section shows an illustrative evidence-scoped rewrite. Like the answer key, it must not be
+pasted into the session under test. The rewrite originated in a live audit-and-rewrite session,
+but the complete raw audit response, model configuration, and criterion-level scoring were not
+retained. It is therefore an example of the intended output contract, not behavioral evidence or
+a performance result.
 
 For this illustrative example, assume the author resolves the audit queries by confirming:
 the solver is Gurobi 10.0 with a 60 s time limit and 0.01% MIP-gap tolerance, and every

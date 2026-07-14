@@ -203,9 +203,10 @@ The target venue's current template and author instructions override them.
   the space is unnecessary next to a verb or operator.
 - Set vectors and matrices in boldface when the author distinguishes them; set descriptive
   (word-like) subscripts and superscripts, “e.g.,” “i.e.,” and “et al.” in Roman.
-- Keep near-equality symbols distinct: ≈ for numerical approximation, ≃ for asymptotic
-  equivalence between functions, ∼ for proportionality or order, ≅ for congruence. Do not use
-  angle brackets ⟨ ⟩ interchangeably with the inequality signs < >.
+- Preserve the manuscript's defined semantics for near-equality and relation symbols. Meanings of
+  `≈`, `≃`, `∼`, and `≅` vary across mathematical fields; do not replace one with another as a
+  stylistic normalization. Verify the local definition and technical context before proposing a
+  change. Do not use angle brackets ⟨ ⟩ interchangeably with the inequality signs < >.
 - Style theorem-class headings (Theorem, Lemma, Proposition, Definition, Hypothesis) as
   unnumbered tertiary-level heads with their own counters, and Proof as a quaternary-level
   head, unless the venue template dictates otherwise.
@@ -225,7 +226,8 @@ domain, contribution type, and length. Extract aggregate patterns rather than pr
 - caption completeness and terminology conventions;
 - qualification of claims and treatment of negative results.
 
-If users cannot access the source PDFs, apply the anonymous patterns in `corpus-calibration.md`.
+If users cannot access the source PDFs, apply the de-identified patterns in
+`corpus-calibration.md`.
 Those patterns are sufficient for structural calibration but cannot support a source attribution.
 
 ## Modernization and prohibited imitation
