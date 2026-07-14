@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Removed
+
+- The committed behavioral audit record (`evals/results/2026-07-14-behavioral-audit.md`)
+  and the `evals/results/` directory. The remaining committed behavioral evidence is the
+  historical comparison snapshot in
+  [`evals/comparisons/optimization-claim-scope.md`](evals/comparisons/optimization-claim-scope.md).
+
 ## v0.1.0 — 2026-07-14
 
 Initial public release, hardened after an independent adversarial audit of the
@@ -22,7 +31,8 @@ initial commit (`c5ee641`).
   (`references/integrity-audit.md`).
 - Structured author-query contract: missing item, blocked claim, requested
   action, consequence (`SKILL.md`).
-- Behavioral audit record: `evals/results/2026-07-14-behavioral-audit.md`.
+- Behavioral audit record: `evals/results/2026-07-14-behavioral-audit.md`
+  (removed after release; see Unreleased above).
 - `CITATION.cff`.
 
 ### Changed

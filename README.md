@@ -166,7 +166,7 @@ skills/ieee-acm-paper-writing/
 evals/
 ├── cases.json               # Schema-v2 behavioral cases
 ├── run_evals.py             # Collection, manual scoring, and reporting harness
-└── results/                 # Audit records and their stated limitations
+└── comparisons/             # Historical A/B comparison snapshot
 scripts/validate_skill.py    # Dependency-free repository validator
 tests/test_evals.py          # Evaluation-runner regression tests
 ```
