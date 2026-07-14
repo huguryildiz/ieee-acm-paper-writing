@@ -14,3 +14,5 @@ jobs:
         run: python3 scripts/validate_skill.py
       - name: Validate evaluation cases (schema v2)
         run: python3 evals/run_evals.py validate
+      - name: Run evaluation-runner regression tests
+        run: python3 -m unittest discover -s tests -v

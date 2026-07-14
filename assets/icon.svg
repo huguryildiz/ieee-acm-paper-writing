@@ -1,92 +1,108 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="IEEE / ACM Paper Writing emblem">
-  <title>IEEE / ACM Paper Writing</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">IEEE and ACM Paper Writing</title>
+  <desc id="desc">A premium navy and gold emblem showing a structured academic manuscript connected to evidence and verification nodes.</desc>
+
   <defs>
-    <!-- Medallion body -->
-    <radialGradient id="disc" cx="50%" cy="38%" r="75%">
-      <stop offset="0%" stop-color="#1b2333"/>
-      <stop offset="55%" stop-color="#111827"/>
-      <stop offset="100%" stop-color="#080b12"/>
+    <linearGradient id="navy" x1="76" y1="36" x2="430" y2="486" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#102A40"/>
+      <stop offset="0.54" stop-color="#071B2D"/>
+      <stop offset="1" stop-color="#04111D"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="214" y1="112" x2="352" y2="406" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFCF3"/>
+      <stop offset="0.64" stop-color="#F4EBD9"/>
+      <stop offset="1" stop-color="#DED0B5"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="122" y1="82" x2="396" y2="430" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF1BE"/>
+      <stop offset="0.28" stop-color="#E8C371"/>
+      <stop offset="0.7" stop-color="#BC8734"/>
+      <stop offset="1" stop-color="#7F511B"/>
+    </linearGradient>
+    <linearGradient id="ink" x1="238" y1="160" x2="325" y2="338" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#16344A"/>
+      <stop offset="1" stop-color="#071A2A"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(266 238) rotate(90) scale(224)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#23506D" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#071827" stop-opacity="0"/>
     </radialGradient>
-    <!-- Gold foil -->
-    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#f6e7b4"/>
-      <stop offset="35%" stop-color="#e8c86a"/>
-      <stop offset="70%" stop-color="#c69a3f"/>
-      <stop offset="100%" stop-color="#9b7526"/>
-    </linearGradient>
-    <linearGradient id="goldSoft" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f4e3a8"/>
-      <stop offset="100%" stop-color="#bd8f38"/>
-    </linearGradient>
-    <!-- Parchment page -->
-    <linearGradient id="page" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fbf7ec"/>
-      <stop offset="100%" stop-color="#e7dcc4"/>
-    </linearGradient>
-    <linearGradient id="pageEdge" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#d9cbab"/>
-      <stop offset="100%" stop-color="#b9a578"/>
-    </linearGradient>
-    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.45"/>
+    <filter id="shadow" x="128" y="76" width="300" height="382" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000713" flood-opacity="0.55"/>
     </filter>
+    <filter id="sealShadow" x="308" y="306" width="132" height="132" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#020A12" flood-opacity="0.65"/>
+    </filter>
+    <clipPath id="frameClip">
+      <rect x="24" y="24" width="464" height="464" rx="104"/>
+    </clipPath>
   </defs>
 
-  <!-- Hexagonal medallion -->
-  <g filter="url(#soft)">
-    <polygon points="256,28 430,128 430,384 256,484 82,384 82,128"
-             fill="url(#disc)" stroke="url(#gold)" stroke-width="10"/>
-    <polygon points="256,58 404,143 404,369 256,454 108,369 108,143"
-             fill="none" stroke="url(#goldSoft)" stroke-width="2" opacity="0.55"/>
-  </g>
-
-  <!-- Circuit / engineering traces -->
-  <g stroke="url(#goldSoft)" stroke-width="2.4" opacity="0.5" fill="none" stroke-linecap="round">
-    <path d="M108 210 H150 M150 210 V176 M150 176 H188"/>
-    <path d="M404 302 H362 M362 302 V336 M362 336 H324"/>
-    <path d="M132 300 H170"/>
-    <path d="M380 212 H342"/>
-  </g>
-  <g fill="url(#gold)" opacity="0.7">
-    <circle cx="188" cy="176" r="4.5"/>
-    <circle cx="324" cy="336" r="4.5"/>
-    <circle cx="132" cy="300" r="4"/>
-    <circle cx="380" cy="212" r="4"/>
-  </g>
-
-  <!-- Manuscript page -->
-  <g transform="rotate(-7 256 250)">
-    <rect x="176" y="118" width="160" height="204" rx="10" fill="url(#pageEdge)"/>
-    <rect x="168" y="110" width="160" height="204" rx="10" fill="url(#page)" stroke="#c9b98f" stroke-width="1.5"/>
-    <!-- Title bar -->
-    <rect x="188" y="132" width="120" height="9" rx="4.5" fill="#2b3446"/>
-    <rect x="188" y="150" width="86" height="6" rx="3" fill="#8a93a6"/>
-    <!-- Sigma — the mathematical core -->
-    <path d="M250 178 H206 L232 200 L206 224 H252"
-          fill="none" stroke="#b6892f" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
-    <!-- Body text lines -->
-    <g fill="#98a1b3">
-      <rect x="262" y="180" width="46" height="6" rx="3"/>
-      <rect x="262" y="196" width="40" height="6" rx="3"/>
-      <rect x="262" y="212" width="46" height="6" rx="3"/>
-      <rect x="188" y="238" width="120" height="6" rx="3"/>
-      <rect x="188" y="254" width="120" height="6" rx="3"/>
-      <rect x="188" y="270" width="92" height="6" rx="3"/>
+  <!-- App-icon frame -->
+  <rect x="24" y="24" width="464" height="464" rx="104" fill="url(#navy)"/>
+  <rect x="28" y="28" width="456" height="456" rx="100" stroke="url(#gold)" stroke-opacity="0.68" stroke-width="8"/>
+  <rect x="43" y="43" width="426" height="426" rx="85" stroke="#F2D58F" stroke-opacity="0.18" stroke-width="2"/>
+  <g clip-path="url(#frameClip)">
+    <circle cx="266" cy="238" r="224" fill="url(#glow)"/>
+    <g stroke="#D6A94F" stroke-opacity="0.16" stroke-width="2">
+      <path d="M-10 142H522M-10 370H522"/>
+      <path d="M142-10V522M370-10V522"/>
+      <circle cx="256" cy="256" r="184"/>
+      <circle cx="256" cy="256" r="218" stroke-dasharray="4 10"/>
     </g>
   </g>
 
-  <!-- Integrity seal: verified claim chain -->
-  <g transform="translate(300 300)">
-    <circle r="46" fill="#0d1117" stroke="url(#gold)" stroke-width="6"/>
-    <circle r="34" fill="none" stroke="url(#goldSoft)" stroke-width="1.6" opacity="0.6"/>
-    <path d="M-19 2 l12 13 22 -27" fill="none" stroke="url(#gold)"
-          stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Evidence chain -->
+  <g stroke="url(#gold)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M92 174H150L178 202"/>
+    <path d="M92 256H154"/>
+    <path d="M92 338H150L178 310"/>
+  </g>
+  <g>
+    <circle cx="92" cy="174" r="13" fill="#0B2235" stroke="url(#gold)" stroke-width="5"/>
+    <circle cx="92" cy="256" r="13" fill="#0B2235" stroke="url(#gold)" stroke-width="5"/>
+    <circle cx="92" cy="338" r="13" fill="#0B2235" stroke="url(#gold)" stroke-width="5"/>
+    <circle cx="92" cy="174" r="3.5" fill="#FFF0BC"/>
+    <circle cx="92" cy="256" r="3.5" fill="#FFF0BC"/>
+    <circle cx="92" cy="338" r="3.5" fill="#FFF0BC"/>
   </g>
 
-  <!-- Crest banner -->
-  <g>
-    <path d="M150 420 h212 l-22 34 h-168 z" fill="url(#gold)"/>
-    <text x="256" y="444" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
-          font-size="22" font-weight="700" letter-spacing="4" fill="#1a1206">IEEE · ACM</text>
+  <!-- Manuscript -->
+  <g filter="url(#shadow)">
+    <path d="M174 104H326L374 152V402C374 414.15 364.15 424 352 424H174C161.85 424 152 414.15 152 402V126C152 113.85 161.85 104 174 104Z" fill="#091827" fill-opacity="0.5"/>
+    <path d="M184 92H326L364 130V386C364 398.15 354.15 408 342 408H184C171.85 408 162 398.15 162 386V114C162 101.85 171.85 92 184 92Z" fill="url(#paper)" stroke="url(#gold)" stroke-width="6"/>
+    <path d="M326 92V120C326 125.523 330.477 130 336 130H364" fill="#E9DBC1"/>
+    <path d="M326 92V120C326 125.523 330.477 130 336 130H364" stroke="#B48234" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Editorial hierarchy -->
+  <path d="M202 152H320" stroke="url(#ink)" stroke-width="13" stroke-linecap="round"/>
+  <path d="M202 178H288" stroke="#937C5E" stroke-width="7" stroke-linecap="round"/>
+  <g fill="url(#ink)">
+    <rect x="198" y="212" width="58" height="58" rx="11"/>
+    <path d="M214 251V230H241V251H234V239L227 246L220 239V251H214Z" fill="#F7EEDC"/>
+    <rect x="272" y="212" width="56" height="7" rx="3.5"/>
+    <rect x="272" y="230" width="46" height="7" rx="3.5" opacity="0.72"/>
+    <rect x="272" y="248" width="56" height="7" rx="3.5" opacity="0.72"/>
+    <rect x="198" y="292" width="130" height="7" rx="3.5" opacity="0.86"/>
+    <rect x="198" y="312" width="130" height="7" rx="3.5" opacity="0.68"/>
+    <rect x="198" y="332" width="101" height="7" rx="3.5" opacity="0.68"/>
+    <rect x="198" y="365" width="78" height="6" rx="3" opacity="0.42"/>
+  </g>
+  <path d="M300 365H328" stroke="#B88737" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Verified-claim seal -->
+  <g filter="url(#sealShadow)">
+    <circle cx="374" cy="372" r="52" fill="#071827" stroke="#6E4719" stroke-width="10"/>
+    <circle cx="374" cy="372" r="47" fill="#0D2639" stroke="url(#gold)" stroke-width="6"/>
+    <circle cx="374" cy="372" r="35" stroke="#E2BD6B" stroke-opacity="0.52" stroke-width="2" stroke-dasharray="3 6"/>
+    <path d="M351 373L367 389L398 352" stroke="url(#gold)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Quiet IEEE / ACM signature encoded as bars, avoiding font dependencies -->
+  <g fill="#E7C678" opacity="0.72">
+    <rect x="203" y="448" width="34" height="4" rx="2"/>
+    <rect x="245" y="448" width="22" height="4" rx="2"/>
+    <rect x="275" y="448" width="34" height="4" rx="2"/>
   </g>
 </svg>

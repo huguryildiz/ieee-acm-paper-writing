@@ -1,6 +1,6 @@
 ---
 name: ieee-acm-paper-writing
-description: Draft, rewrite, compress, structure, calibrate, or audit evidence-grounded engineering manuscripts for IEEE and ACM Transactions, journals, and conferences. Use for abstracts, introductions, related work, system models, mathematical formulations, algorithms, experimental methods, results, discussions, conclusions, contribution lists, notation and claim audits, venue adaptation, or landmark-paper calibration in communications, signal processing, energy systems, robotics, optimization, simulation, ML-assisted engineering, and computer systems. Do not use for general documentation, grant proposals, marketing copy, or peer-review reports unless the user explicitly requests manuscript prose.
+description: Draft, rewrite, compress, structure, calibrate, or audit engineering manuscripts for IEEE and ACM Transactions, journals, and conferences. Use for abstracts, introductions, related work, system models, mathematical formulations, algorithms, experimental methods, results, discussions, conclusions, contribution lists, notation and claim audits, venue adaptation, or landmark-paper calibration in communications, signal processing, energy systems, robotics, optimization, simulation, ML-assisted engineering, and computer systems. Do not use for general documentation, grant proposals, marketing copy, or peer-review reports unless the user explicitly requests manuscript prose.
 ---
 
 # IEEE/ACM Engineering Paper Writing
@@ -126,7 +126,8 @@ defect to an editorial issue because the proposed prose sounds cautious.
 
 ## Adapt to a venue
 
-1. Read the target publication's current official author instructions and template.
+1. Read the target publication's current official author instructions and template. If they are
+   unreachable, do not infer their contents; mark every venue-specific rule as unverified.
 2. Record the publication name, article type, template/version if available, access date,
    length policy, review format, anonymization policy, and mandatory declarations.
 3. Apply [venue-guidance.md](references/venue-guidance.md).

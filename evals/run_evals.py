@@ -14,17 +14,12 @@ Modes
           [--case NAME]          DIR/<case>.md). CMD example:
                                  'claude -p' or 'codex exec'.
   score   --outdir DIR           Build DIR/scores.json listing every criterion.
-          [--judge-cmd CMD]      With --judge-cmd, each criterion is judged
-          [--case NAME]          automatically: the judge receives the
-                                 criterion and the agent output on stdin and
-                                 must answer PASS or FAIL as its first token.
-                                 Without it, verdicts are left null for manual
-                                 or LLM-assisted scoring.
+          [--case NAME]          Verdicts are left null for manual scoring.
   report  --outdir DIR           Aggregate scores.json: a case passes only if
           [--strict]             all must_pass are true and all must_not are
                                  false. Prints per-case results and the
                                  aggregate with its denominator. --strict exits
-                                 non-zero on any failed or unscored case.
+                                 non-zero unless every defined case passes.
 
 A single run per case is an existence check, not a statistical result; do not
 report aggregate numbers without the denominator and the failed-case list.
@@ -38,6 +33,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 CASES = HERE / "cases.json"
+REFERENCES = HERE.parent / "skills" / "ieee-acm-paper-writing" / "references"
 
 SKILL_PREAMBLE = (
     "You have the 'ieee-acm-paper-writing' agent skill installed. Read its "
@@ -49,17 +45,24 @@ SKILL_PREAMBLE = (
 
 def load_cases():
     data = json.loads(CASES.read_text(encoding="utf-8"))
-    if data.get("version") != 2:
+    if not isinstance(data, dict) or data.get("version") != 2:
         sys.exit("cases.json: expected schema version 2")
+    if not isinstance(data.get("cases"), list):
+        sys.exit("cases.json: 'cases' must be a list")
     return data["cases"]
 
 
-def cmd_validate(_args):
-    cases = load_cases()
+def case_problems(cases):
     problems = []
     names = set()
-    for case in cases:
-        name = case.get("name", "<unnamed>")
+    for index, case in enumerate(cases):
+        if not isinstance(case, dict):
+            problems.append(f"case[{index}]: must be an object")
+            continue
+        name = case.get("name")
+        if not isinstance(name, str) or not name.strip():
+            problems.append(f"case[{index}]: name must be a non-empty string")
+            name = f"case[{index}]"
         if name in names:
             problems.append(f"duplicate case name: {name}")
         names.add(name)
@@ -70,6 +73,26 @@ def cmd_validate(_args):
         for field in ("must_pass", "must_not", "expected_routing"):
             if field in case and not isinstance(case[field], list):
                 problems.append(f"{name}: {field} must be a list")
+            elif field in case and not all(
+                    isinstance(item, str) and item.strip() for item in case[field]):
+                problems.append(f"{name}: {field} entries must be non-empty strings")
+        for ref in case.get("expected_routing", []):
+            if isinstance(ref, str) and not (REFERENCES / ref).exists():
+                problems.append(f"{name}: expected_routing references missing file: {ref}")
+    return problems
+
+
+def validated_cases():
+    cases = load_cases()
+    problems = case_problems(cases)
+    if problems:
+        sys.exit("cases.json invalid:\n  - " + "\n  - ".join(problems))
+    return cases
+
+
+def cmd_validate(_args):
+    cases = load_cases()
+    problems = case_problems(cases)
     if problems:
         print(f"FAIL: {len(problems)} problem(s)")
         for p in problems:
@@ -79,7 +102,7 @@ def cmd_validate(_args):
 
 
 def cmd_list(_args):
-    for case in load_cases():
+    for case in validated_cases():
         print(f"{case['name']}: {len(case['must_pass'])} must_pass, "
               f"{len(case.get('must_not', []))} must_not")
 
@@ -93,59 +116,64 @@ def selected(cases, only):
     return cases
 
 
+def valid_verdict(value):
+    return value is True or value is False or value is None
+
+
 def cmd_collect(args):
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
-    for case in selected(load_cases(), args.case):
+    failures = []
+    for case in selected(validated_cases(), args.case):
         prompt = SKILL_PREAMBLE + case["prompt"]
         print(f"collect: {case['name']} ...", flush=True)
-        result = subprocess.run(args.agent_cmd, shell=True, input=prompt,
-                                capture_output=True, text=True, timeout=args.timeout)
-        (outdir / f"{case['name']}.md").write_text(result.stdout, encoding="utf-8")
+        output_file = outdir / f"{case['name']}.md"
+        output_file.unlink(missing_ok=True)
+        try:
+            result = subprocess.run(args.agent_cmd, shell=True, input=prompt,
+                                    capture_output=True, text=True, timeout=args.timeout)
+        except subprocess.TimeoutExpired:
+            failures.append(case["name"])
+            print(f"  error: agent timed out after {args.timeout} s")
+            continue
         if result.returncode != 0:
-            print(f"  warning: agent exited {result.returncode}; stderr head: "
+            failures.append(case["name"])
+            print(f"  error: agent exited {result.returncode}; stderr head: "
                   f"{result.stderr[:200]}")
+            continue
+        output_file.write_text(result.stdout, encoding="utf-8")
     print(f"outputs in {outdir}")
-
-
-def judge(judge_cmd, criterion, polarity, output, timeout):
-    prompt = (
-        "You are scoring one binary criterion against an agent's output. "
-        f"Criterion ({polarity}): {criterion}\n\n"
-        "Answer with exactly PASS if the criterion holds true of the output, "
-        "or FAIL if it does not. First token only.\n\n"
-        f"--- AGENT OUTPUT ---\n{output}"
-    )
-    result = subprocess.run(judge_cmd, shell=True, input=prompt,
-                            capture_output=True, text=True, timeout=timeout)
-    token = (result.stdout.strip().split() or [""])[0].upper()
-    if token in ("PASS", "FAIL"):
-        return token == "PASS"
-    return None
+    if failures:
+        print(f"failed collections: {', '.join(failures)}")
+        sys.exit(1)
 
 
 def cmd_score(args):
     outdir = Path(args.outdir)
     scores_path = outdir / "scores.json"
     scores = json.loads(scores_path.read_text()) if scores_path.exists() else {}
-    for case in selected(load_cases(), args.case):
+    cases = validated_cases()
+    valid_names = {case["name"] for case in cases}
+    scores = {name: entry for name, entry in scores.items() if name in valid_names}
+    for case in selected(cases, args.case):
         output_file = outdir / f"{case['name']}.md"
         if not output_file.exists():
             print(f"skip {case['name']}: no output file")
+            scores.pop(case["name"], None)
             continue
-        output = output_file.read_text(encoding="utf-8")
-        entry = scores.setdefault(case["name"], {"must_pass": {}, "must_not": {}})
+        old_entry = scores.get(case["name"], {})
+        entry = {"must_pass": {}, "must_not": {}}
         for field in ("must_pass", "must_not"):
+            old_verdicts = old_entry.get(field, {})
+            if not isinstance(old_verdicts, dict):
+                old_verdicts = {}
             for criterion in case.get(field, []):
-                if entry[field].get(criterion) is not None:
-                    continue
-                verdict = None
-                if args.judge_cmd:
-                    verdict = judge(args.judge_cmd, criterion, field, output, args.timeout)
-                entry[field][criterion] = verdict
+                verdict = old_verdicts.get(criterion)
+                entry[field][criterion] = verdict if valid_verdict(verdict) else None
+        scores[case["name"]] = entry
         print(f"scored: {case['name']}")
     scores_path.write_text(json.dumps(scores, indent=2), encoding="utf-8")
-    print(f"scores in {scores_path}; null verdicts need manual/judge scoring")
+    print(f"scores in {scores_path}; replace null verdicts with true or false after manual review")
 
 
 def cmd_report(args):
@@ -153,12 +181,32 @@ def cmd_report(args):
     if not scores_path.exists():
         sys.exit(f"{scores_path} not found; run score first")
     scores = json.loads(scores_path.read_text(encoding="utf-8"))
-    total = passed = unscored = 0
+    cases = validated_cases()
+    total = len(cases)
+    passed = unscored = missing = stale = 0
     failed_cases = []
-    for name, entry in scores.items():
-        verdicts_pass = list(entry.get("must_pass", {}).values())
-        verdicts_not = list(entry.get("must_not", {}).values())
-        total += 1
+    known_names = {case["name"] for case in cases}
+    for case in cases:
+        name = case["name"]
+        entry = scores.get(name)
+        if entry is None:
+            missing += 1
+            print(f"MISSING   {name}")
+            continue
+        expected = {field: set(case.get(field, [])) for field in ("must_pass", "must_not")}
+        actual = {field: entry.get(field) for field in ("must_pass", "must_not")}
+        if any(not isinstance(actual[field], dict) or set(actual[field]) != expected[field]
+               for field in actual):
+            stale += 1
+            print(f"STALE     {name}")
+            continue
+        verdicts_pass = list(actual["must_pass"].values())
+        verdicts_not = list(actual["must_not"].values())
+        if any(not valid_verdict(value)
+               for value in verdicts_pass + verdicts_not):
+            stale += 1
+            print(f"STALE     {name}")
+            continue
         if None in verdicts_pass or None in verdicts_not:
             unscored += 1
             print(f"UNSCORED  {name}")
@@ -170,11 +218,15 @@ def cmd_report(args):
         else:
             failed_cases.append(name)
             print(f"FAIL      {name}")
+    unknown = sorted(set(scores) - known_names)
+    for name in unknown:
+        print(f"UNKNOWN   {name} (not counted)")
     print(f"\naggregate: {passed}/{total} cases passed "
-          f"({unscored} unscored; rule: all must_pass true AND all must_not false)")
+          f"({len(failed_cases)} failed, {unscored} unscored, {missing} missing, "
+          f"{stale} stale; rule: all must_pass true AND all must_not false)")
     if failed_cases:
         print(f"failed: {', '.join(failed_cases)}")
-    if args.strict and (failed_cases or unscored):
+    if args.strict and passed != total:
         sys.exit(1)
 
 
@@ -191,9 +243,7 @@ def main():
     p_collect.add_argument("--timeout", type=int, default=600)
     p_score = sub.add_parser("score")
     p_score.add_argument("--outdir", required=True)
-    p_score.add_argument("--judge-cmd")
     p_score.add_argument("--case")
-    p_score.add_argument("--timeout", type=int, default=300)
     p_report = sub.add_parser("report")
     p_report.add_argument("--outdir", required=True)
     p_report.add_argument("--strict", action="store_true")
