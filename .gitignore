@@ -1,5 +1,6 @@
 .DS_Store
 .claude/
+AGENTS.md
 .impeccable.md
 tmp/
 __pycache__/
