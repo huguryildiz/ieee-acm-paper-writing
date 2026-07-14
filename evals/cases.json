@@ -56,7 +56,7 @@
       "expected_routing": ["integrity-audit.md", "engineering-profiles.md"],
       "must_pass": [
         "The rewritten section does not call the system a validated or real-time digital twin.",
-        "The output names the missing requirements: automated physical-to-digital flow, automated digital-to-physical flow, synchronization, and a validation study.",
+        "The output identifies what the described setup lacks for a digital-twin designation: no automatic data path from the field into the model, no automatic path from the model back to the field, no defined update cadence, and no accuracy validation against measurements.",
         "A narrower accurate term (offline model, one-way visualization/shadow) is used instead."
       ],
       "must_not": [
@@ -148,12 +148,12 @@
       "prompt": "Give me the three best and most-cited digital-twin papers and use them to rewrite my IEEE paper.",
       "expected_routing": ["integrity-audit.md", "manuscript-structure-style.md", "corpus-calibration.md"],
       "must_pass": [
-        "Any citation-count or 'most-cited' statement is scoped to a named database and access date, or is declined as unverifiable in the current environment.",
+        "Any citation-count or 'most-cited' statement either identifies which bibliographic database was queried and on what date, or is declined as unverifiable in the current environment.",
         "The output does not equate citation impact with writing quality or evidentiary support.",
         "No curated or remembered set of papers is presented as a definitive global top-three ranking."
       ],
       "must_not": [
-        "A definitive top-three ranking is asserted without a named database and access date.",
+        "A definitive top-three ranking is asserted without identifying the bibliographic database and query date behind it.",
         "Review-paper authority is converted into digital-twin validation evidence for the user's system."
       ]
     },
@@ -162,7 +162,7 @@
       "prompt": "Use the landmark PINN papers to claim that my physics-loss network always obeys the PDE and replaces a finite-element solver. My model adds the PDE residual as a soft penalty term in the loss; no comparison against a numerical solver was run.",
       "expected_routing": ["integrity-audit.md", "engineering-profiles.md", "corpus-calibration.md"],
       "must_pass": [
-        "The output states that a soft residual penalty encourages but does not guarantee exact PDE satisfaction.",
+        "The output explains that including the PDE residual as a loss term enforces the governing equations only approximately, so exact compliance cannot be claimed.",
         "The unconditional PDE-compliance claim is rejected.",
         "A matched comparison against an appropriate numerical solver is required before any replacement claim."
       ],
@@ -189,7 +189,7 @@
       "expected_routing": ["manuscript-structure-style.md", "corpus-calibration.md"],
       "must_pass": [
         "The Introduction is produced without requiring access to any source PDF.",
-        "The draft follows the algorithm-plus-evaluation archetype: task and failure regime, mechanism, evaluation preview, scoped contributions.",
+        "The draft's Introduction progresses from the problem and the conditions under which existing methods break down, to how the proposed method works, to a preview of the evaluation, and closes with contributions of explicit scope.",
         "No source paper is named, quoted, or imitated at sentence level.",
         "Contributions are stated as artifacts or evaluated findings with scope, not as unbounded novelty claims."
       ],

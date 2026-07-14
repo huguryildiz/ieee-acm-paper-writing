@@ -22,6 +22,7 @@ MAX_DESCRIPTION = 1024
 
 MD_FILES = [
     "README.md",
+    "CHANGELOG.md",
     "docs/papers/README.md",
     "skills/ieee-acm-paper-writing/SKILL.md",
 ]
