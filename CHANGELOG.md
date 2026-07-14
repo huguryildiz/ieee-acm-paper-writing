@@ -22,9 +22,25 @@
   Mathematics* guide: equation-as-sentence punctuation, in-line math constraints, display-equation
   break/alignment rules, consecutive numbering, Roman-function and boldface conventions, and
   near-equality symbol semantics (≈, ≃, ∼, ≅), with venue templates taking precedence.
-- Repo-side provenance digests of both source guides under `docs/guides/`
-  (`ieee-editorial-style-manual.md`, `ieee-editing-mathematics.md`), link-checked by the
-  validator; not part of the installable skill.
+- "ACM reference format essentials" subsection in `references/venue-guidance.md`, distilling ACM's
+  master submission template (numeric vs. author-year citation modes, reference-list mechanics,
+  schematic formats for the common source types, DOI resolver form, acknowledgment/history-date
+  placement, CCS/keyword/ORCID and accessibility requirements), with the current template and venue
+  instructions taking precedence; the rules digest is archived in
+  `docs/guides/acm-reference-format-guide.md`.
+- Repo-side provenance digests of the source guides under `docs/guides/`
+  (`ieee-editorial-style-manual.md`, `ieee-editing-mathematics.md`, `acm-reference-format-guide.md`),
+  link-checked by the validator; not part of the installable skill.
+- Behavioral eval cases covering both reference behaviors: `ieee_reference_format_audit` and
+  `acm_reference_format_audit` test whether the agent catches mechanical defects (en-dash citation
+  ranges, more-than-six-author truncation, "ibid.", DOI form, author-year/numeric mode mixing,
+  missing fields, acknowledgment placement); `ieee_reference_format_generate` tests whether the
+  agent produces a correct IEEE reference from raw fields (initials, author truncation, bare DOI)
+  without inventing an absent field.
+- `examples/reference-format-example.md`, a worked example spanning both directions: it audits a
+  broken IEEE reference excerpt, produces a correct reference from raw fields, shows the IEEE and
+  ACM forms side by side, and flags a genuinely missing field as an author query instead of filling
+  it; linked from the SKILL.md router.
 
 ### Changed
 

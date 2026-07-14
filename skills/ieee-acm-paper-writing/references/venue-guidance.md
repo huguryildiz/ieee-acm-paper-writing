@@ -203,6 +203,66 @@ Online references:
   identity, and never list an AI tool as an author.
 - Do not manually reproduce production metadata or rights blocks before the workflow requires them.
 
+### ACM reference format essentials
+
+The following defaults derive from the ACM master submission template's "ACM Reference Format" and
+its worked reference examples. Apply them when building or auditing an ACM reference list; the
+current official template and venue-specific author instructions override this summary.
+
+In-text citations:
+
+- Use whichever citation mode the venue's ACM style specifies: numeric brackets ("as shown in [5]")
+  or author-year ("as shown in [Harel 1978]"). Do not mix modes within one manuscript.
+- The production workflow generates the final citation labels; before that, keep numeric numbers or
+  a "primary-author last name + year" placeholder consistent with the chosen mode.
+
+Reference-list mechanics:
+
+- Order each entry as author(s), year, then title: "A. B. Author, C. D. Author, and E. F. Author.
+  Year. Title of work." Give full given names as printed, not initials, when the source provides
+  them; separate the final author with "and."
+- Put the year immediately after the author list and end the title with a period.
+- Close a reference that carries a DOI with the full resolver form (a doi.org URL) and no trailing
+  period; older ACM output uses a "DOI:" prefix — prefer the bare resolver URL.
+- Give the reference list its own "REFERENCES" heading. Place acknowledgments before the references,
+  not after. For journals and PACMs, add history dates after the references: "Received Month Year;
+  revised Month Year; accepted Month Year" (the revised date is optional).
+
+Schematic formats for common source types:
+
+- Journal or magazine article: A. B. Author and C. D. Author. Year. Title of article. Abbrev.
+  Journal Name vol, no (Month Year), page–page. DOI resolver URL. Use "Article N" with a page
+  count ("Article 5 (April 2007), 50 pages") when the venue assigns article numbers, and "13–es"
+  for an electronic supplement page.
+- Proceedings paper: A. B. Author and C. D. Author. Year. Title of paper. In Proceedings of the
+  Full Conference Name (Acronym 'YY). Publisher, City, State, Country, page–page. DOI resolver URL.
+  Spell the publisher as the venue prints it ("Association for Computing Machinery, New York, NY,
+  USA"; "ACM, New York"; "USENIX Association, Berkeley, CA"); use "Article N, M pages" when the
+  proceedings paginate by article.
+- Book: A. B. Author. Year. Title of Book (Nth ed.). Publisher, City, State.
+- Edited book or series volume: A. B. Editor (Ed.). Year. Title of Book (Nth ed.). Series Name,
+  Vol. N. Publisher, City. DOI resolver URL.
+- Technical report: A. B. Author and C. D. Author. Year. Title of Report. Technical Report No. XXX.
+  Institution, City, State.
+- Ph.D. dissertation: A. B. Author. Year. Title. Ph.D. Dissertation. University, City, State.
+  Add "UMI Order Number: XXX" when supplied.
+- Master's thesis: A. B. Author. Year. Title. Master's thesis. University, City, Country.
+- Website or online reference: A. B. Author. Year. Title. Retrieved Month day, year from URL. For a
+  corporate or undated source, give the author and "Retrieved from URL."
+- Software: A. B. Author or Team. Year. Name of Software. Publisher or Foundation, City, Country.
+  URL.
+- Dataset: A. B. Author and C. D. Author. Year. Title of Dataset. Retrieved Month day, year from
+  URL, or close with a DOI when one exists.
+- Patent: A. B. Author. Year. Title. (Month Year). Patent No. XXX, Filed date, Issued date.
+- Video: A. B. Author. Year. Title. Video. In Venue (dates). Publisher, City, page. DOI resolver
+  URL — or "Video. (date). Retrieved Month day, year from URL" for online video.
+- Preprint: A. B. Author. Year. Title. arXiv:XXXX.XXXXX. Retrieved from the arXiv abstract URL.
+
+Beyond the reference list, an ACM submission also needs CCS concepts drawn from the ACM Computing
+Classification System, author-supplied keywords, and — for accepted articles — an ORCID iD per
+author. Present tables and figures through native table markup and figure descriptions (alt text),
+never as images that assistive technology cannot read.
+
 When adapting LaTeX, preserve semantic structure and use the official class commands rather than
 visual formatting hacks. Confirm that anonymization does not leak through PDF metadata, artifact
 URLs, acknowledgments, or repository history where the venue requires blind review.
