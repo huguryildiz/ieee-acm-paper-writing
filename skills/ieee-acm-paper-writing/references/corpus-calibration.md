@@ -21,8 +21,8 @@ quotations, or citation counts.
 
 ## Evidence and transfer boundary
 
-The calibration source comprises 24 engineering papers distributed across eight technical areas
-and multiple contribution types: foundational theory, algorithm-plus-evaluation, survey/tutorial,
+The calibration source comprises engineering papers distributed across multiple technical areas
+and contribution types, including foundational theory, algorithm-plus-evaluation, survey/tutorial,
 vision/position, and methods reference. The extracted patterns cover openings, model and method
 presentation, guarantee placement, evaluation structure, conclusions, limitations, and display
 roles. They are aggregate derivative guidance, not source evidence.

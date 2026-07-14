@@ -9,6 +9,7 @@ calibration. Official venue requirements override these functional contracts.
 - Section contracts
 - Paragraph and prose controls
 - Equations, algorithms, figures, and tables
+- Mathematical notation and equation editing
 - Reference-corpus calibration
 - Modernization and prohibited imitation
 
@@ -60,7 +61,9 @@ Use paragraphs as argument units:
 4. identify the closest unresolved gap by technical axis;
 5. state contributions as artifacts, results, or evaluated findings;
 6. preview evidence and scope;
-7. add a paper map only when it improves navigation.
+7. add a paper map only when it improves navigation or the venue's convention expects one; when
+   included, use the conventional closing form (“The remainder of this paper is organized as
+   follows...”).
 
 Make each contribution falsifiable and parallel. Distinguish formulation, implementation, dataset,
 analysis, theorem, empirical result, and synthesis. Do not count one contribution at multiple
@@ -123,6 +126,12 @@ legacy exemplars did not foreground them.
 - Prefer direct technical verbs such as “defines,” “derives,” “measures,” “observes,” “indicates,”
   and “hypothesizes.”
 - Calibrate certainty to evidence. Avoid promotional forecasts and unbounded novelty language.
+- Exclude promotional vocabulary (“cutting-edge,” “powerful,” “seamless”), conversational framing
+  (“let's,” “we'll now dive into,” “as you can see”), and project-management terms (“sprint,”
+  “backlog,” “TODO”) when they describe the authors' internal workflow rather than a defined study
+  phase or technical object.
+- Prefer commas, parentheses, or separate sentences over em dashes; use an em dash only when the
+  user or the venue's own style asks for it.
 - Preserve technical meaning during compression; do not delete conditions, comparators, units, or
   uncertainty to save words.
 
@@ -136,6 +145,72 @@ legacy exemplars did not foreground them.
 - Make captions self-contained: define encodings, units, regime, aggregation, and uncertainty.
 - Avoid repeating identical data in prose, figure, and table.
 - Follow current accessibility, color, resolution, and file-format rules.
+
+## Mathematical notation and equation editing
+
+These conventions follow IEEE Publication Operations editorial practice (*Editing Mathematics*).
+The target venue's current template and author instructions override them.
+
+### Equations as grammar
+
+- Treat every equation, displayed or in-line, as part of the sentence. It carries a subject,
+  a verb (a relation such as =, ≤, ≥, ≡), and often conditions; punctuate the surrounding
+  sentence accordingly.
+- Use a comma after an introductory “i.e.,” “e.g.,” “Hence,” or “That is” before an equation.
+  Use a colon only after words such as “following” or “as follows.” Put no punctuation after a
+  form of the verb *to be*, or between a verb or preposition and its object.
+- End a displayed equation with a period when it ends the sentence; a period is the only
+  terminal punctuation IEEE style permits after an equation, including after a fraction, case
+  construction, or closing delimiter.
+- Separate an equation from its condition with a comma and a wide space, with the condition on
+  the same line (e.g., `v(t) = u(t),\quad t = 1, 2, \ldots, m.`). Separate multiple conditions
+  with semicolons. Interior punctuation inside an equation carries mathematical meaning; never
+  add, delete, or restyle it for looks.
+- Write mathematical ellipses as exactly three baseline dots enclosed by commas:
+  `i = 1, 2, \ldots, n`.
+
+### In-line mathematics
+
+- Break an in-line equation after a verb or operator, so the verb or operator stays on the
+  upper line.
+- Do not stack fractions in running text; use a solidus, negative exponent, or `exp(·)` form.
+- Give collective signs (summation, product, union, integral) side-set limits in text
+  (`\sum_{i=1}^{n}` rendered in-line, not display-style limits above and below).
+- Replace *e* raised to a lengthy superscript with the Roman function `exp[...]`.
+- Prefer fractional exponents to radical signs with long bars, e.g., write `(x + α)^{1/2}`.
+
+### Displayed-equation breaking and alignment
+
+- Break a multi-relation display at the verbs and align on them.
+- In a single-verb equation, break at operators (+, −, ×) and align the continuation to the
+  right of the verb; when the verb sits in the right half of the statement, break *before* an
+  operator and align to the left of the verb.
+- When breaking inside fences, break at an operator and align inside the left-hand fence. Keep
+  paired fences matched in size, proportional to their contents, and nested in the hierarchy
+  `{[( )]}`.
+- When breaking between two adjacent fenced groups (an implied product), insert an explicit
+  multiplication sign (× or ·) at the break.
+- Break an integral expression after the differential when possible; otherwise break at an
+  operator and align to the right of the integral sign.
+
+### Numbering, fonts, and symbol semantics
+
+- Number display equations consecutively through the article, e.g., (1)–(n); an appendix may
+  restart as (A1), (A2). Write sub-numbers as (1a), not (1-a) or (1.a), consistently.
+- Set variables in italic; set function and operator names in Roman: sin, cos, tan, exp, log,
+  ln, lim, max, min, sup, inf, arg, det, diag, tr, mod, Pr, Re, Im, erf, and similar. Insert a
+  thin space between a Roman function or differential and its argument (`\sin t`, not `\sint`);
+  the space is unnecessary next to a verb or operator.
+- Set vectors and matrices in boldface when the author distinguishes them; set descriptive
+  (word-like) subscripts and superscripts, “e.g.,” “i.e.,” and “et al.” in Roman.
+- Keep near-equality symbols distinct: ≈ for numerical approximation, ≃ for asymptotic
+  equivalence between functions, ∼ for proportionality or order, ≅ for congruence. Do not use
+  angle brackets ⟨ ⟩ interchangeably with the inequality signs < >.
+- Style theorem-class headings (Theorem, Lemma, Proposition, Definition, Hypothesis) as
+  unnumbered tertiary-level heads with their own counters, and Proof as a quaternary-level
+  head, unless the venue template dictates otherwise.
+- Preserve an author's algorithm environments as given — title, formatting, punctuation, and
+  placement; float an algorithm to the top of a page when cited only by number or title.
 
 ## Reference-corpus calibration
 

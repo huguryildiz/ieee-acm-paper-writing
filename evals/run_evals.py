@@ -26,6 +26,7 @@ report aggregate numbers without the denominator and the failed-case list.
 """
 
 import argparse
+import hashlib
 import json
 import subprocess
 import sys
@@ -34,6 +35,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 CASES = HERE / "cases.json"
 REFERENCES = HERE.parent / "skills" / "ieee-acm-paper-writing" / "references"
+SKILL_DIR = HERE.parent / "skills" / "ieee-acm-paper-writing"
 
 SKILL_PREAMBLE = (
     "You have the 'ieee-acm-paper-writing' agent skill installed. Read its "
@@ -66,19 +68,24 @@ def case_problems(cases):
         if name in names:
             problems.append(f"duplicate case name: {name}")
         names.add(name)
-        if not str(case.get("prompt", "")).strip():
-            problems.append(f"{name}: empty prompt")
-        if not case.get("must_pass"):
-            problems.append(f"{name}: must_pass is empty")
+        prompt = case.get("prompt")
+        if not isinstance(prompt, str) or not prompt.strip():
+            problems.append(f"{name}: prompt must be a non-empty string")
         for field in ("must_pass", "must_not", "expected_routing"):
-            if field in case and not isinstance(case[field], list):
+            if field not in case:
+                problems.append(f"{name}: {field} is required")
+            elif not isinstance(case[field], list):
                 problems.append(f"{name}: {field} must be a list")
-            elif field in case and not all(
+            elif field == "must_pass" and not case[field]:
+                problems.append(f"{name}: must_pass must be a non-empty list")
+            elif not all(
                     isinstance(item, str) and item.strip() for item in case[field]):
                 problems.append(f"{name}: {field} entries must be non-empty strings")
-        for ref in case.get("expected_routing", []):
-            if isinstance(ref, str) and not (REFERENCES / ref).exists():
-                problems.append(f"{name}: expected_routing references missing file: {ref}")
+        routing = case.get("expected_routing")
+        if isinstance(routing, list):
+            for ref in routing:
+                if isinstance(ref, str) and not (REFERENCES / ref).exists():
+                    problems.append(f"{name}: expected_routing references missing file: {ref}")
     return problems
 
 
@@ -120,6 +127,43 @@ def valid_verdict(value):
     return value is True or value is False or value is None
 
 
+def sha256_bytes(value):
+    return hashlib.sha256(value).hexdigest()
+
+
+def case_hash(case):
+    scored_contract = {
+        "name": case["name"],
+        "prompt": case["prompt"],
+        "must_pass": case["must_pass"],
+        "must_not": case["must_not"],
+    }
+    encoded = json.dumps(
+        scored_contract, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    return sha256_bytes(encoded)
+
+
+def output_hash(path):
+    return sha256_bytes(path.read_bytes())
+
+
+def skill_hash():
+    files = [SKILL_DIR / "SKILL.md", SKILL_DIR / "LICENSE",
+             SKILL_DIR / "agents" / "openai.yaml"]
+    files.extend(sorted((SKILL_DIR / "examples").glob("*.md")))
+    files.extend(sorted((SKILL_DIR / "references").glob("*.md")))
+    digest = hashlib.sha256()
+    for path in files:
+        if not path.is_file():
+            continue
+        digest.update(path.relative_to(SKILL_DIR).as_posix().encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
 def cmd_collect(args):
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
@@ -141,6 +185,10 @@ def cmd_collect(args):
             print(f"  error: agent exited {result.returncode}; stderr head: "
                   f"{result.stderr[:200]}")
             continue
+        if not result.stdout.strip():
+            failures.append(case["name"])
+            print("  error: agent returned an empty response")
+            continue
         output_file.write_text(result.stdout, encoding="utf-8")
     print(f"outputs in {outdir}")
     if failures:
@@ -152,7 +200,10 @@ def cmd_score(args):
     outdir = Path(args.outdir)
     scores_path = outdir / "scores.json"
     scores = json.loads(scores_path.read_text()) if scores_path.exists() else {}
+    if not isinstance(scores, dict):
+        sys.exit(f"{scores_path}: expected a JSON object keyed by case name")
     cases = validated_cases()
+    current_skill_hash = skill_hash()
     valid_names = {case["name"] for case in cases}
     scores = {name: entry for name, entry in scores.items() if name in valid_names}
     for case in selected(cases, args.case):
@@ -161,10 +212,28 @@ def cmd_score(args):
             print(f"skip {case['name']}: no output file")
             scores.pop(case["name"], None)
             continue
+        if not output_file.read_bytes().strip():
+            print(f"skip {case['name']}: empty output file")
+            scores.pop(case["name"], None)
+            continue
         old_entry = scores.get(case["name"], {})
-        entry = {"must_pass": {}, "must_not": {}}
+        current_case_hash = case_hash(case)
+        current_output_hash = output_hash(output_file)
+        preserve = (
+            isinstance(old_entry, dict)
+            and old_entry.get("case_hash") == current_case_hash
+            and old_entry.get("output_hash") == current_output_hash
+            and old_entry.get("skill_hash") == current_skill_hash
+        )
+        entry = {
+            "case_hash": current_case_hash,
+            "output_hash": current_output_hash,
+            "skill_hash": current_skill_hash,
+            "must_pass": {},
+            "must_not": {},
+        }
         for field in ("must_pass", "must_not"):
-            old_verdicts = old_entry.get(field, {})
+            old_verdicts = old_entry.get(field, {}) if preserve else {}
             if not isinstance(old_verdicts, dict):
                 old_verdicts = {}
             for criterion in case.get(field, []):
@@ -181,7 +250,10 @@ def cmd_report(args):
     if not scores_path.exists():
         sys.exit(f"{scores_path} not found; run score first")
     scores = json.loads(scores_path.read_text(encoding="utf-8"))
+    if not isinstance(scores, dict):
+        sys.exit(f"{scores_path}: expected a JSON object keyed by case name")
     cases = validated_cases()
+    current_skill_hash = skill_hash()
     total = len(cases)
     passed = unscored = missing = stale = 0
     failed_cases = []
@@ -192,6 +264,25 @@ def cmd_report(args):
         if entry is None:
             missing += 1
             print(f"MISSING   {name}")
+            continue
+        output_file = Path(args.outdir) / f"{name}.md"
+        if not output_file.exists():
+            missing += 1
+            print(f"MISSING   {name} (agent output)")
+            continue
+        if not output_file.read_bytes().strip():
+            missing += 1
+            print(f"MISSING   {name} (empty agent output)")
+            continue
+        if not isinstance(entry, dict):
+            stale += 1
+            print(f"STALE     {name}")
+            continue
+        if (entry.get("case_hash") != case_hash(case)
+                or entry.get("output_hash") != output_hash(output_file)
+                or entry.get("skill_hash") != current_skill_hash):
+            stale += 1
+            print(f"STALE     {name}")
             continue
         expected = {field: set(case.get(field, [])) for field in ("must_pass", "must_not")}
         actual = {field: entry.get(field) for field in ("must_pass", "must_not")}

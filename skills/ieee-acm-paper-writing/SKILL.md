@@ -14,7 +14,8 @@ meaning, notation, citations, scope conditions, and uncertainty.
 Before drafting or auditing:
 
 1. Identify the requested mode: `draft`, `rewrite`, `expand`, `compress`, `outline`,
-   `audit`, `section-audit`, or `venue-adapt`.
+   `audit`, `section-audit`, or `venue-adapt`. Treat style or landmark-paper calibration
+   as a modifier of the applicable mode, not as a separate output mode.
 2. Identify the target publication and article type. If none is supplied, apply generic
    IEEE/ACM engineering conventions and label venue-specific compliance as unverified.
 3. Identify the scientific authority: repository specifications, decision records,
@@ -72,7 +73,7 @@ Read only the files needed for the task, but read every selected file completely
 | Any scientific claim, audit, submission-readiness check, or cross-section review | [integrity-audit.md](references/integrity-audit.md) |
 | Any supported engineering method or domain | [engineering-profiles.md](references/engineering-profiles.md) |
 | Landmark- or classic-paper style calibration: writing or restructuring with the exposition patterns of foundational engineering papers, including when the user cannot access those papers | [corpus-calibration.md](references/corpus-calibration.md) |
-| IEEE or ACM venue adaptation, or an audit or submission-readiness check against a named target venue | [venue-guidance.md](references/venue-guidance.md) |
+| IEEE or ACM venue adaptation, reference-list or citation formatting, or an audit or submission-readiness check against a named target venue | [venue-guidance.md](references/venue-guidance.md) |
 
 Examples are supporting evidence for behavior, not templates to copy mechanically:
 

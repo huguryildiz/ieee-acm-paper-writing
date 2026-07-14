@@ -15,8 +15,9 @@ import json
 import re
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 
-ALLOWED_FRONTMATTER_KEYS = {"name", "description", "license", "allowed-tools", "metadata"}
+ALLOWED_FRONTMATTER_KEYS = {"name", "description"}
 MAX_NAME = 64
 MAX_DESCRIPTION = 1024
 
@@ -27,6 +28,7 @@ MD_FILES = [
     "skills/ieee-acm-paper-writing/SKILL.md",
 ]
 MD_GLOBS = [
+    "docs/guides/*.md",
     "skills/ieee-acm-paper-writing/references/*.md",
     "skills/ieee-acm-paper-writing/examples/*.md",
     "evals/comparisons/*.md",
@@ -50,7 +52,10 @@ def check_frontmatter(skill_md: Path):
     for line in m.group(1).splitlines():
         km = re.match(r"^([A-Za-z-]+):\s*(.*)$", line)
         if km:
-            keys[km.group(1)] = km.group(2).strip()
+            key = km.group(1)
+            if key in keys:
+                err(f"{skill_md}: duplicate frontmatter key '{key}'")
+            keys[key] = km.group(2).strip()
     unexpected = set(keys) - ALLOWED_FRONTMATTER_KEYS
     if unexpected:
         err(f"{skill_md}: unexpected frontmatter keys: {sorted(unexpected)}")
@@ -83,16 +88,63 @@ def iter_md_files(root: Path):
     return sorted(seen)
 
 
+def markdown_targets(text):
+    targets = []
+    patterns = (
+        re.compile(r"!?\[[^\]]*\]\(([^)\n]+)\)"),
+        re.compile(r"^\s*\[[^\]]+\]:\s*(?:<([^>]+)>|(\S+))", re.MULTILINE),
+        re.compile(r"\b(?:href|src)\s*=\s*['\"]([^'\"]+)['\"]", re.IGNORECASE),
+    )
+    for pattern in patterns:
+        for match in pattern.finditer(text):
+            target = next((group for group in match.groups() if group), None)
+            if target:
+                target = target.strip()
+                if target.startswith("<") and target.endswith(">"):
+                    target = target[1:-1]
+                elif " " in target:
+                    target = target.split()[0]
+                targets.append(target)
+    return targets
+
+
+def heading_anchors(text):
+    anchors = set()
+    counts = {}
+    for line in text.splitlines():
+        match = re.match(r"^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$", line)
+        if not match:
+            continue
+        heading = match.group(1)
+        heading = re.sub(r"!?\[([^\]]+)\]\([^)]+\)", r"\1", heading)
+        heading = re.sub(r"<[^>]+>", "", heading)
+        heading = heading.replace("`", "").lower()
+        slug = re.sub(r"[^\w\- ]", "", heading, flags=re.UNICODE)
+        slug = re.sub(r"\s+", "-", slug.strip())
+        if not slug:
+            continue
+        duplicate = counts.get(slug, 0)
+        counts[slug] = duplicate + 1
+        anchors.add(slug if duplicate == 0 else f"{slug}-{duplicate}")
+    return anchors
+
+
 def check_links(root: Path):
-    link_re = re.compile(r"\]\(([^)#\s]+)(?:#[^)\s]*)?\)|src=\"([^\"]+)\"")
     for md in iter_md_files(root):
-        for match in link_re.finditer(md.read_text(encoding="utf-8")):
-            target = match.group(1) or match.group(2)
-            if not target or target.startswith(("http://", "https://", "mailto:")):
+        text = md.read_text(encoding="utf-8")
+        for target in markdown_targets(text):
+            if not target or target.startswith(("http://", "https://", "mailto:", "//")):
                 continue
-            resolved = (md.parent / target).resolve()
+            path_text, separator, fragment = target.partition("#")
+            path_text = unquote(path_text.split("?", 1)[0])
+            resolved = md if not path_text else (md.parent / path_text).resolve()
             if not resolved.exists():
                 err(f"{md.relative_to(root)}: broken relative link -> {target}")
+                continue
+            if separator and fragment and resolved.suffix.lower() == ".md":
+                anchors = heading_anchors(resolved.read_text(encoding="utf-8"))
+                if unquote(fragment).lower() not in anchors:
+                    err(f"{md.relative_to(root)}: broken Markdown anchor -> {target}")
 
 
 def check_cases(root: Path):
@@ -129,17 +181,19 @@ def check_cases(root: Path):
         names.add(label)
         if not isinstance(case.get("prompt"), str) or not case["prompt"].strip():
             err(f"evals/cases.json: {label}: missing or empty prompt")
-        for field in ("must_pass", "must_not"):
+        for field in ("must_pass", "must_not", "expected_routing"):
             value = case.get(field)
             if not isinstance(value, list) or (field == "must_pass" and not value):
-                err(f"evals/cases.json: {label}: '{field}' must be a non-empty list"
-                    if field == "must_pass" else f"evals/cases.json: {label}: '{field}' must be a list")
+                requirement = "a non-empty list" if field == "must_pass" else "a list"
+                err(f"evals/cases.json: {label}: '{field}' must be {requirement}")
                 continue
             if not all(isinstance(item, str) and item.strip() for item in value):
                 err(f"evals/cases.json: {label}: '{field}' entries must be non-empty strings")
-        for ref in case.get("expected_routing", []):
-            if not (references_dir / ref).exists():
-                err(f"evals/cases.json: {label}: expected_routing references missing file '{ref}'")
+        routing = case.get("expected_routing")
+        if isinstance(routing, list):
+            for ref in routing:
+                if isinstance(ref, str) and not (references_dir / ref).exists():
+                    err(f"evals/cases.json: {label}: expected_routing references missing file '{ref}'")
     if not cases:
         err("evals/cases.json: no cases defined")
 
@@ -148,6 +202,30 @@ def check_agent_interface(root: Path):
     yaml_path = root / "skills" / "ieee-acm-paper-writing" / "agents" / "openai.yaml"
     if not yaml_path.exists() or not yaml_path.read_text(encoding="utf-8").strip():
         err("skills/ieee-acm-paper-writing/agents/openai.yaml: missing or empty")
+        return
+    text = yaml_path.read_text(encoding="utf-8")
+    if not re.match(r"^interface:\s*$", text.splitlines()[0]):
+        err("skills/ieee-acm-paper-writing/agents/openai.yaml: expected top-level interface mapping")
+        return
+    values = {}
+    for line in text.splitlines()[1:]:
+        match = re.match(r'^  ([a-z_]+):\s+"([^"\n]*)"\s*$', line)
+        if not match:
+            err(f"skills/ieee-acm-paper-writing/agents/openai.yaml: malformed line: {line}")
+            continue
+        key, value = match.groups()
+        if key in values:
+            err(f"skills/ieee-acm-paper-writing/agents/openai.yaml: duplicate key '{key}'")
+        values[key] = value
+    for required in ("display_name", "short_description", "default_prompt"):
+        if not values.get(required):
+            err(f"skills/ieee-acm-paper-writing/agents/openai.yaml: missing '{required}'")
+    description = values.get("short_description", "")
+    if description and not 25 <= len(description) <= 64:
+        err("skills/ieee-acm-paper-writing/agents/openai.yaml: short_description must be 25-64 characters")
+    prompt = values.get("default_prompt", "")
+    if prompt and "$ieee-acm-paper-writing" not in prompt:
+        err("skills/ieee-acm-paper-writing/agents/openai.yaml: default_prompt must mention $ieee-acm-paper-writing")
 
 
 def main():
