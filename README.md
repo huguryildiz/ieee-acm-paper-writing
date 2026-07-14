@@ -4,12 +4,12 @@
 
 # IEEE / ACM Paper Writing
 
-### Evidence-bounded manuscript drafting and audit for engineering research
+### Evidence-bounded manuscript drafting and auditing for engineering research
 
 An agent skill for turning supplied technical evidence into defensible IEEE- and ACM-style
 manuscript prose—without using polished language to conceal missing support.
 
-<b><a href="#capabilities">Capabilities</a> · <a href="#how-it-works">Design</a> · <a href="#installation">Installation</a> · <a href="#examples">Examples</a> · <a href="#evaluation-and-validation">Validation</a> · <a href="skills/ieee-acm-paper-writing/SKILL.md">SKILL.md</a></b>
+<b><a href="https://ieee-acm-paper-writing.vercel.app">Live showcase</a> · <a href="#capabilities">Capabilities</a> · <a href="#how-it-works">Design</a> · <a href="#installation">Installation</a> · <a href="#examples">Examples</a> · <a href="#evaluation-and-validation">Validation</a> · <a href="skills/ieee-acm-paper-writing/SKILL.md">SKILL.md</a></b>
 
 </div>
 
@@ -53,10 +53,20 @@ Typical tasks include:
 - calibrating exposition to aggregate patterns derived from landmark engineering papers without
   copying their language or treating those patterns as citable evidence.
 
-The included engineering profiles cover communications and networking, signal processing and
-sensing, energy systems, robotics and autonomy, mathematical optimization, simulation and digital
-twins, ML-assisted engineering, and computer and cyber-physical systems. Combined studies can load
-multiple profiles.
+### Engineering domains
+
+The eight supported technical areas are:
+
+1. communications and networking;
+2. signal processing and sensing;
+3. energy systems;
+4. robotics and autonomy;
+5. mathematical optimization;
+6. simulation and digital twins;
+7. machine learning and ML-assisted engineering; and
+8. computer systems and cyber-physical-system engineering.
+
+Combined studies can load multiple profiles.
 
 ## How it works
 
@@ -97,6 +107,10 @@ renderer performs presentation only: it cannot infer findings, rewrite claims, o
 evidence. It refuses to overwrite an existing output unless the user explicitly authorizes
 `--force`.
 
+The [hosted showcase](https://ieee-acm-paper-writing.vercel.app) presents the checked-in fixture in
+a browser and provides direct downloads of its self-contained HTML and source JSON. The site is a
+static presentation layer: it does not accept manuscript uploads or perform an audit.
+
 ## Installation
 
 Install the skill with the [`skills`](https://github.com/vercel-labs/skills) CLI:
@@ -117,17 +131,19 @@ into the skills directory used by your agent environment.
 - [Section-audit example](skills/ieee-acm-paper-writing/examples/section-audit-example.md) — a
   flawed Results and Conclusion fixture with a planted-flaw answer key and an illustrative
   evidence-scoped rewrite; it is not a retained behavioral result.
-- [Section-audit map data](skills/ieee-acm-paper-writing/examples/section-audit-map.json) and
-  [generated HTML](skills/ieee-acm-paper-writing/examples/section-audit-map.html) — the installable,
+- [Live interactive section-audit map](https://ieee-acm-paper-writing.vercel.app/examples/section-audit-map.html),
+  [source JSON](skills/ieee-acm-paper-writing/examples/section-audit-map.json), and
+  [generated HTML source](skills/ieee-acm-paper-writing/examples/section-audit-map.html) — the installable,
   self-contained visualization fixture. Each of the eleven planted flaws is tied to its triggering
   sentence, concern layer, evidentiary defect, consequence, and bounded response. The HTML is a
   presentation companion generated from the JSON, not behavioral evidence about an agent run.
 
 ## Calibration corpus
 
-The local catalog contains 24 papers spanning the eight supported technical areas. Their
-bibliographic provenance is recorded in [`docs/papers/catalog.tsv`](docs/papers/catalog.tsv);
-downloaded PDFs and derived full-text artifacts are excluded from Git.
+The local catalog contains 24 papers spanning the [eight supported technical
+areas](#engineering-domains). Their bibliographic provenance is recorded in
+[`docs/papers/catalog.tsv`](docs/papers/catalog.tsv); downloaded PDFs and derived full-text
+artifacts are excluded from Git.
 
 The installable skill contains only de-identified, derivative patterns such as contribution
 archetypes, paragraph functions, method-presentation sequences, guarantee boundaries, evaluation
@@ -214,8 +230,11 @@ evals/
 docs/
 ├── guides/                  # Repo-side provenance digests of IEEE/ACM style guides
 └── papers/catalog.tsv       # Calibration-corpus provenance (PDFs excluded from Git)
+site/                        # Dependency-free hosted showcase source
+scripts/build_site.py        # Builds the Vercel output from tracked site and example files
 scripts/validate_skill.py    # Dependency-free repository validator
 tests/                       # Evaluation-runner and validator regression tests
+vercel.json                  # Static-site build and output configuration
 ```
 
 ## Citation

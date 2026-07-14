@@ -56,6 +56,9 @@
 - A generated section-audit map fixture (`examples/section-audit-map.json` and `.html`) plus
   regression tests for deterministic output, escaping, schema validation, empty concern layers,
   self-containment, and overwrite safety.
+- A dependency-free Vercel showcase with a responsive editorial interface, embedded audit-map
+  preview, direct HTML and JSON downloads, theme switching, installation-command copying, and a
+  reproducible build that copies the tracked example artifacts without modifying them.
 
 ### Changed
 
