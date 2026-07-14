@@ -4,7 +4,7 @@
 Standard library only (no PyYAML). Checks:
   1. SKILL.md frontmatter: strict flat syntax, allowed keys, name and description limits.
   2. corpus-calibration.md excludes direct source identities and identifiers.
-  3. Relative links and images in the selected repository Markdown files resolve.
+  3. Relative links and images resolve and do not depend on untracked local files.
   4. evals/cases.json parses, uses safe case names, and matches the v2 schema.
   5. agents/openai.yaml exists and is non-empty.
 
@@ -15,6 +15,7 @@ Exit status: 0 if all checks pass, 1 otherwise.
 import csv
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 from urllib.parse import unquote
@@ -146,6 +147,24 @@ def iter_md_files(root: Path):
     return sorted(seen)
 
 
+def tracked_files(root: Path):
+    """Return resolved tracked file paths when root is a Git worktree."""
+    if not (root / ".git").exists():
+        return None
+    result = subprocess.run(
+        ["git", "-C", str(root), "ls-files", "-z"],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return None
+    return {
+        (root / relative).resolve()
+        for relative in result.stdout.split("\0")
+        if relative
+    }
+
+
 def markdown_targets(text):
     targets = []
     patterns = (
@@ -188,6 +207,7 @@ def heading_anchors(text):
 
 
 def check_links(root: Path):
+    tracked = tracked_files(root)
     for md in iter_md_files(root):
         text = md.read_text(encoding="utf-8")
         for target in markdown_targets(text):
@@ -198,6 +218,9 @@ def check_links(root: Path):
             resolved = md if not path_text else (md.parent / path_text).resolve()
             if not resolved.exists():
                 err(f"{md.relative_to(root)}: broken relative link -> {target}")
+                continue
+            if tracked is not None and resolved.is_file() and resolved not in tracked:
+                err(f"{md.relative_to(root)}: relative link targets untracked file -> {target}")
                 continue
             if separator and fragment and resolved.suffix.lower() == ".md":
                 anchors = heading_anchors(resolved.read_text(encoding="utf-8"))

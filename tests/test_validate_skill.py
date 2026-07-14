@@ -1,4 +1,5 @@
 import importlib.util
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -42,6 +43,17 @@ class LinkValidationTests(unittest.TestCase):
     def test_existing_html_anchor_passes(self):
         errors = self.check_readme('<a href="#present">Present</a>\n\n## Present\n')
         self.assertEqual(errors, [])
+
+    def test_existing_but_untracked_link_target_is_rejected_in_git_worktree(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "README.md").write_text("[local](local.md)\n", encoding="utf-8")
+            (root / "local.md").write_text("local only\n", encoding="utf-8")
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            subprocess.run(["git", "-C", str(root), "add", "README.md"], check=True)
+            VALIDATOR_MODULE.check_links(root)
+            self.assertTrue(any("targets untracked file" in error
+                                for error in VALIDATOR_MODULE.errors))
 
 
 class FrontmatterValidationTests(unittest.TestCase):
