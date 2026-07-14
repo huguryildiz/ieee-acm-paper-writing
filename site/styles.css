@@ -415,17 +415,23 @@ h1 {
 .copy-status { position: absolute; right: 20px; bottom: -30px; font-size: .72rem; font-weight: 650; }
 
 .site-footer {
-  min-height: 92px;
-  padding: 28px 20px;
+  min-height: 54px;
+  padding: 14px 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: .55em;
   border-top: 1px solid oklch(38% 0.04 248);
   background: var(--navy-deep);
-  color: oklch(76% 0.022 79);
+  color: oklch(79% 0.022 79);
+  font-family: Palatino, "Palatino Linotype", "Book Antiqua", serif;
+  font-size: .78rem;
+  font-weight: 400;
+  letter-spacing: .025em;
 }
-.site-footer a { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }
+.site-footer a { text-decoration: none; text-underline-offset: .22em; }
 .site-footer a:hover { color: var(--gold); }
+.footer-separator { color: var(--gold); }
 
 .reveal { animation: reveal 700ms var(--ease-out) both; animation-delay: var(--delay); }
 @keyframes reveal { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
@@ -470,7 +476,7 @@ h1 {
   .preview-shell iframe { height: 680px; }
   .domain-section { width: min(100% - 40px, 1320px); }
   .install { padding-inline: 20px; }
-  .site-footer { min-height: 80px; padding-inline: 20px; text-align: center; }
+  .site-footer { min-height: 50px; padding: 12px 20px; text-align: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {
