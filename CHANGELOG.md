@@ -63,9 +63,8 @@
 
 ### Changed
 
-- Kept citation metadata aligned with the latest published tag, v0.1.0, while the next release
-  remains under Unreleased; clarified that calibration modifies a drafting, audit, outline, or
-  venue-adaptation mode rather than defining a ninth output mode.
+- Removed repository-level citation metadata; clarified that calibration modifies a drafting,
+  audit, outline, or venue-adaptation mode rather than defining a ninth output mode.
 - Rephrased public integrity statements as behavioral requirements instead of unconditional model
   guarantees.
 - Regenerated the agent interface prompt to keep scientific-evidence audit separate from optional
