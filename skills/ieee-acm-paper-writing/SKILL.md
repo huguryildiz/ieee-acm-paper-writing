@@ -89,8 +89,9 @@ Examples are supporting evidence for behavior, not templates to copy mechanicall
 - [reference-formatting example](examples/reference-format-example.md)
 - [section-audit example](examples/section-audit-example.md) — audit and evidence-scoped
   rewrite end to end; also a live-test fixture with a planted-flaw answer key
-- [section-audit map data](examples/section-audit-map.json) and its generated
-  [HTML rendering](examples/section-audit-map.html) — the renderer contract and visual result
+- [section-audit map data](examples/section-audit-map.json), its deterministic
+  [renderer fixture](examples/section-audit-map-rendered.html), and the separately maintained
+  [interactive showcase](examples/section-audit-map.html) — the renderer contract and visual example
 
 ## Use the de-identified corpus calibration
 
@@ -203,9 +204,10 @@ When the modifier is present:
 5. Return the canonical text audit and the generated file path. If the environment has no writable
    file surface, return the text audit and state that the HTML artifact could not be created.
 
-Never hand-edit generated HTML; update the JSON and rerun the renderer. The integrity gate carries
-into the rendering unchanged: keep author queries outside manuscript prose, never invent missing
-numbers or insert placeholders to fill a panel, and show an unused concern layer as
+Never hand-edit renderer-generated HTML, including the deterministic fixture; update the JSON and
+rerun the renderer. The separately maintained interactive showcase is not the canonical renderer
+fixture. The integrity gate carries into the rendering unchanged: keep author queries outside
+manuscript prose, never invent missing numbers or insert placeholders to fill a panel, and show an unused concern layer as
 `0 · not exercised`, never as a pass. The generated page must remain self-contained with no
 external assets.
 

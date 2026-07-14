@@ -14,6 +14,10 @@ venv/
 htmlcov/
 .playwright-cli/
 
+# Local frontend-design workspace metadata
+.impeccable/
+PRODUCT.md
+
 # Generated eval artifacts (run_evals.py collect/score/report --outdir)
 out/
 

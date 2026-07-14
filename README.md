@@ -133,10 +133,11 @@ into the skills directory used by your agent environment.
   evidence-scoped rewrite; it is not a retained behavioral result.
 - [Live interactive section-audit map](https://ieee-acm-paper-writing.vercel.app/examples/section-audit-map.html),
   [source JSON](skills/ieee-acm-paper-writing/examples/section-audit-map.json), and
-  [generated HTML source](skills/ieee-acm-paper-writing/examples/section-audit-map.html) — the installable,
-  self-contained visualization fixture. Each of the eleven planted flaws is tied to its triggering
-  sentence, concern layer, evidentiary defect, consequence, and bounded response. The HTML is a
-  presentation companion generated from the JSON, not behavioral evidence about an agent run.
+  [deterministic renderer fixture](skills/ieee-acm-paper-writing/examples/section-audit-map-rendered.html) —
+  installable, self-contained visual artifacts. Each of the eleven planted flaws is tied to its
+  triggering sentence, concern layer, evidentiary defect, consequence, and bounded response. The
+  renderer fixture is generated from the JSON; the live showcase is maintained separately. Neither
+  is behavioral evidence about an agent run.
 
 ## Calibration corpus
 
@@ -220,7 +221,7 @@ skills/ieee-acm-paper-writing/
 ├── LICENSE                  # MIT terms shipped with the installable copy
 ├── agents/openai.yaml       # Agent interface metadata
 ├── assets/                  # Self-contained HTML audit-map template
-├── examples/                # Routing, reference-format, audit data, and generated HTML examples
+├── examples/                # Routing, audit data, interactive showcase, and renderer fixture
 ├── scripts/                 # Dependency-free audit-map renderer
 └── references/              # Integrity, style, domain, corpus, and venue guidance
 evals/

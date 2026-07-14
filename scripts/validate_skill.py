@@ -317,14 +317,14 @@ def check_audit_map_renderer(root: Path):
     skill = root / "skills" / "ieee-acm-paper-writing"
     renderer = skill / "scripts" / "render_audit_map.py"
     example_json = skill / "examples" / "section-audit-map.json"
-    example_html = skill / "examples" / "section-audit-map.html"
+    example_html = skill / "examples" / "section-audit-map-rendered.html"
     template = skill / "assets" / "section-audit-map-template.html"
     for path in (renderer, example_json, example_html, template):
         if not path.is_file():
             err(f"{path.relative_to(root)}: missing audit-map renderer artifact")
             return
     with tempfile.TemporaryDirectory() as tmp:
-        output = Path(tmp) / "section-audit-map.html"
+        output = Path(tmp) / "section-audit-map-rendered.html"
         result = subprocess.run(
             [sys.executable, str(renderer), str(example_json), "--out", str(output)],
             capture_output=True,
@@ -335,7 +335,10 @@ def check_audit_map_renderer(root: Path):
             err(f"audit-map renderer rejected its example input: {detail}")
             return
         if output.read_bytes() != example_html.read_bytes():
-            err("skills/ieee-acm-paper-writing/examples/section-audit-map.html: stale renderer output")
+            err(
+                "skills/ieee-acm-paper-writing/examples/section-audit-map-rendered.html: "
+                "stale renderer output"
+            )
 
 
 def main():
