@@ -1,0 +1,16 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate skill structure (frontmatter, links, agent interface)
+        run: python3 scripts/validate_skill.py
+      - name: Validate evaluation cases (schema v2)
+        run: python3 evals/run_evals.py validate

@@ -6,9 +6,11 @@
 
 ### An evidence-grounded manuscript agent for IEEE and ACM engineering venues
 
-It traces each claim to its supporting evidence, keeps that evidence separate from
-formatting concerns, checks the reported numbers, and adds nothing that the underlying
+It is designed to trace each claim to its supporting evidence, keep that evidence separate
+from formatting concerns, check the reported numbers, and add nothing that the underlying
 work does not establish.
+
+[![validate](https://github.com/huguryildiz/ieee-acm-paper-writing/actions/workflows/validate.yml/badge.svg)](https://github.com/huguryildiz/ieee-acm-paper-writing/actions/workflows/validate.yml)
 
 <b><a href="#design">Design</a> · <a href="#examples">Examples</a> · <a href="#installation">Installation</a> · <a href="#what-this-skill-does-not-do">Scope</a> · <a href="#validation">Validation</a> · <a href="skills/ieee-acm-paper-writing/SKILL.md">SKILL.md</a></b>
 
@@ -73,7 +75,8 @@ installable skill. PDFs are excluded from Git.
 
 ## Installation
 
-After the repository is published, install it with a compatible skill installer:
+Install it with a compatible skill installer (verified end-to-end with the
+[vercel-labs `skills` CLI](https://github.com/vercel-labs/skills)):
 
 ```bash
 npx skills add huguryildiz/ieee-acm-paper-writing --skill ieee-acm-paper-writing
@@ -103,14 +106,30 @@ and corpus-derived venue rules.
 
 ## Validation
 
-Run the validator included with the Codex skill-creator package:
+Run the vendored validator (Python 3 standard library only, no dependencies):
 
 ```bash
-python3 /path/to/skill-creator/scripts/quick_validate.py \
-  skills/ieee-acm-paper-writing
+python3 scripts/validate_skill.py
 ```
 
-Evaluation prompts and expected behaviors are in `evals/cases.json`.
+It checks the `SKILL.md` frontmatter, every relative link, the evaluation-case
+schema, and the agent interface file. The same checks run in CI on every push.
+
+Behavioral evaluation cases live in [`evals/cases.json`](evals/cases.json):
+15 self-contained adversarial prompts with binary, output-observable pass
+criteria. [`evals/run_evals.py`](evals/run_evals.py) validates, collects,
+scores, and reports them against any agent CLI:
+
+```bash
+python3 evals/run_evals.py validate
+python3 evals/run_evals.py collect --agent-cmd '<your agent CLI>' --outdir out/
+python3 evals/run_evals.py score   --outdir out/
+python3 evals/run_evals.py report  --outdir out/
+```
+
+A single-run adversarial audit from 2026-07-14 is recorded in
+[`evals/results/2026-07-14-behavioral-audit.md`](evals/results/2026-07-14-behavioral-audit.md);
+it is existence evidence for the tested cases, not a statistical validation.
 
 ## License
 
