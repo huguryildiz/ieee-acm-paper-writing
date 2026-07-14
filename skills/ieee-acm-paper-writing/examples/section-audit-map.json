@@ -2,11 +2,11 @@
   "version": 1,
   "title": "Section-Audit Map",
   "subject": "tracing planted flaws to evidence-scoped responses",
-  "eyebrow": "IEEE / ACM manuscript audit · teaching fixture",
-  "summary": "A synthetic Results and Conclusion excerpt mapped finding by finding. Each numbered entry preserves the concern layer, identifies the sentence that triggered the finding, and shows the bounded repair or author action supported by the fixture's supplied evidence.",
+  "eyebrow": "IEEE Transactions on Smart Grid · regular research paper · teaching fixture",
+  "summary": "A synthetic Results and Conclusion excerpt for a designated IEEE Transactions on Smart Grid regular research paper target, mapped finding by finding. Each numbered entry preserves the concern layer, identifies the sentence that triggered the finding, and shows the bounded repair or author action supported by the fixture's supplied evidence or verified venue guidance.",
   "source_label": "Flawed source",
   "revision_label": "Evidence-scoped response",
-  "footer": "This is a synthetic teaching fixture. Its system, numbers, citation, and venue are invented. The HTML is generated from section-audit-map.json and is a presentation companion to section-audit-example.md, not behavioral evidence about an agent run.",
+  "footer": "This is a synthetic teaching fixture. Its system, numbers, and citation are invented. The designated venue target is real; the displayed figure-citation rule was checked on 15 July 2026 against the IEEE Editorial Style Manual for Authors at https://journals.ieeeauthorcenter.ieee.org/wp-content/uploads/sites/7/IEEE-Editorial-Style-Manual-for-Authors.pdf and the IEEE PES Author's Kit. The HTML is generated from section-audit-map.json and is a presentation companion to section-audit-example.md, not behavioral evidence about an agent run.",
   "findings": [
     {
       "id": "1",
@@ -138,6 +138,18 @@
       "evidence": "Battery degradation is not implemented or evaluated in the fixture.",
       "consequence": "A planned method extension is presented with an unsupported anticipated outcome.",
       "correction": "State only that incorporating battery degradation into the formulation is left to future work.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "12",
+      "layer": "venue-compliance",
+      "severity": "Editorial",
+      "title": "Figure citation does not follow verified IEEE style",
+      "location": "V. Results · paragraph 2",
+      "source": "Figure 1 summarizes the solve-time comparison.",
+      "evidence": "The designated target is an IEEE Transactions on Smart Grid regular research paper. The IEEE Editorial Style Manual for Authors requires figure citations in running text to use the abbreviation “Fig.”, including at the start of a sentence; the applicable IEEE/PES guidance was checked on 15 July 2026.",
+      "consequence": "The sentence violates a verified venue-style rule, although the defect does not change the scientific meaning of the result.",
+      "correction": "Write: “Fig. 1 summarizes the solve-time comparison.”",
       "disposition": "rewrite"
     }
   ]

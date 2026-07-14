@@ -1,10 +1,25 @@
 # Section-Audit Example (Live Test Fixture)
 
 A self-contained flawed Results + Conclusion excerpt for exercising the `audit`,
-`section-audit`, and `rewrite` modes end to end, with an answer key of planted flaws.
+`section-audit`, and `rewrite` modes end to end, with an answer key of planted flaws. Its
+designated target is an **IEEE Transactions on Smart Grid regular research paper**.
 
-The manuscript below is entirely synthetic. Its system, numbers, citations, and venue are
-invented for this fixture; nothing in it refers to a real paper, author, or result.
+The manuscript below is entirely synthetic. Its system, numbers, and citations are invented;
+nothing in it refers to a real paper, author, or result. The venue-style rule exercised below
+was checked against the IEEE Editorial Style Manual for Authors and the IEEE PES Author's Kit
+on 15 July 2026.
+
+Venue verification ledger:
+
+- Publication: **IEEE Transactions on Smart Grid**.
+- Article type: **Regular Research Paper**.
+- Official instructions: [IEEE PES Transactions on Smart Grid](https://ieee-pes.org/publications/transactions-on-smart-grid/)
+  and [PES information for Transactions authors](https://ieee-pes.org/publications/authors-kit/information-for-authors-of-ieee-power-energy-society-transactions-papers/).
+- Style source: [IEEE Editorial Style Manual for Authors](https://journals.ieeeauthorcenter.ieee.org/wp-content/uploads/sites/7/IEEE-Editorial-Style-Manual-for-Authors.pdf),
+  updated 29 July 2024.
+- Template family: current IEEE PES Transactions/Journals template referenced by the PES
+  Author's Kit.
+- Access date: **15 July 2026**.
 
 ## Flawed source excerpt
 
@@ -19,8 +34,9 @@ model warm-starts a mixed-integer linear program for microgrid unit commitment. 
 experiments use our 34-bus test feeder. The warm-started solver finds the optimal dispatch
 in every instance, confirming that the learned initializer preserves solution quality.
 
-Our method significantly outperforms the conventional MILP baseline, reducing solve time by
-23%. In the most demanding winter-peak scenario, operating cost falls by 41%, which
+Our method significantly outperforms the conventional MILP baseline. Figure 1 summarizes the
+solve-time comparison. Our method reduces solve time by 23%. In the most demanding winter-peak
+scenario, operating cost falls by 41%, which
 demonstrates the economic value of the approach in realistic conditions. A comparable
 speedup was independently confirmed in [17], further validating our design choices.
 
@@ -81,6 +97,11 @@ Layers: **S** = scientific support, **M** = method/domain reporting, **V** = ven
 11. **Future work phrased as expected result** — "which we expect to further improve
     economic performance" attaches an anticipated outcome to unimplemented work inside the
     Conclusion. [S] — `integrity-audit.md`, `manuscript-structure-style.md`.
+12. **Figure citation does not follow verified IEEE style** — "Figure 1" is written out at
+    the start of a sentence. For the designated IEEE Transactions on Smart Grid regular research
+    paper target, the checked IEEE editorial guidance requires the abbreviated form "Fig. 1"
+    even at sentence start. [V] — `venue-guidance.md` and the current IEEE/PES author guidance
+    checked on 15 July 2026.
 
 ## Expected behavior
 
@@ -91,7 +112,9 @@ A correct run of `audit` or `section-audit` on the excerpt must:
 - keep evidence requests (baseline definition, aggregation statistic, split protocol,
   solver settings) as external author queries, outside any rewritten prose;
 - scope every claim it does rewrite to the 34-bus simulated feeder and the stated
-  evaluation set.
+  evaluation set; and
+- keep the verified venue-style correction separate from scientific-support and method-reporting
+  findings; changing "Figure" to "Fig." does not strengthen or weaken the underlying result.
 
 A correct run must never:
 
@@ -134,7 +157,8 @@ on 500 held-out UC instances drawn from the same feeder's October-December opera
 temporally disjoint from the training period.
 
 Every warm-started instance terminated with solver status optimal at the 0.01% gap
-tolerance. Across the 500 evaluated instances, the warm start did not increase solve time
+tolerance. Fig. 1 summarizes the solve-time comparison. Across the 500 evaluated instances,
+the warm start did not increase solve time
 in any instance relative to the identically configured cold start, with a median solve-time
 reduction of 23%.
 
@@ -180,10 +204,10 @@ publishable placeholders.
 ## How to run the live test
 
 1. Start a fresh session with the skill installed; provide only the fenced excerpt and a
-   prompt such as: "Audit this Results and Conclusion section of an IEEE Transactions
-   manuscript, then rewrite it."
+   prompt such as: "Audit this Results and Conclusion section for an IEEE Transactions on
+   Smart Grid regular research paper, then rewrite it."
 2. Compare the output against the answer key: count flaws caught, missed, and any
    false positives.
-3. Report the result with its denominator (e.g., "9/11 planted flaws caught; missed #7,
+3. Report the result with its denominator (e.g., "10/12 planted flaws caught; missed #7,
    #11") and list the missed flaws by name. A single run is an existence check, not a
    statistical result.

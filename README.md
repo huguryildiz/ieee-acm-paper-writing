@@ -134,7 +134,7 @@ into the skills directory used by your agent environment.
 - [Live interactive section-audit map](https://ieee-acm-paper-writing.vercel.app/examples/section-audit-map.html),
   [source JSON](skills/ieee-acm-paper-writing/examples/section-audit-map.json), and
   [deterministic renderer fixture](skills/ieee-acm-paper-writing/examples/section-audit-map-rendered.html) —
-  installable, self-contained visual artifacts. Each of the eleven planted flaws is tied to its
+  installable, self-contained visual artifacts. Each of the twelve planted flaws is tied to its
   triggering sentence, concern layer, evidentiary defect, consequence, and bounded response. The
   renderer fixture is generated from the JSON; the live showcase is maintained separately. Neither
   is behavioral evidence about an agent run.

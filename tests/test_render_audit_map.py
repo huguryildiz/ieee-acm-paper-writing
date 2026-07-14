@@ -39,8 +39,9 @@ class AuditMapRendererTests(unittest.TestCase):
         rendered = RENDER_MODULE.render_document(self.example())
         self.assertIsNone(re.search(r'(?:src|href)=["\']https?://', rendered))
         self.assertNotIn("__bundler", rendered)
-        self.assertIn('data-finding="11"', rendered)
-        self.assertIn("0 · not exercised", rendered)
+        self.assertIn('data-finding="12"', rendered)
+        self.assertIn("1 finding · verified house rules", rendered)
+        self.assertNotIn("0 · not exercised · verified house rules", rendered)
 
     def test_user_text_is_html_escaped(self):
         document = self.example()
