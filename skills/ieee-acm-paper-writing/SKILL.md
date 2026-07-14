@@ -78,9 +78,9 @@ Read only the files needed for the task, but read every selected file completely
 Examples are supporting evidence for behavior, not templates to copy mechanically:
 
 - [routing example](examples/routing-example.md)
-- [claim-audit example](examples/claim-audit-example.md)
-- [rewrite example](examples/rewrite-example.md)
 - [reference-formatting example](examples/reference-format-example.md)
+- [section-audit example](examples/section-audit-example.md) — audit and evidence-scoped
+  rewrite end to end; also a live-test fixture with a planted-flaw answer key
 
 ## Use the anonymous corpus calibration
 

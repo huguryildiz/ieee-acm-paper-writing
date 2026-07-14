@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RUNNER = ROOT / "evals" / "run_evals.py"
 CASES = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))["cases"]
+TOTAL = len(CASES)
 SPEC = importlib.util.spec_from_file_location("run_evals", RUNNER)
 RUNNER_MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(RUNNER_MODULE)
@@ -57,25 +58,25 @@ class ReportTests(unittest.TestCase):
     def test_missing_cases_remain_in_denominator_and_fail_strict(self):
         result = self.run_report(CASES[:2])
         self.assertEqual(result.returncode, 1)
-        self.assertIn("aggregate: 2/15 cases passed", result.stdout)
-        self.assertEqual(result.stdout.count("MISSING   "), 13)
+        self.assertIn(f"aggregate: 2/{TOTAL} cases passed", result.stdout)
+        self.assertEqual(result.stdout.count("MISSING   "), TOTAL - 2)
 
     def test_complete_passing_suite_passes_strict(self):
         result = self.run_report(CASES)
         self.assertEqual(result.returncode, 0)
-        self.assertIn("aggregate: 15/15 cases passed", result.stdout)
+        self.assertIn(f"aggregate: {TOTAL}/{TOTAL} cases passed", result.stdout)
 
     def test_missing_agent_outputs_fail_strict(self):
         result = self.run_report(CASES, remove_outputs=True)
         self.assertEqual(result.returncode, 1)
-        self.assertEqual(result.stdout.count("MISSING   "), 15)
-        self.assertIn("aggregate: 0/15 cases passed", result.stdout)
+        self.assertEqual(result.stdout.count("MISSING   "), TOTAL)
+        self.assertIn(f"aggregate: 0/{TOTAL} cases passed", result.stdout)
 
     def test_replaced_agent_output_is_stale(self):
         result = self.run_report(CASES, replace_first=True)
         self.assertEqual(result.returncode, 1)
         self.assertIn(f"STALE     {CASES[0]['name']}", result.stdout)
-        self.assertIn("aggregate: 14/15 cases passed", result.stdout)
+        self.assertIn(f"aggregate: {TOTAL - 1}/{TOTAL} cases passed", result.stdout)
 
     def test_empty_agent_output_fails_strict(self):
         result = self.run_report(CASES, empty_first=True)
