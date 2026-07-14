@@ -4,6 +4,16 @@ CLAUDE.md
 tmp/
 __pycache__/
 *.pyc
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Generated eval artifacts (run_evals.py collect/score/report --outdir)
+out/
+
 assets/hero.png
 
 # Local paper corpus. Keep only the directory skeleton in Git.

@@ -33,7 +33,7 @@ handled explicitly, solver status or gaps, and the evaluated range.
 
 "Across the 30 evaluated instances containing 20--100 agents, the proposed method completed
 without a timeout on 24 instances, compared with 21 for the baseline, under a common 600 s
-limit. Runtime and optimality-certification results are reported separately."
+limit. The supplied evidence does not establish whether any completed run was certified optimal."
 
 The rewrite deliberately makes no optimality or scalability claim because the supplied
 evidence does not establish one.

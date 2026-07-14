@@ -3,7 +3,7 @@
 
 Standard library only (no PyYAML). Checks:
   1. SKILL.md frontmatter: required keys, name format, description limits.
-  2. Every relative link and image reference in tracked Markdown files resolves.
+  2. Relative links and images in the selected repository Markdown files resolve.
   3. evals/cases.json parses and matches the v2 case schema.
   4. agents/openai.yaml exists and is non-empty.
 
@@ -109,8 +109,20 @@ def check_cases(root: Path):
         return
     references_dir = root / "skills" / "ieee-acm-paper-writing" / "references"
     names = set()
-    for i, case in enumerate(data.get("cases", [])):
-        label = case.get("name", f"case[{i}]")
+    cases = data.get("cases")
+    if not isinstance(cases, list):
+        err("evals/cases.json: 'cases' must be a list")
+        return
+    for i, case in enumerate(cases):
+        if not isinstance(case, dict):
+            err(f"evals/cases.json: case[{i}] must be an object")
+            continue
+        name = case.get("name")
+        if not isinstance(name, str) or not name.strip():
+            err(f"evals/cases.json: case[{i}]: 'name' must be a non-empty string")
+            label = f"case[{i}]"
+        else:
+            label = name
         if label in names:
             err(f"evals/cases.json: duplicate case name '{label}'")
         names.add(label)
@@ -127,7 +139,7 @@ def check_cases(root: Path):
         for ref in case.get("expected_routing", []):
             if not (references_dir / ref).exists():
                 err(f"evals/cases.json: {label}: expected_routing references missing file '{ref}'")
-    if not names:
+    if not cases:
         err("evals/cases.json: no cases defined")
 
 

@@ -21,6 +21,10 @@
 
 ## Manuscript-ready rewrite when the effect is verified
 
+For this illustrative example, assume the author resolves the queries above by confirming that
+the 18% value is the median per-node communication-energy reduction against Baseline B across all
+50 matched scenarios under the Section IV-A traffic load and channel model.
+
 "Across 50 matched simulation scenarios, the proposed controller reduced median per-node
 communication energy by 18% relative to Baseline B under the common traffic load and
 channel model defined in Section IV-A."

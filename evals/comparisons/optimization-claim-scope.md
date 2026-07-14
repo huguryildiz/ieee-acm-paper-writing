@@ -9,11 +9,6 @@ are a synthetic evaluation fixture and must not be cited as an empirical study r
 > represented as a validation of the current skill. A fresh controlled run is required for a
 > current comparison.
 
-![Historical optimization claim-scope A/B comparison showing solver statuses, conditional runtime, rejected claims, and the current-validation boundary.](../../assets/optimization-claim-scope.svg)
-
-*Visual summary of the synthetic fixture. The recorded text and tables below remain the
-authoritative comparison artifact.*
-
 ## Controls
 
 - Date: 2026-07-14

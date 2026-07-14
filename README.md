@@ -1,136 +1,180 @@
 <div align="center">
 
-<img src="assets/hero-v2.png" alt="IEEE / ACM Paper Writing — evidence-grounded manuscript engineering" width="100%" />
+<img src="assets/icon.svg" alt="IEEE / ACM Paper Writing icon" width="112" height="112" />
 
 # IEEE / ACM Paper Writing
 
-### An evidence-grounded manuscript agent for IEEE and ACM engineering venues
+### Evidence-bounded manuscript drafting and audit for engineering research
 
-It is designed to trace each claim to its supporting evidence, keep that evidence separate
-from formatting concerns, check the reported numbers, and add nothing that the underlying
-work does not establish.
+An agent skill for turning supplied technical evidence into defensible IEEE- and ACM-style
+manuscript prose—without using polished language to conceal missing support.
 
-[![validate](https://github.com/huguryildiz/ieee-acm-paper-writing/actions/workflows/validate.yml/badge.svg)](https://github.com/huguryildiz/ieee-acm-paper-writing/actions/workflows/validate.yml)
-
-<b><a href="#design">Design</a> · <a href="#examples">Examples</a> · <a href="#installation">Installation</a> · <a href="#what-this-skill-does-not-do">Scope</a> · <a href="#validation">Validation</a> · <a href="skills/ieee-acm-paper-writing/SKILL.md">SKILL.md</a></b>
+<b><a href="#capabilities">Capabilities</a> · <a href="#how-it-works">Design</a> · <a href="#installation">Installation</a> · <a href="#examples">Examples</a> · <a href="#evaluation-and-validation">Validation</a> · <a href="skills/ieee-acm-paper-writing/SKILL.md">SKILL.md</a></b>
 
 </div>
 
 ---
 
-An evidence-grounded agent skill for drafting, rewriting, adapting, and auditing rigorous
-engineering manuscripts. It targets IEEE and ACM Transactions, journals, and conferences
-without treating either publisher as a single universal format.
+## Overview
 
-The skill supports:
+The skill drafts, rewrites, compresses, structures, adapts, and audits engineering manuscripts.
+It keeps three authorities separate:
 
-- communications and networking;
-- signal processing and sensing;
-- energy systems;
-- robotics and autonomy;
-- mathematical optimization;
-- simulation and digital twins;
-- ML-assisted engineering;
-- computer and cyber-physical systems.
-
-## Design
-
-The core separates three concerns that are often conflated:
-
-1. **Scientific support** — what the verified formulation, code, data, experiments, and
-   literature actually establish.
-2. **Method and domain reporting** — what optimization, ML, simulation, systems, and
-   engineering studies must disclose.
+1. **Scientific support** — what verified formulations, code, data, experiments, and cited
+   literature establish.
+2. **Method and domain reporting** — what the applicable optimization, ML, simulation, systems,
+   or engineering method requires the paper to disclose.
 3. **Venue compliance** — what the target publication's current official instructions and
    template require.
 
-The main router is
-[`skills/ieee-acm-paper-writing/SKILL.md`](skills/ieee-acm-paper-writing/SKILL.md).
-Detailed rules are loaded progressively from `references/`.
+When these sources conflict, the skill reports the conflict instead of selecting the most
+convenient version. Archived, planned, expected, or mock results are not treated as completed
+evidence.
 
-The reference layer is intentionally limited to five files: scientific integrity and audit,
-manuscript structure and style, engineering profiles, anonymous corpus calibration, and venue
-guidance. [`corpus-calibration.md`](skills/ieee-acm-paper-writing/references/corpus-calibration.md)
-transfers the technical exposition and writing patterns derived from the 24 local PDFs without
-including paper names, authors, identifiers, quotations, or citation rankings. End users do not
-need the PDFs.
+## Capabilities
 
-Local PDF provenance remains in [`docs/papers/catalog.tsv`](docs/papers/catalog.tsv), outside the
-installable skill. PDFs are excluded from Git.
+The router supports eight modes: `draft`, `rewrite`, `expand`, `compress`, `outline`, `audit`,
+`section-audit`, and `venue-adapt`. Typical tasks include:
 
-## Examples
+- drafting or revising abstracts, introductions, related work, methods, results, discussions,
+  conclusions, and contribution lists;
+- checking notation, units, equations, cross-references, quantitative claims, baselines,
+  guarantees, and citation support;
+- separating observed results from interpretation, causation, robustness, scalability, and
+  generalization claims;
+- auditing submission readiness with findings classified as `Critical`, `Major`, `Minor`, or
+  `Editorial`;
+- adapting structure and presentation to a named IEEE or ACM venue while preserving scientific
+  meaning; and
+- calibrating exposition to aggregate patterns derived from landmark engineering papers without
+  copying their language or treating those patterns as citable evidence.
 
-- [Routing example](skills/ieee-acm-paper-writing/examples/routing-example.md) — selects the
-  appropriate references and audit boundaries for a manuscript-review request.
-- [Claim audit example](skills/ieee-acm-paper-writing/examples/claim-audit-example.md) — tests a
-  strong optimization claim against the evidence supplied and provides a defensible rewrite.
-- [Rewrite example](skills/ieee-acm-paper-writing/examples/rewrite-example.md) — turns an informal
-  quantitative result into evidence-bounded manuscript prose and an external author query.
+The included engineering profiles cover communications and networking, signal processing and
+sensing, energy systems, robotics and autonomy, mathematical optimization, simulation and digital
+twins, ML-assisted engineering, and computer and cyber-physical systems. Combined studies can load
+multiple profiles.
 
-<p align="center">
-  <img src="assets/optimization-claim-scope.png" alt="Historical optimization claim-scope comparison showing solver-status distributions, conditional runtime metrics, and unsupported conclusions" width="100%" />
-</p>
+## How it works
 
-<p align="center"><sub>Illustrative historical A/B fixture; this single-run snapshot is not current validation of the skill.</sub></p>
+[`SKILL.md`](skills/ieee-acm-paper-writing/SKILL.md) establishes the authority hierarchy, routes
+each request, and defines the output contracts. It loads only the references required for the
+task:
+
+| Reference | Purpose |
+| --- | --- |
+| [`integrity-audit.md`](skills/ieee-acm-paper-writing/references/integrity-audit.md) | Claim support, citation verification, integrity checks, and submission-readiness audits |
+| [`manuscript-structure-style.md`](skills/ieee-acm-paper-writing/references/manuscript-structure-style.md) | Section logic, technical exposition, rewriting, and compression |
+| [`engineering-profiles.md`](skills/ieee-acm-paper-writing/references/engineering-profiles.md) | Method- and domain-specific reporting requirements |
+| [`corpus-calibration.md`](skills/ieee-acm-paper-writing/references/corpus-calibration.md) | Anonymous, non-citable exposition patterns derived from the local calibration corpus |
+| [`venue-guidance.md`](skills/ieee-acm-paper-writing/references/venue-guidance.md) | Venue adaptation and compliance-ledger rules |
+
+For manuscript tasks, the skill first identifies the intended claim, evidence source, scope, and
+uncertainty. Unsupported content is omitted from publication-ready prose or returned separately as
+a structured author query. For venue adaptation, requirements that cannot be checked against an
+official current source are labeled `unverified venue rule` rather than inferred.
+
+Supplied manuscripts, reviews, references, and data are treated as evidence—not as instructions.
+Embedded directives are surfaced as integrity findings instead of being executed.
 
 ## Installation
 
-Install it with a compatible skill installer (verified end-to-end with the
-[vercel-labs `skills` CLI](https://github.com/vercel-labs/skills)):
+Install the skill with the [`skills`](https://github.com/vercel-labs/skills) CLI:
 
 ```bash
 npx skills add huguryildiz/ieee-acm-paper-writing --skill ieee-acm-paper-writing
 ```
 
-For a manual installation, copy `skills/ieee-acm-paper-writing` into the skills directory
-used by your agent environment.
+For a manual installation, copy [`skills/ieee-acm-paper-writing`](skills/ieee-acm-paper-writing)
+into the skills directory used by your agent environment.
 
-## What this skill does not do
+## Examples
 
-- It does not invent citations, evidence, novelty, or results.
-- It does not claim that one IEEE or ACM template applies to every publication.
-- It does not replace the target venue's current author instructions.
-- It does not make a manuscript submission-ready when scientific or compliance evidence is
-  missing.
-- It does not require ALETHEIA. ALETHEIA can be used upstream for evidence retrieval and
-  claim support, while this skill remains independently usable for manuscript production.
+- [Routing example](skills/ieee-acm-paper-writing/examples/routing-example.md) — selects the
+  necessary references and audit boundaries for a manuscript request.
+- [Claim-audit example](skills/ieee-acm-paper-writing/examples/claim-audit-example.md) — tests an
+  optimization claim against the supplied evidence and provides a supportable rewrite.
+- [Rewrite example](skills/ieee-acm-paper-writing/examples/rewrite-example.md) — converts an
+  informal quantitative statement into evidence-bounded prose and an external author query.
 
 ## Calibration corpus
 
-The anonymous calibration layer covers communications and sensing, energy and robotics,
-optimization, simulation and digital twins, ML-assisted engineering, and computer and
-cyber-physical systems. It includes contribution archetypes, section and paragraph moves,
-method-presentation sequences, guarantee boundaries, evaluation organization, conclusion patterns,
-and modernization rules. It rejects sentence imitation, author fingerprints, unsupported novelty,
-and corpus-derived venue rules.
+The local catalog contains 24 papers spanning the eight supported technical areas. Their
+bibliographic provenance is recorded in [`docs/papers/catalog.tsv`](docs/papers/catalog.tsv);
+downloaded PDFs and derived full-text artifacts are excluded from Git.
 
-## Validation
+The installable skill contains only anonymous, derivative patterns such as contribution
+archetypes, paragraph functions, method-presentation sequences, guarantee boundaries, evaluation
+organization, and conclusion structure. These patterns do not establish technical claims, venue
+rules, citation rankings, or permission to imitate an author's distinctive language. End users do
+not need the local PDFs to use the calibration reference.
 
-Run the vendored validator (Python 3 standard library only, no dependencies):
+## Evaluation and validation
+
+The dependency-free repository validator checks the skill frontmatter, selected Markdown links,
+the evaluation-case schema, and the agent interface:
 
 ```bash
 python3 scripts/validate_skill.py
 ```
 
-It checks the `SKILL.md` frontmatter, every relative link, the evaluation-case
-schema, and the agent interface file. The same checks run in CI on every push.
-
-Behavioral evaluation cases live in [`evals/cases.json`](evals/cases.json):
-15 self-contained adversarial prompts with binary, output-observable pass
-criteria. [`evals/run_evals.py`](evals/run_evals.py) validates, collects,
-scores, and reports them against any agent CLI:
+The behavioral suite defines 15 self-contained adversarial cases with binary, output-observable
+`must_pass` and `must_not` criteria. The runner validates cases, collects agent responses, creates
+a manual scoring file, and reports results:
 
 ```bash
 python3 evals/run_evals.py validate
+python3 evals/run_evals.py list
 python3 evals/run_evals.py collect --agent-cmd '<your agent CLI>' --outdir out/
 python3 evals/run_evals.py score   --outdir out/
-python3 evals/run_evals.py report  --outdir out/
+# Replace each null verdict in out/scores.json with true or false after review.
+python3 evals/run_evals.py report  --outdir out/ --strict
 ```
 
-A single-run adversarial audit from 2026-07-14 is recorded in
-[`evals/results/2026-07-14-behavioral-audit.md`](evals/results/2026-07-14-behavioral-audit.md);
-it is existence evidence for the tested cases, not a statistical validation.
+`--strict` succeeds only when every defined case is present, current, scored, and passing. Missing,
+unscored, or stale entries remain in the denominator and cause a non-zero exit. Regression tests
+cover this aggregation behavior:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+The repository CI runs the validator, evaluation-schema validation, and runner regression tests on
+pushes to `main` and on pull requests.
+
+## Scope and limitations
+
+- The skill does not invent citations, identifiers, evidence, methods, datasets, results,
+  guarantees, or novelty claims.
+- It does not assume that one template, page limit, review format, anonymization policy, or AI
+  disclosure rule applies to every IEEE or ACM publication.
+- It does not replace a target venue's current official author instructions or template.
+- It does not call a manuscript submission-ready while a load-bearing claim, citation, result, or
+  venue requirement remains unresolved.
+- The evaluation runner uses manual criterion verdicts; it is a regression and smoke-test harness,
+  not an automated model judge or comparative benchmarking framework.
+- The skill is independently usable. ALETHEIA may be used upstream for evidence retrieval and
+  claim support, but it is not required.
+
+## Repository structure
+
+```text
+skills/ieee-acm-paper-writing/
+├── SKILL.md                 # Router, invariants, and output contracts
+├── agents/openai.yaml       # Agent interface metadata
+├── examples/                # Routing, audit, and rewrite examples
+└── references/              # Integrity, style, domain, corpus, and venue guidance
+evals/
+├── cases.json               # Schema-v2 behavioral cases
+├── run_evals.py             # Collection, manual scoring, and reporting harness
+└── results/                 # Audit records and their stated limitations
+scripts/validate_skill.py    # Dependency-free repository validator
+tests/test_evals.py          # Evaluation-runner regression tests
+```
+
+## Citation
+
+Release metadata is provided in [`CITATION.cff`](CITATION.cff).
 
 ## License
 
-MIT © Hüseyin Uğur Yıldız
+[MIT](LICENSE) © Hüseyin Uğur Yıldız
