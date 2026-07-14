@@ -67,7 +67,7 @@ task:
 | [`integrity-audit.md`](skills/ieee-acm-paper-writing/references/integrity-audit.md) | Claim support, citation verification, integrity checks, and submission-readiness audits |
 | [`manuscript-structure-style.md`](skills/ieee-acm-paper-writing/references/manuscript-structure-style.md) | Section logic, technical exposition, rewriting, and compression |
 | [`engineering-profiles.md`](skills/ieee-acm-paper-writing/references/engineering-profiles.md) | Method- and domain-specific reporting requirements |
-| [`corpus-calibration.md`](skills/ieee-acm-paper-writing/references/corpus-calibration.md) | Anonymous, non-citable exposition patterns derived from the local calibration corpus |
+| [`corpus-calibration.md`](skills/ieee-acm-paper-writing/references/corpus-calibration.md) | De-identified, non-citable exposition patterns derived from the local calibration corpus |
 | [`venue-guidance.md`](skills/ieee-acm-paper-writing/references/venue-guidance.md) | Venue adaptation and compliance-ledger rules |
 
 For manuscript tasks, the skill instructs the agent to identify the intended claim, evidence
@@ -95,10 +95,10 @@ into the skills directory used by your agent environment.
 - [Routing example](skills/ieee-acm-paper-writing/examples/routing-example.md) — selects the
   necessary references and audit boundaries for a manuscript request.
 - [Reference-format example](skills/ieee-acm-paper-writing/examples/reference-format-example.md) —
-  audits and produces IEEE/ACM reference-list entries in the venue's official style.
+  audits and produces IEEE/ACM reference-list entries using publisher-level screening guidance.
 - [Section-audit example](skills/ieee-acm-paper-writing/examples/section-audit-example.md) — a
-  flawed Results and Conclusion fixture with a planted-flaw answer key, plus the audit and
-  evidence-scoped rewrite produced by a live run of the skill.
+  flawed Results and Conclusion fixture with a planted-flaw answer key and an illustrative
+  evidence-scoped rewrite; it is not a retained behavioral result.
 
 ## Calibration corpus
 
@@ -106,22 +106,23 @@ The local catalog contains 24 papers spanning the eight supported technical area
 bibliographic provenance is recorded in [`docs/papers/catalog.tsv`](docs/papers/catalog.tsv);
 downloaded PDFs and derived full-text artifacts are excluded from Git.
 
-The installable skill contains only anonymous, derivative patterns such as contribution
+The installable skill contains only de-identified, derivative patterns such as contribution
 archetypes, paragraph functions, method-presentation sequences, guarantee boundaries, evaluation
 organization, and conclusion structure. These patterns do not establish technical claims, venue
-rules, citation rankings, or permission to imitate an author's distinctive language. End users do
-not need the local PDFs to use the calibration reference.
+rules, citation rankings, source anonymity, or permission to imitate an author's distinctive
+language. A specialist may still recognize a technical lineage. End users do not need the local
+PDFs to use the calibration reference.
 
 ## Evaluation and validation
 
-The dependency-free repository validator checks the skill frontmatter, selected Markdown links,
-the evaluation-case schema, and the agent interface:
+The dependency-free repository validator checks the skill frontmatter, calibration identity
+policy, selected Markdown links, safe evaluation-case names and schema, and the agent interface:
 
 ```bash
 python3 scripts/validate_skill.py
 ```
 
-The behavioral suite defines 18 self-contained adversarial cases with binary, output-observable
+The behavioral suite defines 21 self-contained adversarial cases with binary, output-observable
 `must_pass` and `must_not` criteria. The runner validates cases, collects agent responses, creates
 a manual scoring file, and reports results:
 

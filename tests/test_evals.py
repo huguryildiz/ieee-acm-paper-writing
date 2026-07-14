@@ -110,6 +110,22 @@ class ReportTests(unittest.TestCase):
             self.assertTrue(all(value is None for value in entry["must_not"].values()))
             self.assertEqual(entry["output_hash"], RUNNER_MODULE.output_hash(output_file))
 
+    def test_failed_collection_preserves_existing_output(self):
+        case = CASES[0]
+        with tempfile.TemporaryDirectory() as tmp:
+            outdir = Path(tmp)
+            output_file = outdir / f"{case['name']}.md"
+            output_file.write_text("preserve me", encoding="utf-8")
+            result = subprocess.run(
+                [sys.executable, str(RUNNER), "collect", "--outdir", str(outdir),
+                 "--case", case["name"], "--agent-cmd",
+                 f'{sys.executable} -c "import sys; sys.exit(7)"'],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(result.returncode, 1)
+            self.assertEqual(output_file.read_text(encoding="utf-8"), "preserve me")
+
 
 class SchemaTests(unittest.TestCase):
     def test_name_is_required(self):
@@ -131,6 +147,20 @@ class SchemaTests(unittest.TestCase):
         ])
         self.assertIn("x: must_not is required", problems)
         self.assertIn("x: expected_routing is required", problems)
+
+    def test_unsafe_case_names_are_rejected(self):
+        for name in ("../victim", "/tmp/victim", "nested/name", "has space"):
+            with self.subTest(name=name):
+                problems = RUNNER_MODULE.case_problems([
+                    {"name": name, "prompt": "p", "must_pass": ["y"],
+                     "must_not": [], "expected_routing": []}
+                ])
+                self.assertTrue(any("name must match" in problem for problem in problems))
+
+    def test_case_output_path_rejects_escape(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(ValueError):
+                RUNNER_MODULE.case_output_path(tmp, "../victim")
 
 
 if __name__ == "__main__":

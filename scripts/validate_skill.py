@@ -2,15 +2,17 @@
 """Repository validator for the ieee-acm-paper-writing skill.
 
 Standard library only (no PyYAML). Checks:
-  1. SKILL.md frontmatter: required keys, name format, description limits.
-  2. Relative links and images in the selected repository Markdown files resolve.
-  3. evals/cases.json parses and matches the v2 case schema.
-  4. agents/openai.yaml exists and is non-empty.
+  1. SKILL.md frontmatter: strict flat syntax, allowed keys, name and description limits.
+  2. corpus-calibration.md excludes direct source identities and identifiers.
+  3. Relative links and images in the selected repository Markdown files resolve.
+  4. evals/cases.json parses, uses safe case names, and matches the v2 schema.
+  5. agents/openai.yaml exists and is non-empty.
 
 Usage:  python3 scripts/validate_skill.py [repo_root]
 Exit status: 0 if all checks pass, 1 otherwise.
 """
 
+import csv
 import json
 import re
 import sys
@@ -20,8 +22,10 @@ from urllib.parse import unquote
 ALLOWED_FRONTMATTER_KEYS = {"name", "description"}
 MAX_NAME = 64
 MAX_DESCRIPTION = 1024
+CASE_NAME_RE = re.compile(r"[a-z0-9][a-z0-9_-]*")
 
 MD_FILES = [
+    "CLAUDE.md",
     "README.md",
     "CHANGELOG.md",
     "docs/papers/README.md",
@@ -49,13 +53,20 @@ def check_frontmatter(skill_md: Path):
         err(f"{skill_md}: missing or malformed YAML frontmatter")
         return
     keys = {}
-    for line in m.group(1).splitlines():
-        km = re.match(r"^([A-Za-z-]+):\s*(.*)$", line)
-        if km:
-            key = km.group(1)
-            if key in keys:
-                err(f"{skill_md}: duplicate frontmatter key '{key}'")
-            keys[key] = km.group(2).strip()
+    for line_number, line in enumerate(m.group(1).splitlines(), start=2):
+        if not line.strip():
+            continue
+        if line.startswith((" ", "\t")):
+            err(f"{skill_md}:{line_number}: nested or indented frontmatter is unsupported")
+            continue
+        km = re.fullmatch(r"([A-Za-z-]+):[ ]*(.*)", line)
+        if not km:
+            err(f"{skill_md}:{line_number}: malformed frontmatter line")
+            continue
+        key = km.group(1)
+        if key in keys:
+            err(f"{skill_md}: duplicate frontmatter key '{key}'")
+        keys[key] = km.group(2).strip()
     unexpected = set(keys) - ALLOWED_FRONTMATTER_KEYS
     if unexpected:
         err(f"{skill_md}: unexpected frontmatter keys: {sorted(unexpected)}")
@@ -74,6 +85,53 @@ def check_frontmatter(skill_md: Path):
             err(f"{skill_md}: description exceeds {MAX_DESCRIPTION} characters ({len(desc)})")
         if "<" in desc or ">" in desc:
             err(f"{skill_md}: description contains angle brackets")
+
+
+def check_calibration(root: Path):
+    calibration = root / "skills" / "ieee-acm-paper-writing" / "references" / "corpus-calibration.md"
+    catalog = root / "docs" / "papers" / "catalog.tsv"
+    if not calibration.exists():
+        err("skills/ieee-acm-paper-writing/references/corpus-calibration.md: missing")
+        return
+    if not catalog.exists():
+        err("docs/papers/catalog.tsv: missing; cannot enforce calibration identity policy")
+        return
+
+    text = calibration.read_text(encoding="utf-8")
+    relative = calibration.relative_to(root)
+    direct_patterns = {
+        "DOI": r"\b10\.\d{4,9}/[^\s<>()]+",
+        "arXiv identifier": r"\barXiv\s*:\s*\d{4}\.\d{4,5}\b",
+        "source year": r"\b(?:19|20)\d{2}\b",
+    }
+    for label, pattern in direct_patterns.items():
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            err(f"{relative}: prohibited {label} in calibration -> {match.group(0)}")
+
+    author_terms = set()
+    title_terms = set()
+    doi_terms = set()
+    with catalog.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle, delimiter="\t"):
+            author_year = (row.get("author_year") or "").strip()
+            author_text = re.sub(r"\s+(?:19|20)\d{2}$", "", author_year)
+            author_text = re.sub(r"\s+et al\.$", "", author_text)
+            for term in re.split(r"\s+and\s+|,", author_text):
+                if term.strip():
+                    author_terms.add(term.strip())
+            if (row.get("title") or "").strip():
+                title_terms.add(row["title"].strip())
+            if (row.get("doi") or "").strip():
+                doi_terms.add(row["doi"].strip())
+
+    for label, terms in (("catalog author", author_terms),
+                         ("catalog title", title_terms),
+                         ("catalog identifier", doi_terms)):
+        for term in sorted(terms, key=len, reverse=True):
+            if re.search(rf"(?<!\w){re.escape(term)}(?!\w)", text, re.IGNORECASE):
+                err(f"{relative}: prohibited {label} in calibration -> {term}")
+                break
 
 
 def iter_md_files(root: Path):
@@ -176,6 +234,8 @@ def check_cases(root: Path):
             label = f"case[{i}]"
         else:
             label = name
+            if not CASE_NAME_RE.fullmatch(name):
+                err(f"evals/cases.json: {label}: name must match {CASE_NAME_RE.pattern!r}")
         if label in names:
             err(f"evals/cases.json: duplicate case name '{label}'")
         names.add(label)
@@ -235,6 +295,7 @@ def main():
         err(f"{skill_md}: not found (is '{root}' the repo root?)")
     else:
         check_frontmatter(skill_md)
+        check_calibration(root)
         check_links(root)
         check_cases(root)
         check_agent_interface(root)
@@ -243,7 +304,7 @@ def main():
         for e in errors:
             print(f"  - {e}")
         sys.exit(1)
-    print("OK: frontmatter, links, eval cases, and agent interface all valid")
+    print("OK: frontmatter, calibration policy, links, eval cases, and agent interface all valid")
 
 
 if __name__ == "__main__":

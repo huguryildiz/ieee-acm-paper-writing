@@ -44,5 +44,76 @@ class LinkValidationTests(unittest.TestCase):
         self.assertEqual(errors, [])
 
 
+class FrontmatterValidationTests(unittest.TestCase):
+    def setUp(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def tearDown(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def check_frontmatter(self, frontmatter):
+        with tempfile.TemporaryDirectory() as tmp:
+            skill = Path(tmp) / "SKILL.md"
+            skill.write_text(f"---\n{frontmatter}\n---\n\n# Skill\n", encoding="utf-8")
+            VALIDATOR_MODULE.check_frontmatter(skill)
+            return list(VALIDATOR_MODULE.errors)
+
+    def test_malformed_or_indented_frontmatter_is_rejected(self):
+        errors = self.check_frontmatter(
+            "name: valid-name\ndescription: valid description\n\tmalformed-yaml-indentation"
+        )
+        self.assertTrue(any("nested or indented frontmatter" in error for error in errors))
+
+    def test_nonstandard_frontmatter_keys_are_rejected(self):
+        errors = self.check_frontmatter(
+            "name: valid-name\ndescription: valid description\nlicense: MIT\n"
+            "allowed-tools: Read, Grep\nmetadata: version=1"
+        )
+        self.assertTrue(any("unexpected frontmatter keys" in error for error in errors))
+
+    def test_unrecognized_frontmatter_content_is_rejected(self):
+        errors = self.check_frontmatter(
+            "name: valid-name\ndescription: valid description\nthis is not yaml"
+        )
+        self.assertTrue(any("malformed frontmatter line" in error for error in errors))
+
+
+class CalibrationPolicyTests(unittest.TestCase):
+    def setUp(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def tearDown(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def check_calibration(self, text):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            calibration = (root / "skills" / "ieee-acm-paper-writing" /
+                           "references" / "corpus-calibration.md")
+            calibration.parent.mkdir(parents=True)
+            calibration.write_text(text, encoding="utf-8")
+            catalog = root / "docs" / "papers" / "catalog.tsv"
+            catalog.parent.mkdir(parents=True)
+            catalog.write_text(
+                "domain\tauthor_year\ttitle\tdoi\tlocal_file\tlocal_status\tnotes\n"
+                "systems\tLamport 1978\tTime and events\t10.1000/example\tp.pdf\tavailable\t-\n",
+                encoding="utf-8",
+            )
+            VALIDATOR_MODULE.check_calibration(root)
+            return list(VALIDATOR_MODULE.errors)
+
+    def test_direct_source_identifier_is_rejected(self):
+        errors = self.check_calibration("Derived pattern, doi:10.1000/example\n")
+        self.assertTrue(any("prohibited DOI" in error for error in errors))
+
+    def test_catalog_author_is_rejected(self):
+        errors = self.check_calibration("Pattern attributed to Lamport.\n")
+        self.assertTrue(any("prohibited catalog author" in error for error in errors))
+
+    def test_generic_derivative_pattern_passes(self):
+        errors = self.check_calibration("Define the system boundary before the mechanism.\n")
+        self.assertEqual(errors, [])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,9 +1,10 @@
-# Anonymous calibration derived from the local engineering corpus
+# De-identified calibration derived from the local engineering corpus
 
 Use this reference when users want the writing styles and technical exposition patterns extracted
 from the repository's local PDF corpus, including when they cannot access those PDFs. This file is
 self-contained and intentionally contains no bibliographic identities, titles, identifiers,
-quotations, or citation counts.
+source quotations, years, or citation counts. It is de-identified rather than guaranteed
+anonymous: a specialist may still recognize the technical lineage of a general pattern.
 
 ## Contents
 
@@ -25,7 +26,8 @@ The calibration source comprises engineering papers distributed across multiple 
 and contribution types, including foundational theory, algorithm-plus-evaluation, survey/tutorial,
 vision/position, and methods reference. The extracted patterns cover openings, model and method
 presentation, guarantee placement, evaluation structure, conclusions, limitations, and display
-roles. They are aggregate derivative guidance, not source evidence.
+roles. They are de-identified derivative guidance, not source evidence or proof that their source
+lineage cannot be inferred.
 
 Transfer structure, reasoning sequence, terminology discipline, and claim boundaries. Do not
 transfer sentences, distinctive phrases, author fingerprints, historical forecasts, bibliography
@@ -163,9 +165,9 @@ For reviews, use explicit questions -> definition and misconceptions -> categori
 application areas -> enabling components -> challenges -> open research. Report classification
 logic before prevalence.
 
-For twin taxonomies, define categories by automated data-flow direction between physical and
-digital objects, then classify examples consistently. Separate source labels from reviewer-imposed
-classification.
+For system taxonomies, declare operational classification axes such as data flow, synchronization,
+validation status, and decision role before classifying examples. Apply the axes consistently and
+separate source labels from reviewer-imposed categories.
 
 ### Technical transfer
 
@@ -180,9 +182,9 @@ classification.
 
 ### Writing pattern
 
-For physics-informed learning, use governing problem -> neural representation -> differential or
-physical residual -> data/boundary/collocation terms -> training procedure -> parallel forward and
-inverse cases -> reference-solver comparison -> unresolved optimization and uncertainty questions.
+For physics-informed learning, use governing problem -> learned representation -> location of
+physical knowledge -> training procedure -> reference-method comparison -> unresolved optimization,
+accuracy, and uncertainty boundaries.
 
 For physics/ML taxonomies, organize by whether knowledge enters through observations, architecture,
 or learning objective, and distinguish hard construction from soft penalty.
@@ -204,9 +206,9 @@ For equation discovery, use measured state -> derivative estimation -> candidate
 
 ### Writing pattern
 
-For foundational distributed reasoning, use precise system definition -> event relation -> partial
-order -> logical representation -> algorithmic consequence -> physical-time extension and bound.
-Use small diagrams or counterexamples to expose why intuitive time order fails.
+For foundational distributed reasoning, define the system, state, events, timing assumptions, and
+observable order before deriving an algorithmic consequence. Use a small counterexample or diagram
+to expose where intuitive ordering assumptions fail, then state the mechanism and its boundary.
 
 For CPS position work, use physical property absent from computing abstraction -> concrete failure
 or mismatch -> requirements for new semantics -> implications across design and verification.

@@ -1,6 +1,7 @@
 # Reference Formatting Example
 
-Illustrative only. It shows both reference behaviors against a named venue's rules: **detecting**
+Illustrative only. It shows both reference behaviors against publisher-level reference guidance:
+**detecting**
 and correcting broken formatting, and **producing** a correct reference from raw fields — in each
 case flagging a genuinely missing field instead of inventing it. The bibliographic entries are
 schematic placeholders, not real works to copy.
