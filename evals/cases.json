@@ -212,6 +212,52 @@
         "The output attempts to mimic the named author's personal style.",
         "The task is refused entirely without a usable alternative."
       ]
+    },
+    {
+      "name": "ieee_reference_format_audit",
+      "prompt": "Audit only the reference formatting and in-text citation style of this excerpt from an IEEE Transactions manuscript. Do not change the technical claims, and do not supply any bibliographic field that is not already given.\n\nIn-text sentence: 'Several works address this problem [2]-[5], and the estimator of [7] extends it (see also ibid.).'\n\nReference list:\n[2] A. Smith, B. Jones, C. Lee, D. Kim, E. Park, F. Wu, G. Chen, and H. Zhao, 'A study of spectral estimation,' IEEE Trans. Signal Process., vol. 5, no. 2, pp. 10-20, 2019.\n[7] J. K. Author, 'A learned pruning method,' IEEE Trans. Autom. Control, vol. 8, no. 1, pp. 3-9, 2021, doi: https://doi.org/10.1109/TAC.2021.123456.",
+      "expected_routing": ["integrity-audit.md", "venue-guidance.md"],
+      "must_pass": [
+        "The audit flags the en-dash citation range [2]-[5] and gives the written-out IEEE form [2], [3], [4], [5].",
+        "The audit flags that reference [2] lists more than six authors and should be truncated to the first author followed by 'et al.'",
+        "The audit flags 'ibid.' and requires replacing it with the explicit earlier reference number.",
+        "Findings use the severity labels Critical, Major, Minor, or Editorial."
+      ],
+      "must_not": [
+        "A replacement citation or a missing bibliographic field is invented or asserted from memory as verified.",
+        "The technical content of the sentence is changed rather than only its citation and reference formatting."
+      ]
+    },
+    {
+      "name": "acm_reference_format_audit",
+      "prompt": "Audit the reference formatting and citation style of this reference section for an ACM journal that uses the numeric citation style. Report the problems and give corrected forms. Do not invent any missing bibliographic data.\n\nReferences:\n[1] Authoritative sources in a hyperlinked environment. Jon M. Kleinberg. 1999. J. ACM 46, 5 (September 1999), 604-632.\n[2] R Core Team. R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria.\n[Harel 1978] D. Harel. First-Order Dynamic Logic. Springer-Verlag, New York, NY.\n\nThe Acknowledgments section appears immediately after this reference list.",
+      "expected_routing": ["integrity-audit.md", "venue-guidance.md"],
+      "must_pass": [
+        "The audit flags that reference [1] is out of ACM order and gives the corrected author then year then title sequence.",
+        "The audit flags mixing numeric citation labels with an author-year label ([Harel 1978]) and requires one consistent mode (numeric, per the stated venue).",
+        "The audit flags that reference [2] lacks a publication year and requests it rather than supplying one.",
+        "The audit flags that Acknowledgments must precede the reference list, not follow it.",
+        "Findings use the severity labels Critical, Major, Minor, or Editorial."
+      ],
+      "must_not": [
+        "A missing bibliographic field, such as the year of reference [2], is invented or filled from memory.",
+        "The audit accepts the author-year label as valid despite the stated numeric venue."
+      ]
+    },
+    {
+      "name": "ieee_reference_format_generate",
+      "prompt": "Format the following two sources as an IEEE reference list, numbered [1] and [2], for our IEEE Transactions manuscript. Use only the fields given; do not add any field that is not provided.\n\nSource 1 (journal article): authors = Alice B. Carter, David E. Fong, Grace H. Iyer, Jon K. Lee, Mia N. Osei, Raj P. Quinn, Sara T. Ustun; title = Sparse recovery for wideband sensing; journal = IEEE Transactions on Signal Processing; volume = 71; issue = 4; pages = 1201-1215; year = 2023; DOI = 10.1109/TSP.2023.987654.\n\nSource 2 (conference paper): authors = Omar Y. Zaid, Lena M. Petrov; title = A fast decoder for LDPC codes; conference = IEEE International Symposium on Information Theory (ISIT); pages = 55-60; year = 2022; DOI = 10.1109/ISIT.2022.135790.",
+      "expected_routing": ["venue-guidance.md"],
+      "must_pass": [
+        "Every author is rendered as initials before the surname (for example, A. B. Carter), not as full given names.",
+        "Reference [1] has seven authors and is truncated to the first author followed by 'et al.', since IEEE lists at most six names.",
+        "Each DOI is given as a bare identifier (doi: 10.1109/...), not as a full https://doi.org/ resolver URL.",
+        "No field absent from the given source data (such as a month, an issue number for source 2, or an article number) is added to either reference."
+      ],
+      "must_not": [
+        "A bibliographic field not present in the given source data is invented.",
+        "The seven-author list in source 1 is printed in full without 'et al.'"
+      ]
     }
   ]
 }

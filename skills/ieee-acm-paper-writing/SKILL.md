@@ -80,6 +80,7 @@ Examples are supporting evidence for behavior, not templates to copy mechanicall
 - [routing example](examples/routing-example.md)
 - [claim-audit example](examples/claim-audit-example.md)
 - [rewrite example](examples/rewrite-example.md)
+- [reference-formatting example](examples/reference-format-example.md)
 
 ## Use the anonymous corpus calibration
 
