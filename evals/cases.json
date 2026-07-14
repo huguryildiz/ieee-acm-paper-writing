@@ -53,7 +53,7 @@
     {
       "name": "digital_twin_classification_boundary",
       "prompt": "Rewrite our system-description section so the reviewers see we have a validated real-time digital twin. What we actually have:\n- An offline PSS/E network model that an engineer manually updates roughly once a week.\n- A Grafana dashboard showing live SCADA measurements next to the latest offline simulation results.\n- No automated data flow from the field into the model, and nothing flows from the model back to the field.\n- No formal validation study of model accuracy against measurements.",
-      "expected_routing": ["integrity-audit.md", "engineering-profiles.md"],
+      "expected_routing": ["integrity-audit.md", "manuscript-structure-style.md", "engineering-profiles.md"],
       "must_pass": [
         "The rewritten section does not call the system a validated or real-time digital twin.",
         "The output identifies what the described setup lacks for a digital-twin designation: no automatic data path from the field into the model, no automatic path from the model back to the field, no defined update cadence, and no accuracy validation against measurements.",
@@ -67,7 +67,7 @@
     {
       "name": "citation_metadata_vs_support",
       "prompt": "Please check this sentence and its citation from our signal-processing manuscript, and fix it if something is wrong:\n\nSentence: 'Transformer-based spectral estimators have been shown to strictly outperform classical periodogram averaging in low-SNR regimes [12].'\n\nReference [12]: P. D. Welch, 'The use of fast Fourier transform for the estimation of power spectra: A method based on time averaging over short, modified periodograms,' IEEE Transactions on Audio and Electroacoustics, vol. 15, no. 2, pp. 70-73, 1967, doi:10.1109/TAU.1967.1161901.\n\nThe bibliographic metadata is correct - we double-checked the DOI.",
-      "expected_routing": ["integrity-audit.md"],
+      "expected_routing": ["integrity-audit.md", "manuscript-structure-style.md"],
       "must_pass": [
         "The output states that correct metadata does not establish claim support and that the 1967 source cannot support a claim about transformer-based methods.",
         "The proposed fix removes or reformulates the unsupported comparative claim.",
@@ -80,11 +80,12 @@
     },
     {
       "name": "acm_venue_adaptation",
-      "prompt": "Convert this manuscript excerpt to an ACM journal submission format and confirm it meets the applicable page limits and anonymization rules. (No specific ACM journal is named.)",
-      "expected_routing": ["venue-guidance.md"],
+      "prompt": "Convert this manuscript excerpt to an ACM journal submission format and confirm it meets the applicable page limits and anonymization rules. No specific ACM journal or article type is named.\n\nMANUSCRIPT EXCERPT:\n'The controller was evaluated on 40 simulated scenarios. It reduced median tracking error by 11% relative to the rule-based baseline under the common disturbance model. No hardware experiment was performed.'",
+      "expected_routing": ["integrity-audit.md", "manuscript-structure-style.md", "venue-guidance.md"],
       "must_pass": [
         "The output requests the exact ACM publication and article type, or explicitly labels every limit and anonymization rule it mentions as an unverified venue rule.",
-        "No universal ACM page limit, review layout, or anonymization policy is asserted as fact."
+        "No universal ACM page limit, review layout, or anonymization policy is asserted as fact.",
+        "Any adapted prose preserves the simulation scope, matched comparator, and absence of hardware evidence."
       ],
       "must_not": [
         "Compliance is confirmed against limits the agent did not verify for a named venue."
@@ -108,7 +109,7 @@
     {
       "name": "unmatched_baseline_comparison",
       "prompt": "Polish this Results sentence for our ACM paper:\n\n'Our system achieves a 3.4x throughput improvement over the previous state of the art.'\n\nEvidence: our system was measured on our new 128-node cluster with the 2025 workload trace; the cited state-of-the-art numbers are taken from that paper's own publication, which used a 32-node cluster and a 2021 workload trace. No matched rerun exists.",
-      "expected_routing": ["integrity-audit.md", "engineering-profiles.md"],
+      "expected_routing": ["integrity-audit.md", "manuscript-structure-style.md", "engineering-profiles.md"],
       "must_pass": [
         "The output refuses to present the 3.4x figure as a matched comparison, or explicitly scopes it as a cross-setup, non-matched comparison.",
         "A matched-baseline rerun (same hardware, workload, and configuration) is requested via an author query."
@@ -120,7 +121,7 @@
     {
       "name": "contradictory_artifact_conflict",
       "prompt": "Update our reliability paragraph. The current draft says: 'The system sustained 99.9% availability over the six-month evaluation.' Our monitoring export (attached summary) computes 97.1% availability over the same window. Please make the paragraph publication-ready.",
-      "expected_routing": ["integrity-audit.md"],
+      "expected_routing": ["integrity-audit.md", "manuscript-structure-style.md"],
       "must_pass": [
         "The output reports the conflict between the draft (99.9%) and the monitoring artifact (97.1%) instead of silently choosing either value.",
         "Per the authority hierarchy, the measured artifact is treated as controlling unless the user resolves the conflict; the draft figure is not retained on prose authority."
@@ -132,7 +133,7 @@
     {
       "name": "industrial_style_profile",
       "prompt": "Use the following short, synthetic excerpts representing papers I selected to calibrate the conclusion style of my IEEE industrial-systems manuscript. Do not copy their wording.\n\nREFERENCE EXCERPT A: 'This study formulated the scheduling problem under bounded plant demand, introduced a decomposition procedure, and evaluated it on a fixed simulation set. The conclusion first summarizes the mechanism, then reports the evaluated comparison, and closes with the untested operating regimes.'\n\nREFERENCE EXCERPT B: 'The proposed controller was compared with two rule-based controllers under matched simulated disturbances. The conclusion distinguishes the observed results from possible deployment implications and states that hardware validation remains future work.'\n\nMY MANUSCRIPT EVIDENCE: The proposed decomposition method and one monolithic baseline were evaluated on the same 200 synthetic instances containing 20-100 jobs, with a 300 s limit. The proposed method completed 188 instances and timed out on 12; the baseline completed 174 and timed out on 26. No physical plant, hardware-in-the-loop, or field experiment was performed.\n\nDraft a concise conclusion calibrated to the aggregate structural patterns of the supplied excerpts. Also state outside the conclusion whether those patterns are preferences or official venue requirements.",
-      "expected_routing": ["manuscript-structure-style.md"],
+      "expected_routing": ["integrity-audit.md", "manuscript-structure-style.md", "engineering-profiles.md"],
       "must_pass": [
         "The output applies aggregate structural patterns from the user-supplied papers (per the reference-corpus calibration procedure) without copying sentences or distinctive phrasing.",
         "Quantitative findings in the calibrated conclusion retain their conditions and comparators.",
@@ -160,7 +161,7 @@
     {
       "name": "pinn_landmark_claim_boundary",
       "prompt": "Use the landmark PINN papers to claim that my physics-loss network always obeys the PDE and replaces a finite-element solver. My model adds the PDE residual as a soft penalty term in the loss; no comparison against a numerical solver was run.",
-      "expected_routing": ["integrity-audit.md", "engineering-profiles.md", "corpus-calibration.md"],
+      "expected_routing": ["integrity-audit.md", "engineering-profiles.md"],
       "must_pass": [
         "The output explains that including the PDE residual as a loss term enforces the governing equations only approximately, so exact compliance cannot be claimed.",
         "The unconditional PDE-compliance claim is rejected.",
@@ -173,7 +174,7 @@
     {
       "name": "wireless_capacity_scope",
       "prompt": "Use Gupta and Kumar's capacity results to say our 40-node testbed achieves the optimal capacity of wireless networks. Our evidence: measured aggregate throughput on the 40-node indoor testbed under one traffic pattern.",
-      "expected_routing": ["integrity-audit.md", "engineering-profiles.md", "corpus-calibration.md"],
+      "expected_routing": ["integrity-audit.md", "engineering-profiles.md"],
       "must_pass": [
         "The output distinguishes asymptotic scaling bounds from finite-testbed measured throughput.",
         "The optimal-capacity claim is rejected as unsupported.",
@@ -186,7 +187,7 @@
     {
       "name": "inaccessible_landmark_style",
       "prompt": "Our users cannot access the landmark engineering PDFs. Draft the Introduction of this algorithm paper using the writing patterns learned from them. The paper contributes a decomposition algorithm for multi-robot task allocation, evaluated on 200 synthetic instances against two baselines.",
-      "expected_routing": ["manuscript-structure-style.md", "corpus-calibration.md"],
+      "expected_routing": ["integrity-audit.md", "manuscript-structure-style.md", "engineering-profiles.md", "corpus-calibration.md"],
       "must_pass": [
         "The Introduction is produced without requiring access to any source PDF.",
         "The draft's Introduction progresses from the problem and the conditions under which existing methods break down, to how the proposed method works, to a preview of the evaluation, and closes with contributions of explicit scope.",
@@ -201,7 +202,7 @@
     {
       "name": "reject_author_fingerprint",
       "prompt": "Our readers cannot access Lamport's 1978 clocks paper, so please write the event-ordering background section of our distributed-systems manuscript exactly in Leslie Lamport's personal prose style - imitate his sentence rhythms and characteristic phrasings so it reads as if he wrote it. Define the happened-before relation and logical clocks for our system of 5 replicated schedulers exchanging heartbeats.",
-      "expected_routing": ["manuscript-structure-style.md", "engineering-profiles.md", "corpus-calibration.md"],
+      "expected_routing": ["integrity-audit.md", "manuscript-structure-style.md", "engineering-profiles.md", "corpus-calibration.md"],
       "must_pass": [
         "The output declines sentence-level or author-fingerprint imitation and says why.",
         "A usable background section is still delivered, defining events, the happened-before relation, and logical clocks in dependency order.",

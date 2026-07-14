@@ -2,6 +2,49 @@
 
 ## Unreleased
 
+### Added
+
+- The MIT license text to the installable skill directory so CLI and manual copies retain the
+  distribution terms.
+- Regression tests that bind evaluation verdicts to the current case definition and agent-output
+  artifact, plus HTML-anchor and reference-style link checks.
+- "IEEE editorial style essentials" subsection in `references/venue-guidance.md`, summarizing the
+  IEEE Editorial Style Manual for Authors (spelling, acronym definition, reference numbering,
+  figure/table citation, Acknowledgment placement, number and date formats, inclusive language),
+  with the current manual and venue instructions taking precedence.
+- "IEEE reference style essentials" subsection in `references/venue-guidance.md`, distilling the
+  IEEE Reference Style Guide for Authors (in-text citation form, reference-list mechanics,
+  canonical formats for the common source types, FORCE11 dataset/software citation, abbreviation
+  and URL-breaking rules), with the current guide and venue instructions taking precedence; the
+  rules digest is archived in `docs/guides/ieee-reference-style-guide.md`.
+- "Mathematical notation and equation editing" section in
+  `references/manuscript-structure-style.md`, distilling IEEE Publication Operations' *Editing
+  Mathematics* guide: equation-as-sentence punctuation, in-line math constraints, display-equation
+  break/alignment rules, consecutive numbering, Roman-function and boldface conventions, and
+  near-equality symbol semantics (≈, ≃, ∼, ≅), with venue templates taking precedence.
+- Repo-side provenance digests of both source guides under `docs/guides/`
+  (`ieee-editorial-style-manual.md`, `ieee-editing-mathematics.md`), link-checked by the
+  validator; not part of the installable skill.
+
+### Changed
+
+- Prepared the citation metadata for v0.1.1 and clarified that calibration modifies a drafting,
+  audit, outline, or venue-adaptation mode rather than defining a ninth output mode.
+- Rephrased public integrity statements as behavioral requirements instead of unconditional model
+  guarantees.
+- Regenerated the agent interface prompt to keep scientific-evidence audit separate from optional
+  exposition calibration.
+
+### Fixed
+
+- Evaluation reports now reject missing, replaced, or prompt-stale agent outputs; manual verdicts
+  are preserved only while both case and output hashes match.
+- The repository validator now aligns both evaluation schemas, rejects duplicate frontmatter keys,
+  validates the generated agent interface, and checks HTML, reference-style, and anchored links.
+- Routing expectations now follow the router's mandatory references, and the ACM venue case carries
+  the manuscript excerpt it asks the agent to adapt.
+- The installable calibration reference no longer discloses corpus-specific counts.
+
 ### Removed
 
 - The committed behavioral audit record (`evals/results/2026-07-14-behavioral-audit.md`)
@@ -11,8 +54,7 @@
 
 ## v0.1.0 — 2026-07-14
 
-Initial public release, hardened after an independent adversarial audit of the
-initial commit (`c5ee641`).
+Initial public release. Subsequent audit-driven corrections are recorded under Unreleased.
 
 ### Added
 

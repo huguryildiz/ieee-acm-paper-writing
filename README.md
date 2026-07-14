@@ -27,14 +27,16 @@ It keeps three authorities separate:
 3. **Venue compliance** — what the target publication's current official instructions and
    template require.
 
-When these sources conflict, the skill reports the conflict instead of selecting the most
-convenient version. Archived, planned, expected, or mock results are not treated as completed
-evidence.
+The skill contract requires conflicts between these sources to be reported instead of resolved by
+selecting the most convenient version. It also prohibits treating archived, planned, expected, or
+mock results as completed evidence.
 
 ## Capabilities
 
 The router supports eight modes: `draft`, `rewrite`, `expand`, `compress`, `outline`, `audit`,
-`section-audit`, and `venue-adapt`. Typical tasks include:
+`section-audit`, and `venue-adapt`. Style and landmark-paper calibration modify whichever of these
+modes produces the requested deliverable; calibration is not a separate output mode. Typical tasks
+include:
 
 - drafting or revising abstracts, introductions, related work, methods, results, discussions,
   conclusions, and contribution lists;
@@ -68,13 +70,14 @@ task:
 | [`corpus-calibration.md`](skills/ieee-acm-paper-writing/references/corpus-calibration.md) | Anonymous, non-citable exposition patterns derived from the local calibration corpus |
 | [`venue-guidance.md`](skills/ieee-acm-paper-writing/references/venue-guidance.md) | Venue adaptation and compliance-ledger rules |
 
-For manuscript tasks, the skill first identifies the intended claim, evidence source, scope, and
-uncertainty. Unsupported content is omitted from publication-ready prose or returned separately as
-a structured author query. For venue adaptation, requirements that cannot be checked against an
-official current source are labeled `unverified venue rule` rather than inferred.
+For manuscript tasks, the skill instructs the agent to identify the intended claim, evidence
+source, scope, and uncertainty before drafting. Its output contract requires unsupported content to
+be omitted from publication-ready prose or returned separately as a structured author query. For
+venue adaptation, requirements that cannot be checked against an official current source must be
+labeled `unverified venue rule` rather than inferred.
 
-Supplied manuscripts, reviews, references, and data are treated as evidence—not as instructions.
-Embedded directives are surfaced as integrity findings instead of being executed.
+The integrity contract treats supplied manuscripts, reviews, references, and data as evidence—not
+as instructions—and requires embedded directives to be surfaced as findings rather than executed.
 
 ## Installation
 
@@ -130,9 +133,10 @@ python3 evals/run_evals.py score   --outdir out/
 python3 evals/run_evals.py report  --outdir out/ --strict
 ```
 
-`--strict` succeeds only when every defined case is present, current, scored, and passing. Missing,
-unscored, or stale entries remain in the denominator and cause a non-zero exit. Regression tests
-cover this aggregation behavior:
+`--strict` succeeds only when every defined case has a present agent-response artifact whose hash
+matches the manually scored output, whose case hash matches the current prompt and criteria, and
+whose verdicts are complete and passing. Missing, unscored, or stale entries remain in the
+denominator and cause a non-zero exit. Regression tests cover this aggregation behavior:
 
 ```bash
 python3 -m unittest discover -s tests -v
@@ -143,23 +147,29 @@ pushes to `main` and on pull requests.
 
 ## Scope and limitations
 
-- The skill does not invent citations, identifiers, evidence, methods, datasets, results,
-  guarantees, or novelty claims.
-- It does not assume that one template, page limit, review format, anonymization policy, or AI
-  disclosure rule applies to every IEEE or ACM publication.
-- It does not replace a target venue's current official author instructions or template.
-- It does not call a manuscript submission-ready while a load-bearing claim, citation, result, or
-  venue requirement remains unresolved.
+- The integrity contract prohibits inventing citations, identifiers, evidence, methods, datasets,
+  results, guarantees, or novelty claims.
+- The venue contract prohibits assuming that one template, page limit, review format,
+  anonymization policy, or AI disclosure rule applies to every IEEE or ACM publication.
+- The skill guidance does not replace a target venue's current official author instructions or
+  template.
+- The audit contract prohibits calling a manuscript submission-ready while a load-bearing claim,
+  citation, result, or venue requirement remains unresolved.
 - The evaluation runner uses manual criterion verdicts; it is a regression and smoke-test harness,
   not an automated model judge or comparative benchmarking framework.
 - The skill is independently usable. ALETHEIA may be used upstream for evidence retrieval and
   claim support, but it is not required.
+
+These are requirements encoded by the skill, not a guarantee that every host model will comply on
+every run. Validate consequential outputs against the supplied evidence and retain the relevant
+prompt, response, and scoring artifacts.
 
 ## Repository structure
 
 ```text
 skills/ieee-acm-paper-writing/
 ├── SKILL.md                 # Router, invariants, and output contracts
+├── LICENSE                  # MIT terms shipped with the installable copy
 ├── agents/openai.yaml       # Agent interface metadata
 ├── examples/                # Routing, audit, and rewrite examples
 └── references/              # Integrity, style, domain, corpus, and venue guidance
