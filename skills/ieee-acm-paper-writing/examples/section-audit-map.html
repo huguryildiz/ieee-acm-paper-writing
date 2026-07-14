@@ -162,8 +162,50 @@ document.addEventListener('DOMContentLoaded', async function() {
       '.titletext{grid-column:2;grid-row:1}' +
       '.titletext h1 .k{display:block;margin-top:4px}' +
       '.lede{grid-column:2;grid-row:2;max-width:86ch}' +
+      'footer a{color:var(--v);text-underline-offset:2px}' +
       '@media(max-width:720px){.titleblock{grid-template-columns:58px minmax(0,1fr);column-gap:12px;row-gap:12px}.brandmark{width:58px;height:58px;grid-row:1}.lede{grid-column:1 / -1;grid-row:2}.titletext h1 .k{margin-top:2px}}' +
       '</style>';
+    const venueFinding = {
+      key: '<li class="key s" data-flaw="11"><span class="num">11</span><span class="txt"><span class="nm">Future work phrased as expected result</span><span class="lay">S · scientific support</span></span></li>',
+      sourceAnchor: 'the conventional MILP baseline, <mark class="fl s" data-flaw="2">reducing solve time by 23%</mark>',
+      responseAnchor: '<p><span class="fx" data-flaw="1">Every warm-started instance terminated with solver status optimal at the 0.01% gap tolerance.</span>',
+      dataAnchor: "    '11':['Future work phrased as expected result','s','S']",
+    };
+    const replacements = [
+      [
+        '<p class="eyebrow">IEEE / ACM manuscript audit · teaching fixture</p>',
+        '<p class="eyebrow">IEEE Transactions on Smart Grid · regular research paper · teaching fixture</p>'
+      ],
+      [
+        '<span class="lchip v"><span class="sw">V</span><span class="nm"><b>Venue compliance</b> — house style</span><span class="ct">0 here</span></span>',
+        '<span class="lchip v"><span class="sw">V</span><span class="nm"><b>Venue compliance</b> — verified IEEE style</span><span class="ct">1 flaw</span></span>'
+      ],
+      [
+        venueFinding.key,
+        venueFinding.key + '\n        <li class="key v" data-flaw="12"><span class="num">12</span><span class="txt"><span class="nm">Figure citation not in IEEE style</span><span class="lay">V · venue compliance</span></span></li>'
+      ],
+      [
+        venueFinding.sourceAnchor,
+        'the conventional MILP baseline. <mark class="fl v" data-flaw="12">Figure 1 summarizes the solve-time comparison.</mark><sup class="bdg v" data-flaw="12">12</sup> Our method <mark class="fl s" data-flaw="2">reduces solve time by 23%</mark>'
+      ],
+      [
+        venueFinding.responseAnchor,
+        '<p><span class="fx" data-flaw="12">Fig. 1 summarizes the solve-time comparison.</span><sup class="bdg v" data-flaw="12">12</sup> <span class="fx" data-flaw="1">Every warm-started instance terminated with solver status optimal at the 0.01% gap tolerance.</span>'
+      ],
+      [
+        venueFinding.dataAnchor,
+        venueFinding.dataAnchor + ",\n    '12':['Figure citation not in IEEE style','v','V']"
+      ],
+      [
+        'Fixture is synthetic; numbers, citations, and venue are invented for teaching.',
+        'Fixture is synthetic; its numbers and citation are invented. The designated IEEE Transactions on Smart Grid target is real, and flaw 12 uses the <a href="https://journals.ieeeauthorcenter.ieee.org/wp-content/uploads/sites/7/IEEE-Editorial-Style-Manual-for-Authors.pdf" target="_blank" rel="noopener">IEEE Editorial Style Manual for Authors</a> and IEEE PES guidance checked 15 July 2026.'
+      ]
+    ];
+    for (const [from, to] of replacements) {
+      if (!template.includes(from)) throw new Error('showcase venue patch anchor missing');
+      template = template.replace(from, to);
+    }
+    template = template.split('11 planted flaws').join('12 planted flaws');
     const resourceScript = '<script>window.__resources = ' +
       JSON.stringify(resourceMap).replace(/<\//g, '<\\/') +
       ';</' + 'script>';
