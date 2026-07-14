@@ -1,6 +1,6 @@
 ---
 name: ieee-acm-paper-writing
-description: Draft, rewrite, compress, structure, calibrate, or audit engineering manuscripts for IEEE and ACM Transactions, journals, and conferences. Use for abstracts, introductions, related work, system models, mathematical formulations, algorithms, experimental methods, results, discussions, conclusions, contribution lists, notation and claim audits, evidence-grounded peer-review reports, venue adaptation, or landmark-paper calibration in communications, signal processing, energy systems, robotics, optimization, simulation, ML-assisted engineering, and computer systems. Do not use for general documentation, grant proposals, marketing copy, or editorial accept/reject advocacy detached from manuscript evidence.
+description: Draft, rewrite, compress, structure, calibrate, or audit engineering manuscripts for IEEE and ACM Transactions, journals, and conferences, with optional self-contained HTML audit maps. Use for abstracts, introductions, related work, system models, mathematical formulations, algorithms, experimental methods, results, discussions, conclusions, contribution lists, notation and claim audits, evidence-grounded peer-review reports, venue adaptation, or landmark-paper calibration in communications, signal processing, energy systems, robotics, optimization, simulation, ML-assisted engineering, and computer systems. Do not use for general documentation, grant proposals, marketing copy, or editorial accept/reject advocacy detached from manuscript evidence.
 ---
 
 # IEEE/ACM Engineering Paper Writing
@@ -16,6 +16,8 @@ Before drafting or auditing:
 1. Identify the requested mode: `draft`, `rewrite`, `expand`, `compress`, `outline`,
    `audit`, `section-audit`, or `venue-adapt`. Treat style or landmark-paper calibration
    as a modifier of the applicable mode, not as a separate output mode.
+   Treat `--html-map` as an optional output modifier of `audit` or `section-audit`, never
+   as a ninth mode.
 2. Identify the target publication and article type. If none is supplied, apply generic
    IEEE/ACM engineering conventions and label venue-specific compliance as unverified.
 3. Identify the scientific authority: repository specifications, decision records,
@@ -87,6 +89,8 @@ Examples are supporting evidence for behavior, not templates to copy mechanicall
 - [reference-formatting example](examples/reference-format-example.md)
 - [section-audit example](examples/section-audit-example.md) — audit and evidence-scoped
   rewrite end to end; also a live-test fixture with a planted-flaw answer key
+- [section-audit map data](examples/section-audit-map.json) and its generated
+  [HTML rendering](examples/section-audit-map.html) — the renderer contract and visual result
 
 ## Use the de-identified corpus calibration
 
@@ -171,6 +175,39 @@ not manufacture prose-level claims before the evidence exists.
 
 Return the adapted text plus a compact compliance ledger: verified requirements, unresolved
 requirements, and scientific content intentionally left unchanged.
+
+### HTML audit-map modifier
+
+Interpret `--html-map`, or an unambiguous natural-language request for an HTML audit map, as an
+optional output modifier of `audit` or `section-audit`. Do not add it to the mode list. Do not
+produce an HTML file when the modifier is absent. If the user combines it with another mode, explain
+that it is available only for an audit and do not silently change the requested scientific task.
+
+When the modifier is present:
+
+1. Complete the canonical text audit first. The rendering is a presentation of that audit and adds
+   no finding, number, correction, or conclusion.
+2. Create version-1 JSON matching [section-audit-map.json](examples/section-audit-map.json). Tie
+   every finding to its triggering sentence, concern layer, severity, missing or contradicted
+   evidence, scientific consequence, bounded correction, and disposition.
+3. Render the JSON with the bundled standard-library tool:
+
+   ```bash
+   python3 <skill-directory>/scripts/render_audit_map.py audit-map.json --out <output>.html
+   ```
+
+4. Honor an explicit `--out PATH`. Otherwise write `<source-stem>-section-audit-map.html` beside
+   the requested deliverable, or `section-audit-map.html` in the active workspace when no source
+   path exists. Never overwrite an existing file unless the user explicitly authorizes it; only
+   then pass `--force`.
+5. Return the canonical text audit and the generated file path. If the environment has no writable
+   file surface, return the text audit and state that the HTML artifact could not be created.
+
+Never hand-edit generated HTML; update the JSON and rerun the renderer. The integrity gate carries
+into the rendering unchanged: keep author queries outside manuscript prose, never invent missing
+numbers or insert placeholders to fill a panel, and show an unused concern layer as
+`0 · not exercised`, never as a pass. The generated page must remain self-contained with no
+external assets.
 
 ## Final verification
 

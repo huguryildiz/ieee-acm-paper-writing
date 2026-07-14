@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Section-Audit Map — tracing planted flaws to evidence-scoped responses</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231a2b43'/%3E%3Cpath d='M8 9h16v3H8zm0 6h11v3H8zm0 6h16v3H8z' fill='%23d0aa57'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --paper: #f2ecdf;
+      --paper-raised: #fbf7ee;
+      --paper-deep: #e8deca;
+      --ink: #172338;
+      --ink-soft: #4e5663;
+      --navy: #1a2b43;
+      --gold: #b58a37;
+      --gold-soft: #d8bb79;
+      --rule: rgba(26, 43, 67, .16);
+      --rule-strong: rgba(26, 43, 67, .28);
+      --support: #b45135;
+      --support-wash: rgba(180, 81, 53, .11);
+      --method: #426b88;
+      --method-wash: rgba(66, 107, 136, .11);
+      --venue: #80536f;
+      --venue-wash: rgba(128, 83, 111, .11);
+      --fix: #3f7354;
+      --fix-wash: rgba(63, 115, 84, .11);
+      --shadow: 0 18px 46px -36px rgba(23, 35, 56, .72);
+      --serif: Iowan Old Style, Baskerville, "Times New Roman", serif;
+      --sans: Avenir Next, Avenir, Segoe UI, sans-serif;
+      --mono: SFMono-Regular, Consolas, Liberation Mono, monospace;
+    }
+
+    html[data-theme="dark"] {
+      --paper: #151b24;
+      --paper-raised: #1d2633;
+      --paper-deep: #111720;
+      --ink: #eee7d8;
+      --ink-soft: #bbb6ad;
+      --navy: #d7e1ed;
+      --gold: #d5b56b;
+      --gold-soft: #a98a4e;
+      --rule: rgba(238, 231, 216, .14);
+      --rule-strong: rgba(238, 231, 216, .26);
+      --support: #df8a70;
+      --support-wash: rgba(223, 138, 112, .13);
+      --method: #83aac5;
+      --method-wash: rgba(131, 170, 197, .13);
+      --venue: #c396b2;
+      --venue-wash: rgba(195, 150, 178, .13);
+      --fix: #88b895;
+      --fix-wash: rgba(136, 184, 149, .13);
+      --shadow: 0 20px 52px -32px rgba(0, 0, 0, .8);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        linear-gradient(90deg, transparent 0 49.9%, rgba(181, 138, 55, .035) 50%, transparent 50.1%),
+        var(--paper);
+      color: var(--ink);
+      font: 16px/1.55 var(--sans);
+    }
+
+    button { font: inherit; }
+    .masthead {
+      border-top: 6px solid var(--navy);
+      border-bottom: 1px solid var(--rule-strong);
+      background: color-mix(in srgb, var(--paper-raised) 92%, transparent);
+    }
+    .masthead-inner, .legend, .layout, footer {
+      width: min(1480px, calc(100% - 48px));
+      margin-inline: auto;
+    }
+    .masthead-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      padding: clamp(26px, 4vw, 56px) 0 30px;
+    }
+    .identity {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .mark {
+      width: 58px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--rule-strong);
+      background: var(--navy);
+      color: var(--gold-soft);
+      box-shadow: 7px 7px 0 var(--paper-deep);
+    }
+    .mark svg { width: 31px; height: 31px; }
+    .eyebrow, .section-label, .location, .disposition, .key-layer, .legend-label {
+      font: 700 .72rem/1.35 var(--mono);
+      letter-spacing: .095em;
+      text-transform: uppercase;
+    }
+    .eyebrow { margin: 1px 0 8px; color: var(--gold); }
+    h1 {
+      max-width: 1050px;
+      margin: 0;
+      font: 600 clamp(2rem, 4vw, 4.5rem)/.98 var(--serif);
+      letter-spacing: -.032em;
+    }
+    .subject { color: var(--ink-soft); font-weight: 400; }
+    .lede {
+      grid-column: 2;
+      max-width: 880px;
+      margin: 16px 0 0;
+      color: var(--ink-soft);
+      font-family: var(--serif);
+      font-size: clamp(1.03rem, 1.5vw, 1.24rem);
+    }
+    .toolbar { display: flex; gap: 8px; align-items: start; }
+    .action {
+      min-height: 42px;
+      border: 1px solid var(--rule-strong);
+      background: transparent;
+      color: var(--ink);
+      padding: 9px 13px;
+      cursor: pointer;
+    }
+    .action:hover, .action:focus-visible { border-color: var(--gold); outline: none; }
+
+    .legend {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      flex-wrap: wrap;
+      padding: 18px 0;
+    }
+    .legend-label { align-self: center; margin-right: 4px; color: var(--ink-soft); }
+    .layer-chip {
+      display: grid;
+      grid-template-columns: 28px auto;
+      gap: 0 9px;
+      align-items: center;
+      min-width: 205px;
+      border: 1px solid var(--rule);
+      background: var(--paper-raised);
+      padding: 9px 12px;
+    }
+    .layer-code {
+      grid-row: 1 / 3;
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      color: var(--paper-raised);
+      font: 800 .78rem var(--mono);
+    }
+    .layer-name { font-size: .86rem; font-weight: 700; }
+    .layer-count { color: var(--ink-soft); font: .69rem var(--mono); }
+    .layer-chip.s .layer-code, .badge.s, .finding-number.s { background: var(--support); }
+    .layer-chip.m .layer-code, .badge.m, .finding-number.m { background: var(--method); }
+    .layer-chip.v .layer-code, .badge.v, .finding-number.v { background: var(--venue); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 18px;
+      padding-bottom: 44px;
+    }
+    .rail {
+      align-self: start;
+      position: sticky;
+      top: 14px;
+      border: 1px solid var(--rule-strong);
+      background: var(--paper-raised);
+      box-shadow: var(--shadow);
+    }
+    .rail h2 {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0;
+      border-bottom: 1px solid var(--rule);
+      padding: 14px;
+      font: 700 .8rem var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .rail-status { color: var(--ink-soft); font-weight: 500; text-transform: none; }
+    .keylist { display: grid; gap: 1px; margin: 0; padding: 0; list-style: none; background: var(--rule); }
+    .key {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 29px minmax(0, 1fr);
+      gap: 9px;
+      align-items: start;
+      border: 0;
+      background: var(--paper-raised);
+      color: var(--ink);
+      padding: 10px 12px;
+      text-align: left;
+      cursor: pointer;
+    }
+    .key:hover, .key:focus-visible { background: var(--paper-deep); outline: none; }
+    .key-title { display: block; font-size: .82rem; line-height: 1.25; font-weight: 700; }
+    .key-layer { display: block; margin-top: 3px; color: var(--ink-soft); font-size: .59rem; }
+    .finding-number {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      color: var(--paper-raised);
+      font: 800 .68rem var(--mono);
+    }
+
+    .report { min-width: 0; }
+    .column-heads {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .column-head {
+      border-top: 3px solid var(--navy);
+      padding: 10px 14px 6px;
+      color: var(--ink-soft);
+      font-size: .84rem;
+    }
+    .column-head.fix { border-color: var(--fix); }
+    .column-head strong { color: var(--ink); }
+    .finding-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+      scroll-margin-top: 18px;
+    }
+    .panel {
+      min-width: 0;
+      border: 1px solid var(--rule);
+      background: var(--paper-raised);
+      box-shadow: var(--shadow);
+    }
+    .panel.fix { border-color: color-mix(in srgb, var(--fix) 45%, var(--rule)); }
+    .panel-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: start;
+      border-bottom: 1px solid var(--rule);
+      padding: 12px 14px;
+    }
+    .badge {
+      display: grid;
+      place-items: center;
+      min-width: 29px;
+      height: 29px;
+      padding: 0 5px;
+      color: var(--paper-raised);
+      font: 800 .72rem var(--mono);
+    }
+    .finding-title { margin: 1px 0 2px; font: 700 1rem/1.25 var(--serif); }
+    .location { color: var(--ink-soft); font-size: .59rem; }
+    .severity {
+      border: 1px solid var(--rule-strong);
+      padding: 3px 6px;
+      color: var(--ink-soft);
+      font: 700 .58rem var(--mono);
+      text-transform: uppercase;
+    }
+    .panel-body { padding: 14px; }
+    blockquote {
+      margin: 0 0 13px;
+      border-left: 3px solid var(--support);
+      background: var(--support-wash);
+      padding: 11px 13px;
+      font: 1rem/1.5 var(--serif);
+    }
+    .panel[data-layer="method-domain"] blockquote { border-color: var(--method); background: var(--method-wash); }
+    .panel[data-layer="venue-compliance"] blockquote { border-color: var(--venue); background: var(--venue-wash); }
+    .analysis-label { margin: 13px 0 4px; color: var(--ink-soft); font: 700 .61rem var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+    .analysis-text { margin: 0; color: var(--ink-soft); font-size: .88rem; }
+    .correction {
+      margin: 0;
+      border-left: 3px solid var(--fix);
+      background: var(--fix-wash);
+      padding: 11px 13px;
+      font: 1rem/1.5 var(--serif);
+    }
+    .disposition { display: inline-block; margin-bottom: 9px; color: var(--fix); font-size: .61rem; }
+    .empty {
+      border: 1px dashed var(--rule-strong);
+      background: var(--paper-raised);
+      padding: 30px;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    html.has-focus [data-finding]:not(.active) { opacity: .24; filter: grayscale(.75); }
+    html.has-focus [data-finding].active { opacity: 1; filter: none; }
+    .key, .finding-pair { transition: opacity 160ms ease-out, filter 160ms ease-out, background 160ms ease-out; }
+
+    footer {
+      border-top: 1px solid var(--rule-strong);
+      padding: 20px 0 34px;
+      color: var(--ink-soft);
+      font-size: .78rem;
+    }
+    footer strong { color: var(--ink); }
+
+    @media (max-width: 980px) {
+      .masthead-inner { grid-template-columns: 1fr; }
+      .toolbar { grid-row: 1; justify-self: end; }
+      .layout { grid-template-columns: 1fr; }
+      .rail { position: static; }
+      .keylist { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+    }
+    @media (max-width: 720px) {
+      .masthead-inner, .legend, .layout, footer { width: min(100% - 24px, 1480px); }
+      .identity { grid-template-columns: 44px minmax(0, 1fr); gap: 12px; }
+      .mark { width: 44px; }
+      .lede { grid-column: 1 / -1; }
+      .column-heads { display: none; }
+      .finding-pair { grid-template-columns: 1fr; }
+      .panel.fix::before {
+        content: "Evidence-scoped response";
+        display: block;
+        border-bottom: 1px solid var(--rule);
+        padding: 8px 14px;
+        color: var(--fix);
+        font: 700 .61rem var(--mono);
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .key, .finding-pair { transition: none; }
+    }
+    @media print {
+      :root, html[data-theme="dark"] {
+        --paper: #f7f2e7; --paper-raised: #fffdf7; --paper-deep: #eee5d4;
+        --ink: #172338; --ink-soft: #4e5663; --navy: #1a2b43;
+      }
+      body { background: var(--paper); }
+      .toolbar { display: none; }
+      .masthead-inner, .legend, .layout, footer { width: 100%; }
+      .layout { grid-template-columns: 1fr; }
+      .rail { position: static; box-shadow: none; break-after: page; }
+      .finding-pair { break-inside: avoid; }
+      .panel { box-shadow: none; }
+      html.has-focus [data-finding]:not(.active) { opacity: 1; filter: none; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div>
+        <div class="identity">
+          <div class="mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M5 7.5h22M5 16h15M5 24.5h22" stroke="currentColor" stroke-width="2.4"/>
+              <circle cx="24" cy="16" r="3.2" fill="currentColor"/>
+            </svg>
+          </div>
+          <div>
+            <p class="eyebrow">IEEE / ACM manuscript audit · teaching fixture</p>
+            <h1>Section-Audit Map <span class="subject">— tracing planted flaws to evidence-scoped responses</span></h1>
+          </div>
+        </div>
+        <p class="lede">A synthetic Results and Conclusion excerpt mapped finding by finding. Each numbered entry preserves the concern layer, identifies the sentence that triggered the finding, and shows the bounded repair or author action supported by the fixture&#x27;s supplied evidence.</p>
+      </div>
+      <div class="toolbar" aria-label="Display controls">
+        <button class="action" id="clear" type="button">Clear focus</button>
+        <button class="action" id="theme" type="button" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="legend" aria-label="Concern layers">
+    <span class="legend-label">Concern layers</span>
+    <span class="layer-chip s"><span class="layer-code">S</span><span class="layer-name">Scientific support</span><span class="layer-count">9 findings · claims vs. evidence</span></span>
+    <span class="layer-chip m"><span class="layer-code">M</span><span class="layer-name">Method / domain reporting</span><span class="layer-count">2 findings · reproducibility and disclosure</span></span>
+    <span class="layer-chip v"><span class="layer-code">V</span><span class="layer-name">Venue compliance</span><span class="layer-count">0 · not exercised · verified house rules</span></span>
+  </section>
+
+  <main class="layout">
+    <aside class="rail" aria-label="Finding index">
+      <h2>Finding index <span class="rail-status" id="rail-status">11 findings</span></h2>
+      <ol class="keylist"><li><button class="key" type="button" data-finding="1" aria-controls="finding-1"><span class="finding-number s">1</span><span><span class="key-title">Unscoped optimality claim</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key" type="button" data-finding="2" aria-controls="finding-2"><span class="finding-number s">2</span><span><span class="key-title">Bare 23% solve-time claim</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key" type="button" data-finding="3" aria-controls="finding-3"><span class="finding-number s">3</span><span><span class="key-title">Significance asserted without a test</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key" type="button" data-finding="4" aria-controls="finding-4"><span class="finding-number s">4</span><span><span class="key-title">Best-case cost reduction presented as typical</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key" type="button" data-finding="5" aria-controls="finding-5"><span class="finding-number m">5</span><span><span class="key-title">Missing reproducibility settings</span><span class="key-layer">M · Method / domain reporting</span></span></button></li>
+        <li><button class="key" type="button" data-finding="6" aria-controls="finding-6"><span class="finding-number s">6</span><span><span class="key-title">Unverifiable corroborating citation</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key" type="button" data-finding="7" aria-controls="finding-7"><span class="finding-number m">7</span><span><span class="key-title">Evaluation split is ambiguous</span><span class="key-layer">M · Method / domain reporting</span></span></button></li>
+        <li><button class="key" type="button" data-finding="8" aria-controls="finding-8"><span class="finding-number s">8</span><span><span class="key-title">Absolute negative claim lacks scope</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key" type="button" data-finding="9" aria-controls="finding-9"><span class="finding-number s">9</span><span><span class="key-title">Universal proof claim exceeds the study</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key" type="button" data-finding="10" aria-controls="finding-10"><span class="finding-number s">10</span><span><span class="key-title">New generalization claims appear only in the Conclusion</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key" type="button" data-finding="11" aria-controls="finding-11"><span class="finding-number s">11</span><span><span class="key-title">Future work is phrased as an expected result</span><span class="key-layer">S · Scientific support</span></span></button></li></ol>
+    </aside>
+
+    <section class="report" aria-label="Finding-to-correction map">
+      <div class="column-heads" aria-hidden="true">
+        <div class="column-head"><strong>Flawed source</strong> — sentence and evidentiary defect</div>
+        <div class="column-head fix"><strong>Evidence-scoped response</strong> — bounded repair or author action</div>
+      </div>
+      <article class="finding-pair" id="finding-1" data-finding="1">
+  <section class="panel" data-layer="scientific-support" aria-label="Finding 1 source">
+    <div class="panel-head">
+      <span class="badge s">1</span>
+      <div>
+        <h2 class="finding-title">Unscoped optimality claim</h2>
+        <div class="location">V. Results · paragraph 1</div>
+      </div>
+      <span class="severity">Major</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>The warm-started solver finds the optimal dispatch in every instance.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">The submitted excerpt gives no solver status, MIP-gap tolerance, or time limit. A warm start does not itself certify optimality.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">The sentence claims a guarantee that cannot be reconstructed from the reported experiment.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 1 response">
+    <div class="panel-head">
+      <span class="badge s">1</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Scientific support</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Evidence-scoped rewrite</span>
+      <p class="correction">After the author supplies the missing solver evidence, report the actual certificate: every warm-started instance terminated with solver status optimal at the stated 0.01% relative MIP-gap tolerance and 60 s limit.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-2" data-finding="2">
+  <section class="panel" data-layer="scientific-support" aria-label="Finding 2 source">
+    <div class="panel-head">
+      <span class="badge s">2</span>
+      <div>
+        <h2 class="finding-title">Bare 23% solve-time claim</h2>
+        <div class="location">V. Results · paragraph 2</div>
+      </div>
+      <span class="severity">Major</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>Our method reduces solve time by 23%.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">The excerpt omits the instance count, aggregation statistic, baseline configuration, and matched solver settings.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">The reader cannot determine whether 23% is a mean, median, best case, or unmatched comparison.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 2 response">
+    <div class="panel-head">
+      <span class="badge s">2</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Scientific support</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Evidence-scoped rewrite</span>
+      <p class="correction">With the supplied evidence, state that the value is the median solve-time reduction across 500 held-out instances relative to an identically configured cold start.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-3" data-finding="3">
+  <section class="panel" data-layer="scientific-support" aria-label="Finding 3 source">
+    <div class="panel-head">
+      <span class="badge s">3</span>
+      <div>
+        <h2 class="finding-title">Significance asserted without a test</h2>
+        <div class="location">V. Results · paragraph 2</div>
+      </div>
+      <span class="severity">Major</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>Our method significantly outperforms the conventional MILP baseline.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">No statistical test, p-value, confidence interval, or uncertainty summary is supplied.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">The word significantly implies statistical support that the evidence packet does not provide.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 3 response">
+    <div class="panel-head">
+      <span class="badge s">3</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Scientific support</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Remove unsupported statement</span>
+      <p class="correction">Remove the statistical-significance wording. Report only the supplied descriptive comparison and request uncertainty or distributional evidence separately.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-4" data-finding="4">
+  <section class="panel" data-layer="scientific-support" aria-label="Finding 4 source">
+    <div class="panel-head">
+      <span class="badge s">4</span>
+      <div>
+        <h2 class="finding-title">Best-case cost reduction presented as typical</h2>
+        <div class="location">V. Results · paragraph 2 and VI. Conclusion</div>
+      </div>
+      <span class="severity">Major</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>In the most demanding winter-peak scenario, operating cost falls by 41%, which demonstrates the economic value of the approach in realistic conditions.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">The 41% value comes from one instance whose cold start returned a time-limited, suboptimal incumbent rather than a certified optimum.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">The draft generalizes a scenario-specific comparison to the complete evaluation set and to realistic operation.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 4 response">
+    <div class="panel-head">
+      <span class="badge s">4</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Scientific support</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Evidence-scoped rewrite</span>
+      <p class="correction">Identify the single winter-peak instance, the time-limited comparator, and the suboptimal-incumbent boundary; explicitly state that 41% is not a general operating-cost reduction.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-5" data-finding="5">
+  <section class="panel" data-layer="method-domain" aria-label="Finding 5 source">
+    <div class="panel-head">
+      <span class="badge m">5</span>
+      <div>
+        <h2 class="finding-title">Missing reproducibility settings</h2>
+        <div class="location">V. Results · paragraph 1</div>
+      </div>
+      <span class="severity">Major</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>All experiments use our 34-bus test feeder.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">The submitted excerpt gives no solver name or version, time limit, MIP-gap setting, matched baseline configuration, seeds, or hardware.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">The optimization comparison cannot be reconstructed or assessed for configuration bias.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="method-domain" aria-label="Finding 5 response">
+    <div class="panel-head">
+      <span class="badge m">5</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Method / domain reporting</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">External author query</span>
+      <p class="correction">Insert the supplied Gurobi 10.0, 60 s, and 0.01% relative MIP-gap settings and state that cold- and warm-started runs use the identical formulation and solver configuration except for initialization. Request any still-missing hardware and seed details outside the manuscript prose.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-6" data-finding="6">
+  <section class="panel" data-layer="scientific-support" aria-label="Finding 6 source">
+    <div class="panel-head">
+      <span class="badge s">6</span>
+      <div>
+        <h2 class="finding-title">Unverifiable corroborating citation</h2>
+        <div class="location">V. Results · paragraph 2</div>
+      </div>
+      <span class="severity">Major</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>A comparable speedup was independently confirmed in [17], further validating our design choices.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">The fixture supplies neither the identity nor the content of reference [17], so its claim support cannot be checked.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">An unverified citation becomes load-bearing evidence for the manuscript&#x27;s own result.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 6 response">
+    <div class="panel-head">
+      <span class="badge s">6</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Scientific support</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Remove unsupported statement</span>
+      <p class="correction">Drop the corroboration sentence. Do not replace it unless the cited source is independently verified to support the exact scoped comparison.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-7" data-finding="7">
+  <section class="panel" data-layer="method-domain" aria-label="Finding 7 source">
+    <div class="panel-head">
+      <span class="badge m">7</span>
+      <div>
+        <h2 class="finding-title">Evaluation split is ambiguous</h2>
+        <div class="location">V. Results · paragraph 3</div>
+      </div>
+      <span class="severity">Major</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>The model was evaluated on held-out scenarios drawn from the same year of feeder data.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">The excerpt does not state whether training and evaluation are temporally or scenario-level disjoint.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">Potential leakage prevents a defensible claim about held-out performance.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="method-domain" aria-label="Finding 7 response">
+    <div class="panel-head">
+      <span class="badge m">7</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Method / domain reporting</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Evidence-scoped rewrite</span>
+      <p class="correction">Report the supplied temporal split: train on January–September and evaluate on 500 October–December instances from the same feeder year. Do not imply cross-feeder or cross-year generalization.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-8" data-finding="8">
+  <section class="panel" data-layer="scientific-support" aria-label="Finding 8 source">
+    <div class="panel-head">
+      <span class="badge s">8</span>
+      <div>
+        <h2 class="finding-title">Absolute negative claim lacks scope</h2>
+        <div class="location">V. Results · paragraph 3</div>
+      </div>
+      <span class="severity">Major</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>Across the evaluation set, the warm start never degraded solver performance.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">The submitted excerpt does not define the evaluation-set size or composition and does not identify which performance measure never degraded.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">Never reads as an unbounded universal rather than a finite observation.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 8 response">
+    <div class="panel-head">
+      <span class="badge s">8</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Scientific support</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Evidence-scoped rewrite</span>
+      <p class="correction">Scope the statement to the 500 evaluated instances and to solve time: the warm start did not increase solve time in any instance relative to the identically configured cold start.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-9" data-finding="9">
+  <section class="panel" data-layer="scientific-support" aria-label="Finding 9 source">
+    <div class="panel-head">
+      <span class="badge s">9</span>
+      <div>
+        <h2 class="finding-title">Universal proof claim exceeds the study</h2>
+        <div class="location">VI. Conclusion · sentence 1</div>
+      </div>
+      <span class="severity">Critical</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>This paper proved that learning-assisted warm starting makes mixed-integer dispatch tractable for real-time operation in all operating conditions.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">The fixture contains a finite simulation study on one 34-bus feeder and no operational deployment or real-time validation.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">The Conclusion converts bounded experimental observations into a universal proof and deployment claim.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 9 response">
+    <div class="panel-head">
+      <span class="badge s">9</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Scientific support</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Evidence-scoped rewrite</span>
+      <p class="correction">Replace the universal statement with the finite study boundary: the reported certificates and timing observations apply to the 34-bus feeder, 500-instance evaluation set, trained initializer, solver settings, and time limit.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-10" data-finding="10">
+  <section class="panel" data-layer="scientific-support" aria-label="Finding 10 source">
+    <div class="panel-head">
+      <span class="badge s">10</span>
+      <div>
+        <h2 class="finding-title">New generalization claims appear only in the Conclusion</h2>
+        <div class="location">VI. Conclusion · sentence 3</div>
+      </div>
+      <span class="severity">Critical</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>The framework generalizes to transmission-level unit commitment and to networks with high renewable penetration, making it directly deployable by system operators.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">No result in the fixture evaluates transmission-level systems, substantially higher renewable penetration, or operational deployment.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">The Conclusion claims external validity and readiness beyond the Results section and supplied evidence.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 10 response">
+    <div class="panel-head">
+      <span class="badge s">10</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Scientific support</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Remove unsupported statement</span>
+      <p class="correction">State that these settings were not evaluated and make no generalization or deployment claim for them.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-11" data-finding="11">
+  <section class="panel" data-layer="scientific-support" aria-label="Finding 11 source">
+    <div class="panel-head">
+      <span class="badge s">11</span>
+      <div>
+        <h2 class="finding-title">Future work is phrased as an expected result</h2>
+        <div class="location">VI. Conclusion · final sentence</div>
+      </div>
+      <span class="severity">Major</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>Future versions will incorporate battery degradation, which we expect to further improve economic performance.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">Battery degradation is not implemented or evaluated in the fixture.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">A planned method extension is presented with an unsupported anticipated outcome.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 11 response">
+    <div class="panel-head">
+      <span class="badge s">11</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Scientific support</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Evidence-scoped rewrite</span>
+      <p class="correction">State only that incorporating battery degradation into the formulation is left to future work.</p>
+    </div>
+  </section>
+</article>
+    </section>
+  </main>
+
+  <footer><strong>How to read.</strong> This is a synthetic teaching fixture. Its system, numbers, citation, and venue are invented. The HTML is generated from section-audit-map.json and is a presentation companion to section-audit-example.md, not behavioral evidence about an agent run.</footer>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const themeButton = document.getElementById('theme');
+      const clearButton = document.getElementById('clear');
+      const status = document.getElementById('rail-status');
+      const findings = {"1":{"layer":"S","title":"Unscoped optimality claim"},"10":{"layer":"S","title":"New generalization claims appear only in the Conclusion"},"11":{"layer":"S","title":"Future work is phrased as an expected result"},"2":{"layer":"S","title":"Bare 23% solve-time claim"},"3":{"layer":"S","title":"Significance asserted without a test"},"4":{"layer":"S","title":"Best-case cost reduction presented as typical"},"5":{"layer":"M","title":"Missing reproducibility settings"},"6":{"layer":"S","title":"Unverifiable corroborating citation"},"7":{"layer":"M","title":"Evaluation split is ambiguous"},"8":{"layer":"S","title":"Absolute negative claim lacks scope"},"9":{"layer":"S","title":"Universal proof claim exceeds the study"}};
+      let locked = null;
+
+      function setFocus(id) {
+        locked = id;
+        root.classList.toggle('has-focus', Boolean(id));
+        document.querySelectorAll('[data-finding]').forEach((element) => {
+          element.classList.toggle('active', Boolean(id) && element.dataset.finding === id);
+        });
+        status.textContent = id && findings[id]
+          ? `finding ${id} · ${findings[id].layer}`
+          : `11 findings`;
+      }
+
+      document.addEventListener('click', (event) => {
+        if (event.target.closest('.toolbar')) return;
+        const target = event.target.closest('[data-finding]');
+        if (!target) return setFocus(null);
+        const id = target.dataset.finding;
+        setFocus(locked === id ? null : id);
+      });
+      clearButton.addEventListener('click', () => setFocus(null));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') setFocus(null);
+      });
+
+      function applyTheme(theme) {
+        root.dataset.theme = theme;
+        const dark = theme === 'dark';
+        themeButton.textContent = dark ? 'Light' : 'Dark';
+        themeButton.setAttribute('aria-pressed', String(dark));
+        try { localStorage.setItem('audit-map-theme', theme); } catch (_) {}
+      }
+      let saved = null;
+      try { saved = localStorage.getItem('audit-map-theme'); } catch (_) {}
+      applyTheme(saved || 'light');
+      themeButton.addEventListener('click', () => {
+        applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
+      });
+    })();
+  </script>
+</body>
+</html>

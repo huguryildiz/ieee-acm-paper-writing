@@ -50,6 +50,12 @@
   answer key spanning all three concern layers, expected must/must-never behavior, a run
   protocol, and an illustrative evidence-scoped rewrite; linked from the SKILL.md router and the
   README without presenting the unretained live session as behavioral evidence.
+- Optional `--html-map` rendering for `audit` and `section-audit`, backed by a versioned JSON
+  contract, a self-contained HTML template, and a Python-standard-library renderer that performs
+  presentation only and refuses implicit overwrite.
+- A generated section-audit map fixture (`examples/section-audit-map.json` and `.html`) plus
+  regression tests for deterministic output, escaping, schema validation, empty concern layers,
+  self-containment, and overwrite safety.
 
 ### Changed
 
@@ -66,6 +72,8 @@
   verification before they become compliance findings.
 - Expanded skill routing to evidence-grounded peer-review reports while continuing to exclude
   unsupported editorial accept/reject advocacy.
+- Kept the router at eight scientific modes and defined `--html-map` as an opt-in output modifier
+  rather than a ninth mode; the canonical text audit remains authoritative.
 
 ### Fixed
 
