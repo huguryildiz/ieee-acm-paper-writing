@@ -41,6 +41,11 @@
   broken IEEE reference excerpt, produces a correct reference from raw fields, shows the IEEE and
   ACM forms side by side, and flags a genuinely missing field as an author query instead of filling
   it; linked from the SKILL.md router.
+- `examples/section-audit-example.md`, a live-test fixture: a synthetic flawed Results and
+  Conclusion excerpt (ML-warm-started MILP microgrid dispatch) with an 11-item planted-flaw
+  answer key spanning all three concern layers, expected must/must-never behavior, a run
+  protocol, and the audit plus evidence-scoped rewrite produced verbatim by a live skill run
+  (11/11 flaws caught, no false positives); linked from the SKILL.md router and the README.
 
 ### Changed
 
@@ -53,6 +58,8 @@
 
 ### Fixed
 
+- Evaluation-runner regression tests now derive the expected case count from `cases.json` instead
+  of a hardcoded 15, which had broken CI when the three reference-format cases were added.
 - Evaluation reports now reject missing, replaced, or prompt-stale agent outputs; manual verdicts
   are preserved only while both case and output hashes match.
 - The repository validator now aligns both evaluation schemas, rejects duplicate frontmatter keys,
@@ -63,6 +70,9 @@
 
 ### Removed
 
+- `examples/claim-audit-example.md` and `examples/rewrite-example.md`: both are subsumed by the
+  end-to-end section-audit example (claim testing, evidence-first rewrite, external author query);
+  the routing and reference-format examples remain as the distinct behavior surfaces.
 - The committed behavioral audit record (`evals/results/2026-07-14-behavioral-audit.md`)
   and the `evals/results/` directory. The remaining committed behavioral evidence is the
   historical comparison snapshot in

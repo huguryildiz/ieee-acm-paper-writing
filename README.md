@@ -94,10 +94,11 @@ into the skills directory used by your agent environment.
 
 - [Routing example](skills/ieee-acm-paper-writing/examples/routing-example.md) — selects the
   necessary references and audit boundaries for a manuscript request.
-- [Claim-audit example](skills/ieee-acm-paper-writing/examples/claim-audit-example.md) — tests an
-  optimization claim against the supplied evidence and provides a supportable rewrite.
-- [Rewrite example](skills/ieee-acm-paper-writing/examples/rewrite-example.md) — converts an
-  informal quantitative statement into evidence-bounded prose and an external author query.
+- [Reference-format example](skills/ieee-acm-paper-writing/examples/reference-format-example.md) —
+  audits and produces IEEE/ACM reference-list entries in the venue's official style.
+- [Section-audit example](skills/ieee-acm-paper-writing/examples/section-audit-example.md) — a
+  flawed Results and Conclusion fixture with a planted-flaw answer key, plus the audit and
+  evidence-scoped rewrite produced by a live run of the skill.
 
 ## Calibration corpus
 
@@ -120,7 +121,7 @@ the evaluation-case schema, and the agent interface:
 python3 scripts/validate_skill.py
 ```
 
-The behavioral suite defines 15 self-contained adversarial cases with binary, output-observable
+The behavioral suite defines 18 self-contained adversarial cases with binary, output-observable
 `must_pass` and `must_not` criteria. The runner validates cases, collects agent responses, creates
 a manual scoring file, and reports results:
 
@@ -171,14 +172,17 @@ skills/ieee-acm-paper-writing/
 ├── SKILL.md                 # Router, invariants, and output contracts
 ├── LICENSE                  # MIT terms shipped with the installable copy
 ├── agents/openai.yaml       # Agent interface metadata
-├── examples/                # Routing, audit, and rewrite examples
+├── examples/                # Routing, reference-format, and section-audit examples
 └── references/              # Integrity, style, domain, corpus, and venue guidance
 evals/
 ├── cases.json               # Schema-v2 behavioral cases
 ├── run_evals.py             # Collection, manual scoring, and reporting harness
 └── comparisons/             # Historical A/B comparison snapshot
+docs/
+├── guides/                  # Repo-side provenance digests of IEEE/ACM style guides
+└── papers/catalog.tsv       # Calibration-corpus provenance (PDFs excluded from Git)
 scripts/validate_skill.py    # Dependency-free repository validator
-tests/test_evals.py          # Evaluation-runner regression tests
+tests/                       # Evaluation-runner and validator regression tests
 ```
 
 ## Citation
