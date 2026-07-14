@@ -156,6 +156,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     // The manifest bytes are ours; SRI protects against CDN compromise, not this.
     template = template.replace(/\s+integrity="[^"]*"/gi, '').replace(/\s+crossorigin="[^"]*"/gi, '');
 
+    const layoutOverride = '<style id="title-layout-override">' +
+      '.titleblock{max-width:100%;display:grid;grid-template-columns:76px minmax(0,1fr);column-gap:18px;row-gap:14px;align-items:center}' +
+      '.brandmark{grid-column:1;grid-row:1 / span 2}' +
+      '.titletext{grid-column:2;grid-row:1}' +
+      '.titletext h1 .k{display:block;margin-top:4px}' +
+      '.lede{grid-column:2;grid-row:2;max-width:86ch}' +
+      '@media(max-width:720px){.titleblock{grid-template-columns:58px minmax(0,1fr);column-gap:12px;row-gap:12px}.brandmark{width:58px;height:58px;grid-row:1}.lede{grid-column:1 / -1;grid-row:2}.titletext h1 .k{margin-top:2px}}' +
+      '</style>';
     const resourceScript = '<script>window.__resources = ' +
       JSON.stringify(resourceMap).replace(/<\//g, '<\\/') +
       ';</' + 'script>';
@@ -168,6 +176,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (headOpen) {
       const i = headOpen.index + headOpen[0].length;
       template = template.slice(0, i) + resourceScript + template.slice(i);
+    }
+    const headClose = template.match(/<\/head>/i);
+    if (headClose) {
+      const i = headClose.index;
+      template = template.slice(0, i) + layoutOverride + template.slice(i);
     }
 
     // Parse the template and swap the root element. Scripts inserted via
