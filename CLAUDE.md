@@ -77,6 +77,3 @@ denominator and the failed-case list, never a bare aggregate.
 - **Allowed frontmatter keys** in `SKILL.md` are fixed: `name` and `description`. The
   dependency-free validator supports flat, single-line values and rejects nested YAML or any
   additional key. `name` ≤ 64 chars, `description` ≤ 1024 chars.
-- **Visual/brand direction** for README assets and diagrams is defined in
-  [`.impeccable.md`](.impeccable.md): deep navy / parchment / restrained gold editorial system;
-  no neon, AI gradients, glassmorphism, or imitation of IEEE/ACM corporate marks.

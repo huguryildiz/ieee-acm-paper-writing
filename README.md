@@ -116,7 +116,8 @@ PDFs to use the calibration reference.
 ## Evaluation and validation
 
 The dependency-free repository validator checks the skill frontmatter, calibration identity
-policy, selected Markdown links, safe evaluation-case names and schema, and the agent interface:
+policy, selected Markdown links and their tracked targets, safe evaluation-case names and schema,
+and the agent interface:
 
 ```bash
 python3 scripts/validate_skill.py

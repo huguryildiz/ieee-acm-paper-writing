@@ -7,8 +7,8 @@
 - The MIT license text to the installable skill directory so CLI and manual copies retain the
   distribution terms.
 - Regression tests that bind evaluation verdicts to the current case definition and agent-output
-  artifact, plus HTML-anchor, reference-style link, path-containment, strict-frontmatter, and
-  calibration-identity checks.
+  artifact, plus HTML-anchor, reference-style and tracked-target link, path-containment,
+  strict-frontmatter, and calibration-identity checks.
 - Three behavioral cases that exercise embedded-directive handling in drafting, rewriting, and
   venue-adaptation modes.
 - "IEEE editorial style essentials" subsection in `references/venue-guidance.md`, summarizing the
