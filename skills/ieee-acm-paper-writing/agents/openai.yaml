@@ -1,4 +1,4 @@
 interface:
   display_name: "IEEE/ACM Engineering Paper Writing"
   short_description: "Draft, audit, and calibrate engineering papers"
-  default_prompt: "Use $ieee-acm-paper-writing to audit this engineering manuscript against its supplied evidence, using the calibration corpus only for exposition when requested."
+  default_prompt: "Use $ieee-acm-paper-writing to audit this engineering manuscript against its supplied evidence; add --html-map only when I request the optional visual artifact."

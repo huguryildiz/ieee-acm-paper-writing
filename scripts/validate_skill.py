@@ -7,6 +7,7 @@ Standard library only (no PyYAML). Checks:
   3. Relative links and images resolve and do not depend on untracked local files.
   4. evals/cases.json parses, uses safe case names, and matches the v2 schema.
   5. agents/openai.yaml exists and is non-empty.
+  6. The audit-map renderer accepts its example JSON and reproduces the checked-in HTML.
 
 Usage:  python3 scripts/validate_skill.py [repo_root]
 Exit status: 0 if all checks pass, 1 otherwise.
@@ -17,6 +18,7 @@ import json
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -311,6 +313,31 @@ def check_agent_interface(root: Path):
         err("skills/ieee-acm-paper-writing/agents/openai.yaml: default_prompt must mention $ieee-acm-paper-writing")
 
 
+def check_audit_map_renderer(root: Path):
+    skill = root / "skills" / "ieee-acm-paper-writing"
+    renderer = skill / "scripts" / "render_audit_map.py"
+    example_json = skill / "examples" / "section-audit-map.json"
+    example_html = skill / "examples" / "section-audit-map.html"
+    template = skill / "assets" / "section-audit-map-template.html"
+    for path in (renderer, example_json, example_html, template):
+        if not path.is_file():
+            err(f"{path.relative_to(root)}: missing audit-map renderer artifact")
+            return
+    with tempfile.TemporaryDirectory() as tmp:
+        output = Path(tmp) / "section-audit-map.html"
+        result = subprocess.run(
+            [sys.executable, str(renderer), str(example_json), "--out", str(output)],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            detail = result.stderr.strip() or result.stdout.strip() or "unknown renderer failure"
+            err(f"audit-map renderer rejected its example input: {detail}")
+            return
+        if output.read_bytes() != example_html.read_bytes():
+            err("skills/ieee-acm-paper-writing/examples/section-audit-map.html: stale renderer output")
+
+
 def main():
     root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parent.parent
     skill_md = root / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
@@ -322,12 +349,13 @@ def main():
         check_links(root)
         check_cases(root)
         check_agent_interface(root)
+        check_audit_map_renderer(root)
     if errors:
         print(f"FAIL: {len(errors)} problem(s)")
         for e in errors:
             print(f"  - {e}")
         sys.exit(1)
-    print("OK: frontmatter, calibration policy, links, eval cases, and agent interface all valid")
+    print("OK: frontmatter, calibration policy, links, eval cases, agent interface, and audit map valid")
 
 
 if __name__ == "__main__":

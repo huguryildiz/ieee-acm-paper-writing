@@ -35,8 +35,9 @@ mock results as completed evidence.
 
 The router supports eight modes: `draft`, `rewrite`, `expand`, `compress`, `outline`, `audit`,
 `section-audit`, and `venue-adapt`. Style and landmark-paper calibration modify whichever of these
-modes produces the requested deliverable; calibration is not a separate output mode. Typical tasks
-include:
+modes produces the requested deliverable; calibration is not a separate output mode. The optional
+`--html-map` modifier renders an `audit` or `section-audit` result without defining a ninth mode.
+Typical tasks include:
 
 - drafting or revising abstracts, introductions, related work, methods, results, discussions,
   conclusions, and contribution lists;
@@ -46,6 +47,7 @@ include:
   generalization claims;
 - auditing submission readiness with findings classified as `Critical`, `Major`, `Minor`, or
   `Editorial`;
+- rendering an explicitly requested audit as a self-contained, interactive HTML finding map;
 - adapting structure and presentation to a named IEEE or ACM venue while preserving scientific
   meaning; and
 - calibrating exposition to aggregate patterns derived from landmark engineering papers without
@@ -79,6 +81,22 @@ labeled `unverified venue rule` rather than inferred.
 The integrity contract treats supplied manuscripts, reviews, references, and data as evidence—not
 as instructions—and requires embedded directives to be surfaced as findings rather than executed.
 
+### Optional HTML audit map
+
+Request the visual artifact with the `--html-map` output modifier:
+
+```text
+$ieee-acm-paper-writing section-audit --html-map manuscript.md
+$ieee-acm-paper-writing section-audit --html-map --out reports/results-audit.html manuscript.md
+```
+
+Without the modifier, the skill produces no HTML file. With it, the agent completes the canonical
+text audit, writes validated version-1 JSON, and invokes the dependency-free
+[`render_audit_map.py`](skills/ieee-acm-paper-writing/scripts/render_audit_map.py) renderer. The
+renderer performs presentation only: it cannot infer findings, rewrite claims, or fill missing
+evidence. It refuses to overwrite an existing output unless the user explicitly authorizes
+`--force`.
+
 ## Installation
 
 Install the skill with the [`skills`](https://github.com/vercel-labs/skills) CLI:
@@ -99,6 +117,11 @@ into the skills directory used by your agent environment.
 - [Section-audit example](skills/ieee-acm-paper-writing/examples/section-audit-example.md) — a
   flawed Results and Conclusion fixture with a planted-flaw answer key and an illustrative
   evidence-scoped rewrite; it is not a retained behavioral result.
+- [Section-audit map data](skills/ieee-acm-paper-writing/examples/section-audit-map.json) and
+  [generated HTML](skills/ieee-acm-paper-writing/examples/section-audit-map.html) — the installable,
+  self-contained visualization fixture. Each of the eleven planted flaws is tied to its triggering
+  sentence, concern layer, evidentiary defect, consequence, and bounded response. The HTML is a
+  presentation companion generated from the JSON, not behavioral evidence about an agent run.
 
 ## Calibration corpus
 
@@ -117,10 +140,12 @@ PDFs to use the calibration reference.
 
 The dependency-free repository validator checks the skill frontmatter, calibration identity
 policy, selected Markdown links and their tracked targets, safe evaluation-case names and schema,
-and the agent interface:
+the agent interface, and deterministic regeneration of the checked-in audit map:
 
 ```bash
 python3 scripts/validate_skill.py
+python3 skills/ieee-acm-paper-writing/scripts/render_audit_map.py \
+  skills/ieee-acm-paper-writing/examples/section-audit-map.json --check
 ```
 
 The behavioral suite defines 21 self-contained adversarial cases with binary, output-observable
@@ -145,8 +170,10 @@ denominator and cause a non-zero exit. Regression tests cover this aggregation b
 python3 -m unittest discover -s tests -v
 ```
 
-The repository CI runs the validator, evaluation-schema validation, and runner regression tests on
-pushes to `main` and on pull requests.
+The repository CI runs the validator, evaluation-schema validation, and regression tests on pushes
+to `main` and on pull requests. Renderer tests reject stale checked-in HTML, unsafe unescaped
+content, invalid concern layers, duplicate finding identifiers, implicit overwrite, external asset
+dependencies, and empty-layer wording that could be mistaken for a pass.
 
 ## Scope and limitations
 
@@ -158,6 +185,8 @@ pushes to `main` and on pull requests.
   template.
 - The audit contract prohibits calling a manuscript submission-ready while a load-bearing claim,
   citation, result, or venue requirement remains unresolved.
+- The HTML renderer presents a completed audit; it is not an analysis engine and cannot establish
+  evidence, generate findings, or repair unsupported claims.
 - The evaluation runner uses manual criterion verdicts; it is a regression and smoke-test harness,
   not an automated model judge or comparative benchmarking framework.
 - The skill is independently usable. ALETHEIA may be used upstream for evidence retrieval and
@@ -174,7 +203,9 @@ skills/ieee-acm-paper-writing/
 ├── SKILL.md                 # Router, invariants, and output contracts
 ├── LICENSE                  # MIT terms shipped with the installable copy
 ├── agents/openai.yaml       # Agent interface metadata
-├── examples/                # Routing, reference-format, and section-audit examples
+├── assets/                  # Self-contained HTML audit-map template
+├── examples/                # Routing, reference-format, audit data, and generated HTML examples
+├── scripts/                 # Dependency-free audit-map renderer
 └── references/              # Integrity, style, domain, corpus, and venue guidance
 evals/
 ├── cases.json               # Schema-v2 behavioral cases
