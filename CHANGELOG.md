@@ -53,7 +53,8 @@
 - Optional `--html-map` rendering for `audit` and `section-audit`, backed by a versioned JSON
   contract, a self-contained HTML template, and a Python-standard-library renderer that performs
   presentation only and refuses implicit overwrite.
-- A generated section-audit map fixture (`examples/section-audit-map.json` and `.html`) plus
+- A generated section-audit map fixture (`examples/section-audit-map.json` and
+  `examples/section-audit-map-rendered.html`) plus
   regression tests for deterministic output, escaping, schema validation, empty concern layers,
   self-containment, and overwrite safety.
 - A dependency-free Vercel showcase with a responsive editorial interface, embedded audit-map
@@ -80,6 +81,8 @@
 
 ### Fixed
 
+- Separated the custom interactive audit-map showcase from the deterministic renderer fixture so
+  presentation edits no longer make the renderer freshness check fail.
 - Evaluation-runner regression tests now derive the expected case count from `cases.json` instead
   of a hardcoded 15, which had broken CI when the three reference-format cases were added.
 - Evaluation case names are restricted to safe slugs, every output path is contained within the

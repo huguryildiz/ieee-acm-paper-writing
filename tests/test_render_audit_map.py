@@ -21,7 +21,7 @@ EXAMPLE_JSON = (
     / "examples"
     / "section-audit-map.json"
 )
-EXAMPLE_HTML = EXAMPLE_JSON.with_suffix(".html")
+RENDERED_EXAMPLE_HTML = EXAMPLE_JSON.with_name("section-audit-map-rendered.html")
 SPEC = importlib.util.spec_from_file_location("render_audit_map", RENDERER)
 RENDER_MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(RENDER_MODULE)
@@ -31,9 +31,9 @@ class AuditMapRendererTests(unittest.TestCase):
     def example(self):
         return json.loads(EXAMPLE_JSON.read_text(encoding="utf-8"))
 
-    def test_checked_in_example_matches_renderer(self):
+    def test_checked_in_renderer_fixture_matches_renderer(self):
         rendered = RENDER_MODULE.render_document(self.example())
-        self.assertEqual(EXAMPLE_HTML.read_text(encoding="utf-8"), rendered)
+        self.assertEqual(RENDERED_EXAMPLE_HTML.read_text(encoding="utf-8"), rendered)
 
     def test_render_is_self_contained_and_not_a_bundler_artifact(self):
         rendered = RENDER_MODULE.render_document(self.example())
