@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Evidence-bounded manuscript drafting and auditing for engineering research.">
+  <meta name="theme-color" content="#f2ecdf">
+  <title>IEEE / ACM Paper Writing — Evidence-bounded manuscript work</title>
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header" aria-label="Primary navigation">
+    <a class="brand" href="/" aria-label="IEEE / ACM Paper Writing home">
+      <img src="/assets/icon.svg" alt="" width="38" height="38">
+      <span>IEEE / ACM<br><strong>Paper Writing</strong></span>
+    </a>
+    <nav class="header-links" aria-label="Site links">
+      <a href="#principles">Design</a>
+      <a href="#example">Example</a>
+      <a href="https://github.com/huguryildiz/ieee-acm-paper-writing">GitHub</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Use dark theme" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.64 5.64l1.42 1.42m9.88 9.88 1.42 1.42m0-12.72-1.42 1.42M7.06 16.94l-1.42 1.42M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy reveal" style="--delay: 0ms">
+        <p class="eyebrow"><span>01</span> Evidence before eloquence</p>
+        <h1 id="hero-title">Write the paper the evidence can carry.</h1>
+        <p class="hero-deck">Manuscript drafting and auditing bounded by verified formulations, code, data, experiments, and literature—not by how convincing a sentence sounds.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#example">
+            Explore the audit map
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 17 10-10m0 0H9m8 0v8"/></svg>
+          </a>
+          <a class="button button-secondary" href="/examples/section-audit-map.html" download>
+            Download HTML
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"/></svg>
+          </a>
+        </div>
+        <dl class="hero-facts" aria-label="Skill architecture summary">
+          <div><dt>08</dt><dd>routing modes</dd></div>
+          <div><dt>08</dt><dd>engineering domains</dd></div>
+          <div><dt>05</dt><dd>progressive references</dd></div>
+        </dl>
+      </div>
+
+      <div class="evidence-plate reveal" style="--delay: 120ms" aria-label="Evidence chain illustration">
+        <div class="plate-heading">
+          <span>Claim support ledger</span>
+          <span class="plate-status"><i></i> bounded</span>
+        </div>
+        <div class="claim-statement">“The method reduced solve time by 23%.”</div>
+        <ol class="evidence-chain">
+          <li>
+            <span class="chain-index">A</span>
+            <div><strong>Scope</strong><small>500 held-out instances · one feeder</small></div>
+            <span class="chain-mark">defined</span>
+          </li>
+          <li>
+            <span class="chain-index">B</span>
+            <div><strong>Comparator</strong><small>identical solver settings</small></div>
+            <span class="chain-mark">matched</span>
+          </li>
+          <li>
+            <span class="chain-index">C</span>
+            <div><strong>Statistic</strong><small>median wall-clock time</small></div>
+            <span class="chain-mark chain-mark-warn">needed</span>
+          </li>
+          <li>
+            <span class="chain-index">D</span>
+            <div><strong>Evidence</strong><small>result table or trace</small></div>
+            <span class="chain-mark chain-mark-warn">needed</span>
+          </li>
+        </ol>
+        <p class="plate-note">A polished claim does not repair a missing denominator, comparator, statistic, or trace.</p>
+      </div>
+    </section>
+
+    <section class="principles" id="principles" aria-labelledby="principles-title">
+      <div class="section-heading">
+        <p class="eyebrow"><span>02</span> Three-concern separation</p>
+        <h2 id="principles-title">Three authorities.<br>One defensible boundary.</h2>
+      </div>
+      <div class="principle-list">
+        <article>
+          <span class="principle-number">I</span>
+          <h3>Scientific support</h3>
+          <p>What the verified formulation, implementation, data, experiment, or cited literature actually establishes.</p>
+        </article>
+        <article>
+          <span class="principle-number">II</span>
+          <h3>Method reporting</h3>
+          <p>What the applicable optimization, ML, simulation, systems, or engineering method requires authors to disclose.</p>
+        </article>
+        <article>
+          <span class="principle-number">III</span>
+          <h3>Venue compliance</h3>
+          <p>What the target publication’s current official instructions and template require—kept separate from scientific truth.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="example" id="example" aria-labelledby="example-title">
+      <div class="example-intro">
+        <div>
+          <p class="eyebrow"><span>03</span> Interactive example</p>
+          <h2 id="example-title">Trace every finding back to its evidentiary defect.</h2>
+        </div>
+        <p>The section-audit map connects eleven planted flaws to their triggering sentence, concern layer, consequence, and bounded response. It is a synthetic teaching fixture, not evidence of agent performance.</p>
+      </div>
+
+      <div class="preview-shell">
+        <div class="preview-toolbar">
+          <div class="preview-identity">
+            <span class="preview-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span>section-audit-map.html</span>
+          </div>
+          <div class="preview-actions">
+            <a href="/examples/section-audit-map.json" download>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V8m-8-4h4l4 4v4M9 12h6m-6 4h4"/></svg>
+              JSON
+            </a>
+            <a href="/examples/section-audit-map.html" download>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"/></svg>
+              Download HTML
+            </a>
+            <a class="open-example" href="/examples/section-audit-map.html" target="_blank" rel="noopener">
+              Open full screen
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 17 10-10m0 0H9m8 0v8"/></svg>
+            </a>
+          </div>
+        </div>
+        <iframe src="/examples/section-audit-map.html" title="Interactive section-audit map example" loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <section class="domain-section" aria-labelledby="domains-title">
+      <div class="domain-copy">
+        <p class="eyebrow"><span>04</span> Engineering profiles</p>
+        <h2 id="domains-title">Method-aware across eight technical areas.</h2>
+        <p>Combined studies can load multiple profiles without confusing domain-reporting requirements with evidence or venue rules.</p>
+      </div>
+      <ol class="domain-list">
+        <li><span>01</span>Communications and networking</li>
+        <li><span>02</span>Signal processing and sensing</li>
+        <li><span>03</span>Energy systems</li>
+        <li><span>04</span>Robotics and autonomy</li>
+        <li><span>05</span>Mathematical optimization</li>
+        <li><span>06</span>Simulation and digital twins</li>
+        <li><span>07</span>ML-assisted engineering</li>
+        <li><span>08</span>Computer and cyber-physical systems</li>
+      </ol>
+    </section>
+
+    <section class="install" aria-labelledby="install-title">
+      <div>
+        <p class="eyebrow eyebrow-dark"><span>05</span> Install the skill</p>
+        <h2 id="install-title">Put evidence boundaries in the writing loop.</h2>
+      </div>
+      <div class="command-block">
+        <code id="install-command">npx skills add huguryildiz/ieee-acm-paper-writing --skill ieee-acm-paper-writing</code>
+        <button id="copy-command" type="button" aria-describedby="copy-status">
+          <span>Copy command</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h11v11H8zM5 16H4V4h12v1"/></svg>
+        </button>
+        <span class="copy-status" id="copy-status" role="status" aria-live="polite"></span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      <img src="/assets/icon.svg" alt="" width="42" height="42">
+      <p><strong>IEEE / ACM Paper Writing</strong><br>Evidence-bounded manuscript work for engineering research.</p>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/huguryildiz/ieee-acm-paper-writing/blob/main/skills/ieee-acm-paper-writing/SKILL.md">Read SKILL.md</a>
+      <a href="https://github.com/huguryildiz/ieee-acm-paper-writing">View repository</a>
+      <a href="https://github.com/huguryildiz/ieee-acm-paper-writing/blob/main/LICENSE">MIT License</a>
+    </div>
+  </footer>
+</body>
+</html>

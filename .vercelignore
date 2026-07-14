@@ -1,0 +1,15 @@
+.git/
+.github/
+.vercel/
+.playwright-cli/
+.pytest_cache/
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+assets/hero.png
+docs/papers/library/
+out/
+output/
+site-dist/
+tmp/
