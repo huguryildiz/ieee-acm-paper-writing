@@ -30,7 +30,6 @@ MAX_DESCRIPTION = 1024
 CASE_NAME_RE = re.compile(r"[a-z0-9][a-z0-9_-]*")
 
 MD_FILES = [
-    "CLAUDE.md",
     "README.md",
     "CHANGELOG.md",
     "docs/papers/README.md",
