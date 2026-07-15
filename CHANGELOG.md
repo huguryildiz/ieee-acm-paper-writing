@@ -4,6 +4,14 @@
 
 ### Added
 
+- Validator check that no evaluation criterion shares a distinctive six-word phrase with any skill
+  file, so an answer cannot be passed by echoing loaded skill text.
+- Validator check that the interactive showcase stays self-contained (no external asset fetch) and
+  keeps its bundle blocks parseable.
+- Behavioral case `acm_ai_disclosure_blind_review` exercising AI-disclosure identity leakage under
+  double-blind review, listing an AI tool as an author, and ORCID/open-access verification.
+- `skill_hash` now covers the non-Markdown audit-map assets so a section-audit case's verdict goes
+  stale when they change.
 - The MIT license text to the installable skill directory so CLI and manual copies retain the
   distribution terms.
 - Regression tests that bind evaluation verdicts to the current case definition and agent-output
@@ -80,6 +88,15 @@
 
 ### Fixed
 
+- Regenerated the two IEEE reference-format cases with independent bibliographic data so they no
+  longer duplicate the shipped `reference-format-example.md` answer key; decoupled the shared
+  `[Okafor 1991]` example label; rephrased criteria that echoed skill text.
+- Made the interactive showcase truly self-contained by removing vestigial Google Fonts preconnect
+  hints; all fonts were already embedded as data: URIs, so the visual is unchanged.
+- The audit-map renderer now reports a clean error and exit code for invalid-UTF-8 and
+  deeply-nested JSON input instead of raising an uncaught traceback.
+- Scoped the ACM ORCID and open-access notes and the IEEE mathematics conventions as
+  verify-against-the-current-venue defaults rather than timeless universal facts.
 - Separated the custom interactive audit-map showcase from the deterministic renderer fixture so
   presentation edits no longer make the renderer freshness check fail.
 - Evaluation-runner regression tests now derive the expected case count from `cases.json` instead
@@ -111,6 +128,7 @@
   and the `evals/results/` directory. The remaining committed behavioral evidence is the
   historical comparison snapshot in
   [`evals/comparisons/optimization-claim-scope.md`](evals/comparisons/optimization-claim-scope.md).
+- `CITATION.cff`. Citation metadata is no longer maintained in the repository.
 
 ## v0.1.0 — 2026-07-14
 
@@ -135,7 +153,7 @@ Initial public release. Subsequent audit-driven corrections are recorded under U
   action, consequence (`SKILL.md`).
 - Behavioral audit record: `evals/results/2026-07-14-behavioral-audit.md`
   (removed after release; see Unreleased above).
-- `CITATION.cff`.
+- `CITATION.cff` (removed after release; see Unreleased above).
 
 ### Changed
 

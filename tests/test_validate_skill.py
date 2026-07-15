@@ -127,5 +127,91 @@ class CalibrationPolicyTests(unittest.TestCase):
         self.assertEqual(errors, [])
 
 
+class CriteriaIndependenceTests(unittest.TestCase):
+    def setUp(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def tearDown(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def check(self, criterion):
+        import json
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            refs = root / "skills" / "ieee-acm-paper-writing" / "references"
+            refs.mkdir(parents=True)
+            (refs / "venue-guidance.md").write_text(
+                "Replace ibid. with the explicit earlier reference number in the list.\n",
+                encoding="utf-8",
+            )
+            (root / "evals").mkdir()
+            (root / "evals" / "cases.json").write_text(
+                json.dumps(
+                    {
+                        "version": 2,
+                        "cases": [
+                            {
+                                "name": "sample",
+                                "prompt": "p",
+                                "must_pass": [criterion],
+                                "must_not": [],
+                                "expected_routing": [],
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            VALIDATOR_MODULE.check_criteria_independence(root)
+            return list(VALIDATOR_MODULE.errors)
+
+    def test_criterion_echoing_skill_text_is_rejected(self):
+        errors = self.check("Replace ibid. with the explicit earlier reference number shown.")
+        self.assertTrue(any("shares a 6-word phrase" in error for error in errors))
+
+    def test_independently_worded_criterion_passes(self):
+        errors = self.check("Substitute the bracketed source number that the shorthand stands for.")
+        self.assertEqual(errors, [])
+
+
+class AuditMapShowcaseTests(unittest.TestCase):
+    BUNDLE = (
+        '<!DOCTYPE html><html><head></head><body>{body}'
+        '<script type="__bundler/manifest">{{}}</script>'
+        '<script type="__bundler/template">"<div>ok</div>"</script>'
+        '</body></html>'
+    )
+
+    def setUp(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def tearDown(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def check(self, body=""):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            examples = root / "skills" / "ieee-acm-paper-writing" / "examples"
+            examples.mkdir(parents=True)
+            (examples / "section-audit-map.html").write_text(
+                self.BUNDLE.format(body=body), encoding="utf-8"
+            )
+            VALIDATOR_MODULE.check_audit_map_showcase(root)
+            return list(VALIDATOR_MODULE.errors)
+
+    def test_self_contained_showcase_passes(self):
+        self.assertEqual(self.check(), [])
+
+    def test_google_fonts_link_is_rejected(self):
+        errors = self.check('<link rel="preconnect" href="https://fonts.googleapis.com">')
+        self.assertTrue(any("external asset dependency" in e for e in errors))
+
+    def test_missing_showcase_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            VALIDATOR_MODULE.check_audit_map_showcase(Path(tmp))
+            self.assertTrue(any("missing or empty" in e for e in VALIDATOR_MODULE.errors))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -50,6 +50,20 @@ class AuditMapRendererTests(unittest.TestCase):
         self.assertNotIn('<script>alert("x")</script>', rendered)
         self.assertIn("&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt;", rendered)
 
+    def test_script_context_breakout_is_neutralized(self):
+        document = self.example()
+        document["findings"][0]["title"] = '</script><script>alert(1)</script>'
+        rendered = RENDER_MODULE.render_document(document)
+        self.assertNotIn("</script><script>alert(1)</script>", rendered)
+        self.assertIn("\\u003c/script\\u003e", rendered)
+
+    def test_invalid_utf8_input_fails_cleanly(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bad = Path(tmp) / "bad.json"
+            bad.write_bytes(b"\xff\xfe{")
+            with self.assertRaises(RENDER_MODULE.RenderError):
+                RENDER_MODULE.load_json(str(bad))
+
     def test_invalid_concern_layer_is_rejected(self):
         document = self.example()
         document["findings"][0]["layer"] = "editorial-vibes"

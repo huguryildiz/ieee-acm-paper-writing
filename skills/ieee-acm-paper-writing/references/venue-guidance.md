@@ -195,12 +195,13 @@ Online references:
 - Verify accessibility requirements for figures, alternative text, tables, and color.
 - Verify page or word limits, appendices, supplementary material, artifact evaluation, data/code
   availability, ethics review, conflicts, funding, and AI disclosure.
-- Verify ORCID: ACM requires every author to register an ORCID iD to complete the publishing
-  workflow for an accepted article.
-- Verify the rights and access model rather than assuming it. ACM has moved to a fully
-  open-access model; confirm whether the article is covered under an institutional agreement
-  (e.g. ACM Open) or carries an article-processing charge, and treat this as an author obligation
-  to resolve, not a formatting detail.
+- Verify ORCID against the current workflow rather than asserting it: as of this guide version ACM
+  has required every author to register an ORCID iD to complete the publishing workflow for an
+  accepted article; confirm it still holds for the target venue.
+- Verify the rights and access model rather than assuming it. As of this guide version ACM has been
+  moving toward an open-access model; confirm whether the article is covered under an institutional
+  agreement (e.g. ACM Open) or carries an article-processing charge, and treat this as an author
+  obligation to resolve, not a formatting detail. Check the venue's current policy, which changes.
 - Where generative-AI use must be disclosed, verify whether the disclosure statement itself must
   sit inside the anonymized submission for blind review; do not let the disclosure leak author
   identity, and never list an AI tool as an author.
