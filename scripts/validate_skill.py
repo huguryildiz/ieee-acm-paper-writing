@@ -6,8 +6,10 @@ Standard library only (no PyYAML). Checks:
   2. corpus-calibration.md excludes direct source identities and identifiers.
   3. Relative links and images resolve and do not depend on untracked local files.
   4. evals/cases.json parses, uses safe case names, and matches the v2 schema.
-  5. agents/openai.yaml exists and is non-empty.
-  6. The audit-map renderer accepts its example JSON and reproduces the checked-in HTML.
+  5. Eval criteria share no distinctive 6-word phrase with any skill file (M5 guard).
+  6. agents/openai.yaml exists and is non-empty.
+  7. The audit-map renderer accepts its example JSON and reproduces the checked-in HTML.
+  8. The interactive showcase stays self-contained (no external asset fetch) and intact.
 
 Usage:  python3 scripts/validate_skill.py [repo_root]
 Exit status: 0 if all checks pass, 1 otherwise.
@@ -283,6 +285,46 @@ def check_cases(root: Path):
         err("evals/cases.json: no cases defined")
 
 
+def _criteria_ngrams(text, n=6):
+    words = re.findall(r"[a-z0-9']+", text.lower())
+    return {" ".join(words[i : i + n]) for i in range(len(words) - n + 1)}
+
+
+def check_criteria_independence(root: Path):
+    """Eval criteria must not share a distinctive 6-word phrase with any skill file.
+
+    A criterion copied near-verbatim from a reference the agent loads lets a model
+    pass by echoing skill text rather than demonstrating the behavior. This guards
+    the M5 contamination invariant so it cannot silently regress when cases change.
+    """
+    cases_path = root / "evals" / "cases.json"
+    if not cases_path.exists():
+        return
+    try:
+        data = json.loads(cases_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return  # check_cases already reports the parse failure
+    skill = root / "skills" / "ieee-acm-paper-writing"
+    skill_grams = set()
+    for md in skill.rglob("*.md"):
+        skill_grams |= _criteria_ngrams(md.read_text(encoding="utf-8"))
+    for case in data.get("cases", []):
+        if not isinstance(case, dict):
+            continue
+        label = case.get("name", "?")
+        for field in ("must_pass", "must_not"):
+            for item in case.get(field, []) or []:
+                if not isinstance(item, str):
+                    continue
+                overlap = _criteria_ngrams(item) & skill_grams
+                if overlap:
+                    sample = sorted(overlap)[0]
+                    err(
+                        f"evals/cases.json: {label}: '{field}' criterion shares a 6-word "
+                        f"phrase with a skill file (e.g. {sample!r}); rephrase independently"
+                    )
+
+
 def check_agent_interface(root: Path):
     yaml_path = root / "skills" / "ieee-acm-paper-writing" / "agents" / "openai.yaml"
     if not yaml_path.exists() or not yaml_path.read_text(encoding="utf-8").strip():
@@ -341,6 +383,48 @@ def check_audit_map_renderer(root: Path):
             )
 
 
+# Tokens that only appear when an interactive page pulls an asset from a remote
+# host at load time. The showcase embeds all fonts as data: URIs, so any of these
+# would be a regression against the "self-contained, no external assets" guarantee.
+EXTERNAL_ASSET_TOKENS = (
+    "fonts.googleapis.com",
+    "fonts.gstatic.com",
+    'rel="preconnect"',
+    'rel=\\"preconnect\\"',
+    '@import',
+)
+
+
+def check_audit_map_showcase(root: Path):
+    """The interactive showcase must stay self-contained and structurally intact.
+
+    It is a hand-maintained Artifact bundle (not renderer output), so nothing else
+    checks it. This guards two invariants: its bundle blocks parse, and it fetches
+    no external asset at load — re-exporting it through a tool that re-adds Google
+    Fonts links would otherwise ship an external dependency undetected.
+    """
+    showcase = root / "skills" / "ieee-acm-paper-writing" / "examples" / "section-audit-map.html"
+    rel = showcase.relative_to(root)
+    if not showcase.is_file() or not showcase.read_text(encoding="utf-8").strip():
+        err(f"{rel}: missing or empty interactive showcase")
+        return
+    text = showcase.read_text(encoding="utf-8")
+    for token in EXTERNAL_ASSET_TOKENS:
+        if token in text:
+            err(f"{rel}: external asset dependency reintroduced ({token}); must stay self-contained")
+    for kind in ("manifest", "template"):
+        match = re.search(
+            rf'<script type="__bundler/{kind}">\s*(.*?)\s*</script>', text, re.S
+        )
+        if not match:
+            err(f"{rel}: missing __bundler/{kind} block")
+            continue
+        try:
+            json.loads(match.group(1))
+        except json.JSONDecodeError as exc:
+            err(f"{rel}: __bundler/{kind} block is not valid JSON ({exc})")
+
+
 def main():
     root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parent.parent
     skill_md = root / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
@@ -351,14 +435,19 @@ def main():
         check_calibration(root)
         check_links(root)
         check_cases(root)
+        check_criteria_independence(root)
         check_agent_interface(root)
         check_audit_map_renderer(root)
+        check_audit_map_showcase(root)
     if errors:
         print(f"FAIL: {len(errors)} problem(s)")
         for e in errors:
             print(f"  - {e}")
         sys.exit(1)
-    print("OK: frontmatter, calibration policy, links, eval cases, agent interface, and audit map valid")
+    print(
+        "OK: frontmatter, calibration policy, links, eval cases, criteria independence, "
+        "agent interface, and audit map valid"
+    )
 
 
 if __name__ == "__main__":

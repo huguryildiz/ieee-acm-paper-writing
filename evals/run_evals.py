@@ -169,6 +169,9 @@ def skill_hash():
              SKILL_DIR / "agents" / "openai.yaml"]
     files.extend(sorted((SKILL_DIR / "examples").glob("*.md")))
     files.extend(sorted((SKILL_DIR / "references").glob("*.md")))
+    # Non-Markdown audit-map assets a section-audit case can depend on.
+    files.extend(sorted((SKILL_DIR / "examples").glob("section-audit-map.*")))
+    files.extend(sorted((SKILL_DIR / "assets").glob("*.html")))
     digest = hashlib.sha256()
     for path in files:
         if not path.is_file():

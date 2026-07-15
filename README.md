@@ -190,7 +190,7 @@ python3 skills/ieee-acm-paper-writing/scripts/render_audit_map.py \
   skills/ieee-acm-paper-writing/examples/section-audit-map.json --check
 ```
 
-The behavioral suite defines 21 self-contained adversarial cases with binary, output-observable
+The behavioral suite defines 22 self-contained adversarial cases with binary, output-observable
 `must_pass` and `must_not` criteria. The runner validates cases, collects agent responses, creates
 a manual scoring file, and reports results:
 
@@ -257,6 +257,7 @@ docs/
 ├── guides/                  # Repo-side provenance digests of IEEE/ACM style guides
 └── papers/catalog.tsv       # Calibration-corpus provenance (PDFs excluded from Git)
 site/                        # Dependency-free hosted showcase source
+assets/                      # Repo-side icon and showcase screenshots (not installed)
 scripts/build_site.py        # Builds the Vercel output from tracked site and example files
 scripts/validate_skill.py    # Dependency-free repository validator
 tests/                       # Evaluation-runner and validator regression tests

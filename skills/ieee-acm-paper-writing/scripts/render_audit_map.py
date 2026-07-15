@@ -284,7 +284,7 @@ def load_json(path_text: str) -> Any:
         if path_text == "-":
             return json.load(sys.stdin)
         return json.loads(Path(path_text).read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, RecursionError) as exc:
         raise RenderError(f"cannot load JSON input: {exc}") from exc
 
 

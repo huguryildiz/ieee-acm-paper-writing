@@ -217,12 +217,12 @@
     },
     {
       "name": "ieee_reference_format_audit",
-      "prompt": "Audit only the reference formatting and in-text citation style of this excerpt from an IEEE Transactions manuscript. Do not change the technical claims, and do not supply any bibliographic field that is not already given.\n\nIn-text sentence: 'Several works address this problem [2]-[5], and the estimator of [7] extends it (see also ibid.).'\n\nReference list:\n[2] A. Smith, B. Jones, C. Lee, D. Kim, E. Park, F. Wu, G. Chen, and H. Zhao, 'A study of spectral estimation,' IEEE Trans. Signal Process., vol. 5, no. 2, pp. 10-20, 2019.\n[7] J. K. Author, 'A learned pruning method,' IEEE Trans. Autom. Control, vol. 8, no. 1, pp. 3-9, 2021, doi: https://doi.org/10.1109/TAC.2021.123456.",
+      "prompt": "Audit only the reference formatting and in-text citation style of this excerpt from an IEEE Transactions manuscript. Do not change the technical claims, and do not supply any bibliographic field that is not already given.\n\nIn-text sentence: 'These detectors improve on earlier work [3]-[6], and the observer of [9] extends it (see also ibid.).'\n\nReference list:\n[3] R. Okonkwo, S. Delacroix, T. Marsh, U. Bianchi, V. Sarmiento, W. Haaland, X. Petrova, and Y. Nkemelu, 'Robust beamforming over noisy links,' IEEE Trans. Wireless Commun., vol. 12, no. 3, pp. 88-97, 2020.\n[9] P. R. Solberg, 'A recursive channel estimator,' IEEE Trans. Commun., vol. 15, no. 6, pp. 40-48, 2022, doi: 10.1109/TCOMM.2022.654321.",
       "expected_routing": ["integrity-audit.md", "venue-guidance.md"],
       "must_pass": [
-        "The audit flags the en-dash citation range [2]-[5] and gives the written-out IEEE form [2], [3], [4], [5].",
-        "The audit flags that reference [2] lists more than six authors and should be truncated to the first author followed by 'et al.'",
-        "The audit flags 'ibid.' and requires replacing it with the explicit earlier reference number.",
+        "The audit flags the en-dash citation range [3]-[6] and gives the written-out IEEE form [3], [4], [5], [6].",
+        "The audit flags that reference [3] lists more than six authors and should be truncated to the first author followed by 'et al.'",
+        "The audit flags the Latin shorthand 'ibid.' and calls for substituting the specific bracketed source number it stands in for.",
         "Findings use the severity labels Critical, Major, Minor, or Editorial."
       ],
       "must_not": [
@@ -232,11 +232,11 @@
     },
     {
       "name": "acm_reference_format_audit",
-      "prompt": "Audit the reference formatting and citation style of this reference section for an ACM journal that uses the numeric citation style. Report the problems and give corrected forms. Do not invent any missing bibliographic data.\n\nReferences:\n[1] Authoritative sources in a hyperlinked environment. Jon M. Kleinberg. 1999. J. ACM 46, 5 (September 1999), 604-632.\n[2] R Core Team. R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria.\n[Harel 1978] D. Harel. First-Order Dynamic Logic. Springer-Verlag, New York, NY.\n\nThe Acknowledgments section appears immediately after this reference list.",
+      "prompt": "Audit the reference formatting and citation style of this reference section for an ACM journal that uses the numeric citation style. Report the problems and give corrected forms. Do not invent any missing bibliographic data.\n\nReferences:\n[1] Authoritative sources in a hyperlinked environment. Jon M. Kleinberg. 1999. J. ACM 46, 5 (September 1999), 604-632.\n[2] R Core Team. R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria.\n[Okafor 1991] E. Okafor. Foundations of Temporal Reasoning. Meridian Press, Boston, MA.\n\nThe Acknowledgments section appears immediately after this reference list.",
       "expected_routing": ["integrity-audit.md", "venue-guidance.md"],
       "must_pass": [
         "The audit flags that reference [1] is out of ACM order and gives the corrected author then year then title sequence.",
-        "The audit flags mixing numeric citation labels with an author-year label ([Harel 1978]) and requires one consistent mode (numeric, per the stated venue).",
+        "The audit flags mixing numeric citation labels with an author-year label ([Okafor 1991]) and requires one consistent mode (numeric, per the stated venue).",
         "The audit flags that reference [2] lacks a publication year and requests it rather than supplying one.",
         "The audit flags that Acknowledgments must precede the reference list, not follow it.",
         "Findings use the severity labels Critical, Major, Minor, or Editorial."
@@ -248,17 +248,32 @@
     },
     {
       "name": "ieee_reference_format_generate",
-      "prompt": "Format the following two sources as an IEEE reference list, numbered [1] and [2], for our IEEE Transactions manuscript. Use only the fields given; do not add any field that is not provided.\n\nSource 1 (journal article): authors = Alice B. Carter, David E. Fong, Grace H. Iyer, Jon K. Lee, Mia N. Osei, Raj P. Quinn, Sara T. Ustun; title = Sparse recovery for wideband sensing; journal = IEEE Transactions on Signal Processing; volume = 71; issue = 4; pages = 1201-1215; year = 2023; DOI = 10.1109/TSP.2023.987654.\n\nSource 2 (conference paper): authors = Omar Y. Zaid, Lena M. Petrov; title = A fast decoder for LDPC codes; conference = IEEE International Symposium on Information Theory (ISIT); pages = 55-60; year = 2022; DOI = 10.1109/ISIT.2022.135790.",
+      "prompt": "Format the following two sources as an IEEE reference list, numbered [1] and [2], for our IEEE Transactions manuscript. Use only the fields given; do not add any field that is not provided.\n\nSource 1 (journal article): authors = Helena K. Vasquez, Ingrid M. Toure, Julius O. Brandt, Keiko A. Nakamura, Liam P. Escobar, Mara T. Sienkiewicz, Nadia R. Oyelaran; title = Low-rank tensor completion for radar imaging; journal = IEEE Transactions on Aerospace and Electronic Systems; volume = 59; issue = 2; pages = 940-953; year = 2023; DOI = 10.1109/TAES.2023.741852.\n\nSource 2 (conference paper): authors = Omar Y. Zaid, Lena M. Petrov; title = A fast decoder for LDPC codes; conference = IEEE International Symposium on Information Theory (ISIT); pages = 55-60; year = 2022; DOI = 10.1109/ISIT.2022.135790.",
       "expected_routing": ["venue-guidance.md"],
       "must_pass": [
-        "Every author is rendered as initials before the surname (for example, A. B. Carter), not as full given names.",
+        "Every author is rendered as initials before the surname (for example, H. K. Vasquez), not as full given names.",
         "Reference [1] has seven authors and is truncated to the first author followed by 'et al.', since IEEE lists at most six names.",
-        "Each DOI is given as a bare identifier (doi: 10.1109/...), not as a full https://doi.org/ resolver URL.",
+        "Each DOI appears as the plain doi:10.1109/... identifier rather than wrapped in a resolver web link.",
         "No field absent from the given source data (such as a month, an issue number for source 2, or an article number) is added to either reference."
       ],
       "must_not": [
         "A bibliographic field not present in the given source data is invented.",
         "The seven-author list in source 1 is printed in full without 'et al.'"
+      ]
+    },
+    {
+      "name": "acm_ai_disclosure_blind_review",
+      "prompt": "We are preparing a double-blind ACM submission. Audit only the venue-compliance and integrity aspects of this author-supplied disclosure and front-matter note; do not rewrite the technical content, and do not supply any fact that is not given.\n\nAuthor-supplied note: 'AI disclosure: The authors, Dr. Lena Petrov and Dr. R. Okafor at Meridian University, used an AI assistant (WriteBot 4) to draft Sections III and IV. WriteBot 4 is listed as the fourth author. Our ORCID iDs and open-access election will be added at camera-ready.'\n\nThe submission is anonymized for double-blind review.",
+      "expected_routing": ["venue-guidance.md", "integrity-audit.md"],
+      "must_pass": [
+        "The audit flags that the note prints the author names and affiliation inside an anonymized double-blind submission, and asks to strip those identifying details or move the disclosure so review anonymity is preserved.",
+        "The audit flags that a software tool appears in the author list and asks to remove it as an author.",
+        "The audit treats the ORCID registration and the open-access election as obligations to confirm against the target venue's current workflow, not fields to fabricate.",
+        "Findings keep venue-compliance and integrity concerns distinct from the paper's technical content, which is left unchanged."
+      ],
+      "must_not": [
+        "A withheld detail, such as an ORCID iD or the open-access agreement, is invented or asserted from memory.",
+        "Naming the AI tool as an author is accepted as legitimate."
       ]
     },
     {

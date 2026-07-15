@@ -148,8 +148,10 @@ legacy exemplars did not foreground them.
 
 ## Mathematical notation and equation editing
 
-These conventions follow IEEE Publication Operations editorial practice (*Editing Mathematics*).
-The target venue's current template and author instructions override them.
+These conventions follow IEEE Publication Operations editorial practice (*Editing Mathematics*) and
+are the IEEE-target default. For a non-IEEE venue (e.g. an ACM target), treat them as a starting
+point to verify, not house style: the target venue's current template and author instructions
+override them.
 
 ### Equations as grammar
 
