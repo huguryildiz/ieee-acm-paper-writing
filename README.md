@@ -33,10 +33,11 @@ mock results as completed evidence.
 
 ## Capabilities
 
-The router supports eight modes: `draft`, `rewrite`, `expand`, `compress`, `outline`, `audit`,
-`section-audit`, and `venue-adapt`. Style and landmark-paper calibration modify whichever of these
-modes produces the requested deliverable; calibration is not a separate output mode. The optional
-`--html-map` modifier renders an `audit` or `section-audit` result without defining a ninth mode.
+The router supports nine modes: `draft`, `rewrite`, `expand`, `compress`, `humanize`, `outline`,
+`audit`, `section-audit`, and `venue-adapt`. Style and landmark-paper calibration modify whichever
+of these modes produces the requested deliverable; calibration is not a separate output mode. The
+optional `--html-map` modifier renders an `audit` or `section-audit` result without defining an
+additional mode.
 Typical tasks include:
 
 - drafting or revising abstracts, introductions, related work, methods, results, discussions,
@@ -45,6 +46,8 @@ Typical tasks include:
   guarantees, and citation support;
 - separating observed results from interpretation, causation, robustness, scalability, and
   generalization claims;
+- removing machine-idiom prose patterns (`humanize`) while preserving claims, numbers, citations,
+  notation, and evidence-bearing hedges, without touching generative-AI disclosures;
 - auditing submission readiness with findings classified as `Critical`, `Major`, `Minor`, or
   `Editorial`;
 - rendering an explicitly requested audit as a self-contained, interactive HTML finding map;

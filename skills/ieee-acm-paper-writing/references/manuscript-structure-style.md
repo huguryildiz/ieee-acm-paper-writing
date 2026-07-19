@@ -1,13 +1,14 @@
 # Manuscript structure and writing style
 
-Use this reference for section drafting, rewriting, outlining, compression, or structural style
-calibration. Official venue requirements override these functional contracts.
+Use this reference for section drafting, rewriting, outlining, compression, humanization, or
+structural style calibration. Official venue requirements override these functional contracts.
 
 ## Contents
 
 - Select a contribution archetype
 - Section contracts
 - Paragraph and prose controls
+- Machine-idiom removal (humanize)
 - Equations, algorithms, figures, and tables
 - Mathematical notation and equation editing
 - Reference-corpus calibration
@@ -134,6 +135,30 @@ legacy exemplars did not foreground them.
   user or the venue's own style asks for it.
 - Preserve technical meaning during compression; do not delete conditions, comparators, units, or
   uncertainty to save words.
+
+## Machine-idiom removal (humanize)
+
+Use this catalog for `humanize` mode and as a soft screen during drafting and rewriting.
+Humanize changes prose surface only. Scientific content — claims, numbers, units, citations,
+notation, labels, scope conditions, and hedges that encode real evidential uncertainty — is
+out of bounds. Integrity constraints override every pattern below. The target publication's
+generative-AI disclosure policy applies unchanged to humanized text; never remove or weaken a
+disclosure to make text read as human-written.
+
+| Pattern | Correction |
+| --- | --- |
+| Formulaic transition chains: “Moreover,” “Furthermore,” “Additionally,” “It is worth noting that,” “It is important to note that” | Replace with signposting that names the logical function (assumption, contrast, consequence, example, limitation), or delete the transition when the logic is already clear. |
+| Uniform sentence rhythm: consecutive sentences of near-equal length with identical subject-verb openings | Vary length and structure; merge choppy sentences that share one claim; split sentences that stack unrelated clauses. |
+| Uniform paragraph openings: every paragraph starting with the same topic-sentence-plus-transition formula | Open some paragraphs with the finding, condition, or contrast itself. |
+| Hedging inflation: “could potentially,” “may possibly,” stacked qualifiers on a claim the evidence fully supports | State the supported claim directly. Keep every hedge that encodes real uncertainty (missing tests, partial coverage, unproven generality); strengthening those is an integrity defect, not a style fix. |
+| Filler intensifiers and vogue vocabulary: “delve,” “leverage,” “showcase,” “underscore,” “pivotal,” “crucial,” “comprehensive,” “seamlessly,” and “robust” as unquantified praise | Replace with the precise technical verb or drop the modifier. Keep a term that carries a defined technical meaning in context, such as robustness with a stated perturbation set. |
+| Symmetric enumeration formula: rule-of-three lists everywhere, “Firstly / Secondly / Finally,” perfect parallelism across all sentences | Keep parallel structure only where the content is genuinely parallel; vary enumeration style; let unequal points take unequal space. |
+| List-itis: bullet fragments where the venue expects argued prose | Convert to paragraphs that state and connect claims. Keep lists for genuinely enumerable items. |
+| Meta-discourse and summary boilerplate: “In this section, we will,” “As mentioned earlier,” “In conclusion,” “In summary” openers that restate without adding | Delete, or replace with content: the section's actual claim, dependency, or consequence. |
+
+After the pass, reread the result against the source: every claim, number, citation, symbol,
+and condition must survive with unchanged meaning. Report the pass as a change ledger grouped
+by pattern category; do not annotate individual edits inline in the manuscript text.
 
 ## Equations, algorithms, figures, and tables
 
