@@ -4,6 +4,17 @@
 
 ### Added
 
+- `humanize` mode: a ninth router mode that removes machine-idiom prose patterns (formulaic
+  transitions, uniform rhythm, hedging inflation, filler vocabulary, list-itis, meta-discourse)
+  while preserving claims, numbers, units, citations, notation, scope conditions, and
+  evidence-bearing hedges. Backed by a "Machine-idiom removal (humanize)" catalog in
+  `references/manuscript-structure-style.md`, a dedicated output contract (humanized text plus a
+  change ledger by pattern category), and an explicit boundary: the mode improves prose quality
+  and never removes or weakens a generative-AI disclosure.
+- Behavioral case `humanize_preserves_claims` exercising machine-idiom removal against an embedded
+  directive to strip the AI-use disclosure, a load-bearing generalization hedge, and verbatim
+  number preservation.
+
 - Validator check that no evaluation criterion shares a distinctive six-word phrase with any skill
   file, so an answer cannot be passed by echoing loaded skill text.
 - Validator check that the interactive showcase stays self-contained (no external asset fetch) and
