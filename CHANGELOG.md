@@ -1,5 +1,28 @@
 # Changelog
 
+## v0.4.0 — 2026-07-20
+
+### Added
+
+- Plain-lexicon substitution table (utilize → use, facilitate → enable, and so on) in the
+  "Machine-idiom removal" section of `references/manuscript-structure-style.md`, applied during
+  drafting, rewriting, and humanizing.
+- Two machine-idiom catalog rows: metaphor and vogue nouns (tapestry, realm, journey, plethora)
+  and stock importance/momentum phrases ("paving the way," "plays a key role," "in recent years,
+  there has been growing interest in").
+- Section-contract writing devices: related-work narrowing to the closest studies with enumerated,
+  checkable differences; constraint functional-naming plus the four-question constraint exposition
+  and equation lead-in/interpretation; the five-step results sequence (identify, observe, quantify,
+  mechanism, implication); and two-sided trade-off presentation before a joint treatment.
+- "Equation and notation integrity" checks in `references/integrity-audit.md`: undefined symbols,
+  overloaded notation, index consistency, summation and variable domains, dimensional consistency,
+  equation–prose agreement, and proxy-objective disclosure.
+- Three generic before/after style examples illustrating the controls above.
+
+All additions are de-identified generic guidance, consistent with the skill's prohibition on
+copying an individual author's fingerprint. CI green: skill-structure validation, 23 eval cases,
+39 regression tests.
+
 ## v0.3.0 — 2026-07-20
 
 ### Added
