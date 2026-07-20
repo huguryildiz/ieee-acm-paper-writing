@@ -116,7 +116,10 @@ outside the skill references.
    supplied.
 3. Define symbols before first use and keep one symbol per meaning. Preserve existing
    equation, figure, table, citation, and section labels unless renumbering is requested.
-4. State what each method component does, why it is needed, and what it does not establish.
+4. State what each method component does, how it works, why it is needed, and what it does not
+   establish. Write the exposition to teach a reader who does not already know the passage, and
+   ground an abstract point in a concrete instance (a named node, set, quantity, or condition)
+   only when the evidence already supports it; never invent one.
 5. Present observed results before interpretation. Move mechanisms, implications, and
    generalization claims to the Discussion unless the target publication combines them.
 6. Return manuscript-ready prose only when every included claim is supported.

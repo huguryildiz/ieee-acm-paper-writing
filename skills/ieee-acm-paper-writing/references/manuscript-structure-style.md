@@ -121,6 +121,16 @@ legacy exemplars did not foreground them.
 ## Paragraph and prose controls
 
 - Give each paragraph one function and one controlling claim.
+- In exposition of a model, method, or formulation, write for a reader who does not already know
+  the passage: state what the component does, how its parts produce that behavior, and why it
+  matters for the problem. Build this pedagogical clarity by explaining connections already present
+  in the evidence, never by adding claims, mechanisms, or interpretations the source does not
+  support. Results interpretation still follows the results-before-interpretation and
+  Discussion-placement rules of the section contracts.
+- Make an abstract statement concrete using only material already in the evidence: ground a
+  constraint or mechanism in the specific instance it refers to (a named node, set, quantity, or
+  condition) when this aids understanding. Never invent an instance, value, or example to
+  illustrate a point.
 - Prefer definition before abbreviation and one term per concept.
 - Use signposting that names logical function: assumption, contrast, consequence, example, or
   limitation. Avoid transitions that announce only section order.

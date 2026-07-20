@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.3.0 — 2026-07-20
+
+### Added
+
+- Pedagogical exposition guidance for `draft` and `rewrite`: expositions of a model, method, or
+  formulation now state what a component does, how its parts produce that behavior, and why it
+  matters, written to teach a reader unfamiliar with the passage. Backed by two new bullets in the
+  "Paragraph and prose controls" section of `references/manuscript-structure-style.md` and an
+  expanded step 4 in the "Draft or rewrite" contract of `SKILL.md`.
+- A concrete-instantiation rule: an abstract statement may be grounded in the specific instance it
+  refers to (a named node, set, quantity, or condition) when this aids understanding, using only
+  material the evidence already supports and never an invented example. The integrity gate and the
+  results-before-interpretation / Discussion-placement rules remain unchanged.
+
 ## v0.2.0 — 2026-07-19
 
 ### Added
