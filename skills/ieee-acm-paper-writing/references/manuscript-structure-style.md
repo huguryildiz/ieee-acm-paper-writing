@@ -76,6 +76,10 @@ Organize related work by assumption, method family, decision variable, data regi
 evaluation setting. End each cluster with the unresolved issue relevant to the present work. Do not
 use a paper-by-paper chronology or claim novelty from rhetorical confidence.
 
+After the clustered survey, narrow to the closest one or two studies and enumerate their
+differences explicitly — by scope, model realism, and method — each difference checkable. Close
+with a restrained gap statement scoped to what was actually surveyed, not to the field at large.
+
 Include only background required to understand the contribution. Separate established definitions
 from the manuscript's own assumptions and design choices.
 
@@ -90,6 +94,14 @@ analytically distinct. Identify measured, calibrated, fitted, assumed, and selec
 Order definitions, assumptions, propositions, algorithms, and evidence by dependency rather than
 discovery chronology. Define every symbol before use. Explain what each equation or constraint
 does and why it is needed.
+
+Give each constraint or constraint group a functional name (for example, flow conservation, energy
+balance, bandwidth, or disjointness) and reuse that name when the constraint reappears in analysis.
+For each, let the prose answer four questions: what it enforces, why it is needed (what breaks
+without it), how its terms map to the physical system, and whether it additionally removes symmetry,
+phantom flows, subtours, or infeasible configurations. Introduce every displayed equation with a
+lead-in clause, and when its meaning is not self-evident, follow it with an interpretation that
+names the role of each term rather than restating the algebra.
 
 Put a result close to its assumptions and name the controlled quantity, probability statement,
 asymptotic variable, and comparison object. Put an algorithm after its model and state inputs,
@@ -107,6 +119,12 @@ plans.
 Present observations before interpretation. Organize by research question, claim, failure regime,
 or representative case. Keep quality, feasibility, reliability, runtime, resource cost, and
 certificate quality distinct. Define metrics and denominators; report uncertainty and failures.
+
+For each figure, table, or experiment, follow a five-step sequence: identify what is shown and its
+axes; state the dominant trend in one sentence; quantify it with exact values, units, and
+comparator-scoped percentage changes; give the mechanism, grounded in the model and labeled as a
+hypothesis when it is one; and state the design implication. Do not narrate every plotted point;
+cover the dominant trend, the exceptions, and the implication.
 
 Use Discussion for mechanisms, alternatives, misspecification, validity, deployment trade-offs,
 negative results, and generalization boundaries. Tie future work to demonstrated limitations.
@@ -131,6 +149,9 @@ legacy exemplars did not foreground them.
   constraint or mechanism in the specific instance it refers to (a named node, set, quantity, or
   condition) when this aids understanding. Never invent an instance, value, or example to
   illustrate a point.
+- When two objectives or effects conflict, state both directions before motivating a joint
+  treatment: name what increasing the design variable improves and what it worsens, then explain
+  why optimizing the objectives independently fails.
 - Prefer definition before abbreviation and one term per concept.
 - Use signposting that names logical function: assumption, contrast, consequence, example, or
   limitation. Avoid transitions that announce only section order.
@@ -165,10 +186,58 @@ disclosure to make text read as human-written.
 | Symmetric enumeration formula: rule-of-three lists everywhere, “Firstly / Secondly / Finally,” perfect parallelism across all sentences | Keep parallel structure only where the content is genuinely parallel; vary enumeration style; let unequal points take unequal space. |
 | List-itis: bullet fragments where the venue expects argued prose | Convert to paragraphs that state and connect claims. Keep lists for genuinely enumerable items. |
 | Meta-discourse and summary boilerplate: “In this section, we will,” “As mentioned earlier,” “In conclusion,” “In summary” openers that restate without adding | Delete, or replace with content: the section's actual claim, dependency, or consequence. |
+| Metaphor and vogue nouns: “tapestry,” “realm,” “journey,” “landscape” (figurative), “myriad,” “plethora” | Replace with the literal technical noun plus a count or set, e.g. “many” or the actual number. |
+| Stock importance and momentum phrases: “paving the way,” “shed light on,” “a testament to,” “plays a crucial/vital/key role,” “underscores/highlights the importance of,” “In today's world,” “In recent years, there has been growing interest in” | Delete, or replace with the specific consequence, mechanism, or a dated and sourced trend that makes the point checkable. |
 
 After the pass, reread the result against the source: every claim, number, citation, symbol,
 and condition must survive with unchanged meaning. Report the pass as a change ledger grouped
 by pattern category; do not annotate individual edits inline in the manuscript text.
+
+### Plain-lexicon substitutions
+
+Prefer the short common word; keep a longer word only in its defined technical sense. Apply during
+drafting, rewriting, and humanizing, never at the cost of a term's technical meaning.
+
+| Avoid | Prefer |
+| --- | --- |
+| utilize | use (keep “utilization” as a technical term, e.g. bandwidth utilization) |
+| demonstrate | show |
+| facilitate | enable, allow |
+| in order to | to |
+| prior to | before |
+| subsequently | then |
+| numerous | many |
+| possess | have |
+| commence | begin |
+| endeavor | attempt |
+| ascertain | determine |
+| elucidate | explain |
+| aforementioned | this/that + noun |
+| leverage (verb) | use, exploit |
+| methodology | method (unless the methodology itself is the subject) |
+
+### Before and after
+
+Generic illustrations of the controls above. They are patterns to apply, not text to copy.
+
+- Promotional claim to verifiable statement.
+  - Before: *Our novel framework achieves remarkable gains across a plethora of realistic scenarios,
+    demonstrating its great potential.*
+  - After: *The proposed method reduces peak per-unit cost by 18.4% on average over 20 randomized
+    instances (Table III).*
+- Redundant motivation to a single statement plus a new layer.
+  - Before: *Energy efficiency is crucial because batteries cannot be replaced. […] Since replacing
+    batteries is infeasible, energy-efficient operation is of utmost importance.*
+  - After: *Because batteries cannot be replaced in the field, the system lifetime is set by the
+    energy budget of the most heavily loaded unit. This coupling turns a local operating decision
+    into a system-level design problem.*
+- AI-flavored prose to humanized plain academic English.
+  - Before: *Moreover, our comprehensive evaluation demonstrates remarkable improvements,
+    highlighting the potential of the approach and paving the way for robust, scalable, and reliable
+    deployments.*
+  - After: *Joint optimization extends the objective by 21.7% on average over the sequential
+    baseline across 20 instances (Table IV). The gain comes from the solver's freedom to trade one
+    cost against another, which the sequential design fixes in its first stage.*
 
 ## Equations, algorithms, figures, and tables
 

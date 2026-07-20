@@ -7,6 +7,7 @@ submission-readiness or cross-section review.
 
 - Evidence classes and claim ledger
 - Citation and quantitative integrity
+- Equation and notation integrity
 - Guarantee, statistical, and causal boundaries
 - Reproducibility and negative evidence
 - Audit procedure and severity
@@ -56,6 +57,27 @@ Report conflicts. Do not silently select the convenient source.
 For every number, record unit, denominator, population or instance set, aggregation, uncertainty,
 and source artifact. Check tables, figures, abstract, body, and conclusion for identical definitions.
 Do not report a percentage without its denominator or a relative change without the comparator.
+
+## Equation and notation integrity
+
+Run these checks on any text that contains mathematics:
+
+- **Undefined symbols**: every symbol resolves to a definition earlier in the manuscript or in a
+  symbol table.
+- **Overloaded notation**: one symbol carries one meaning; flag a letter reused for both an index
+  and a quantity, or reused across models.
+- **Index consistency**: index letters keep their roles across the formulation; flag silent swaps.
+- **Summation and product domains**: every collective sign states its domain, and the domain matches
+  a set defined in the formulation.
+- **Variable domains**: every decision variable has a stated domain (integer, continuous, or binary)
+  consistent with the declared model class; an “ILP” with continuous variables is an MILP.
+- **Dimensional consistency**: units balance across every equality and inequality; flag
+  energy-versus-power and per-round-versus-per-lifetime confusions.
+- **Equation–prose agreement**: the prose matches the algebra — inequality direction, which entity
+  pays a cost, and per-instance versus aggregate quantities.
+- **Proxy objectives**: when the objective optimizes a proxy for a physical metric (a min-max
+  surrogate for lifetime, an error bound for reliability), state the relationship and its conditions
+  where the objective is introduced.
 
 ## Guarantee, statistical, and causal boundaries
 
