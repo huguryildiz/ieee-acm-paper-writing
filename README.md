@@ -103,27 +103,140 @@ $ieee-acm-paper-writing section-audit --html-map manuscript.md
 $ieee-acm-paper-writing section-audit --html-map --out reports/results-audit.html manuscript.md
 ```
 
-Without the modifier, the skill produces no HTML file. With it, the agent completes the canonical
-text audit, writes validated version-1 JSON, and invokes the dependency-free
+Without the modifier, the skill produces neither JSON nor HTML. With it, the agent completes the canonical
+text audit, writes and retains validated version-1 JSON, and invokes the dependency-free
 [`render_audit_map.py`](skills/ieee-acm-paper-writing/scripts/render_audit_map.py) renderer. The
 renderer performs presentation only: it cannot infer findings, rewrite claims, or fill missing
 evidence. It refuses to overwrite an existing output unless the user explicitly authorizes
 `--force`.
 
+Every `--html-map` run returns three deliverables:
+
+| Requested form | Text audit | JSON artifact | HTML artifact |
+| --- | --- | --- | --- |
+| `section-audit --html-map manuscript.md` | Returned in the agent response | `manuscript-section-audit-map.json` | `manuscript-section-audit-map.html` |
+| `section-audit --html-map --out reports/results-audit.html manuscript.md` | Returned in the agent response | `reports/results-audit.json` | `reports/results-audit.html` |
+
+The JSON is a retained user artifact and is the input accepted by the local audit workbench. The
+agent checks both output paths before writing and does not overwrite either file without explicit
+approval. An explicit `--out` path must end in `.html`; its sibling `.json` path is derived by
+replacing that suffix.
+
 The [hosted showcase](https://ieee-acm-paper-writing.vercel.app) presents the checked-in fixture in
 a browser and provides direct downloads of its self-contained HTML and source JSON. The site is a
-static presentation layer: it does not accept manuscript uploads or perform an audit.
+static presentation layer: it does not accept manuscript uploads or perform an audit. Renderer
+outputs are confined to the workspace root supplied to the command; traversal, external absolute
+paths, and symlink escapes are rejected.
+
+### Local audit workbench
+
+The workbench is repository-side support tooling; it is **not included** when the standalone skill
+is installed under `.agents/skills/`. To inspect completed audit-map JSON without sending it to a
+hosted service, clone the matching repository release and run the server from that clone's root:
+
+```bash
+git clone --branch v0.5.0 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
+cd ieee-acm-paper-writing
+python3 scripts/serve_local_audit.py
+```
+
+The command opens a loopback-only workbench on a random local port. Drop or select version-1 JSON,
+then inspect the canonical renderer output, download the self-contained HTML, or open it full
+screen. The browser sends the JSON only to the local `127.0.0.1` process; the request is session
+bound, limited to 2 MiB, and is not persisted. Use `--no-open` to suppress automatic browser launch
+or `--port PORT` to request a specific local port.
+
+The workbench remains a presentation tool. It does not read a manuscript, discover findings, or
+establish submission readiness. Stop it with `Ctrl+C` when finished.
 
 ## Installation
 
-Install the skill with the [`skills`](https://github.com/vercel-labs/skills) CLI:
+### Prerequisites
+
+- Node.js 22.20.0 or newer for the pinned `skills@1.5.21` CLI used below;
+- an agent host that supports the shared Agent Skills format; and
+- Python 3 when generating the optional HTML audit map or running the repository-side local
+  workbench.
+
+The repository has been exercised with Codex. The upstream CLI supports other agent hosts, but this
+repository does not claim equivalent behavioral validation for every host or model.
+
+### Reproducible Codex install
+
+Run this from the manuscript repository in which the skill should be available. It pins both the
+installer and the released skill source, targets Codex explicitly, copies rather than symlinks the
+files, and skips interactive prompts:
 
 ```bash
-npx skills add huguryildiz/ieee-acm-paper-writing --skill ieee-acm-paper-writing
+DISABLE_TELEMETRY=1 npx --yes skills@1.5.21 add \
+  https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.5.0/skills/ieee-acm-paper-writing \
+  --skill ieee-acm-paper-writing --agent codex --copy -y
 ```
 
+This project-scoped command installs under `.agents/skills/`. Add `--global` only when the skill
+should be available to Codex across all projects. The upstream installer collects anonymous usage
+telemetry by default; `DISABLE_TELEMETRY=1` opts out for this invocation.
+
+After installation, start a **new agent session** so the host discovers the skill. Then invoke it
+with a manuscript path and an explicit mode. These are agent prompts, not commands for a separate
+standalone manuscript-processing executable.
+
+### Complete skill invocation reference
+
+The supported invocation shape is:
+
+```text
+$ieee-acm-paper-writing <mode> [supported modifier] <input> [evidence and constraints]
+```
+
+All nine modes are shown below. Replace the example paths and angle-bracketed descriptions with
+your own material:
+
+```text
+$ieee-acm-paper-writing draft abstract from evidence.md
+$ieee-acm-paper-writing rewrite sections/results.md
+$ieee-acm-paper-writing expand sections/method.md
+$ieee-acm-paper-writing compress manuscript.md
+$ieee-acm-paper-writing humanize sections/introduction.md
+$ieee-acm-paper-writing outline evidence.md
+$ieee-acm-paper-writing audit manuscript.md
+$ieee-acm-paper-writing section-audit sections/results.md
+$ieee-acm-paper-writing venue-adapt manuscript.md for <publication and article type>
+```
+
+Style or landmark-paper calibration is a natural-language modifier of the applicable mode, not a
+tenth mode and not a command-line flag. Representative calibrated requests are:
+
+```text
+$ieee-acm-paper-writing draft introduction from evidence.md using the de-identified landmark-paper calibration
+$ieee-acm-paper-writing rewrite sections/method.md using the applicable corpus-calibration exposition pattern
+$ieee-acm-paper-writing outline evidence.md in the exposition pattern appropriate to <technical area>
+```
+
+`--html-map` is supported only with `audit` and `section-audit`. `--out` belongs to that modifier,
+must name an `.html` file, and also causes the paired `.json` file to be retained:
+
+```text
+$ieee-acm-paper-writing audit --html-map manuscript.md
+$ieee-acm-paper-writing audit --html-map --out reports/manuscript-audit.html manuscript.md
+$ieee-acm-paper-writing section-audit --html-map manuscript.md
+$ieee-acm-paper-writing section-audit --html-map --out reports/results-audit.html manuscript.md
+```
+
+There are no mode-specific CLI flags beyond this documented HTML modifier. State target venue,
+article type, section, evidence sources, output-file requests, claim boundaries, and other
+scientific constraints in ordinary language. If paired audit-map outputs already exist, explicitly
+authorize replacement in the request; the skill does not infer overwrite permission.
+
+Text modes return the requested prose or audit in the conversation unless the user requests a file
+edit. The HTML modifier writes the paired JSON and HTML artifacts inside the active workspace and
+returns both paths; it does not turn the renderer into an analysis engine. Review the installed
+skill before use, because agent skills execute with the host agent's permissions.
+
 For a manual installation, copy [`skills/ieee-acm-paper-writing`](skills/ieee-acm-paper-writing)
-into the skills directory used by your agent environment.
+into the skill directory used by the selected agent host, then begin a new session. Manual skill
+installation copies only the distributable skill; it does not install the repository-side local
+workbench.
 
 ## Examples
 
@@ -193,7 +306,7 @@ python3 skills/ieee-acm-paper-writing/scripts/render_audit_map.py \
   skills/ieee-acm-paper-writing/examples/section-audit-map.json --check
 ```
 
-The behavioral suite defines 22 self-contained adversarial cases with binary, output-observable
+The behavioral suite defines 23 self-contained adversarial cases with binary, output-observable
 `must_pass` and `must_not` criteria. The runner validates cases, collects agent responses, creates
 a manual scoring file, and reports results:
 
@@ -216,9 +329,12 @@ python3 -m unittest discover -s tests -v
 ```
 
 The repository CI runs the validator, evaluation-schema validation, and regression tests on pushes
-to `main` and on pull requests. Renderer tests reject stale checked-in HTML, unsafe unescaped
-content, invalid concern layers, duplicate finding identifiers, implicit overwrite, external asset
-dependencies, and empty-layer wording that could be mistaken for a pass.
+to `main` and on pull requests. These are structural and deterministic checks; CI does **not** run a
+host model and therefore does not establish behavioral compliance. A behavioral claim requires a
+collected agent response for every case, manual criterion scoring, and a strict report with the
+denominator and failed-case list. Renderer tests reject stale checked-in HTML, unsafe unescaped
+content, invalid concern layers, duplicate finding identifiers, implicit overwrite, output-path
+escapes, external asset dependencies, and empty-layer wording that could be mistaken for a pass.
 
 ## Scope and limitations
 
@@ -262,6 +378,7 @@ docs/
 site/                        # Dependency-free hosted showcase source
 assets/                      # Repo-side icon and showcase screenshots (not installed)
 scripts/build_site.py        # Builds the Vercel output from tracked site and example files
+scripts/serve_local_audit.py # Runs the loopback-only local audit workbench
 scripts/validate_skill.py    # Dependency-free repository validator
 tests/                       # Evaluation-runner and validator regression tests
 vercel.json                  # Static-site build and output configuration

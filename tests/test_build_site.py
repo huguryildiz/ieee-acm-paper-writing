@@ -35,6 +35,9 @@ class SiteBuildTests(unittest.TestCase):
         self.assertIn('href="/examples/section-audit-map.html" download', landing_page)
         self.assertIn('href="/examples/section-audit-map.json" download', landing_page)
         self.assertIn('src="/examples/section-audit-map.html"', landing_page)
+        self.assertIn('#local-audit-workbench', landing_page)
+        self.assertIn('skills@1.5.21', landing_page)
+        self.assertIn('/tree/v0.5.0/skills/ieee-acm-paper-writing', landing_page)
         self.assertNotIn("unpkg.com", landing_page)
         self.assertNotIn("cdn.jsdelivr.net", landing_page)
 

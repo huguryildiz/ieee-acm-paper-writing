@@ -126,6 +126,10 @@
             <span>section-audit-map.html</span>
           </div>
           <div class="preview-actions">
+            <a href="https://github.com/huguryildiz/ieee-acm-paper-writing#local-audit-workbench">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H4zM9 20h6m-3-4v4"/></svg>
+              Run locally
+            </a>
             <a href="/examples/section-audit-map.json" download>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V8m-8-4h4l4 4v4M9 12h6m-6 4h4"/></svg>
               JSON
@@ -168,7 +172,7 @@
         <h2 id="install-title">Put evidence boundaries in the writing loop.</h2>
       </div>
       <div class="command-block">
-        <code id="install-command">npx skills add huguryildiz/ieee-acm-paper-writing --skill ieee-acm-paper-writing</code>
+        <code id="install-command">DISABLE_TELEMETRY=1 npx --yes skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.5.0/skills/ieee-acm-paper-writing --skill ieee-acm-paper-writing --agent codex --copy -y</code>
         <button id="copy-command" type="button" aria-describedby="copy-status">
           <span>Copy command</span>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h11v11H8zM5 16H4V4h12v1"/></svg>

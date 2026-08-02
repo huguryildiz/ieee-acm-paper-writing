@@ -284,6 +284,22 @@ def check_cases(root: Path):
         err("evals/cases.json: no cases defined")
 
 
+def check_readme_case_count(root: Path):
+    readme = root / "README.md"
+    cases_path = root / "evals" / "cases.json"
+    if not readme.exists() or not cases_path.exists():
+        return
+    try:
+        count = len(json.loads(cases_path.read_text(encoding="utf-8")).get("cases", []))
+    except (json.JSONDecodeError, AttributeError):
+        return  # check_cases reports the underlying schema problem
+    match = re.search(r"behavioral suite defines (\d+) self-contained", readme.read_text(encoding="utf-8"))
+    if not match:
+        err("README.md: missing behavioral-suite case count")
+    elif int(match.group(1)) != count:
+        err(f"README.md: behavioral-suite count is {match.group(1)}, but evals/cases.json has {count}")
+
+
 def _criteria_ngrams(text, n=6):
     words = re.findall(r"[a-z0-9']+", text.lower())
     return {" ".join(words[i : i + n]) for i in range(len(words) - n + 1)}
@@ -367,7 +383,15 @@ def check_audit_map_renderer(root: Path):
     with tempfile.TemporaryDirectory() as tmp:
         output = Path(tmp) / "section-audit-map-rendered.html"
         result = subprocess.run(
-            [sys.executable, str(renderer), str(example_json), "--out", str(output)],
+            [
+                sys.executable,
+                str(renderer),
+                str(example_json),
+                "--out",
+                str(output),
+                "--workspace-root",
+                tmp,
+            ],
             capture_output=True,
             text=True,
         )
@@ -434,6 +458,7 @@ def main():
         check_calibration(root)
         check_links(root)
         check_cases(root)
+        check_readme_case_count(root)
         check_criteria_independence(root)
         check_agent_interface(root)
         check_audit_map_renderer(root)

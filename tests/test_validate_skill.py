@@ -175,6 +175,113 @@ class CriteriaIndependenceTests(unittest.TestCase):
         self.assertEqual(errors, [])
 
 
+class ReadmeCaseCountTests(unittest.TestCase):
+    def setUp(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def tearDown(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def check(self, readme_count, case_count):
+        import json
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "README.md").write_text(
+                f"The behavioral suite defines {readme_count} self-contained cases.\n",
+                encoding="utf-8",
+            )
+            (root / "evals").mkdir()
+            (root / "evals" / "cases.json").write_text(
+                json.dumps({"cases": [{} for _ in range(case_count)]}),
+                encoding="utf-8",
+            )
+            VALIDATOR_MODULE.check_readme_case_count(root)
+            return list(VALIDATOR_MODULE.errors)
+
+    def test_matching_count_passes(self):
+        self.assertEqual(self.check(23, 23), [])
+
+    def test_stale_count_is_rejected(self):
+        errors = self.check(22, 23)
+        self.assertTrue(any("evals/cases.json has 23" in error for error in errors))
+
+
+class HtmlMapDocumentationTests(unittest.TestCase):
+    def test_skill_requires_json_and_html_as_deliverables(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("The JSON is a user-deliverable artifact", skill)
+        self.assertIn("plus the JSON path and HTML path", skill)
+        self.assertIn("<source-stem>-section-audit-map.json", skill)
+        self.assertIn("same path with `.json` substituted", skill)
+
+    def test_skill_keeps_author_queries_after_claim_narrowing(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Omitting, narrowing, or qualifying an unsupported requested claim", skill)
+        self.assertIn("A limitation sentence inside the\nmanuscript is not a substitute", skill)
+
+    def test_readme_lists_every_mode_and_paired_artifacts(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        for mode in (
+            "draft",
+            "rewrite",
+            "expand",
+            "compress",
+            "humanize",
+            "outline",
+            "audit",
+            "section-audit",
+            "venue-adapt",
+        ):
+            self.assertIn(f"$ieee-acm-paper-writing {mode}", readme)
+        self.assertIn("manuscript-section-audit-map.json", readme)
+        self.assertIn("reports/results-audit.json", readme)
+
+    def test_readme_documents_complete_modifier_surface(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("### Complete skill invocation reference", readme)
+        self.assertIn("$ieee-acm-paper-writing audit --html-map manuscript.md", readme)
+        self.assertIn(
+            "$ieee-acm-paper-writing audit --html-map --out reports/manuscript-audit.html manuscript.md",
+            readme,
+        )
+        self.assertIn("natural-language modifier", readme)
+        self.assertIn("There are no mode-specific CLI flags beyond", readme)
+
+
+class ModeDocumentationTests(unittest.TestCase):
+    MODES = (
+        "draft",
+        "rewrite",
+        "expand",
+        "compress",
+        "humanize",
+        "outline",
+        "audit",
+        "section-audit",
+        "venue-adapt",
+    )
+
+    def test_public_mode_inventory_matches_router(self):
+        skill = (ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md").read_text(
+            encoding="utf-8"
+        )
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        for mode in self.MODES:
+            self.assertIn(f"`{mode}`", skill)
+            self.assertIn(f"$ieee-acm-paper-writing {mode}", readme)
+
+    def test_release_pinned_install_and_workbench_scope_are_documented(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("tree/v0.5.0/skills/ieee-acm-paper-writing", readme)
+        self.assertIn("is **not included**", readme)
+        self.assertIn("git clone --branch v0.5.0 --depth 1", readme)
+
+
 class AuditMapShowcaseTests(unittest.TestCase):
     BUNDLE = (
         '<!DOCTYPE html><html><head></head><body>{body}'

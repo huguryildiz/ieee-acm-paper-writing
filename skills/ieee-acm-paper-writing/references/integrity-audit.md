@@ -38,7 +38,10 @@ Apply this authority order for technical claims:
 4. current primary literature and authoritative standards;
 5. narrative notes and manuscript drafts.
 
-Report conflicts. Do not silently select the convenient source.
+Report conflicts with both values or statements, both locations, the controlling authority, and
+the reason it controls. Keep this record outside publication-ready prose. When a measured artifact
+and narrative draft disagree, the measured artifact controls allowed wording unless evidence
+invalidates that artifact; its authority does not erase the contradiction.
 
 ## Citation and quantitative integrity
 
@@ -51,12 +54,20 @@ Report conflicts. Do not silently select the convenient source.
 - When a citation cannot be verified against an authoritative source in the current
   environment, do not treat it as support: keep the dependent claim out of manuscript prose
   or scope it to verified evidence, and mark the item `unverified citation` in the handoff.
+- If the cited source is identifiable but its content does not support the sentence, remove that
+  evidentiary use. Request an actually supporting source as an external author query; do not leave
+  the request inside revised manuscript prose and do not propose a source from memory as verified.
 - Scope any citation-count, ranking, or "most-cited" statement to a named database and
   access date. A curated reading corpus is not a global ranking.
 
 For every number, record unit, denominator, population or instance set, aggregation, uncertainty,
 and source artifact. Check tables, figures, abstract, body, and conclusion for identical definitions.
 Do not report a percentage without its denominator or a relative change without the comparator.
+
+Treat a comparison as matched only when the relevant platform, data or workload, implementation
+and configuration, resource budget, stopping rule, and metric definition align. Otherwise remove
+superiority language or identify the number as a descriptive cross-setup contrast, then place a
+request for a controlled like-for-like rerun in the external author-query handoff.
 
 ## Equation and notation integrity
 
@@ -144,6 +155,11 @@ Classify findings:
 
 For each finding give location, claim, evidence or missing evidence, consequence, and concrete
 correction. Do not create empty severity sections.
+
+For drafting and rewriting, finish with a handoff reconciliation: every absent item that prevents
+requested claim wording becomes a separate external `Author queries` entry with the missing item,
+blocked wording, requested action, and fallback if unresolved. Mentioning the absence inside the
+paper is not a substitute for asking the author to resolve it.
 
 ## Cross-section consistency
 

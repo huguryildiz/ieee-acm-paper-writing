@@ -1,5 +1,47 @@
 # Changelog
 
+## v0.5.0 — 2026-08-03
+
+### Added
+
+- A loopback-only local audit workbench with drag-and-drop JSON intake, canonical renderer
+  validation, sandboxed preview, HTML download, full-screen viewing, light/dark themes, responsive
+  layouts, session-bound requests, and a 2 MiB input limit.
+- Renderer output containment for traversal, external absolute paths, and symlink escapes, with
+  regression tests for every boundary.
+- A validator check that keeps the README behavioral-case count synchronized with `cases.json`.
+
+### Changed
+
+- Manuscript-mode handoff now requires mechanically structured external author queries for every
+  unresolved claim dependency and a visible source-conflict record when evidence disagrees.
+- Every `--html-map` run now retains and returns both the version-1 JSON artifact and its rendered
+  HTML companion with deterministic paired filenames; README includes all nine mode invocations.
+- Installation guidance now pins the released skill and installer, states the current Node.js
+  prerequisite, distinguishes project and global scope, targets Codex explicitly, exposes the
+  telemetry opt-out, and includes first-use examples.
+- CI now uses `actions/checkout@v6` with read-only repository permissions and documentation now
+  distinguishes deterministic CI checks from manually scored model behavior.
+- The hosted landing page links to the local-workbench instructions and copies the reproducible
+  Codex installation command.
+
+### Fixed
+
+- Missing statistical, citation-support, real-time, and matched-comparison evidence can no longer
+  remain only as manuscript limitations; each becomes a separate external author action.
+- Narrowing or omitting an unsupported requested claim no longer discharges the corresponding
+  external `Author queries` obligation.
+- Conflicting measured and narrative values remain visible even when the measured artifact controls
+  the allowed wording.
+- Systems without automated field-to-model updates are classified as offline models rather than
+  digital shadows merely because live measurements and older simulations share a dashboard.
+- The README behavioral-suite count now matches the 23 defined cases.
+- Local-workbench documentation now states that the UI is repository-side tooling rather than part
+  of the installed skill, and provides a release-pinned clone command.
+- Regression coverage now keeps the public nine-mode invocation inventory synchronized with the
+  skill router.
+- Compact local-workbench controls now meet the 44 px minimum touch-target size.
+
 ## v0.4.0 — 2026-07-20
 
 ### Added
@@ -180,7 +222,7 @@ copying an individual author's fingerprint. CI green: skill-structure validation
 
 ## v0.1.0 — 2026-07-14
 
-Initial public release. Subsequent audit-driven corrections are recorded under Unreleased.
+Initial public release. Subsequent audit-driven corrections are recorded under later releases.
 
 ### Added
 
@@ -200,8 +242,8 @@ Initial public release. Subsequent audit-driven corrections are recorded under U
 - Structured author-query contract: missing item, blocked claim, requested
   action, consequence (`SKILL.md`).
 - Behavioral audit record: `evals/results/2026-07-14-behavioral-audit.md`
-  (removed after release; see Unreleased above).
-- `CITATION.cff` (removed after release; see Unreleased above).
+  (removed in a later release; see the removal entry above).
+- `CITATION.cff` (removed in a later release; see the removal entry above).
 
 ### Changed
 
