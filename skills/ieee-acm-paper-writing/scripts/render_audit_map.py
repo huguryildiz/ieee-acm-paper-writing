@@ -311,12 +311,46 @@ def write_atomic(path: Path, content: str, force: bool) -> None:
             os.unlink(temp_name)
 
 
+def output_within_workspace(path: Path, workspace_root: Path) -> Path:
+    """Return an absolute output path after enforcing workspace containment.
+
+    ``resolve`` follows existing symlink components, so a parent directory that points outside
+    the workspace cannot be used to bypass the boundary. The lexical path is returned so an
+    existing in-workspace symlink is replaced as a directory entry rather than followed during
+    the atomic write.
+    """
+    try:
+        root = workspace_root.resolve(strict=True)
+    except OSError as exc:
+        raise RenderError(f"cannot resolve workspace root {workspace_root}: {exc}") from exc
+    if not root.is_dir():
+        raise RenderError(f"workspace root is not a directory: {root}")
+
+    lexical = path if path.is_absolute() else Path.cwd() / path
+    try:
+        resolved = lexical.resolve(strict=False)
+        common = Path(os.path.commonpath((str(root), str(resolved))))
+    except (OSError, ValueError) as exc:
+        raise RenderError(f"cannot resolve output path {path}: {exc}") from exc
+    if common != root:
+        raise RenderError(
+            f"output must stay inside workspace root {root}: {path}"
+        )
+    return lexical.absolute()
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Render a self-contained HTML presentation of a canonical text audit."
     )
     parser.add_argument("input", help="audit-map JSON path, or - for stdin")
     parser.add_argument("--out", "-o", help="output HTML path; defaults to INPUT with .html suffix")
+    parser.add_argument(
+        "--workspace-root",
+        type=Path,
+        default=Path.cwd(),
+        help="directory that must contain the output path (default: current directory)",
+    )
     parser.add_argument("--check", action="store_true", help="validate and render in memory without writing")
     parser.add_argument("--force", action="store_true", help="overwrite an existing output file")
     return parser
@@ -337,6 +371,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             raise RenderError("--out is required when input is read from stdin")
         else:
             output = Path(args.input).with_suffix(".html")
+        output = output_within_workspace(output, args.workspace_root)
         write_atomic(output, rendered, args.force)
         print(f"Wrote {output} ({finding_count} findings)")
         return 0

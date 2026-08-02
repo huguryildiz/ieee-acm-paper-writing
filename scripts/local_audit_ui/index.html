@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="A loopback-only workbench for previewing validated audit-map JSON with the canonical renderer.">
+  <meta name="theme-color" content="#f3ecdf">
+  <meta name="audit-session" content="@@SESSION_TOKEN@@">
+  <title>Local Audit Workbench — IEEE / ACM Paper Writing</title>
+  <link rel="icon" href="/local-audit-logo.png" type="image/png">
+  <link rel="stylesheet" href="/local-audit.css">
+  <script src="/local-audit.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#workbench">Skip to workbench</a>
+
+  <header class="workbench-header">
+    <a class="wordmark" href="/" aria-label="Reset local audit workbench">
+      <img class="wordmark-logo" src="/local-audit-logo.png" alt="" width="54" height="51">
+      <span><strong>Local Audit Workbench</strong><small>IEEE / ACM Paper Writing</small></span>
+    </a>
+    <div class="header-meta">
+      <span class="local-seal"><i aria-hidden="true"></i> Loopback only</span>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Use dark theme" aria-pressed="false">
+        <span aria-hidden="true">◐</span>
+        <span class="theme-label">Dark</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="workbench">
+    <section class="intake" aria-labelledby="intake-title">
+      <p class="folio">LOCAL DESK <span>01</span></p>
+      <h1 id="intake-title">Inspect the map.<br><em>Keep the audit canonical.</em></h1>
+      <p class="intake-copy">Choose version-1 audit-map JSON. The file is sent only to the loopback process on this computer, where the repository’s existing renderer validates it and creates the preview.</p>
+
+      <label class="drop-zone" id="drop-zone" for="audit-file">
+        <input id="audit-file" type="file" accept="application/json,.json">
+        <span class="drop-index" aria-hidden="true">01</span>
+        <span class="drop-copy"><strong>Drop audit-map JSON here</strong><small>or choose a local file · 2 MiB maximum</small></span>
+        <span class="drop-action">Choose JSON</span>
+      </label>
+
+      <div class="intake-actions">
+        <button class="text-action" id="load-example" type="button">Load teaching fixture <span aria-hidden="true">↗</span></button>
+        <button class="text-action" id="clear-preview" type="button" disabled>Clear desk <span aria-hidden="true">×</span></button>
+      </div>
+
+      <aside class="boundary-note" aria-labelledby="boundary-title">
+        <span class="boundary-rule" aria-hidden="true"></span>
+        <div>
+          <h2 id="boundary-title">Presentation boundary</h2>
+          <p>This desk does not read a manuscript, discover findings, repair claims, or establish submission readiness. It presents an audit already encoded as JSON.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="preview-region" aria-labelledby="preview-title">
+      <div class="preview-toolbar">
+        <div class="file-identity">
+          <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span id="file-name">no audit selected</span>
+        </div>
+        <div class="preview-actions">
+          <button id="download-html" type="button" disabled>Download HTML <span aria-hidden="true">↓</span></button>
+          <button class="open-action" id="open-preview" type="button" disabled>Open full screen <span aria-hidden="true">↗</span></button>
+        </div>
+      </div>
+
+      <div class="preview-stage" id="preview-stage">
+        <div class="empty-state" id="empty-state">
+          <p class="empty-kicker">Awaiting canonical audit data</p>
+          <h2 id="preview-title">One JSON document.<br>One deterministic view.</h2>
+          <ol>
+            <li><span>1</span>Choose a completed audit-map JSON file.</li>
+            <li><span>2</span>The canonical renderer validates every required field.</li>
+            <li><span>3</span>Inspect, download, or open the self-contained HTML.</li>
+          </ol>
+        </div>
+        <div class="loading-state" id="loading-state" hidden aria-hidden="true">
+          <span></span><span></span><span></span>
+          <p>Validating with the canonical renderer…</p>
+        </div>
+        <iframe id="audit-preview" title="Rendered local audit map" sandbox="allow-scripts" hidden></iframe>
+      </div>
+
+      <div class="status-strip" aria-label="Preview status">
+        <span><strong>Schema</strong><i id="schema-status">—</i></span>
+        <span><strong>Findings</strong><i id="finding-count">—</i></span>
+        <span><strong>Renderer</strong><i>canonical · local</i></span>
+        <p id="status-message" role="status" aria-live="polite">Choose JSON or load the teaching fixture.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

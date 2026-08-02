@@ -121,8 +121,10 @@ uncertainty propagation, replication and diagnostics, numerical failures, and co
 
 Before using “digital twin,” declare the physical referent, digital representation, automated
 physical-to-digital flow, automated digital-to-physical flow, synchronization cadence, state
-estimator, model version, and operational purpose. Use narrower terms for an offline model or
-one-way shadow when coupling is absent.
+estimator, model version, and operational purpose. With no automated field-to-model update, use
+`offline model` rather than `digital shadow`; reserve the latter for an implemented automated
+physical-to-digital path. Do not infer synchronization from a dashboard that merely displays live
+measurements beside older simulation results.
 
 Separate connectivity from calibration, calibration from validation, prediction from decision
 support, and decision support from control. Bidirectional data alone does not establish model

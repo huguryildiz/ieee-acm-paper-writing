@@ -93,6 +93,38 @@ class AuditMapRendererTests(unittest.TestCase):
             RENDER_MODULE.write_atomic(output, "replacement", force=True)
             self.assertEqual(output.read_text(encoding="utf-8"), "replacement")
 
+    def test_output_path_inside_workspace_is_accepted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            output = RENDER_MODULE.output_within_workspace(root / "reports" / "audit.html", root)
+            self.assertEqual(output, root / "reports" / "audit.html")
+
+    def test_parent_traversal_outside_workspace_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "workspace"
+            root.mkdir()
+            with self.assertRaisesRegex(RENDER_MODULE.RenderError, "inside workspace root"):
+                RENDER_MODULE.output_within_workspace(root / ".." / "outside.html", root)
+
+    def test_absolute_output_outside_workspace_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            parent = Path(tmp)
+            root = parent / "workspace"
+            root.mkdir()
+            with self.assertRaisesRegex(RENDER_MODULE.RenderError, "inside workspace root"):
+                RENDER_MODULE.output_within_workspace(parent / "outside.html", root)
+
+    def test_symlinked_parent_cannot_escape_workspace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            parent = Path(tmp)
+            root = parent / "workspace"
+            outside = parent / "outside"
+            root.mkdir()
+            outside.mkdir()
+            (root / "reports").symlink_to(outside, target_is_directory=True)
+            with self.assertRaisesRegex(RENDER_MODULE.RenderError, "inside workspace root"):
+                RENDER_MODULE.output_within_workspace(root / "reports" / "audit.html", root)
+
 
 if __name__ == "__main__":
     unittest.main()
