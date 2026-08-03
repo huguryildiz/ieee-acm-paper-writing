@@ -289,12 +289,7 @@ class ModeDocumentationTests(unittest.TestCase):
 
 
 class AuditMapShowcaseTests(unittest.TestCase):
-    BUNDLE = (
-        '<!DOCTYPE html><html><head></head><body>{body}'
-        '<script type="__bundler/manifest">{{}}</script>'
-        '<script type="__bundler/template">"<div>ok</div>"</script>'
-        '</body></html>'
-    )
+    PAGE = '<!DOCTYPE html><html><head></head><body>{body}<div>audit map</div></body></html>'
 
     def setUp(self):
         VALIDATOR_MODULE.errors.clear()
@@ -302,22 +297,37 @@ class AuditMapShowcaseTests(unittest.TestCase):
     def tearDown(self):
         VALIDATOR_MODULE.errors.clear()
 
-    def check(self, body=""):
+    def check(self, body="", fixture_body=None):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             examples = root / "skills" / "ieee-acm-paper-writing" / "examples"
             examples.mkdir(parents=True)
             (examples / "section-audit-map.html").write_text(
-                self.BUNDLE.format(body=body), encoding="utf-8"
+                self.PAGE.format(body=body), encoding="utf-8"
             )
+            if fixture_body is not None:
+                (examples / "section-audit-map-rendered.html").write_text(
+                    self.PAGE.format(body=fixture_body), encoding="utf-8"
+                )
             VALIDATOR_MODULE.check_audit_map_showcase(root)
             return list(VALIDATOR_MODULE.errors)
 
-    def test_self_contained_showcase_passes(self):
-        self.assertEqual(self.check(), [])
+    def test_showcase_matching_the_renderer_fixture_passes(self):
+        self.assertEqual(self.check(fixture_body=""), [])
+
+    def test_showcase_diverging_from_the_renderer_fixture_is_rejected(self):
+        errors = self.check(fixture_body="<p>re-rendered</p>")
+        self.assertTrue(any("showcase differs from" in e for e in errors))
+
+    def test_missing_renderer_fixture_is_rejected(self):
+        errors = self.check()
+        self.assertTrue(any("missing renderer fixture" in e for e in errors))
 
     def test_google_fonts_link_is_rejected(self):
-        errors = self.check('<link rel="preconnect" href="https://fonts.googleapis.com">')
+        errors = self.check(
+            '<link rel="preconnect" href="https://fonts.googleapis.com">',
+            fixture_body='<link rel="preconnect" href="https://fonts.googleapis.com">',
+        )
         self.assertTrue(any("external asset dependency" in e for e in errors))
 
     def test_missing_showcase_is_rejected(self):

@@ -301,11 +301,12 @@ claim, rewrite text, or establish submission readiness. It rejects path escapes 
 overwrite either paired artifact without explicit authorization.
 
 The [hosted showcase](https://ieee-acm-paper-writing.vercel.app) displays checked-in synthetic
-fixtures; it does not accept manuscript uploads or perform audits. The
-[live section-audit example](https://ieee-acm-paper-writing.vercel.app/examples/section-audit-map.html),
-[source JSON](skills/ieee-acm-paper-writing/examples/section-audit-map.json), and
+fixtures; it does not accept manuscript uploads or perform audits. Every published example is
+canonical renderer output, so the
+[live section-audit example](https://ieee-acm-paper-writing.vercel.app/examples/section-audit-map.html)
+is byte-identical to the
 [deterministic renderer fixture](skills/ieee-acm-paper-writing/examples/section-audit-map-rendered.html)
-make the renderer contract inspectable.
+rendered from its [source JSON](skills/ieee-acm-paper-writing/examples/section-audit-map.json).
 
 ### Local audit workbench
 

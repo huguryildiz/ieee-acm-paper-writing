@@ -429,14 +429,17 @@ EXTERNAL_ASSET_TOKENS = (
 
 
 def check_audit_map_showcase(root: Path):
-    """The interactive showcase must stay self-contained and structurally intact.
+    """The published showcase must be canonical renderer output and self-contained.
 
-    It is a hand-maintained Artifact bundle (not renderer output), so nothing else
-    checks it. This guards two invariants: its bundle blocks parse, and it fetches
-    no external asset at load — re-exporting it through a tool that re-adds Google
-    Fonts links would otherwise ship an external dependency undetected.
+    The hosted page ships this file, so a hand-edited or re-exported copy would put
+    content on the web that no renderer check covers. Pinning it to the deterministic
+    fixture makes any divergence — including a stale copy carrying an outdated
+    template — a validation failure, and the token scan still rejects a re-export
+    that reintroduces a remote font fetch.
     """
-    showcase = root / "skills" / "ieee-acm-paper-writing" / "examples" / "section-audit-map.html"
+    examples = root / "skills" / "ieee-acm-paper-writing" / "examples"
+    showcase = examples / "section-audit-map.html"
+    fixture = examples / "section-audit-map-rendered.html"
     rel = showcase.relative_to(root)
     if not showcase.is_file() or not showcase.read_text(encoding="utf-8").strip():
         err(f"{rel}: missing or empty interactive showcase")
@@ -445,17 +448,11 @@ def check_audit_map_showcase(root: Path):
     for token in EXTERNAL_ASSET_TOKENS:
         if token in text:
             err(f"{rel}: external asset dependency reintroduced ({token}); must stay self-contained")
-    for kind in ("manifest", "template"):
-        match = re.search(
-            rf'<script type="__bundler/{kind}">\s*(.*?)\s*</script>', text, re.S
-        )
-        if not match:
-            err(f"{rel}: missing __bundler/{kind} block")
-            continue
-        try:
-            json.loads(match.group(1))
-        except json.JSONDecodeError as exc:
-            err(f"{rel}: __bundler/{kind} block is not valid JSON ({exc})")
+    if not fixture.is_file():
+        err(f"{fixture.relative_to(root)}: missing renderer fixture for the showcase")
+        return
+    if showcase.read_bytes() != fixture.read_bytes():
+        err(f"{rel}: showcase differs from {fixture.name}; re-render it from section-audit-map.json")
 
 
 def main():
