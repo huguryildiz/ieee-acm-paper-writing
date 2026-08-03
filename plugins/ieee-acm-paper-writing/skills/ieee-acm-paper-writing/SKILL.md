@@ -140,6 +140,19 @@ Do not put `TODO`, `TBD`, fabricated placeholders, internal file paths, or agent
 inside publication-ready prose. When evidence is missing, omit the unsupported statement or
 return an external `Author queries` block containing the precise missing item and its impact.
 
+Apply this binary gate whenever the user asks for the "best," "top," "most-cited," or otherwise
+ranked sources. A ranked or citation-count answer is allowed only when the task supplies an
+inspectable, retained bibliographic-database export or query-result artifact that records the named
+database, complete query and scope, query date, and counts. A web search, search snippet, secondary
+ranking, individual database record, or an unsupported statement that a database was queried does
+not satisfy this provenance requirement. If that artifact is absent, decline the ranking. Output
+no specific paper title, author, DOI, citation count, shortlist, or fixed-number substitute
+bibliography. Do not evade the
+gate by calling remembered or locally cataloged papers "unranked," "strong," "landmark,"
+"complementary," or "candidates," and do not claim that the de-identified calibration corpus
+contains or identifies particular papers. Return an `Author queries` action requesting the dated
+database export and the manuscript or verified source set needed for the writing task.
+
 Before finalizing a manuscript-mode response, reconcile the claim inventory against the proposed
 prose. For every unresolved dependency that blocks requested wording, emit one numbered item under
 `Author queries`; do not bury the request in a limitation sentence. Each item must state:
