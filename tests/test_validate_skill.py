@@ -303,6 +303,14 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         self.assertIn("No experiments beyond 64 nodes and no statistical test supplied",
                       humanize["prompt"])
 
+    def test_humanize_preserves_relative_result_comparators(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Keep every relative result anchored to its comparator", skill)
+        self.assertIn("Dropping the comparator is a claim change", skill)
+        self.assertIn("ledger must name each comparator carried through", skill)
+
     def test_ieee_ibid_rule_distinguishes_clear_and_ambiguous_antecedents(self):
         venue = (
             ROOT / "skills" / "ieee-acm-paper-writing" / "references" / "venue-guidance.md"
