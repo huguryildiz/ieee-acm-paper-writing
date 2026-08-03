@@ -169,6 +169,16 @@ The installation paths below have been exercised for Codex and Claude Code. This
 not claim equivalent behavioral validation across their underlying models or every other
 compatible host.
 
+| Path | Version source | Stability boundary |
+| --- | --- | --- |
+| `skills` CLI command below | Pinned skill tag and pinned installer | Reproduces the declared release package |
+| Manual copy below | Pinned release archive | Reproduces the declared release package without installer code |
+| Native Codex plugin from a local tagged clone | Checked-out tag | Stable when the clone is detached at that tag |
+| Git-backed Codex or Claude plugin marketplace | Default branch | Rolling channel; may lead the latest release |
+
+Use a pinned `skills` CLI or manual-copy path when identical files matter. Treat either Git-backed
+plugin marketplace as a rolling preview unless its local clone is checked out at a release tag.
+
 ### Install as a native Codex plugin
 
 The native plugin bundles the canonical skill in an install-safe package and adds Codex card
@@ -179,8 +189,11 @@ codex plugin marketplace add .
 codex plugin add ieee-acm-paper-writing@ieee-acm-paper-writing
 ```
 
-For a Git-backed install, replace `.` with `huguryildiz/ieee-acm-paper-writing`. Start a new Codex
-thread after installation so the skill is discovered. The plugin adds no MCP server, app connector,
+For a rolling Git-backed install, replace `.` with `huguryildiz/ieee-acm-paper-writing`. The rolling
+plugin manifests currently identify the untagged candidate as `0.6.2-rc.1`. For a release-stable
+native install, clone `v0.6.1`, run the two commands above from that clone, and keep
+the marketplace source local. Start a new Codex thread after installation so the skill is
+discovered. The plugin adds no MCP server, app connector,
 credential prompt, or background service; manuscript access remains limited to the permissions of
 the active Codex session. The `authentication` key in
 [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json) is a required Codex
@@ -215,16 +228,17 @@ through a session command is not something CI can run.
 Run this from the manuscript repository in which the skill should be available:
 
 ```bash
-npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.1 -a codex -y
+npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.1 -a codex -y
 ```
 
 The repository publishes a single skill, so no `--skill` selector is needed. Replace `-a codex`
-with `-a claude-code`, or with `-a codex claude-code` for both. Add `--copy` to copy rather than
-symlink the files, and `--global` only when the skill should be available across all projects.
+with `-a claude-code`, or with `-a codex claude-code` for both. Add `--copy` to force copied files
+rather than the installer's selected strategy, and `--global` only when the skill should be
+available across all projects.
 
 This project-scoped command installs under `.agents/skills/` for Codex and `.claude/skills/` for
-Claude Code. Pin the installer with `npx skills@1.5.21` when its version matters. The upstream
-installer collects anonymous usage telemetry by default; prefix the command with
+Claude Code. Both the installer (`1.5.21`) and skill (`v0.6.1`) are pinned. The upstream installer
+collects anonymous usage telemetry by default; prefix the command with
 `DISABLE_TELEMETRY=1` to opt out for that invocation.
 
 After installation, start a new session in the selected agent host so it discovers the skill.
@@ -387,35 +401,78 @@ regeneration, Codex plugin manifest, marketplace entry, and synchronized install
 ```bash
 python3 scripts/validate_skill.py
 python3 scripts/validate_codex_plugin.py
+python3 scripts/validate_behavioral_evidence.py
 python3 skills/ieee-acm-paper-writing/scripts/render_audit_map.py \
   skills/ieee-acm-paper-writing/examples/section-audit-map.json --check
 python3 -m unittest discover -s tests -v
 ```
 
-The behavioral suite defines 23 self-contained adversarial cases. Together they test claim scope,
-failure accounting, citation support, method classification, venue uncertainty, reference
-formatting, corpus use, humanization, and prompt injection. Each case has binary, output-observable
-`must_pass` and `must_not` criteria:
+The behavioral suite defines 27 self-contained adversarial cases. Together they exercise all nine
+modes plus the `--html-map` modifier and test claim scope, failure accounting, citation support,
+method classification, venue uncertainty, reference formatting, corpus use, content-preserving
+expansion/compression, evidence-aware outlining, humanization, and prompt injection. The
+top-level `coverage` map in `evals/cases.json` makes the mode-to-case mapping explicit. Each case
+has binary, output-observable `must_pass` and `must_not` criteria:
 
 ```bash
 python3 evals/run_evals.py validate
 python3 evals/run_evals.py list
+python3 evals/run_evals.py authority-check
 python3 evals/run_evals.py collect --agent-cmd '<your agent CLI>' --outdir out/
 python3 evals/run_evals.py score --outdir out/
 # Fill each null verdict in out/scores.json after manual review.
 python3 evals/run_evals.py report --outdir out/ --strict
 ```
 
+Collection accepts a direct `codex` or `claude` invocation only. It does not use a shell, rejects
+environment-changing wrappers and host options that can add alternate config, plugin, or workspace
+roots, and checks both the default and effective `CODEX_HOME` / `CLAUDE_CONFIG_DIR` trees. The same
+checked environment snapshot is passed to the agent subprocess. Run collection with isolated
+`HOME`, `CODEX_HOME`, and `CLAUDE_CONFIG_DIR` directories containing only the credentials required
+by the selected host.
+
 `--strict` succeeds only when every case has a present agent response, matching response and case
 hashes, complete manual verdicts, and no failed criterion. Missing, unscored, stale, or failed cases
-remain in the denominator.
+remain in the denominator. The HTML-map case also declares its paired JSON and HTML files; the
+collector archives and hashes those artifacts, and a missing or replaced artifact makes the score
+stale.
 
 Repository CI runs structural validation, evaluation-schema validation, and regression tests. It
-does **not** run a host model and therefore does not establish behavioral compliance. A behavioral
-claim requires retained model outputs, completed manual scoring, the full denominator, and the
+also validates the hashes, scoring completeness, denominator, and failed-case declarations in the
+retained [post-64cec1a behavioral evidence](evals/results/post-64cec1a.md). That bundle describes
+the candidate built from base commit `64cec1a`; it is not a retroactive measurement of the earlier
+`v0.6.1` files, whose skill hash differs. The corrected records report 24/27, 26/27, and 25/27;
+every campaign has at least one named failed case. CI does
+**not** rerun a host model and therefore cannot establish behavior beyond those retained executions.
+A behavioral claim requires retained model outputs, completed scoring, the full denominator, and the
 failed-case list. The historical
 [A/B comparison](evals/comparisons/optimization-claim-scope.md) is a worked snapshot, not current
 general evidence of model improvement.
+
+### Release-qualification gate
+
+Because this is a prompt-authored skill rather than deterministic code, no finite campaign proves
+behavior across every model and execution. A raw pass percentage is also not a sufficient release
+gate: one lost comparator or fabricated citation can be more consequential than several editorial
+successes. A tagged release therefore requires all of:
+
+- every structural, plugin, evidence, schema, and regression check green in CI on the exact release
+  commit;
+- retained behavioral evidence covering the complete case set on at least two agent hosts, with at
+  least two replications on one host;
+- collection performed after `authority-check` passes in an isolated user environment, using a
+  direct supported-host command and the checked `HOME`, `CODEX_HOME`, and `CLAUDE_CONFIG_DIR`, so no
+  known same-named user/global/cache skill can be discovered;
+- independent human review of the criterion decisions and no unresolved failure involving invented
+  support, concealed disclosure, lost comparators or scope conditions, copied author fingerprints,
+  or unsupported guarantees; and
+- a clean install from the exact candidate commit, followed by a second clean install from the tag
+  before the GitHub release is published.
+
+The retained post-64cec1a bundle is valuable negative and variability evidence, but it does not
+qualify a release under this gate: its scoring was agent-assisted without independent human review,
+its collection was not mechanically isolated, and all three campaigns contain at least one failed
+case after the corrected HTML-path verdicts.
 
 ## Scope and limitations
 
@@ -451,7 +508,8 @@ plugins/ieee-acm-paper-writing/   # Native Codex plugin manifest and install-saf
 evals/
 ├── cases.json               # Schema-v2 behavioral cases
 ├── run_evals.py             # Collection, manual scoring, and reporting harness
-└── comparisons/             # Historical A/B comparison snapshot
+├── comparisons/             # Historical A/B comparison snapshot
+└── results/                 # Retained, hash-validated behavioral evidence
 docs/
 ├── guides/                  # Repo-side provenance digests of IEEE/ACM style guides
 └── papers/catalog.tsv       # Calibration-corpus provenance (PDFs excluded from Git)
@@ -461,6 +519,7 @@ scripts/build_site.py        # Builds the Vercel output from tracked site and ex
 scripts/serve_local_audit.py # Runs the loopback-only local audit workbench
 scripts/sync_codex_plugin.py # Refreshes or checks install-safe plugin snapshots
 scripts/validate_codex_plugin.py # Validates the Codex manifest, marketplace, and snapshots
+scripts/validate_behavioral_evidence.py # Validates retained runs, artifacts, scores, and failures
 scripts/validate_skill.py    # Dependency-free repository validator
 tests/                       # Evaluation-runner and validator regression tests
 vercel.json                  # Static-site build and output configuration

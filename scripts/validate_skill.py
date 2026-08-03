@@ -29,6 +29,11 @@ ALLOWED_FRONTMATTER_KEYS = {"name", "description"}
 MAX_NAME = 64
 MAX_DESCRIPTION = 1024
 CASE_NAME_RE = re.compile(r"[a-z0-9][a-z0-9_-]*")
+REQUIRED_EVAL_MODES = {
+    "draft", "rewrite", "expand", "compress", "humanize", "outline",
+    "audit", "section-audit", "venue-adapt",
+}
+REQUIRED_EVAL_MODIFIERS = {"html-map"}
 
 MD_FILES = [
     "README.md",
@@ -281,8 +286,56 @@ def check_cases(root: Path):
             for ref in routing:
                 if isinstance(ref, str) and not (references_dir / ref).exists():
                     err(f"evals/cases.json: {label}: expected_routing references missing file '{ref}'")
+        artifacts = case.get("artifacts", [])
+        if not isinstance(artifacts, list):
+            err(f"evals/cases.json: {label}: 'artifacts' must be a list when present")
+        elif not all(isinstance(artifact, str) for artifact in artifacts):
+            err(f"evals/cases.json: {label}: 'artifacts' entries must be strings")
+        elif len(set(artifacts)) != len(artifacts):
+            err(f"evals/cases.json: {label}: 'artifacts' entries must be unique")
+        else:
+            for artifact in artifacts:
+                valid = (
+                    isinstance(artifact, str)
+                    and artifact
+                    and "\\" not in artifact
+                    and not Path(artifact).is_absolute()
+                    and ".." not in Path(artifact).parts
+                    and Path(artifact).parts[:2] == ("tmp", "evals")
+                    and len(Path(artifact).parts) > 2
+                )
+                if not valid:
+                    err(
+                        f"evals/cases.json: {label}: artifact paths must be safe relative "
+                        f"paths below tmp/evals: {artifact!r}"
+                    )
     if not cases:
         err("evals/cases.json: no cases defined")
+        return
+
+    coverage = data.get("coverage")
+    if not isinstance(coverage, dict):
+        err("evals/cases.json: 'coverage' must be an object")
+        return
+    for group, required in (("modes", REQUIRED_EVAL_MODES),
+                            ("modifiers", REQUIRED_EVAL_MODIFIERS)):
+        mapping = coverage.get(group)
+        if not isinstance(mapping, dict):
+            err(f"evals/cases.json: coverage.{group} must be an object")
+            continue
+        for surface in sorted(required):
+            covered_by = mapping.get(surface)
+            if not isinstance(covered_by, list) or not covered_by:
+                err(
+                    f"evals/cases.json: coverage.{group}.{surface} must name at least one case"
+                )
+                continue
+            unknown = [case_name for case_name in covered_by if case_name not in names]
+            if unknown:
+                err(
+                    f"evals/cases.json: coverage.{group}.{surface} references unknown cases: "
+                    + ", ".join(unknown)
+                )
 
 
 def check_readme_case_count(root: Path):
@@ -437,11 +490,50 @@ def check_claude_plugin_package(root: Path):
         err(f"plugin manifests disagree on version: {detail}")
     declared = plugin.get("version")
     readme = (root / "README.md").read_text(encoding="utf-8")
-    if isinstance(declared, str) and f"v{declared}" not in readme:
-        err(
-            f"README.md pins no install command for the declared plugin version v{declared}; "
-            "tag the release and update the pinned install and clone commands"
-        )
+    if isinstance(declared, str):
+        prerelease = "-" in declared.partition("+")[0]
+        if prerelease:
+            if declared not in readme:
+                err(f"README.md does not identify rolling plugin candidate {declared}")
+            stable = r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
+            stable_patterns = {
+                "versioned skills installer and stable release URL": (
+                    rf"npx\s+skills@\d+\.\d+\.\d+\s+add\s+"
+                    rf"https://github\.com/huguryildiz/ieee-acm-paper-writing/tree/v({stable})"
+                    r"(?![-+0-9A-Za-z.])"
+                ),
+                "manual stable release archive": (
+                    rf"archive/refs/tags/v({stable})\.tar\.gz"
+                ),
+                "stable-pinned workbench clone": (
+                    rf"git clone --branch v({stable})(?![-+0-9A-Za-z.]) --depth 1"
+                ),
+            }
+            stable_versions = []
+            for label, pattern in stable_patterns.items():
+                match = re.search(pattern, readme)
+                if not match:
+                    err(f"README.md has no {label} while manifests declare {declared}")
+                else:
+                    stable_versions.append(match.group(1))
+            if len(set(stable_versions)) > 1:
+                err("README.md stable install channels disagree on release version")
+        else:
+            release = re.escape(declared)
+            required_patterns = {
+                "versioned skills installer and release URL": (
+                    rf"npx\s+skills@\d+\.\d+\.\d+\s+add\s+"
+                    rf"https://github\.com/huguryildiz/ieee-acm-paper-writing/tree/v{release}\b"
+                ),
+                "manual release archive": rf"archive/refs/tags/v{release}\.tar\.gz",
+                "release-pinned workbench clone": rf"git clone --branch v{release} --depth 1",
+            }
+            for label, pattern in required_patterns.items():
+                if not re.search(pattern, readme):
+                    err(
+                        f"README.md has no {label} for declared plugin version v{declared}; "
+                        "tag the release and update every stable install channel"
+                    )
 
 
 def check_audit_map_renderer(root: Path):

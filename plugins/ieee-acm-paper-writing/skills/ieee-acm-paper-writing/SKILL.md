@@ -205,6 +205,10 @@ defect to an editorial issue because the proposed prose sounds cautious.
 5. Mark any rule not verified from the target publication as `unverified venue rule` in the
    handoff, not in the manuscript.
 
+For an IEEE reference list returned as Markdown, run a literal final cleanup: replace `*et al*.`
+or `_et al_.` with plain `et al.`. Emphasis may remain on publication titles, but never on this
+author-list abbreviation.
+
 Never infer that all IEEE or all ACM publications share one page limit, section order,
 review layout, bibliography rule, anonymization policy, or generative-AI disclosure format.
 
@@ -301,6 +305,7 @@ Before handing off, check:
 - every comparison against the actual baseline and matched evaluation set;
 - every guarantee against its precise scope;
 - every symbol, abbreviation, unit, and cross-reference for consistency;
+- every IEEE reference-list occurrence of `et al.` as roman text, never Markdown emphasis;
 - every figure and table claim against the displayed data;
 - every abstract and conclusion claim against the body and verified results;
 - every venue-specific rule against current official guidance;

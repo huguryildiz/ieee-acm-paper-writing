@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Results Section-Audit Map — solver optimality, runtime, and deployment-readiness claims</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='512'%20height='512'%20viewBox='0%200%20512%20512'%20fill='none'%3E%3Cdefs%3E%3ClinearGradient%20id='mk-navy'%20x1='76'%20y1='36'%20x2='430'%20y2='486'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%233C2609'/%3E%3Cstop%20offset='0.54'%20stop-color='%23211203'/%3E%3Cstop%20offset='1'%20stop-color='%23100701'/%3E%3C/linearGradient%3E%3ClinearGradient%20id='mk-paper'%20x1='200'%20y1='330'%20x2='372'%20y2='146'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%23FFFAEE'/%3E%3Cstop%20offset='0.6'%20stop-color='%23F4E3C3'/%3E%3Cstop%20offset='1'%20stop-color='%23DCC49A'/%3E%3C/linearGradient%3E%3ClinearGradient%20id='mk-gold'%20x1='122'%20y1='82'%20x2='396'%20y2='430'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%23FFEDC4'/%3E%3Cstop%20offset='0.3'%20stop-color='%23FFC24D'/%3E%3Cstop%20offset='0.68'%20stop-color='%23E0871B'/%3E%3Cstop%20offset='1'%20stop-color='%23A0500C'/%3E%3C/linearGradient%3E%3ClinearGradient%20id='mk-vaneGold'%20x1='210'%20y1='330'%20x2='374'%20y2='150'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%23B4711C'/%3E%3Cstop%20offset='0.5'%20stop-color='%23E7A233'/%3E%3Cstop%20offset='1'%20stop-color='%23FFD588'/%3E%3C/linearGradient%3E%3ClinearGradient%20id='mk-sealGold'%20x1='352'%20y1='344'%20x2='432'%20y2='426'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%23FFE0A0'/%3E%3Cstop%20offset='0.55'%20stop-color='%23FFB93C'/%3E%3Cstop%20offset='1'%20stop-color='%23D6811A'/%3E%3C/linearGradient%3E%3CradialGradient%20id='mk-glow'%20cx='0'%20cy='0'%20r='1'%20gradientTransform='translate(266%20238)%20rotate(90)%20scale(224)'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%23A6631A'%20stop-opacity='0.46'/%3E%3Cstop%20offset='1'%20stop-color='%231A0F04'%20stop-opacity='0'/%3E%3C/radialGradient%3E%3Cfilter%20id='mk-quillShadow'%20x='96'%20y='72'%20width='340'%20height='360'%20filterUnits='userSpaceOnUse'%20color-interpolation-filters='sRGB'%3E%3CfeDropShadow%20dx='0'%20dy='16'%20stdDeviation='16'%20flood-color='%23130700'%20flood-opacity='0.6'/%3E%3C/filter%3E%3Cfilter%20id='mk-sealShadow'%20x='312'%20y='312'%20width='164'%20height='164'%20filterUnits='userSpaceOnUse'%20color-interpolation-filters='sRGB'%3E%3CfeDropShadow%20dx='0'%20dy='8'%20stdDeviation='8'%20flood-color='%230C0500'%20flood-opacity='0.65'/%3E%3C/filter%3E%3CclipPath%20id='mk-frameClip'%3E%3Crect%20x='24'%20y='24'%20width='464'%20height='464'%20rx='104'/%3E%3C/clipPath%3E%3CclipPath%20id='mk-vaneAClip'%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C300%20160%20225%20235%20197%20331%20Z'/%3E%3C/clipPath%3E%3CclipPath%20id='mk-vaneBClip'%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C340%20200%20265%20275%20197%20331%20Z'/%3E%3C/clipPath%3E%3C/defs%3E%3Crect%20x='24'%20y='24'%20width='464'%20height='464'%20rx='104'%20fill='url(%23mk-navy)'/%3E%3Crect%20x='28'%20y='28'%20width='456'%20height='456'%20rx='100'%20stroke='url(%23mk-gold)'%20stroke-opacity='0.68'%20stroke-width='8'/%3E%3Crect%20x='43'%20y='43'%20width='426'%20height='426'%20rx='85'%20stroke='%23F5C97F'%20stroke-opacity='0.18'%20stroke-width='2'/%3E%3Cg%20clip-path='url(%23mk-frameClip)'%3E%3Ccircle%20cx='266'%20cy='238'%20r='224'%20fill='url(%23mk-glow)'/%3E%3Cg%20stroke='%23E8A63C'%20stroke-opacity='0.16'%20stroke-width='2'%3E%3Cpath%20d='M-10%20142H522M-10%20370H522'/%3E%3Cpath%20d='M142-10V522M370-10V522'/%3E%3Ccircle%20cx='256'%20cy='256'%20r='218'%20stroke-dasharray='4%2010'/%3E%3C/g%3E%3Crect%20x='106'%20y='106'%20width='300'%20height='300'%20rx='34'%20transform='rotate(45%20256%20256)'%20stroke='%23F0AE45'%20stroke-opacity='0.26'%20stroke-width='3'/%3E%3C/g%3E%3Cg%20stroke-linecap='round'%20fill='none'%3E%3Cpath%20d='M158%20393%20C212%20405%20262%20405%20314%20396'%20stroke='%23F3C57E'%20stroke-opacity='0.88'%20stroke-width='9'/%3E%3Cpath%20d='M190%20424%20C226%20431%20262%20431%20296%20425'%20stroke='%23E8A63C'%20stroke-opacity='0.4'%20stroke-width='6'/%3E%3C/g%3E%3Cg%20filter='url(%23mk-quillShadow)'%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C300%20160%20225%20235%20197%20331%20Z'%20fill='url(%23mk-paper)'/%3E%3Cg%20clip-path='url(%23mk-vaneAClip)'%20stroke='%23A67C43'%20stroke-opacity='0.55'%20stroke-width='4'%20stroke-linecap='round'%3E%3Cpath%20d='M213%20313%20180%20246'/%3E%3Cpath%20d='M234%20291%20201%20224'/%3E%3Cpath%20d='M255%20269%20222%20202'/%3E%3Cpath%20d='M275%20247%20242%20180'/%3E%3Cpath%20d='M296%20224%20263%20157'/%3E%3Cpath%20d='M316%20202%20283%20135'/%3E%3Cpath%20d='M337%20180%20304%20113'/%3E%3C/g%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C300%20160%20225%20235%20197%20331%20Z'%20stroke='url(%23mk-gold)'%20stroke-width='5'%20stroke-linejoin='round'/%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C340%20200%20265%20275%20197%20331%20Z'%20fill='url(%23mk-vaneGold)'/%3E%3Cg%20clip-path='url(%23mk-vaneBClip)'%20stroke='%235C3407'%20stroke-opacity='0.45'%20stroke-width='4'%20stroke-linecap='round'%3E%3Cpath%20d='M213%20313%20259%20329'/%3E%3Cpath%20d='M234%20291%20280%20307'/%3E%3Cpath%20d='M255%20269%20301%20285'/%3E%3Cpath%20d='M275%20247%20321%20263'/%3E%3Cpath%20d='M296%20224%20342%20240'/%3E%3Cpath%20d='M316%20202%20362%20218'/%3E%3C/g%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C340%20200%20265%20275%20197%20331%20Z'%20stroke='url(%23mk-gold)'%20stroke-width='5'%20stroke-linejoin='round'/%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140'%20stroke='%233A2308'%20stroke-opacity='0.7'%20stroke-width='6'%20stroke-linecap='round'/%3E%3Cpath%20d='M186%20321%20L208%20341%20L152%20390%20Z'%20fill='url(%23mk-gold)'%20stroke='%237A4410'%20stroke-width='4'%20stroke-linejoin='round'/%3E%3Cpath%20d='M176%20352%20L158%20379'%20stroke='%235C3407'%20stroke-opacity='0.8'%20stroke-width='4'%20stroke-linecap='round'/%3E%3C/g%3E%3Cg%20filter='url(%23mk-sealShadow)'%3E%3Cg%20transform='rotate(45%20392%20386)'%3E%3Crect%20x='358'%20y='352'%20width='68'%20height='68'%20rx='18'%20fill='%23170D03'%20stroke='%237A4410'%20stroke-width='9'/%3E%3Crect%20x='362'%20y='356'%20width='60'%20height='60'%20rx='15'%20fill='%232E1A06'%20stroke='url(%23mk-sealGold)'%20stroke-width='6'/%3E%3Crect%20x='370'%20y='364'%20width='44'%20height='44'%20rx='11'%20stroke='%23FFCE78'%20stroke-opacity='0.5'%20stroke-width='2'%20stroke-dasharray='3%206'/%3E%3C/g%3E%3Cpath%20d='M377%20387%20L389%20399%20L409%20374'%20stroke='url(%23mk-sealGold)'%20stroke-width='10'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/g%3E%3Cg%20fill='%23FFC776'%20opacity='0.8'%3E%3Crect%20x='203'%20y='448'%20width='34'%20height='4'%20rx='2'/%3E%3Crect%20x='245'%20y='448'%20width='22'%20height='4'%20rx='2'/%3E%3Crect%20x='275'%20y='448'%20width='34'%20height='4'%20rx='2'/%3E%3C/g%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #f0ebde;
+      --panel: #f7f3e7;
+      --panel-deep: #ede6d5;
+      --ink: #21201c;
+      --ink-soft: #4a453b;
+      --muted: #6b6459;
+      --line: rgba(33, 32, 28, .15);
+      --line-soft: rgba(33, 32, 28, .09);
+      --navy: #1b2a3d;
+      --gold: #b18a45;
+      --gold-soft: #ddbd74;
+      --support: #c05a34;
+      --support-wash: rgba(217, 119, 87, .15);
+      --method: #516e8b;
+      --method-wash: rgba(94, 124, 153, .15);
+      --venue: #8a5a78;
+      --venue-wash: rgba(154, 107, 134, .15);
+      --repair: #4e7c5c;
+      --repair-wash: rgba(94, 140, 106, .13);
+      --repair-line: rgba(78, 124, 92, .45);
+      --on-accent: #f7f3e7;
+      --shadow: 0 1px 2px rgba(40, 32, 16, .06), 0 14px 34px -20px rgba(40, 32, 16, .3);
+      --serif: Newsreader, "Iowan Old Style", Baskerville, Georgia, "Times New Roman", serif;
+      --sans: "Source Sans 3", "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #1b1915;
+      --panel: #242019;
+      --panel-deep: #1f1c16;
+      --ink: #f0ebde;
+      --ink-soft: #c9c1af;
+      --muted: #a39a87;
+      --line: rgba(240, 235, 222, .14);
+      --line-soft: rgba(240, 235, 222, .08);
+      --navy: #e1d8c5;
+      --gold: #d9b76d;
+      --gold-soft: #d9b76d;
+      --support: #e8977a;
+      --support-wash: rgba(232, 151, 122, .17);
+      --method: #8faac6;
+      --method-wash: rgba(143, 170, 198, .17);
+      --venue: #c695b4;
+      --venue-wash: rgba(198, 149, 180, .18);
+      --repair: #82b790;
+      --repair-wash: rgba(130, 183, 144, .15);
+      --repair-line: rgba(130, 183, 144, .42);
+      --on-accent: #211e18;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 18px 40px -22px rgba(0, 0, 0, .7);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 320px;
+      margin: 0;
+      padding: 26px clamp(14px, 3vw, 42px) 80px;
+      background:
+        radial-gradient(1200px 600px at 85% -10%, color-mix(in srgb, var(--panel) 55%, transparent), transparent 60%),
+        var(--bg);
+      color: var(--ink);
+      font: 15px/1.5 var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font: inherit; }
+
+    .masthead, .legend, .layout, footer {
+      width: min(1360px, 100%);
+      margin-inline: auto;
+    }
+    .masthead { margin-bottom: 22px; }
+    .masthead-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px 26px;
+      align-items: end;
+    }
+    .identity {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+    .mark {
+      grid-row: 1 / 3;
+      width: 84px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      color: var(--gold-soft);
+      filter: drop-shadow(0 2px 6px rgba(40, 32, 16, .18)) drop-shadow(0 12px 28px rgba(40, 32, 16, .32));
+    }
+    .mark svg { display: block; width: 100%; height: 100%; }
+    .eyebrow, .legend-label, .location, .disposition, .key-layer, .analysis-label {
+      font-family: var(--mono);
+      font-weight: 600;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--muted);
+      font-size: .69rem;
+      letter-spacing: .18em;
+    }
+    h1 {
+      max-width: 1040px;
+      margin: 0;
+      font: 600 clamp(1.75rem, 3vw, 2.55rem)/1.08 var(--serif);
+      letter-spacing: -.012em;
+    }
+    .subject {
+      color: var(--muted);
+      font-style: italic;
+      font-weight: 400;
+    }
+    .lede {
+      max-width: 70ch;
+      margin: 11px 0 0 94px;
+      color: var(--ink-soft);
+      font-size: .94rem;
+    }
+    .toolbar { display: flex; gap: 8px; align-items: center; }
+    .action {
+      min-height: 44px;
+      display: inline-flex;
+      gap: 7px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--panel);
+      color: var(--ink-soft);
+      padding: 8px 12px;
+      font: 500 .72rem/1 var(--mono);
+      letter-spacing: .035em;
+      cursor: pointer;
+      box-shadow: 0 1px 1px rgba(40, 32, 16, .03);
+      transition: border-color 150ms ease-out, color 150ms ease-out, background 150ms ease-out;
+    }
+    #theme::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--ink);
+      opacity: .7;
+    }
+    .action:hover { border-color: var(--muted); color: var(--ink); }
+    .action:focus-visible, .key:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--gold) 64%, transparent);
+      outline-offset: 2px;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      align-items: center;
+      margin-bottom: 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      padding: 12px 15px;
+      box-shadow: var(--shadow);
+    }
+    .legend-label {
+      margin-right: 2px;
+      color: var(--muted);
+      font-size: .66rem;
+      letter-spacing: .14em;
+    }
+    .layer-chip {
+      display: grid;
+      grid-template-columns: 22px auto auto;
+      gap: 0 9px;
+      align-items: center;
+      border: 1px solid var(--line-soft);
+      border-radius: 999px;
+      background: var(--panel-deep);
+      padding: 5px 11px 5px 8px;
+    }
+    .layer-code {
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      color: var(--on-accent);
+      font: 700 .69rem/1 var(--mono);
+    }
+    .layer-name { color: var(--ink); font-size: .81rem; font-weight: 600; }
+    .layer-count {
+      border-left: 1px solid var(--line);
+      padding-left: 9px;
+      color: var(--muted);
+      font: .68rem/1.35 var(--mono);
+    }
+    .layer-chip.s .layer-code { background: var(--support); }
+    .layer-chip.m .layer-code { background: var(--method); }
+    .layer-chip.v .layer-code { background: var(--venue); }
+    .legend-spacer { flex: 1; }
+    .repair-key { display: inline-flex; gap: 8px; align-items: center; color: var(--ink-soft); font-size: .76rem; }
+    .repair-swatch {
+      width: 20px;
+      height: 12px;
+      border-radius: 3px;
+      background: var(--repair-wash);
+      box-shadow: inset 3px 0 0 var(--repair);
+    }
+    .legend-how { color: var(--muted); font: .69rem/1.4 var(--mono); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .rail {
+      position: sticky;
+      top: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .rail h2 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      border-bottom: 1px solid var(--line-soft);
+      padding: 13px 15px 11px;
+      color: var(--muted);
+      font: 600 .75rem/1.3 var(--mono);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .rail-status {
+      color: var(--ink-soft);
+      font-size: .68rem;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .keylist { margin: 0; padding: 6px; list-style: none; }
+    .key {
+      width: 100%;
+      min-height: 44px;
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 9px;
+      align-items: start;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--ink);
+      padding: 8px 9px;
+      text-align: left;
+      cursor: pointer;
+      transition: background 130ms ease-out, opacity 130ms ease-out;
+    }
+    .key:hover { background: var(--panel-deep); }
+    .key.s { --layer: var(--support); --layer-wash: var(--support-wash); }
+    .key.m { --layer: var(--method); --layer-wash: var(--method-wash); }
+    .key.v { --layer: var(--venue); --layer-wash: var(--venue-wash); }
+    .finding-number, .badge {
+      --layer: var(--support);
+      --layer-wash: var(--support-wash);
+      display: grid;
+      place-items: center;
+      border: 1.5px solid var(--layer);
+      border-radius: 7px;
+      background: var(--layer-wash);
+      color: var(--layer);
+      font: 700 .71rem/1 var(--mono);
+    }
+    .finding-number { width: 25px; height: 25px; }
+    .finding-number.m, .badge.m { --layer: var(--method); --layer-wash: var(--method-wash); }
+    .finding-number.v, .badge.v { --layer: var(--venue); --layer-wash: var(--venue-wash); }
+    .key-title { display: block; color: var(--ink-soft); font-size: .8rem; line-height: 1.32; }
+    .key-layer { display: block; margin-top: 3px; color: var(--layer, var(--muted)); font-size: .6rem; letter-spacing: .04em; }
+
+    .report { min-width: 0; }
+    .column-heads {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .column-head {
+      border: 1px solid var(--line-soft);
+      border-radius: 9px;
+      background: var(--support-wash);
+      padding: 8px 12px;
+      color: var(--ink-soft);
+      font: italic .85rem/1.4 var(--serif);
+    }
+    .column-head.fix { background: var(--repair-wash); }
+    .column-head strong {
+      display: inline-block;
+      margin-right: 5px;
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--support) 13%, transparent);
+      color: var(--support);
+      padding: 3px 7px;
+      font: 600 .64rem/1.2 var(--mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .column-head.fix strong { background: var(--repair-wash); color: var(--repair); }
+    .finding-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+      scroll-margin-top: 18px;
+      transition: opacity 130ms ease-out, filter 130ms ease-out;
+    }
+    .panel {
+      --layer: var(--support);
+      --layer-wash: var(--support-wash);
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .panel[data-layer="method-domain"] { --layer: var(--method); --layer-wash: var(--method-wash); }
+    .panel[data-layer="venue-compliance"] { --layer: var(--venue); --layer-wash: var(--venue-wash); }
+    .panel.fix { border-color: var(--repair-line); }
+    .panel-head {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: start;
+      min-height: 64px;
+      border-bottom: 1px solid var(--line-soft);
+      padding: 12px 14px;
+    }
+    .panel.fix .panel-head { background: var(--repair-wash); }
+    .badge { min-width: 29px; height: 29px; padding: 0 5px; }
+    .finding-title { margin: 0 0 3px; font: 600 1.02rem/1.25 var(--serif); }
+    .location { color: var(--muted); font-size: .6rem; }
+    .severity {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--panel-deep);
+      color: var(--muted);
+      padding: 3px 6px;
+      font: 600 .58rem/1.2 var(--mono);
+      text-transform: uppercase;
+    }
+    .panel-body { padding: 14px 16px 17px; }
+    blockquote, .correction {
+      margin: 0;
+      border-radius: 4px;
+      padding: 10px 12px;
+      color: var(--ink);
+      font: .79rem/1.68 var(--mono);
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+    blockquote {
+      border-bottom: 2px solid var(--layer);
+      background: var(--layer-wash);
+    }
+    .correction {
+      box-shadow: inset 3px 0 0 var(--repair-line);
+      background: var(--repair-wash);
+    }
+    .analysis-label { margin: 13px 0 4px; color: var(--muted); font-size: .59rem; letter-spacing: .08em; }
+    .analysis-text { margin: 0; color: var(--ink-soft); font-size: .82rem; line-height: 1.5; }
+    .disposition { display: inline-block; margin-bottom: 9px; color: var(--repair); font-size: .6rem; }
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      padding: 30px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    html.has-focus [data-finding]:not(.active) { opacity: .24; filter: saturate(.5); }
+    html.has-focus .key:not(.active) { filter: none; }
+    .key.active { background: var(--layer-wash, var(--panel-deep)); outline: 1.5px solid var(--layer, var(--line)); }
+    .finding-pair.active .panel { box-shadow: 0 0 0 1px var(--layer, var(--line)), var(--shadow); }
+    .finding-pair.active .panel.fix { box-shadow: 0 0 0 1px var(--repair), var(--shadow); }
+
+    #tip {
+      position: fixed;
+      z-index: 50;
+      max-width: 280px;
+      border-radius: 9px;
+      background: var(--ink);
+      color: var(--bg);
+      padding: 8px 11px;
+      font-size: .75rem;
+      line-height: 1.35;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(4px);
+      box-shadow: 0 12px 30px -10px rgba(0, 0, 0, .5);
+      transition: opacity 120ms ease-out, transform 120ms ease-out;
+    }
+    #tip.on { opacity: 1; transform: translateY(0); }
+    #tip strong { font-family: var(--mono); font-size: .68rem; }
+
+    footer {
+      margin-top: 22px;
+      color: var(--muted);
+      font: .69rem/1.6 var(--mono);
+    }
+    footer strong { color: var(--ink-soft); font-weight: 600; }
+
+    @media (max-width: 1080px) {
+      .layout { grid-template-columns: 1fr; }
+      .rail { position: static; }
+      .keylist { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); padding: 8px; }
+    }
+    @media (max-width: 760px) {
+      body { padding: 18px 12px 56px; }
+      .masthead-inner { grid-template-columns: 1fr; }
+      .identity { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; }
+      .mark { width: 64px; }
+      .lede { margin-left: 76px; }
+      .toolbar { justify-self: end; }
+      .layer-chip { grid-template-columns: 22px minmax(0, 1fr); flex: 1 1 250px; }
+      .layer-count { grid-column: 2; border-left: 0; padding-left: 0; }
+      .legend-spacer { display: none; }
+      .column-heads { display: none; }
+      .finding-pair { grid-template-columns: 1fr; }
+      .panel.fix { position: relative; margin-top: 3px; }
+      .panel.fix::before {
+        content: "↳ bounded response";
+        position: absolute;
+        z-index: 1;
+        top: -12px;
+        left: 16px;
+        background: var(--bg);
+        color: var(--repair);
+        padding: 0 6px;
+        font: 600 .62rem/1.5 var(--mono);
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+    }
+    @media (max-width: 500px) {
+      .identity { grid-template-columns: 1fr; }
+      .mark { grid-row: auto; width: 52px; }
+      .lede { margin-left: 0; }
+      .toolbar { justify-self: stretch; }
+      .action { flex: 1; justify-content: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .action, .key, .finding-pair, #tip { transition: none; }
+    }
+    @media print {
+      :root, html[data-theme="dark"] {
+        --bg: #fffdf7;
+        --panel: #fffdf7;
+        --panel-deep: #f2ecdf;
+        --ink: #21201c;
+        --ink-soft: #4a453b;
+        --muted: #6b6459;
+      }
+      body { padding: 0; background: var(--bg); }
+      .toolbar { display: none; }
+      .masthead, .legend, .layout, footer { width: 100%; }
+      .layout { grid-template-columns: 1fr; }
+      .rail { position: static; box-shadow: none; break-after: page; }
+      .finding-pair { break-inside: avoid; }
+      .panel, .finding-pair.active .panel, .finding-pair.active .panel.fix { box-shadow: none; }
+      html.has-focus [data-finding]:not(.active) { opacity: 1; filter: none; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div>
+        <div class="identity">
+          <div class="mark" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+            <defs>
+            <linearGradient id="mk-navy" x1="76" y1="36" x2="430" y2="486" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#3C2609"/>
+            <stop offset="0.54" stop-color="#211203"/>
+            <stop offset="1" stop-color="#100701"/>
+            </linearGradient>
+            <linearGradient id="mk-paper" x1="200" y1="330" x2="372" y2="146" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFFAEE"/>
+            <stop offset="0.6" stop-color="#F4E3C3"/>
+            <stop offset="1" stop-color="#DCC49A"/>
+            </linearGradient>
+            <linearGradient id="mk-gold" x1="122" y1="82" x2="396" y2="430" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFEDC4"/>
+            <stop offset="0.3" stop-color="#FFC24D"/>
+            <stop offset="0.68" stop-color="#E0871B"/>
+            <stop offset="1" stop-color="#A0500C"/>
+            </linearGradient>
+            <linearGradient id="mk-vaneGold" x1="210" y1="330" x2="374" y2="150" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#B4711C"/>
+            <stop offset="0.5" stop-color="#E7A233"/>
+            <stop offset="1" stop-color="#FFD588"/>
+            </linearGradient>
+            <linearGradient id="mk-sealGold" x1="352" y1="344" x2="432" y2="426" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFE0A0"/>
+            <stop offset="0.55" stop-color="#FFB93C"/>
+            <stop offset="1" stop-color="#D6811A"/>
+            </linearGradient>
+            <radialGradient id="mk-glow" cx="0" cy="0" r="1" gradientTransform="translate(266 238) rotate(90) scale(224)" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#A6631A" stop-opacity="0.46"/>
+            <stop offset="1" stop-color="#1A0F04" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="mk-quillShadow" x="96" y="72" width="340" height="360" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#130700" flood-opacity="0.6"/>
+            </filter>
+            <filter id="mk-sealShadow" x="312" y="312" width="164" height="164" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0C0500" flood-opacity="0.65"/>
+            </filter>
+            <clipPath id="mk-frameClip">
+            <rect x="24" y="24" width="464" height="464" rx="104"/>
+            </clipPath>
+            <clipPath id="mk-vaneAClip">
+            <path d="M197 331 Q275 245 374 140 C300 160 225 235 197 331 Z"/>
+            </clipPath>
+            <clipPath id="mk-vaneBClip">
+            <path d="M197 331 Q275 245 374 140 C340 200 265 275 197 331 Z"/>
+            </clipPath>
+            </defs>
+            <rect x="24" y="24" width="464" height="464" rx="104" fill="url(#mk-navy)"/>
+            <rect x="28" y="28" width="456" height="456" rx="100" stroke="url(#mk-gold)" stroke-opacity="0.68" stroke-width="8"/>
+            <rect x="43" y="43" width="426" height="426" rx="85" stroke="#F5C97F" stroke-opacity="0.18" stroke-width="2"/>
+            <g clip-path="url(#mk-frameClip)">
+            <circle cx="266" cy="238" r="224" fill="url(#mk-glow)"/>
+            <g stroke="#E8A63C" stroke-opacity="0.16" stroke-width="2">
+            <path d="M-10 142H522M-10 370H522"/>
+            <path d="M142-10V522M370-10V522"/>
+            <circle cx="256" cy="256" r="218" stroke-dasharray="4 10"/>
+            </g>
+            <rect x="106" y="106" width="300" height="300" rx="34" transform="rotate(45 256 256)"
+            stroke="#F0AE45" stroke-opacity="0.26" stroke-width="3"/>
+            </g>
+            <g stroke-linecap="round" fill="none">
+            <path d="M158 393 C212 405 262 405 314 396" stroke="#F3C57E" stroke-opacity="0.88" stroke-width="9"/>
+            <path d="M190 424 C226 431 262 431 296 425" stroke="#E8A63C" stroke-opacity="0.4" stroke-width="6"/>
+            </g>
+            <g filter="url(#mk-quillShadow)">
+            <path d="M197 331 Q275 245 374 140 C300 160 225 235 197 331 Z" fill="url(#mk-paper)"/>
+            <g clip-path="url(#mk-vaneAClip)" stroke="#A67C43" stroke-opacity="0.55" stroke-width="4" stroke-linecap="round">
+            <path d="M213 313 180 246"/>
+            <path d="M234 291 201 224"/>
+            <path d="M255 269 222 202"/>
+            <path d="M275 247 242 180"/>
+            <path d="M296 224 263 157"/>
+            <path d="M316 202 283 135"/>
+            <path d="M337 180 304 113"/>
+            </g>
+            <path d="M197 331 Q275 245 374 140 C300 160 225 235 197 331 Z" stroke="url(#mk-gold)" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M197 331 Q275 245 374 140 C340 200 265 275 197 331 Z" fill="url(#mk-vaneGold)"/>
+            <g clip-path="url(#mk-vaneBClip)" stroke="#5C3407" stroke-opacity="0.45" stroke-width="4" stroke-linecap="round">
+            <path d="M213 313 259 329"/>
+            <path d="M234 291 280 307"/>
+            <path d="M255 269 301 285"/>
+            <path d="M275 247 321 263"/>
+            <path d="M296 224 342 240"/>
+            <path d="M316 202 362 218"/>
+            </g>
+            <path d="M197 331 Q275 245 374 140 C340 200 265 275 197 331 Z" stroke="url(#mk-gold)" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M197 331 Q275 245 374 140" stroke="#3A2308" stroke-opacity="0.7" stroke-width="6" stroke-linecap="round"/>
+            <path d="M186 321 L208 341 L152 390 Z" fill="url(#mk-gold)" stroke="#7A4410" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M176 352 L158 379" stroke="#5C3407" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round"/>
+            </g>
+            <g filter="url(#mk-sealShadow)">
+            <g transform="rotate(45 392 386)">
+            <rect x="358" y="352" width="68" height="68" rx="18" fill="#170D03" stroke="#7A4410" stroke-width="9"/>
+            <rect x="362" y="356" width="60" height="60" rx="15" fill="#2E1A06" stroke="url(#mk-sealGold)" stroke-width="6"/>
+            <rect x="370" y="364" width="44" height="44" rx="11" stroke="#FFCE78" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="3 6"/>
+            </g>
+            <path d="M377 387 L389 399 L409 374" stroke="url(#mk-sealGold)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <g fill="#FFC776" opacity="0.8">
+            <rect x="203" y="448" width="34" height="4" rx="2"/>
+            <rect x="245" y="448" width="22" height="4" rx="2"/>
+            <rect x="275" y="448" width="34" height="4" rx="2"/>
+            </g>
+            </svg>
+          </div>
+          <div>
+            <p class="eyebrow">Generic IEEE/ACM engineering audit · Results excerpt</p>
+            <h1>Results Section-Audit Map <span class="subject">— solver optimality, runtime, and deployment-readiness claims</span></h1>
+          </div>
+        </div>
+        <p class="lede">The supplied solver logs contradict the absolute optimality-and-runtime claim and do not support real-time deployment readiness. The bounded evidence is that 9 of 12 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, whereas 3 reached the 60 s limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%. Reproducibility details needed to interpret these outcomes are not supplied.</p>
+      </div>
+      <div class="toolbar" aria-label="Display controls">
+        <button class="action" id="clear" type="button">× Clear focus</button>
+        <button class="action" id="theme" type="button" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="legend" aria-label="Concern layers">
+    <span class="legend-label">Concern layers</span>
+    <span class="layer-chip s"><span class="layer-code">S</span><span class="layer-name">Scientific support</span><span class="layer-count">2 findings · claims vs. evidence</span></span>
+    <span class="layer-chip m"><span class="layer-code">M</span><span class="layer-name">Method / domain reporting</span><span class="layer-count">1 finding · reproducibility and disclosure</span></span>
+    <span class="layer-chip v"><span class="layer-code">V</span><span class="layer-name">Venue compliance</span><span class="layer-count">0 · not exercised · verified house rules</span></span>
+    <span class="legend-spacer" aria-hidden="true"></span>
+    <span class="repair-key"><span class="repair-swatch" aria-hidden="true"></span>bounded response</span>
+    <span class="legend-how">select # to trace finding → response</span>
+  </section>
+
+  <main class="layout">
+    <aside class="rail" aria-label="Finding index">
+      <h2>Answer key <span class="rail-status" id="rail-status" aria-live="polite">3 findings</span></h2>
+      <ol class="keylist"><li><button class="key s" type="button" data-finding="1" aria-controls="finding-1"><span class="finding-number s">1</span><span><span class="key-title">Global-optimality and 10 s guarantee is contradicted by the logs</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key s" type="button" data-finding="2" aria-controls="finding-2"><span class="finding-number s">2</span><span><span class="key-title">Real-time deployment readiness is unsupported</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key m" type="button" data-finding="3" aria-controls="finding-3"><span class="finding-number m">3</span><span><span class="key-title">Optimization experiment is not reproducible from the supplied report</span><span class="key-layer">M · Method / domain reporting</span></span></button></li></ol>
+    </aside>
+
+    <section class="report" aria-label="Finding-to-correction map">
+      <div class="column-heads" aria-hidden="true">
+        <div class="column-head"><strong>Audited Results excerpt</strong> sentence and evidentiary defect</div>
+        <div class="column-head fix"><strong>Evidence-scoped correction</strong> bounded repair or author action</div>
+      </div>
+      <article class="finding-pair" id="finding-1" data-finding="1">
+  <section class="panel" data-layer="scientific-support" aria-label="Finding 1 source">
+    <div class="panel-head">
+      <span class="badge s">1</span>
+      <div>
+        <h2 class="finding-title">Global-optimality and 10 s guarantee is contradicted by the logs</h2>
+        <div class="location">Results excerpt · sentence 1</div>
+      </div>
+      <span class="severity">Critical</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>The optimizer always returns the global optimum within 10 s.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">Only 9 of 12 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance. The other 3 runs reached the 60 s time limit with feasible incumbents and nonzero final gaps of 4.1%, 5.3%, and 7.8%. No exact-optimality certificate is supplied.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">The sentence makes both a universal runtime claim and an exact global-optimality claim that the controlling solver logs directly contradict. An OPTIMAL status under a 1% gap tolerance also does not establish exact global optimality.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 1 response">
+    <div class="panel-head">
+      <span class="badge s">1</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Scientific support</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Remove unsupported statement</span>
+      <p class="correction">Remove the sentence. Retain only the observed, tolerance-scoped report: 9 of 12 runs ended with solver status OPTIMAL under the 1% relative MIP-gap tolerance, while 3 reached the 60 s limit with feasible incumbents and the reported final gaps.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-2" data-finding="2">
+  <section class="panel" data-layer="scientific-support" aria-label="Finding 2 source">
+    <div class="panel-head">
+      <span class="badge s">2</span>
+      <div>
+        <h2 class="finding-title">Real-time deployment readiness is unsupported</h2>
+        <div class="location">Results excerpt · sentence 3</div>
+      </div>
+      <span class="severity">Major</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>The method is therefore ready for real-time deployment.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">No deployment experiment, operational deadline, end-to-end latency measurement, scheduling or jitter analysis, or timing evidence outside the solver logs is supplied. Moreover, 3 of 12 runs reached the 60 s solver limit.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">Solver-log outcomes alone do not establish deadline compliance, system-level real-time behavior, operational safety, or deployment readiness; the conclusion exceeds both the experiment and its external-validity scope.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 2 response">
+    <div class="panel-head">
+      <span class="badge s">2</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Scientific support</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">Remove unsupported statement</span>
+      <p class="correction">Remove the deployment-readiness conclusion. If deployment is a target, define the operational deadline and evaluate end-to-end latency, tail behavior, deadline misses, resource use, and relevant operational failure modes in a representative environment before making a scoped readiness claim.</p>
+    </div>
+  </section>
+</article>
+      <article class="finding-pair" id="finding-3" data-finding="3">
+  <section class="panel" data-layer="method-domain" aria-label="Finding 3 source">
+    <div class="panel-head">
+      <span class="badge m">3</span>
+      <div>
+        <h2 class="finding-title">Optimization experiment is not reproducible from the supplied report</h2>
+        <div class="location">Results excerpt · sentence 2</div>
+      </div>
+      <span class="severity">Major</span>
+    </div>
+    <div class="panel-body">
+      <blockquote>Across 12 instances, 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%.</blockquote>
+      <p class="analysis-label">Contradicted or missing evidence</p>
+      <p class="analysis-text">The report supplies the instance count, one tolerance, a time limit, statuses, and the three timeout gaps, but not the solver and version, instance identities or selection rule, formulation/configuration, hardware, thread count, seeds where applicable, per-instance runtimes, primal values, or best bounds.</p>
+      <p class="analysis-label">Scientific consequence</p>
+      <p class="analysis-text">Readers cannot reconstruct the runs, assess configuration dependence, or determine the runtime distribution and solution-quality context across all 12 instances.</p>
+    </div>
+  </section>
+  <section class="panel fix" data-layer="method-domain" aria-label="Finding 3 response">
+    <div class="panel-head">
+      <span class="badge m">3</span>
+      <div>
+        <h2 class="finding-title">Bounded response</h2>
+        <div class="location">Method / domain reporting</div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <span class="disposition">External author query</span>
+      <p class="correction">Report the solver/version, formulation and settings, hardware and threads, instance family and selection, seeds where applicable, and per-instance runtime, status, primal value, best bound, and final gap. Until then, keep the numerical statement explicitly descriptive of the supplied logs and do not generalize beyond these 12 runs.</p>
+    </div>
+  </section>
+</article>
+    </section>
+  </main>
+
+  <footer><strong>How to read.</strong> Generated on 3 August 2026 from the supplied synthetic Results excerpt by applying the repository-local ieee-acm-paper-writing skill. No target publication was specified; venue-specific compliance was not assessed.</footer>
+  <div id="tip" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const themeButton = document.getElementById('theme');
+      const clearButton = document.getElementById('clear');
+      const status = document.getElementById('rail-status');
+      const tip = document.getElementById('tip');
+      const findings = {"1":{"layer":"S","title":"Global-optimality and 10 s guarantee is contradicted by the logs"},"2":{"layer":"S","title":"Real-time deployment readiness is unsupported"},"3":{"layer":"M","title":"Optimization experiment is not reproducible from the supplied report"}};
+      let locked = null;
+
+      function paintFocus(id) {
+        root.classList.toggle('has-focus', Boolean(id));
+        document.querySelectorAll('[data-finding]').forEach((element) => {
+          element.classList.toggle('active', Boolean(id) && element.dataset.finding === id);
+        });
+        status.textContent = id && findings[id]
+          ? `finding ${id} · ${findings[id].layer}`
+          : `3 findings`;
+      }
+
+      function setLockedFocus(id) {
+        locked = id;
+        paintFocus(id);
+      }
+
+      document.addEventListener('pointerover', (event) => {
+        const target = event.target.closest('[data-finding]');
+        if (target && !locked) paintFocus(target.dataset.finding);
+
+        const badge = event.target.closest('.badge');
+        if (!badge) return;
+        const item = findings[badge.textContent.trim()];
+        if (!item) return;
+        const heading = document.createElement('strong');
+        heading.textContent = `${badge.textContent.trim()} · ${item.layer}`;
+        tip.replaceChildren(heading, document.createElement('br'), document.createTextNode(item.title));
+        tip.classList.add('on');
+      });
+
+      document.addEventListener('pointermove', (event) => {
+        if (!tip.classList.contains('on')) return;
+        const left = Math.min(event.clientX + 14, window.innerWidth - tip.offsetWidth - 10);
+        const below = event.clientY + 18;
+        const top = below + tip.offsetHeight > window.innerHeight - 8
+          ? event.clientY - tip.offsetHeight - 14
+          : below;
+        tip.style.left = `${Math.max(8, left)}px`;
+        tip.style.top = `${Math.max(8, top)}px`;
+      });
+
+      document.addEventListener('pointerout', (event) => {
+        const from = event.target.closest('[data-finding]');
+        const to = event.relatedTarget && event.relatedTarget.closest
+          ? event.relatedTarget.closest('[data-finding]')
+          : null;
+        if (!locked && from && (!to || to.dataset.finding !== from.dataset.finding)) paintFocus(null);
+        if (event.target.closest('.badge')) tip.classList.remove('on');
+      });
+
+      document.addEventListener('click', (event) => {
+        if (event.target.closest('.toolbar')) return;
+        const target = event.target.closest('[data-finding]');
+        if (!target) return setLockedFocus(null);
+        const id = target.dataset.finding;
+        setLockedFocus(locked === id ? null : id);
+      });
+      clearButton.addEventListener('click', () => setLockedFocus(null));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          setLockedFocus(null);
+          tip.classList.remove('on');
+        }
+      });
+
+      function applyTheme(theme) {
+        root.dataset.theme = theme;
+        root.style.colorScheme = theme;
+        const dark = theme === 'dark';
+        themeButton.lastChild.textContent = dark ? 'Light' : 'Dark';
+        themeButton.setAttribute('aria-label', dark ? 'Use light theme' : 'Use dark theme');
+        themeButton.setAttribute('aria-pressed', String(dark));
+        try { localStorage.setItem('audit-map-theme', theme); } catch (_) {}
+      }
+      let saved = null;
+      try { saved = localStorage.getItem('audit-map-theme'); } catch (_) {}
+      applyTheme(saved || 'light');
+      themeButton.addEventListener('click', () => {
+        applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
+      });
+    })();
+  </script>
+</body>
+</html>
