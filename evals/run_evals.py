@@ -9,6 +9,8 @@ never scored).
 Modes
   validate                       Check cases.json against the v2 schema.
   list                           Print case names and criterion counts.
+  authority-check                Refuse known same-named user/global/cache
+                                 skill copies before behavioral collection.
   collect --agent-cmd CMD        Run each case prompt through an agent command
           --outdir DIR           (prompt on stdin, output captured to
           [--case NAME]          DIR/<case>.md). CMD example:
@@ -45,6 +47,10 @@ REQUIRED_MODES = (
     "audit", "section-audit", "venue-adapt",
 )
 REQUIRED_MODIFIERS = ("html-map",)
+SKILL_NAME = "ieee-acm-paper-writing"
+SKILL_HASH_IGNORED_DIRS = {"__pycache__", ".pytest_cache"}
+SKILL_HASH_IGNORED_NAMES = {".DS_Store"}
+SKILL_HASH_IGNORED_SUFFIXES = {".pyc", ".pyo"}
 
 SKILL_PREAMBLE = (
     "For this evaluation, the sole authoritative skill copy is the repository-local "
@@ -230,6 +236,42 @@ def output_hash(path):
     return sha256_bytes(path.read_bytes())
 
 
+def authority_collisions(home=None):
+    """Return known same-named skill copies that can contaminate collection.
+
+    This is deliberately read-only. It checks the user/global skill locations documented by
+    Codex and Claude plus their plugin-cache trees. Collection must run under an isolated user
+    environment when any collision is present; the runner never deletes or renames installations.
+    """
+    home = Path.home() if home is None else Path(home)
+    candidates = [
+        home / ".agents" / "skills" / SKILL_NAME,
+        home / ".codex" / "skills" / SKILL_NAME,
+        home / ".claude" / "skills" / SKILL_NAME,
+    ]
+    for cache_root in (home / ".codex" / "plugins" / "cache",
+                       home / ".claude" / "plugins" / "cache"):
+        if cache_root.is_dir():
+            candidates.extend(cache_root.glob(f"**/skills/{SKILL_NAME}"))
+    return sorted({path.absolute() for path in candidates if path.exists()}, key=str)
+
+
+def require_clean_authority():
+    collisions = authority_collisions()
+    if collisions:
+        detail = "\n".join(f"  - {path}" for path in collisions)
+        raise SystemExit(
+            "behavioral collection refused: same-named user/global/cache skill copies were "
+            "found:\n" + detail +
+            "\nRun collection in an isolated user environment. No installation was modified."
+        )
+
+
+def cmd_authority_check(_args):
+    require_clean_authority()
+    print(f"OK: no known same-named {SKILL_NAME} skill copy found outside the repository")
+
+
 def case_artifact_source_path(declared):
     root = HERE.parent.resolve()
     safe_root = (root / "tmp" / "evals").resolve()
@@ -260,19 +302,27 @@ def archived_artifact_hashes(outdir, case):
     return hashes
 
 
-def skill_hash():
-    files = [SKILL_DIR / "SKILL.md", SKILL_DIR / "LICENSE",
-             SKILL_DIR / "agents" / "openai.yaml"]
-    files.extend(sorted((SKILL_DIR / "examples").glob("*.md")))
-    files.extend(sorted((SKILL_DIR / "references").glob("*.md")))
-    # Non-Markdown audit-map assets a section-audit case can depend on.
-    files.extend(sorted((SKILL_DIR / "examples").glob("section-audit-map.*")))
-    files.extend(sorted((SKILL_DIR / "assets").glob("*.html")))
-    digest = hashlib.sha256()
-    for path in files:
-        if not path.is_file():
+def skill_tree_files(root=SKILL_DIR):
+    root = Path(root)
+    files = []
+    for path in sorted(root.rglob("*")):
+        relative = path.relative_to(root)
+        if (any(part in SKILL_HASH_IGNORED_DIRS for part in relative.parts)
+                or path.name in SKILL_HASH_IGNORED_NAMES
+                or path.suffix in SKILL_HASH_IGNORED_SUFFIXES):
             continue
-        digest.update(path.relative_to(SKILL_DIR).as_posix().encode("utf-8"))
+        if path.is_symlink():
+            raise ValueError(f"installable skill hash refuses symlink: {relative.as_posix()}")
+        if path.is_file():
+            files.append(path)
+    return files
+
+
+def skill_hash(root=SKILL_DIR):
+    root = Path(root)
+    digest = hashlib.sha256()
+    for path in skill_tree_files(root):
+        digest.update(path.relative_to(root).as_posix().encode("utf-8"))
         digest.update(b"\0")
         digest.update(path.read_bytes())
         digest.update(b"\0")
@@ -280,6 +330,7 @@ def skill_hash():
 
 
 def cmd_collect(args):
+    require_clean_authority()
     outdir = Path(args.outdir).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
     failures = []
@@ -502,6 +553,7 @@ def main():
     sub = parser.add_subparsers(dest="mode", required=True)
     sub.add_parser("validate")
     sub.add_parser("list")
+    sub.add_parser("authority-check")
     p_collect = sub.add_parser("collect")
     p_collect.add_argument("--agent-cmd", required=True)
     p_collect.add_argument("--outdir", required=True)
@@ -514,7 +566,8 @@ def main():
     p_report.add_argument("--outdir", required=True)
     p_report.add_argument("--strict", action="store_true")
     args = parser.parse_args()
-    {"validate": cmd_validate, "list": cmd_list, "collect": cmd_collect,
+    {"validate": cmd_validate, "list": cmd_list, "authority-check": cmd_authority_check,
+     "collect": cmd_collect,
      "score": cmd_score, "report": cmd_report}[args.mode](args)
 
 

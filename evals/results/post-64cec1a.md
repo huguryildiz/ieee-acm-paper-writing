@@ -4,21 +4,21 @@ This bundle records three complete behavioral campaigns against the repository c
 commit `64cec1afeb6d42a8bb1f2b0aec281f6f2bb91a32`. It is evidence for the post-commit candidate,
 not a retroactive claim about the tagged `v0.6.1` files. The exact candidate identifiers are:
 
-- installable-skill hash: `ea1badec6ce9cbfe590b73bf81265ddaad3c24e117ab3a17af44e936f906333d`;
+- installable-skill hash: `7b4ad1b27eaebec0802eaebc9d06d821bef7b2619029f2c2f996c7f38ad8c037`;
 - `evals/cases.json` hash: `2d824f6d18d003a5e2d8df3d8e08adf825f005a581782fb5af68488a068b007a`;
 - denominator: 27 cases, 92 `must_pass` criteria, and 55 `must_not` criteria per campaign.
 
-The collector explicitly named `skills/ieee-acm-paper-writing/SKILL.md` as its sole authority and
-rejected same-named user-level, global, cached, or otherwise installed copies. This corrects an
-authority ambiguity found during the campaign: name-only invocation could silently exercise a
-different installed version.
+The historical collector explicitly named `skills/ieee-acm-paper-writing/SKILL.md` as its sole
+authority, but did not mechanically prevent same-named user-level, global, or cached copies from
+being discovered. The current runner now refuses collection when it finds a known collision; these
+retained campaigns predate that gate and therefore require recollection for release qualification.
 
 ## Results
 
 | Campaign | Client and requested model | Result | Failed cases |
 | --- | --- | --- | --- |
-| Codex replication 1 | Codex CLI 0.144.6; `gpt-5.6-sol`; medium | 25/27 | `citation_metadata_vs_support`, `landmark_corpus_not_ranking` |
-| Codex replication 2 | Codex CLI 0.144.6; `gpt-5.6-sol`; medium | 27/27 strict pass | none |
+| Codex replication 1 | Codex CLI 0.144.6; `gpt-5.6-sol`; medium | 24/27 | `citation_metadata_vs_support`, `landmark_corpus_not_ranking`, `html_audit_map_artifacts` |
+| Codex replication 2 | Codex CLI 0.144.6; `gpt-5.6-sol`; medium | 26/27 | `html_audit_map_artifacts` |
 | Claude replication 1 | Claude Code 2.1.220; `sonnet` alias; high | 25/27 | `industrial_style_profile`, `humanize_preserves_claims` |
 
 The first Codex run correctly rejected the unsupported transformer comparison but did not
@@ -26,8 +26,9 @@ explicitly state that correct metadata is insufficient for claim support. More s
 gave approximate citation counts without a named database and query date. The Claude run copied a
 sentence frame too closely from a supplied style excerpt and dropped the fixed-batch comparator
 while humanizing a numerical result. These are retained failures, not exclusions or rerun-selected
-successes. They show that the instructions are not a reliability guarantee even though one full
-campaign passed.
+successes. A subsequent AI-assisted closing audit also found that both Codex responses used
+absolute collection paths where the HTML-map criterion required exact workspace-relative paths;
+the earlier judge had incorrectly relaxed that criterion. No retained campaign is a strict pass.
 
 Every campaign includes the complete response set, criterion-level score file, scoring rationale,
 and generated HTML-map JSON/HTML pair. The machine-readable [manifest](post-64cec1a/manifest.json)
@@ -46,9 +47,10 @@ responses are retained as `responses.jsonl` rather than one Markdown file per ca
 `run_evals.py report --strict` cannot be pointed at this directory; `scripts/validate_behavioral_evidence.py`
 performs the equivalent hash, verdict, denominator, and failed-case checks instead.
 
-The bundle records the skill hash computed from the repository files, not an observation of which
-`SKILL.md` copy each host actually opened. The collection preamble names the repository-local copy
-as the sole authority, but that instruction is not mechanically enforced.
+The bundle records a full-tree hash computed from the current installable skill files, not an
+observation of which `SKILL.md` copy each host actually opened. The collection preamble named the
+repository-local copy as the sole authority, but mechanical collision refusal was added only after
+these campaigns were retained.
 
 ## Scoring boundary
 

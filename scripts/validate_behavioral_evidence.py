@@ -181,6 +181,10 @@ def main() -> int:
         scoring = manifest.get("scoring")
         if not isinstance(scoring, dict) or scoring.get("independent_human_review") is not False:
             fail("manifest.json: independent human review must be recorded truthfully as false")
+        collection = manifest.get("collection")
+        if (not isinstance(collection, dict)
+                or type(collection.get("mechanical_authority_isolation")) is not bool):
+            fail("manifest.json: collection must record mechanical_authority_isolation as boolean")
         campaigns = manifest.get("campaigns")
         if not isinstance(campaigns, list) or len(campaigns) < 3:
             fail("manifest.json: at least three retained campaigns are required")
@@ -199,14 +203,13 @@ def main() -> int:
         strict_passes = sum(
             validate_campaign(campaign, cases, skill_hash) for campaign in campaigns
         )
-        if strict_passes < 1:
-            fail("manifest.json: no retained campaign passes the strict behavioral gate")
     except (OSError, UnicodeError, ValueError, KeyError, TypeError) as exc:
         print(f"FAIL: {exc}")
         return 1
     print(
         f"OK: {len(campaigns)} retained campaigns, {len(cases)} cases each, "
-        f"{strict_passes} strict pass(es); all hashes, verdicts, and failure lists valid"
+        f"{strict_passes} strict pass(es); all hashes, verdicts, and failure lists valid; "
+        "evidence validation is not release approval"
     )
     return 0
 
