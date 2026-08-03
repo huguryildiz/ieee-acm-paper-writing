@@ -36,6 +36,20 @@ current skill, case, response, and artifact hashes; checks all criterion keys an
 two clients and two distinct Codex replications; and fails if a declared denominator or failure list
 drifts.
 
+## Retained-bundle boundaries
+
+Two properties of this bundle are deliberate rather than defects. The Codex replication-1 response
+for `html_audit_map_artifacts` links its generated files by absolute collection path, so one
+collecting-machine home directory appears in `responses.jsonl` and the matching review entry;
+rewriting it would invalidate the response hashes that make the bundle checkable. And because
+responses are retained as `responses.jsonl` rather than one Markdown file per case,
+`run_evals.py report --strict` cannot be pointed at this directory; `scripts/validate_behavioral_evidence.py`
+performs the equivalent hash, verdict, denominator, and failed-case checks instead.
+
+The bundle records the skill hash computed from the repository files, not an observation of which
+`SKILL.md` copy each host actually opened. The collection preamble names the repository-local copy
+as the sole authority, but that instruction is not mechanically enforced.
+
 ## Scoring boundary
 
 Scoring was schema-constrained, agent-assisted criterion review with Claude Code 2.1.220,

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.6.2 — 2026-08-03
 
 ### Added
 
@@ -16,7 +16,11 @@
 ### Changed
 
 - The primary README and showcase commands now pin both the `skills` installer (`1.5.21`) and the
-  skill release (`v0.6.1`).
+  skill release (`v0.6.2`).
+- The plugin manifests declare `0.6.2`, so a rolling marketplace install no longer reports the
+  `0.6.1` version number while carrying post-`v0.6.1` skill files.
+- The README now states a release-readiness threshold and records that the retained behavioral
+  evidence describes the post-64cec1a candidate rather than the earlier `v0.6.1` files.
 - Installation documentation now labels Git-backed plugin marketplaces as rolling channels and
   distinguishes them from release-stable tagged-clone, CLI, and manual-copy paths.
 - The collector now pins the repository-local `SKILL.md` as its sole authority, preventing a
