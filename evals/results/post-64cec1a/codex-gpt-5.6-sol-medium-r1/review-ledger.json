@@ -408,7 +408,7 @@
         {
           "criterion": "Review-paper authority is converted into digital-twin validation evidence for the user's system.",
           "verdict": false,
-          "evidence_quote": "they cannot validate an unevaluated implementation",
+          "evidence_quote": "Citation impact also does not establish technical correctness. ... **Action:** Identify the physical referent, automated physical-to-digital and digital-to-physical flows, synchronization cadence, estimator, model version, validation evidence, and operational purpose.",
           "rationale": "Yanıt, makalelerin kullanımını yapı ve terminoloji sınırlarıyla kısıtlıyor; sistem doğrulaması olarak sunmuyor."
         }
       ]

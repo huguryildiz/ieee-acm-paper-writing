@@ -13,6 +13,7 @@
     "repository_skill_authority": "skills/ieee-acm-paper-writing/SKILL.md",
     "same_named_user_or_cached_copy_allowed": false,
     "mechanical_authority_isolation": false,
+    "skill_hash_captured_at_collection": false,
     "expected_routing_scored": false,
     "date": "2026-08-03",
     "timezone": "Europe/Istanbul"

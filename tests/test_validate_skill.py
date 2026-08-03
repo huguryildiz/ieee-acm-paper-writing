@@ -418,6 +418,7 @@ class ClaudePluginPackageTests(unittest.TestCase):
     @staticmethod
     def build(root, *, plugin_version="1.2.3", market_version="1.2.3",
               entry_version="1.2.3", codex_version="1.2.3", source="./",
+              changelog="# Changelog\n\n## v1.2.3 — 2026-01-01\n",
               readme=(
                   "npx skills@1.5.21 add "
                   "https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v1.2.3\n"
@@ -454,6 +455,7 @@ class ClaudePluginPackageTests(unittest.TestCase):
         skill.mkdir(parents=True, exist_ok=True)
         (skill / "SKILL.md").write_text("---\nname: x\ndescription: y\n---\n", encoding="utf-8")
         (root / "README.md").write_text(readme, encoding="utf-8")
+        (root / "CHANGELOG.md").write_text(changelog, encoding="utf-8")
 
     def run_check(self, **kwargs):
         with tempfile.TemporaryDirectory() as tmp:
@@ -509,6 +511,20 @@ class ClaudePluginPackageTests(unittest.TestCase):
             entry_version="1.2.4-rc.1", codex_version="1.2.4-rc.1", readme=readme,
         )
         self.assertTrue(any("rolling plugin candidate" in error for error in errors))
+
+    def test_prerelease_pinning_an_unreleased_stable_version_is_rejected(self):
+        readme = (
+            "Rolling plugin candidate `1.2.4-rc.1`.\n"
+            "npx skills@1.5.21 add "
+            "https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v9.9.9\n"
+            "archive/refs/tags/v9.9.9.tar.gz\n"
+            "git clone --branch v9.9.9 --depth 1\n"
+        )
+        errors = self.run_check(
+            plugin_version="1.2.4-rc.1", market_version="1.2.4-rc.1",
+            entry_version="1.2.4-rc.1", codex_version="1.2.4-rc.1", readme=readme,
+        )
+        self.assertTrue(any("never released" in error for error in errors))
 
     def test_source_without_an_installable_skill_is_rejected(self):
         errors = self.run_check(source="./docs")
