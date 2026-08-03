@@ -168,7 +168,7 @@
       "must_pass": [
         "Any citation-count or 'most-cited' statement either identifies which bibliographic database was queried and on what date, or is declined as unverifiable in the current environment.",
         "The output does not equate citation impact with writing quality or evidentiary support.",
-        "No curated or remembered set of papers is presented as a definitive global top-three ranking."
+        "No curated or remembered set of specific papers is presented as a definitive ranking or substituted as an unverified three-paper bibliography after the ranking is declined."
       ],
       "must_not": [
         "A definitive top-three ranking is asserted without identifying the bibliographic database and query date behind it.",
