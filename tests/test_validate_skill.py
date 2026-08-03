@@ -277,9 +277,15 @@ class ModeDocumentationTests(unittest.TestCase):
 
     def test_release_pinned_install_and_workbench_scope_are_documented(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("tree/v0.5.0/skills/ieee-acm-paper-writing", readme)
+        self.assertIn("npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.5.0", readme)
         self.assertIn("is **not included**", readme)
         self.assertIn("git clone --branch v0.5.0 --depth 1", readme)
+
+    def test_plugin_install_path_states_that_it_tracks_the_default_branch(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("/plugin marketplace add huguryildiz/ieee-acm-paper-writing", readme)
+        self.assertIn("/plugin install ieee-acm-paper-writing", readme)
+        self.assertIn("rather than a pinned release", readme)
 
 
 class AuditMapShowcaseTests(unittest.TestCase):

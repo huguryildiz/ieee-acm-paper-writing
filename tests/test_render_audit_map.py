@@ -14,14 +14,20 @@ RENDERER = (
     / "scripts"
     / "render_audit_map.py"
 )
-EXAMPLE_JSON = (
-    ROOT
-    / "skills"
-    / "ieee-acm-paper-writing"
-    / "examples"
-    / "section-audit-map.json"
-)
+EXAMPLES = ROOT / "skills" / "ieee-acm-paper-writing" / "examples"
+EXAMPLE_JSON = EXAMPLES / "section-audit-map.json"
 RENDERED_EXAMPLE_HTML = EXAMPLE_JSON.with_name("section-audit-map-rendered.html")
+FIXTURE_PAIRS = (
+    (EXAMPLE_JSON, RENDERED_EXAMPLE_HTML),
+    (
+        EXAMPLES / "method-reproducibility-audit-map.json",
+        EXAMPLES / "method-reproducibility-audit-map.html",
+    ),
+    (
+        EXAMPLES / "venue-adaptation-audit-map.json",
+        EXAMPLES / "venue-adaptation-audit-map.html",
+    ),
+)
 SPEC = importlib.util.spec_from_file_location("render_audit_map", RENDERER)
 RENDER_MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(RENDER_MODULE)
@@ -31,9 +37,12 @@ class AuditMapRendererTests(unittest.TestCase):
     def example(self):
         return json.loads(EXAMPLE_JSON.read_text(encoding="utf-8"))
 
-    def test_checked_in_renderer_fixture_matches_renderer(self):
-        rendered = RENDER_MODULE.render_document(self.example())
-        self.assertEqual(RENDERED_EXAMPLE_HTML.read_text(encoding="utf-8"), rendered)
+    def test_checked_in_renderer_fixtures_match_renderer(self):
+        for json_path, html_path in FIXTURE_PAIRS:
+            with self.subTest(json_path=json_path.name):
+                document = json.loads(json_path.read_text(encoding="utf-8"))
+                rendered = RENDER_MODULE.render_document(document)
+                self.assertEqual(html_path.read_text(encoding="utf-8"), rendered)
 
     def test_render_is_self_contained_and_not_a_bundler_artifact(self):
         rendered = RENDER_MODULE.render_document(self.example())

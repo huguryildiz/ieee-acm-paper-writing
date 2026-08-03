@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "title": "Method-Contract Map",
+  "subject": "recovering a reproducible evaluation from an under-specified Methods section",
+  "eyebrow": "Cyber-physical systems · simulated mobile-robot study · teaching fixture",
+  "summary": "A realistic but synthetic Methods and Evaluation excerpt for a simulated warehouse mobile-robot study. The audit separates unsupported deployment and timing claims, incomplete system and simulator contracts, and defects that require a new analysis or rerun; all values belong only to the linked teaching fixture.",
+  "source_label": "Under-specified source",
+  "revision_label": "Bounded response",
+  "footer": "Generated on 3 August 2026 by applying the checked-in ieee-acm-paper-writing skill to method-reproducibility-audit-example.md. The realistic fixture is synthetic: its robot, simulator, timings, run counts, and data split are invented and are not real-system results. This retained example run demonstrates the output contract; it is not behavioral benchmark evidence. A prose repair cannot cure leakage, excluded failures, or a missing experiment specification.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Simulation is presented as deployment evidence",
+      "location": "III. Methods · opening sentence",
+      "source": "We deploy the controller on autonomous warehouse robots and evaluate it under realistic operating conditions.",
+      "evidence": "The fixture supplies simulator logs only. It contains no physical robot, sensor, actuator, warehouse, or field-deployment record.",
+      "consequence": "The sentence changes simulated evidence into a real-system deployment claim.",
+      "correction": "State that the controller is evaluated in a simulated warehouse environment. Do not claim hardware or operational performance without corresponding evidence.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "2",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "System and controller contract is absent",
+      "location": "III. Methods · controller description",
+      "source": "The controller converts localization estimates into safe motion commands.",
+      "evidence": "No state, observation, action, update rule, control frequency, dynamics model, actuator bound, or definition of safe motion is supplied.",
+      "consequence": "A reader cannot reconstruct the controller or determine which safety property the sentence refers to.",
+      "correction": "Request the state and observation definitions, controller update rule, execution frequency, dynamics and actuator constraints, and the exact safety criterion. Keep the safety wording out of manuscript prose until those items and supporting evidence are available.",
+      "disposition": "author-query"
+    },
+    {
+      "id": "3",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "Simulator and scenario contract is absent",
+      "location": "III. Methods · simulation description",
+      "source": "We use a high-fidelity simulator with realistic sensor noise and randomized warehouse layouts.",
+      "evidence": "No archived artifact identifies the simulator and version, world files, dynamics, sensor-noise model, layout distribution, seed list, or controller revision.",
+      "consequence": "High-fidelity and realistic are not reproducible properties, and the tested environment distribution cannot be reconstructed or bounded.",
+      "correction": "Request the simulator and version, world-file identity, dynamics and sensing configuration, noise and layout distributions, seed list, and controller revision. Replace high-fidelity and realistic with a factual description limited to the supplied configuration.",
+      "disposition": "author-query"
+    },
+    {
+      "id": "4",
+      "layer": "scientific-support",
+      "severity": "Major",
+      "title": "Mean latency is treated as a real-time guarantee",
+      "location": "IV. Evaluation · timing paragraph",
+      "source": "An average inference time of 18 ms confirms real-time operation.",
+      "evidence": "The synthetic timing record provides a mean of 18 ms but no control period, deadline, tail distribution, jitter, hardware identity, warm-up policy, or missed-deadline count.",
+      "consequence": "A mean computation time cannot establish deadline compliance or real-time behavior.",
+      "correction": "Report only the observed mean per-step inference time of 18 ms for the fixture configuration. Treat real-time compliance as unevaluated until the deadline, hardware, timing distribution, and misses are supplied.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "5",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "Preprocessing leaks evaluation data",
+      "location": "III. Methods · data preparation",
+      "source": "We normalize all recorded trajectories before assigning frames to training and test sets.",
+      "evidence": "The normalization statistics use the complete synthetic dataset, including test trajectories. Frames are then split after preprocessing.",
+      "consequence": "Information from the evaluation trajectories enters model fitting, so the reported held-out result is not a clean estimate.",
+      "correction": "Split by complete trajectory first, fit every preprocessing transform on the training trajectories only, apply the frozen transforms to the test trajectories, and rerun the evaluation. Do not repair this finding with wording alone.",
+      "disposition": "author-query"
+    },
+    {
+      "id": "6",
+      "layer": "scientific-support",
+      "severity": "Major",
+      "title": "Frames are counted as independent replications",
+      "location": "IV. Evaluation · uncertainty statement",
+      "source": "Performance is stable across 6,000 independent test samples.",
+      "evidence": "The 6,000 frames come from 12 simulated runs. Frames within a run share the same trajectory, environment realization, and controller state.",
+      "consequence": "The stated denominator overcounts the independent replication unit and can understate uncertainty.",
+      "correction": "Identify the 12 simulated runs as the replication units, report the 6,000 frames as correlated observations, and compute uncertainty at the run level or justify another dependence-aware analysis.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "7",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "Divergent runs disappear from the denominator",
+      "location": "IV. Evaluation · run selection",
+      "source": "We report the 12 successful runs after removing unstable trials.",
+      "evidence": "The fixture contains 15 attempted runs; three were removed after controller divergence, and no prospective exclusion rule is supplied.",
+      "consequence": "Conditioning the analysis on success hides a 3/15 failure fraction and biases the reported performance.",
+      "correction": "Report all 15 attempted runs and the three divergence failures. Analyze the complete set or apply a prospectively justified exclusion rule while preserving the failure count and its consequence.",
+      "disposition": "rewrite"
+    }
+  ]
+}

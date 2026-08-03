@@ -1,0 +1,13 @@
+{
+  "name": "ieee-acm-paper-writing",
+  "version": "0.5.0",
+  "description": "Evidence-bounded drafting, rewriting, auditing, and venue adaptation for IEEE and ACM engineering manuscripts.",
+  "author": {
+    "name": "huguryildiz",
+    "url": "https://github.com/huguryildiz"
+  },
+  "homepage": "https://github.com/huguryildiz/ieee-acm-paper-writing",
+  "repository": "https://github.com/huguryildiz/ieee-acm-paper-writing",
+  "license": "MIT",
+  "keywords": ["ieee", "acm", "manuscript", "academic-writing", "audit"]
+}

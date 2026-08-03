@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- A native Codex plugin package with repository marketplace metadata, install-safe skill and icon
+  snapshots, Codex interface metadata, and local/Git marketplace installation instructions.
+- Dependency-free snapshot synchronization and plugin-package validation, with regression tests and
+  a dedicated CI gate that rejects symlinks, stale packaged files, and invalid manifest or
+  marketplace contracts.
+- A native Claude Code plugin manifest and single-plugin marketplace, installable with
+  `/plugin marketplace add` and `/plugin install` without Node.js or a shell command.
+
+### Changed
+
+- Installation guidance now presents three separate paths — native Codex plugin, native Claude Code
+  plugin, and the Agent Skills CLI — and the CLI command drops the redundant repository subpath,
+  skill selector, and installer pin that the CLI resolves on its own.
+
 ## v0.5.0 — 2026-08-03
 
 ### Added

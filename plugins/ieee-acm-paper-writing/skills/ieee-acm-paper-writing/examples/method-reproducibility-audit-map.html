@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <title>Section-Audit Map — tracing planted flaws to evidence-scoped responses</title>
+  <title>Method-Contract Map — recovering a reproducible evaluation from an under-specified Methods section</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='512'%20height='512'%20viewBox='0%200%20512%20512'%20fill='none'%3E%3Cdefs%3E%3ClinearGradient%20id='mk-navy'%20x1='76'%20y1='36'%20x2='430'%20y2='486'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%233C2609'/%3E%3Cstop%20offset='0.54'%20stop-color='%23211203'/%3E%3Cstop%20offset='1'%20stop-color='%23100701'/%3E%3C/linearGradient%3E%3ClinearGradient%20id='mk-paper'%20x1='200'%20y1='330'%20x2='372'%20y2='146'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%23FFFAEE'/%3E%3Cstop%20offset='0.6'%20stop-color='%23F4E3C3'/%3E%3Cstop%20offset='1'%20stop-color='%23DCC49A'/%3E%3C/linearGradient%3E%3ClinearGradient%20id='mk-gold'%20x1='122'%20y1='82'%20x2='396'%20y2='430'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%23FFEDC4'/%3E%3Cstop%20offset='0.3'%20stop-color='%23FFC24D'/%3E%3Cstop%20offset='0.68'%20stop-color='%23E0871B'/%3E%3Cstop%20offset='1'%20stop-color='%23A0500C'/%3E%3C/linearGradient%3E%3ClinearGradient%20id='mk-vaneGold'%20x1='210'%20y1='330'%20x2='374'%20y2='150'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%23B4711C'/%3E%3Cstop%20offset='0.5'%20stop-color='%23E7A233'/%3E%3Cstop%20offset='1'%20stop-color='%23FFD588'/%3E%3C/linearGradient%3E%3ClinearGradient%20id='mk-sealGold'%20x1='352'%20y1='344'%20x2='432'%20y2='426'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%23FFE0A0'/%3E%3Cstop%20offset='0.55'%20stop-color='%23FFB93C'/%3E%3Cstop%20offset='1'%20stop-color='%23D6811A'/%3E%3C/linearGradient%3E%3CradialGradient%20id='mk-glow'%20cx='0'%20cy='0'%20r='1'%20gradientTransform='translate(266%20238)%20rotate(90)%20scale(224)'%20gradientUnits='userSpaceOnUse'%3E%3Cstop%20stop-color='%23A6631A'%20stop-opacity='0.46'/%3E%3Cstop%20offset='1'%20stop-color='%231A0F04'%20stop-opacity='0'/%3E%3C/radialGradient%3E%3Cfilter%20id='mk-quillShadow'%20x='96'%20y='72'%20width='340'%20height='360'%20filterUnits='userSpaceOnUse'%20color-interpolation-filters='sRGB'%3E%3CfeDropShadow%20dx='0'%20dy='16'%20stdDeviation='16'%20flood-color='%23130700'%20flood-opacity='0.6'/%3E%3C/filter%3E%3Cfilter%20id='mk-sealShadow'%20x='312'%20y='312'%20width='164'%20height='164'%20filterUnits='userSpaceOnUse'%20color-interpolation-filters='sRGB'%3E%3CfeDropShadow%20dx='0'%20dy='8'%20stdDeviation='8'%20flood-color='%230C0500'%20flood-opacity='0.65'/%3E%3C/filter%3E%3CclipPath%20id='mk-frameClip'%3E%3Crect%20x='24'%20y='24'%20width='464'%20height='464'%20rx='104'/%3E%3C/clipPath%3E%3CclipPath%20id='mk-vaneAClip'%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C300%20160%20225%20235%20197%20331%20Z'/%3E%3C/clipPath%3E%3CclipPath%20id='mk-vaneBClip'%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C340%20200%20265%20275%20197%20331%20Z'/%3E%3C/clipPath%3E%3C/defs%3E%3Crect%20x='24'%20y='24'%20width='464'%20height='464'%20rx='104'%20fill='url(%23mk-navy)'/%3E%3Crect%20x='28'%20y='28'%20width='456'%20height='456'%20rx='100'%20stroke='url(%23mk-gold)'%20stroke-opacity='0.68'%20stroke-width='8'/%3E%3Crect%20x='43'%20y='43'%20width='426'%20height='426'%20rx='85'%20stroke='%23F5C97F'%20stroke-opacity='0.18'%20stroke-width='2'/%3E%3Cg%20clip-path='url(%23mk-frameClip)'%3E%3Ccircle%20cx='266'%20cy='238'%20r='224'%20fill='url(%23mk-glow)'/%3E%3Cg%20stroke='%23E8A63C'%20stroke-opacity='0.16'%20stroke-width='2'%3E%3Cpath%20d='M-10%20142H522M-10%20370H522'/%3E%3Cpath%20d='M142-10V522M370-10V522'/%3E%3Ccircle%20cx='256'%20cy='256'%20r='218'%20stroke-dasharray='4%2010'/%3E%3C/g%3E%3Crect%20x='106'%20y='106'%20width='300'%20height='300'%20rx='34'%20transform='rotate(45%20256%20256)'%20stroke='%23F0AE45'%20stroke-opacity='0.26'%20stroke-width='3'/%3E%3C/g%3E%3Cg%20stroke-linecap='round'%20fill='none'%3E%3Cpath%20d='M158%20393%20C212%20405%20262%20405%20314%20396'%20stroke='%23F3C57E'%20stroke-opacity='0.88'%20stroke-width='9'/%3E%3Cpath%20d='M190%20424%20C226%20431%20262%20431%20296%20425'%20stroke='%23E8A63C'%20stroke-opacity='0.4'%20stroke-width='6'/%3E%3C/g%3E%3Cg%20filter='url(%23mk-quillShadow)'%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C300%20160%20225%20235%20197%20331%20Z'%20fill='url(%23mk-paper)'/%3E%3Cg%20clip-path='url(%23mk-vaneAClip)'%20stroke='%23A67C43'%20stroke-opacity='0.55'%20stroke-width='4'%20stroke-linecap='round'%3E%3Cpath%20d='M213%20313%20180%20246'/%3E%3Cpath%20d='M234%20291%20201%20224'/%3E%3Cpath%20d='M255%20269%20222%20202'/%3E%3Cpath%20d='M275%20247%20242%20180'/%3E%3Cpath%20d='M296%20224%20263%20157'/%3E%3Cpath%20d='M316%20202%20283%20135'/%3E%3Cpath%20d='M337%20180%20304%20113'/%3E%3C/g%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C300%20160%20225%20235%20197%20331%20Z'%20stroke='url(%23mk-gold)'%20stroke-width='5'%20stroke-linejoin='round'/%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C340%20200%20265%20275%20197%20331%20Z'%20fill='url(%23mk-vaneGold)'/%3E%3Cg%20clip-path='url(%23mk-vaneBClip)'%20stroke='%235C3407'%20stroke-opacity='0.45'%20stroke-width='4'%20stroke-linecap='round'%3E%3Cpath%20d='M213%20313%20259%20329'/%3E%3Cpath%20d='M234%20291%20280%20307'/%3E%3Cpath%20d='M255%20269%20301%20285'/%3E%3Cpath%20d='M275%20247%20321%20263'/%3E%3Cpath%20d='M296%20224%20342%20240'/%3E%3Cpath%20d='M316%20202%20362%20218'/%3E%3C/g%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140%20C340%20200%20265%20275%20197%20331%20Z'%20stroke='url(%23mk-gold)'%20stroke-width='5'%20stroke-linejoin='round'/%3E%3Cpath%20d='M197%20331%20Q275%20245%20374%20140'%20stroke='%233A2308'%20stroke-opacity='0.7'%20stroke-width='6'%20stroke-linecap='round'/%3E%3Cpath%20d='M186%20321%20L208%20341%20L152%20390%20Z'%20fill='url(%23mk-gold)'%20stroke='%237A4410'%20stroke-width='4'%20stroke-linejoin='round'/%3E%3Cpath%20d='M176%20352%20L158%20379'%20stroke='%235C3407'%20stroke-opacity='0.8'%20stroke-width='4'%20stroke-linecap='round'/%3E%3C/g%3E%3Cg%20filter='url(%23mk-sealShadow)'%3E%3Cg%20transform='rotate(45%20392%20386)'%3E%3Crect%20x='358'%20y='352'%20width='68'%20height='68'%20rx='18'%20fill='%23170D03'%20stroke='%237A4410'%20stroke-width='9'/%3E%3Crect%20x='362'%20y='356'%20width='60'%20height='60'%20rx='15'%20fill='%232E1A06'%20stroke='url(%23mk-sealGold)'%20stroke-width='6'/%3E%3Crect%20x='370'%20y='364'%20width='44'%20height='44'%20rx='11'%20stroke='%23FFCE78'%20stroke-opacity='0.5'%20stroke-width='2'%20stroke-dasharray='3%206'/%3E%3C/g%3E%3Cpath%20d='M377%20387%20L389%20399%20L409%20374'%20stroke='url(%23mk-sealGold)'%20stroke-width='10'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/g%3E%3Cg%20fill='%23FFC776'%20opacity='0.8'%3E%3Crect%20x='203'%20y='448'%20width='34'%20height='4'%20rx='2'/%3E%3Crect%20x='245'%20y='448'%20width='22'%20height='4'%20rx='2'/%3E%3Crect%20x='275'%20y='448'%20width='34'%20height='4'%20rx='2'/%3E%3C/g%3E%3C/svg%3E">
   <style>
     :root {
@@ -603,11 +603,11 @@
             </svg>
           </div>
           <div>
-            <p class="eyebrow">IEEE Transactions on Smart Grid · regular research paper · teaching fixture</p>
-            <h1>Section-Audit Map <span class="subject">— tracing planted flaws to evidence-scoped responses</span></h1>
+            <p class="eyebrow">Cyber-physical systems · simulated mobile-robot study · teaching fixture</p>
+            <h1>Method-Contract Map <span class="subject">— recovering a reproducible evaluation from an under-specified Methods section</span></h1>
           </div>
         </div>
-        <p class="lede">A synthetic Results and Conclusion excerpt for a designated IEEE Transactions on Smart Grid regular research paper target, mapped finding by finding. Each numbered entry preserves the concern layer, identifies the sentence that triggered the finding, and shows the bounded repair or author action supported by the fixture&#x27;s supplied evidence or verified venue guidance.</p>
+        <p class="lede">A realistic but synthetic Methods and Evaluation excerpt for a simulated warehouse mobile-robot study. The audit separates unsupported deployment and timing claims, incomplete system and simulator contracts, and defects that require a new analysis or rerun; all values belong only to the linked teaching fixture.</p>
       </div>
       <div class="toolbar" aria-label="Display controls">
         <button class="action" id="clear" type="button">× Clear focus</button>
@@ -618,9 +618,9 @@
 
   <section class="legend" aria-label="Concern layers">
     <span class="legend-label">Concern layers</span>
-    <span class="layer-chip s"><span class="layer-code">S</span><span class="layer-name">Scientific support</span><span class="layer-count">9 findings · claims vs. evidence</span></span>
-    <span class="layer-chip m"><span class="layer-code">M</span><span class="layer-name">Method / domain reporting</span><span class="layer-count">2 findings · reproducibility and disclosure</span></span>
-    <span class="layer-chip v"><span class="layer-code">V</span><span class="layer-name">Venue compliance</span><span class="layer-count">1 finding · verified house rules</span></span>
+    <span class="layer-chip s"><span class="layer-code">S</span><span class="layer-name">Scientific support</span><span class="layer-count">3 findings · claims vs. evidence</span></span>
+    <span class="layer-chip m"><span class="layer-code">M</span><span class="layer-name">Method / domain reporting</span><span class="layer-count">4 findings · reproducibility and disclosure</span></span>
+    <span class="layer-chip v"><span class="layer-code">V</span><span class="layer-name">Venue compliance</span><span class="layer-count">0 · not exercised · verified house rules</span></span>
     <span class="legend-spacer" aria-hidden="true"></span>
     <span class="repair-key"><span class="repair-swatch" aria-hidden="true"></span>bounded response</span>
     <span class="legend-how">select # to trace finding → response</span>
@@ -628,42 +628,37 @@
 
   <main class="layout">
     <aside class="rail" aria-label="Finding index">
-      <h2>Answer key <span class="rail-status" id="rail-status" aria-live="polite">12 findings</span></h2>
-      <ol class="keylist"><li><button class="key s" type="button" data-finding="1" aria-controls="finding-1"><span class="finding-number s">1</span><span><span class="key-title">Unscoped optimality claim</span><span class="key-layer">S · Scientific support</span></span></button></li>
-        <li><button class="key s" type="button" data-finding="2" aria-controls="finding-2"><span class="finding-number s">2</span><span><span class="key-title">Bare 23% solve-time claim</span><span class="key-layer">S · Scientific support</span></span></button></li>
-        <li><button class="key s" type="button" data-finding="3" aria-controls="finding-3"><span class="finding-number s">3</span><span><span class="key-title">Significance asserted without a test</span><span class="key-layer">S · Scientific support</span></span></button></li>
-        <li><button class="key s" type="button" data-finding="4" aria-controls="finding-4"><span class="finding-number s">4</span><span><span class="key-title">Best-case cost reduction presented as typical</span><span class="key-layer">S · Scientific support</span></span></button></li>
-        <li><button class="key m" type="button" data-finding="5" aria-controls="finding-5"><span class="finding-number m">5</span><span><span class="key-title">Missing reproducibility settings</span><span class="key-layer">M · Method / domain reporting</span></span></button></li>
-        <li><button class="key s" type="button" data-finding="6" aria-controls="finding-6"><span class="finding-number s">6</span><span><span class="key-title">Unverifiable corroborating citation</span><span class="key-layer">S · Scientific support</span></span></button></li>
-        <li><button class="key m" type="button" data-finding="7" aria-controls="finding-7"><span class="finding-number m">7</span><span><span class="key-title">Evaluation split is ambiguous</span><span class="key-layer">M · Method / domain reporting</span></span></button></li>
-        <li><button class="key s" type="button" data-finding="8" aria-controls="finding-8"><span class="finding-number s">8</span><span><span class="key-title">Absolute negative claim lacks scope</span><span class="key-layer">S · Scientific support</span></span></button></li>
-        <li><button class="key s" type="button" data-finding="9" aria-controls="finding-9"><span class="finding-number s">9</span><span><span class="key-title">Universal proof claim exceeds the study</span><span class="key-layer">S · Scientific support</span></span></button></li>
-        <li><button class="key s" type="button" data-finding="10" aria-controls="finding-10"><span class="finding-number s">10</span><span><span class="key-title">New generalization claims appear only in the Conclusion</span><span class="key-layer">S · Scientific support</span></span></button></li>
-        <li><button class="key s" type="button" data-finding="11" aria-controls="finding-11"><span class="finding-number s">11</span><span><span class="key-title">Future work is phrased as an expected result</span><span class="key-layer">S · Scientific support</span></span></button></li>
-        <li><button class="key v" type="button" data-finding="12" aria-controls="finding-12"><span class="finding-number v">12</span><span><span class="key-title">Figure citation does not follow verified IEEE style</span><span class="key-layer">V · Venue compliance</span></span></button></li></ol>
+      <h2>Answer key <span class="rail-status" id="rail-status" aria-live="polite">7 findings</span></h2>
+      <ol class="keylist"><li><button class="key s" type="button" data-finding="1" aria-controls="finding-1"><span class="finding-number s">1</span><span><span class="key-title">Simulation is presented as deployment evidence</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key m" type="button" data-finding="2" aria-controls="finding-2"><span class="finding-number m">2</span><span><span class="key-title">System and controller contract is absent</span><span class="key-layer">M · Method / domain reporting</span></span></button></li>
+        <li><button class="key m" type="button" data-finding="3" aria-controls="finding-3"><span class="finding-number m">3</span><span><span class="key-title">Simulator and scenario contract is absent</span><span class="key-layer">M · Method / domain reporting</span></span></button></li>
+        <li><button class="key s" type="button" data-finding="4" aria-controls="finding-4"><span class="finding-number s">4</span><span><span class="key-title">Mean latency is treated as a real-time guarantee</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key m" type="button" data-finding="5" aria-controls="finding-5"><span class="finding-number m">5</span><span><span class="key-title">Preprocessing leaks evaluation data</span><span class="key-layer">M · Method / domain reporting</span></span></button></li>
+        <li><button class="key s" type="button" data-finding="6" aria-controls="finding-6"><span class="finding-number s">6</span><span><span class="key-title">Frames are counted as independent replications</span><span class="key-layer">S · Scientific support</span></span></button></li>
+        <li><button class="key m" type="button" data-finding="7" aria-controls="finding-7"><span class="finding-number m">7</span><span><span class="key-title">Divergent runs disappear from the denominator</span><span class="key-layer">M · Method / domain reporting</span></span></button></li></ol>
     </aside>
 
     <section class="report" aria-label="Finding-to-correction map">
       <div class="column-heads" aria-hidden="true">
-        <div class="column-head"><strong>Flawed source</strong> sentence and evidentiary defect</div>
-        <div class="column-head fix"><strong>Evidence-scoped response</strong> bounded repair or author action</div>
+        <div class="column-head"><strong>Under-specified source</strong> sentence and evidentiary defect</div>
+        <div class="column-head fix"><strong>Bounded response</strong> bounded repair or author action</div>
       </div>
       <article class="finding-pair" id="finding-1" data-finding="1">
   <section class="panel" data-layer="scientific-support" aria-label="Finding 1 source">
     <div class="panel-head">
       <span class="badge s">1</span>
       <div>
-        <h2 class="finding-title">Unscoped optimality claim</h2>
-        <div class="location">V. Results · paragraph 1</div>
+        <h2 class="finding-title">Simulation is presented as deployment evidence</h2>
+        <div class="location">III. Methods · opening sentence</div>
       </div>
-      <span class="severity">Major</span>
+      <span class="severity">Critical</span>
     </div>
     <div class="panel-body">
-      <blockquote>The warm-started solver finds the optimal dispatch in every instance.</blockquote>
+      <blockquote>We deploy the controller on autonomous warehouse robots and evaluate it under realistic operating conditions.</blockquote>
       <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">The submitted excerpt gives no solver status, MIP-gap tolerance, or time limit. A warm start does not itself certify optimality.</p>
+      <p class="analysis-text">The fixture supplies simulator logs only. It contains no physical robot, sensor, actuator, warehouse, or field-deployment record.</p>
       <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">The sentence claims a guarantee that cannot be reconstructed from the reported experiment.</p>
+      <p class="analysis-text">The sentence changes simulated evidence into a real-system deployment claim.</p>
     </div>
   </section>
   <section class="panel fix" data-layer="scientific-support" aria-label="Finding 1 response">
@@ -676,71 +671,71 @@
     </div>
     <div class="panel-body">
       <span class="disposition">Evidence-scoped rewrite</span>
-      <p class="correction">After the author supplies the missing solver evidence, report the actual certificate: every warm-started instance terminated with solver status optimal at the stated 0.01% relative MIP-gap tolerance and 60 s limit.</p>
+      <p class="correction">State that the controller is evaluated in a simulated warehouse environment. Do not claim hardware or operational performance without corresponding evidence.</p>
     </div>
   </section>
 </article>
       <article class="finding-pair" id="finding-2" data-finding="2">
-  <section class="panel" data-layer="scientific-support" aria-label="Finding 2 source">
+  <section class="panel" data-layer="method-domain" aria-label="Finding 2 source">
     <div class="panel-head">
-      <span class="badge s">2</span>
+      <span class="badge m">2</span>
       <div>
-        <h2 class="finding-title">Bare 23% solve-time claim</h2>
-        <div class="location">V. Results · paragraph 2</div>
+        <h2 class="finding-title">System and controller contract is absent</h2>
+        <div class="location">III. Methods · controller description</div>
       </div>
       <span class="severity">Major</span>
     </div>
     <div class="panel-body">
-      <blockquote>Our method reduces solve time by 23%.</blockquote>
+      <blockquote>The controller converts localization estimates into safe motion commands.</blockquote>
       <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">The excerpt omits the instance count, aggregation statistic, baseline configuration, and matched solver settings.</p>
+      <p class="analysis-text">No state, observation, action, update rule, control frequency, dynamics model, actuator bound, or definition of safe motion is supplied.</p>
       <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">The reader cannot determine whether 23% is a mean, median, best case, or unmatched comparison.</p>
+      <p class="analysis-text">A reader cannot reconstruct the controller or determine which safety property the sentence refers to.</p>
     </div>
   </section>
-  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 2 response">
+  <section class="panel fix" data-layer="method-domain" aria-label="Finding 2 response">
     <div class="panel-head">
-      <span class="badge s">2</span>
+      <span class="badge m">2</span>
       <div>
         <h2 class="finding-title">Bounded response</h2>
-        <div class="location">Scientific support</div>
+        <div class="location">Method / domain reporting</div>
       </div>
     </div>
     <div class="panel-body">
-      <span class="disposition">Evidence-scoped rewrite</span>
-      <p class="correction">With the supplied evidence, state that the value is the median solve-time reduction across 500 held-out instances relative to an identically configured cold start.</p>
+      <span class="disposition">External author query</span>
+      <p class="correction">Request the state and observation definitions, controller update rule, execution frequency, dynamics and actuator constraints, and the exact safety criterion. Keep the safety wording out of manuscript prose until those items and supporting evidence are available.</p>
     </div>
   </section>
 </article>
       <article class="finding-pair" id="finding-3" data-finding="3">
-  <section class="panel" data-layer="scientific-support" aria-label="Finding 3 source">
+  <section class="panel" data-layer="method-domain" aria-label="Finding 3 source">
     <div class="panel-head">
-      <span class="badge s">3</span>
+      <span class="badge m">3</span>
       <div>
-        <h2 class="finding-title">Significance asserted without a test</h2>
-        <div class="location">V. Results · paragraph 2</div>
+        <h2 class="finding-title">Simulator and scenario contract is absent</h2>
+        <div class="location">III. Methods · simulation description</div>
       </div>
       <span class="severity">Major</span>
     </div>
     <div class="panel-body">
-      <blockquote>Our method significantly outperforms the conventional MILP baseline.</blockquote>
+      <blockquote>We use a high-fidelity simulator with realistic sensor noise and randomized warehouse layouts.</blockquote>
       <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">No statistical test, p-value, confidence interval, or uncertainty summary is supplied.</p>
+      <p class="analysis-text">No archived artifact identifies the simulator and version, world files, dynamics, sensor-noise model, layout distribution, seed list, or controller revision.</p>
       <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">The word significantly implies statistical support that the evidence packet does not provide.</p>
+      <p class="analysis-text">High-fidelity and realistic are not reproducible properties, and the tested environment distribution cannot be reconstructed or bounded.</p>
     </div>
   </section>
-  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 3 response">
+  <section class="panel fix" data-layer="method-domain" aria-label="Finding 3 response">
     <div class="panel-head">
-      <span class="badge s">3</span>
+      <span class="badge m">3</span>
       <div>
         <h2 class="finding-title">Bounded response</h2>
-        <div class="location">Scientific support</div>
+        <div class="location">Method / domain reporting</div>
       </div>
     </div>
     <div class="panel-body">
-      <span class="disposition">Remove unsupported statement</span>
-      <p class="correction">Remove the statistical-significance wording. Report only the supplied descriptive comparison and request uncertainty or distributional evidence separately.</p>
+      <span class="disposition">External author query</span>
+      <p class="correction">Request the simulator and version, world-file identity, dynamics and sensing configuration, noise and layout distributions, seed list, and controller revision. Replace high-fidelity and realistic with a factual description limited to the supplied configuration.</p>
     </div>
   </section>
 </article>
@@ -749,17 +744,17 @@
     <div class="panel-head">
       <span class="badge s">4</span>
       <div>
-        <h2 class="finding-title">Best-case cost reduction presented as typical</h2>
-        <div class="location">V. Results · paragraph 2 and VI. Conclusion</div>
+        <h2 class="finding-title">Mean latency is treated as a real-time guarantee</h2>
+        <div class="location">IV. Evaluation · timing paragraph</div>
       </div>
       <span class="severity">Major</span>
     </div>
     <div class="panel-body">
-      <blockquote>In the most demanding winter-peak scenario, operating cost falls by 41%, which demonstrates the economic value of the approach in realistic conditions.</blockquote>
+      <blockquote>An average inference time of 18 ms confirms real-time operation.</blockquote>
       <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">The 41% value comes from one instance whose cold start returned a time-limited, suboptimal incumbent rather than a certified optimum.</p>
+      <p class="analysis-text">The synthetic timing record provides a mean of 18 ms but no control period, deadline, tail distribution, jitter, hardware identity, warm-up policy, or missed-deadline count.</p>
       <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">The draft generalizes a scenario-specific comparison to the complete evaluation set and to realistic operation.</p>
+      <p class="analysis-text">A mean computation time cannot establish deadline compliance or real-time behavior.</p>
     </div>
   </section>
   <section class="panel fix" data-layer="scientific-support" aria-label="Finding 4 response">
@@ -772,7 +767,7 @@
     </div>
     <div class="panel-body">
       <span class="disposition">Evidence-scoped rewrite</span>
-      <p class="correction">Identify the single winter-peak instance, the time-limited comparator, and the suboptimal-incumbent boundary; explicitly state that 41% is not a general operating-cost reduction.</p>
+      <p class="correction">Report only the observed mean per-step inference time of 18 ms for the fixture configuration. Treat real-time compliance as unevaluated until the deadline, hardware, timing distribution, and misses are supplied.</p>
     </div>
   </section>
 </article>
@@ -781,17 +776,17 @@
     <div class="panel-head">
       <span class="badge m">5</span>
       <div>
-        <h2 class="finding-title">Missing reproducibility settings</h2>
-        <div class="location">V. Results · paragraph 1</div>
+        <h2 class="finding-title">Preprocessing leaks evaluation data</h2>
+        <div class="location">III. Methods · data preparation</div>
       </div>
       <span class="severity">Major</span>
     </div>
     <div class="panel-body">
-      <blockquote>All experiments use our 34-bus test feeder.</blockquote>
+      <blockquote>We normalize all recorded trajectories before assigning frames to training and test sets.</blockquote>
       <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">The submitted excerpt gives no solver name or version, time limit, MIP-gap setting, matched baseline configuration, seeds, or hardware.</p>
+      <p class="analysis-text">The normalization statistics use the complete synthetic dataset, including test trajectories. Frames are then split after preprocessing.</p>
       <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">The optimization comparison cannot be reconstructed or assessed for configuration bias.</p>
+      <p class="analysis-text">Information from the evaluation trajectories enters model fitting, so the reported held-out result is not a clean estimate.</p>
     </div>
   </section>
   <section class="panel fix" data-layer="method-domain" aria-label="Finding 5 response">
@@ -804,7 +799,7 @@
     </div>
     <div class="panel-body">
       <span class="disposition">External author query</span>
-      <p class="correction">Insert the supplied Gurobi 10.0, 60 s, and 0.01% relative MIP-gap settings and state that cold- and warm-started runs use the identical formulation and solver configuration except for initialization. Request any still-missing hardware and seed details outside the manuscript prose.</p>
+      <p class="correction">Split by complete trajectory first, fit every preprocessing transform on the training trajectories only, apply the frozen transforms to the test trajectories, and rerun the evaluation. Do not repair this finding with wording alone.</p>
     </div>
   </section>
 </article>
@@ -813,17 +808,17 @@
     <div class="panel-head">
       <span class="badge s">6</span>
       <div>
-        <h2 class="finding-title">Unverifiable corroborating citation</h2>
-        <div class="location">V. Results · paragraph 2</div>
+        <h2 class="finding-title">Frames are counted as independent replications</h2>
+        <div class="location">IV. Evaluation · uncertainty statement</div>
       </div>
       <span class="severity">Major</span>
     </div>
     <div class="panel-body">
-      <blockquote>A comparable speedup was independently confirmed in [17], further validating our design choices.</blockquote>
+      <blockquote>Performance is stable across 6,000 independent test samples.</blockquote>
       <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">The fixture supplies neither the identity nor the content of reference [17], so its claim support cannot be checked.</p>
+      <p class="analysis-text">The 6,000 frames come from 12 simulated runs. Frames within a run share the same trajectory, environment realization, and controller state.</p>
       <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">An unverified citation becomes load-bearing evidence for the manuscript&#x27;s own result.</p>
+      <p class="analysis-text">The stated denominator overcounts the independent replication unit and can understate uncertainty.</p>
     </div>
   </section>
   <section class="panel fix" data-layer="scientific-support" aria-label="Finding 6 response">
@@ -835,8 +830,8 @@
       </div>
     </div>
     <div class="panel-body">
-      <span class="disposition">Remove unsupported statement</span>
-      <p class="correction">Drop the corroboration sentence. Do not replace it unless the cited source is independently verified to support the exact scoped comparison.</p>
+      <span class="disposition">Evidence-scoped rewrite</span>
+      <p class="correction">Identify the 12 simulated runs as the replication units, report the 6,000 frames as correlated observations, and compute uncertainty at the run level or justify another dependence-aware analysis.</p>
     </div>
   </section>
 </article>
@@ -845,17 +840,17 @@
     <div class="panel-head">
       <span class="badge m">7</span>
       <div>
-        <h2 class="finding-title">Evaluation split is ambiguous</h2>
-        <div class="location">V. Results · paragraph 3</div>
+        <h2 class="finding-title">Divergent runs disappear from the denominator</h2>
+        <div class="location">IV. Evaluation · run selection</div>
       </div>
       <span class="severity">Major</span>
     </div>
     <div class="panel-body">
-      <blockquote>The model was evaluated on held-out scenarios drawn from the same year of feeder data.</blockquote>
+      <blockquote>We report the 12 successful runs after removing unstable trials.</blockquote>
       <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">The excerpt does not state whether training and evaluation are temporally or scenario-level disjoint.</p>
+      <p class="analysis-text">The fixture contains 15 attempted runs; three were removed after controller divergence, and no prospective exclusion rule is supplied.</p>
       <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">Potential leakage prevents a defensible claim about held-out performance.</p>
+      <p class="analysis-text">Conditioning the analysis on success hides a 3/15 failure fraction and biases the reported performance.</p>
     </div>
   </section>
   <section class="panel fix" data-layer="method-domain" aria-label="Finding 7 response">
@@ -868,174 +863,14 @@
     </div>
     <div class="panel-body">
       <span class="disposition">Evidence-scoped rewrite</span>
-      <p class="correction">Report the supplied temporal split: train on January–September and evaluate on 500 October–December instances from the same feeder year. Do not imply cross-feeder or cross-year generalization.</p>
-    </div>
-  </section>
-</article>
-      <article class="finding-pair" id="finding-8" data-finding="8">
-  <section class="panel" data-layer="scientific-support" aria-label="Finding 8 source">
-    <div class="panel-head">
-      <span class="badge s">8</span>
-      <div>
-        <h2 class="finding-title">Absolute negative claim lacks scope</h2>
-        <div class="location">V. Results · paragraph 3</div>
-      </div>
-      <span class="severity">Major</span>
-    </div>
-    <div class="panel-body">
-      <blockquote>Across the evaluation set, the warm start never degraded solver performance.</blockquote>
-      <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">The submitted excerpt does not define the evaluation-set size or composition and does not identify which performance measure never degraded.</p>
-      <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">Never reads as an unbounded universal rather than a finite observation.</p>
-    </div>
-  </section>
-  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 8 response">
-    <div class="panel-head">
-      <span class="badge s">8</span>
-      <div>
-        <h2 class="finding-title">Bounded response</h2>
-        <div class="location">Scientific support</div>
-      </div>
-    </div>
-    <div class="panel-body">
-      <span class="disposition">Evidence-scoped rewrite</span>
-      <p class="correction">Scope the statement to the 500 evaluated instances and to solve time: the warm start did not increase solve time in any instance relative to the identically configured cold start.</p>
-    </div>
-  </section>
-</article>
-      <article class="finding-pair" id="finding-9" data-finding="9">
-  <section class="panel" data-layer="scientific-support" aria-label="Finding 9 source">
-    <div class="panel-head">
-      <span class="badge s">9</span>
-      <div>
-        <h2 class="finding-title">Universal proof claim exceeds the study</h2>
-        <div class="location">VI. Conclusion · sentence 1</div>
-      </div>
-      <span class="severity">Critical</span>
-    </div>
-    <div class="panel-body">
-      <blockquote>This paper proved that learning-assisted warm starting makes mixed-integer dispatch tractable for real-time operation in all operating conditions.</blockquote>
-      <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">The fixture contains a finite simulation study on one 34-bus feeder and no operational deployment or real-time validation.</p>
-      <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">The Conclusion converts bounded experimental observations into a universal proof and deployment claim.</p>
-    </div>
-  </section>
-  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 9 response">
-    <div class="panel-head">
-      <span class="badge s">9</span>
-      <div>
-        <h2 class="finding-title">Bounded response</h2>
-        <div class="location">Scientific support</div>
-      </div>
-    </div>
-    <div class="panel-body">
-      <span class="disposition">Evidence-scoped rewrite</span>
-      <p class="correction">Replace the universal statement with the finite study boundary: the reported certificates and timing observations apply to the 34-bus feeder, 500-instance evaluation set, trained initializer, solver settings, and time limit.</p>
-    </div>
-  </section>
-</article>
-      <article class="finding-pair" id="finding-10" data-finding="10">
-  <section class="panel" data-layer="scientific-support" aria-label="Finding 10 source">
-    <div class="panel-head">
-      <span class="badge s">10</span>
-      <div>
-        <h2 class="finding-title">New generalization claims appear only in the Conclusion</h2>
-        <div class="location">VI. Conclusion · sentence 3</div>
-      </div>
-      <span class="severity">Critical</span>
-    </div>
-    <div class="panel-body">
-      <blockquote>The framework generalizes to transmission-level unit commitment and to networks with high renewable penetration, making it directly deployable by system operators.</blockquote>
-      <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">No result in the fixture evaluates transmission-level systems, substantially higher renewable penetration, or operational deployment.</p>
-      <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">The Conclusion claims external validity and readiness beyond the Results section and supplied evidence.</p>
-    </div>
-  </section>
-  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 10 response">
-    <div class="panel-head">
-      <span class="badge s">10</span>
-      <div>
-        <h2 class="finding-title">Bounded response</h2>
-        <div class="location">Scientific support</div>
-      </div>
-    </div>
-    <div class="panel-body">
-      <span class="disposition">Remove unsupported statement</span>
-      <p class="correction">State that these settings were not evaluated and make no generalization or deployment claim for them.</p>
-    </div>
-  </section>
-</article>
-      <article class="finding-pair" id="finding-11" data-finding="11">
-  <section class="panel" data-layer="scientific-support" aria-label="Finding 11 source">
-    <div class="panel-head">
-      <span class="badge s">11</span>
-      <div>
-        <h2 class="finding-title">Future work is phrased as an expected result</h2>
-        <div class="location">VI. Conclusion · final sentence</div>
-      </div>
-      <span class="severity">Major</span>
-    </div>
-    <div class="panel-body">
-      <blockquote>Future versions will incorporate battery degradation, which we expect to further improve economic performance.</blockquote>
-      <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">Battery degradation is not implemented or evaluated in the fixture.</p>
-      <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">A planned method extension is presented with an unsupported anticipated outcome.</p>
-    </div>
-  </section>
-  <section class="panel fix" data-layer="scientific-support" aria-label="Finding 11 response">
-    <div class="panel-head">
-      <span class="badge s">11</span>
-      <div>
-        <h2 class="finding-title">Bounded response</h2>
-        <div class="location">Scientific support</div>
-      </div>
-    </div>
-    <div class="panel-body">
-      <span class="disposition">Evidence-scoped rewrite</span>
-      <p class="correction">State only that incorporating battery degradation into the formulation is left to future work.</p>
-    </div>
-  </section>
-</article>
-      <article class="finding-pair" id="finding-12" data-finding="12">
-  <section class="panel" data-layer="venue-compliance" aria-label="Finding 12 source">
-    <div class="panel-head">
-      <span class="badge v">12</span>
-      <div>
-        <h2 class="finding-title">Figure citation does not follow verified IEEE style</h2>
-        <div class="location">V. Results · paragraph 2</div>
-      </div>
-      <span class="severity">Editorial</span>
-    </div>
-    <div class="panel-body">
-      <blockquote>Figure 1 summarizes the solve-time comparison.</blockquote>
-      <p class="analysis-label">Contradicted or missing evidence</p>
-      <p class="analysis-text">The designated target is an IEEE Transactions on Smart Grid regular research paper. The IEEE Editorial Style Manual for Authors requires figure citations in running text to use the abbreviation “Fig.”, including at the start of a sentence; the applicable IEEE/PES guidance was rechecked on 3 August 2026.</p>
-      <p class="analysis-label">Scientific consequence</p>
-      <p class="analysis-text">The sentence violates a verified venue-style rule, although the defect does not change the scientific meaning of the result.</p>
-    </div>
-  </section>
-  <section class="panel fix" data-layer="venue-compliance" aria-label="Finding 12 response">
-    <div class="panel-head">
-      <span class="badge v">12</span>
-      <div>
-        <h2 class="finding-title">Bounded response</h2>
-        <div class="location">Venue compliance</div>
-      </div>
-    </div>
-    <div class="panel-body">
-      <span class="disposition">Evidence-scoped rewrite</span>
-      <p class="correction">Write: “Fig. 1 summarizes the solve-time comparison.”</p>
+      <p class="correction">Report all 15 attempted runs and the three divergence failures. Analyze the complete set or apply a prospectively justified exclusion rule while preserving the failure count and its consequence.</p>
     </div>
   </section>
 </article>
     </section>
   </main>
 
-  <footer><strong>How to read.</strong> Generated on 3 August 2026 by applying the checked-in ieee-acm-paper-writing skill to section-audit-example.md. The realistic fixture is synthetic: its system, numbers, and citation are invented. The designated venue target is real, and the displayed figure-citation rule was rechecked on 3 August 2026 against the IEEE Editorial Style Manual for Authors at https://journals.ieeeauthorcenter.ieee.org/wp-content/uploads/sites/7/IEEE-Editorial-Style-Manual-for-Authors.pdf and the IEEE PES Author&#x27;s Kit. This retained example run demonstrates the output contract; it is not behavioral benchmark evidence.</footer>
+  <footer><strong>How to read.</strong> Generated on 3 August 2026 by applying the checked-in ieee-acm-paper-writing skill to method-reproducibility-audit-example.md. The realistic fixture is synthetic: its robot, simulator, timings, run counts, and data split are invented and are not real-system results. This retained example run demonstrates the output contract; it is not behavioral benchmark evidence. A prose repair cannot cure leakage, excluded failures, or a missing experiment specification.</footer>
   <div id="tip" role="status" aria-live="polite"></div>
 
   <script>
@@ -1045,7 +880,7 @@
       const clearButton = document.getElementById('clear');
       const status = document.getElementById('rail-status');
       const tip = document.getElementById('tip');
-      const findings = {"1":{"layer":"S","title":"Unscoped optimality claim"},"10":{"layer":"S","title":"New generalization claims appear only in the Conclusion"},"11":{"layer":"S","title":"Future work is phrased as an expected result"},"12":{"layer":"V","title":"Figure citation does not follow verified IEEE style"},"2":{"layer":"S","title":"Bare 23% solve-time claim"},"3":{"layer":"S","title":"Significance asserted without a test"},"4":{"layer":"S","title":"Best-case cost reduction presented as typical"},"5":{"layer":"M","title":"Missing reproducibility settings"},"6":{"layer":"S","title":"Unverifiable corroborating citation"},"7":{"layer":"M","title":"Evaluation split is ambiguous"},"8":{"layer":"S","title":"Absolute negative claim lacks scope"},"9":{"layer":"S","title":"Universal proof claim exceeds the study"}};
+      const findings = {"1":{"layer":"S","title":"Simulation is presented as deployment evidence"},"2":{"layer":"M","title":"System and controller contract is absent"},"3":{"layer":"M","title":"Simulator and scenario contract is absent"},"4":{"layer":"S","title":"Mean latency is treated as a real-time guarantee"},"5":{"layer":"M","title":"Preprocessing leaks evaluation data"},"6":{"layer":"S","title":"Frames are counted as independent replications"},"7":{"layer":"M","title":"Divergent runs disappear from the denominator"}};
       let locked = null;
 
       function paintFocus(id) {
@@ -1055,7 +890,7 @@
         });
         status.textContent = id && findings[id]
           ? `finding ${id} · ${findings[id].layer}`
-          : `12 findings`;
+          : `7 findings`;
       }
 
       function setLockedFocus(id) {

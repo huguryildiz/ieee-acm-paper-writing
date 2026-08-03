@@ -20,6 +20,7 @@ PRODUCT.md
 
 # Generated eval artifacts (run_evals.py collect/score/report --outdir)
 out/
+output/
 
 assets/hero.png
 site-dist/
