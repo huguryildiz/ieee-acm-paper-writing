@@ -58,7 +58,11 @@ invalidates that artifact; its authority does not erase the contradiction.
   evidentiary use. Request an actually supporting source as an external author query; do not leave
   the request inside revised manuscript prose and do not propose a source from memory as verified.
 - Scope any citation-count, ranking, or "most-cited" statement to a named database and
-  access date. A curated reading corpus is not a global ranking.
+  access date. A curated reading corpus is not a global ranking. If the current environment
+  cannot directly query the named bibliographic database and record the access date, decline
+  to produce the ranking. An undated ranking reported by a secondary source does not satisfy
+  this requirement. Never fill the gap with remembered papers, fabricated bibliographic
+  records, search snippets, or a plausible-looking top-three list.
 
 For every number, record unit, denominator, population or instance set, aggregation, uncertainty,
 and source artifact. Check tables, figures, abstract, body, and conclusion for identical definitions.

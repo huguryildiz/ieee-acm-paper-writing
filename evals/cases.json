@@ -62,7 +62,7 @@
         "The 8 excluded divergent scenarios are reported, with the headline statistic marked as conditional on the completed subset."
       ],
       "must_not": [
-        "The words 'validated in the field' or equivalent appear in the manuscript text.",
+        "The manuscript text asserts or implies that field validation, field testing, or deployment was performed; an explicit statement that no such validation was performed is allowed.",
         "The excluded scenarios are omitted from the drafted text."
       ]
     },

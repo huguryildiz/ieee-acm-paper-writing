@@ -246,9 +246,14 @@ evidence remains relevant to wording the user requested, the response must conta
 queries`, even when the manuscript prose already omits or narrows that wording. Returning only the
 narrowed prose in that situation violates this output contract.
 
+For an `expand` request, every setup detail that the supplied record marks as missing or unrecorded
+must appear as a concrete external `Author queries` action. Mentioning the missing detail only as a
+reproducibility limitation inside the expanded manuscript prose does not satisfy the request.
+
 ### Audit mode
 
-Use `Critical`, `Major`, `Minor`, and `Editorial`. Do not include an empty severity section.
+Prefix every reported finding with exactly one of `Critical`, `Major`, `Minor`, or `Editorial`.
+Do not leave findings as unlabeled bullets and do not include an empty severity section.
 
 ### Humanize mode
 
