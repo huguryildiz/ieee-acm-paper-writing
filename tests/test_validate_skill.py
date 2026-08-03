@@ -290,6 +290,26 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         self.assertIn("Omitting, narrowing, or qualifying an unsupported requested claim", skill)
         self.assertIn("A limitation sentence inside the\nmanuscript is not a substitute", skill)
 
+    def test_humanize_cannot_add_causal_attribution(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        cases = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))
+        humanize = next(case for case in cases["cases"]
+                        if case["name"] == "humanize_preserves_claims")
+        self.assertIn("Do not introduce a causal explanation, mechanism claim", skill)
+        self.assertIn("Keep an observed comparison descriptive", skill)
+        self.assertIn("pivotal role of adaptive batching", humanize["prompt"])
+        self.assertIn("No experiments beyond 64 nodes and no statistical test supplied",
+                      humanize["prompt"])
+
+    def test_ieee_ibid_rule_distinguishes_clear_and_ambiguous_antecedents(self):
+        venue = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "references" / "venue-guidance.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("shorthand's antecedent unambiguous", venue)
+        self.assertIn("request the source number instead of guessing one", venue)
+
     def test_readme_lists_every_mode_and_paired_artifacts(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         for mode in (
