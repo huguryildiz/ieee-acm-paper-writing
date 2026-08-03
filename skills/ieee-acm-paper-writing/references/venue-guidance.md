@@ -110,6 +110,10 @@ In-text citations:
 - Cite parts of a work as "[3, Thm. 1]," "[3, pp. 5–10]," "[3, eq. (2)]," "[3, Fig. 1],"
   "[3, Sect. 4.5]," "[3, Ch. 2, pp. 5–10]," "[3, Algorithm 5]." Replace "ibid." and "op. cit."
   with the explicit earlier reference number and renumber accordingly.
+- When the supplied sentence makes the shorthand's antecedent unambiguous, substitute that
+  bracketed number directly (for example, `ibid.` immediately after `[9]` becomes `[9]`). If
+  multiple antecedents remain plausible from the supplied material, flag the ambiguity and
+  request the source number instead of guessing one.
 
 Reference-list mechanics:
 

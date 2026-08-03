@@ -173,9 +173,12 @@ catalog in [manuscript-structure-style.md](references/manuscript-structure-style
    table, or section labels, scope conditions, or hedges that encode real evidential
    uncertainty. Remove a hedge only when it softens a claim the supplied evidence fully
    supports.
-3. Keep the formal register of the target venue. Humanizing means natural expert prose, not
+3. Do not introduce a causal explanation, mechanism claim, or component attribution that
+   is absent from the supplied evidence. Keep an observed comparison descriptive unless
+   the study design identifies the claimed cause and defends that identification.
+4. Keep the formal register of the target venue. Humanizing means natural expert prose, not
    conversational tone.
-4. This mode improves prose quality; it is not a tool for concealing AI assistance. Never
+5. This mode improves prose quality; it is not a tool for concealing AI assistance. Never
    remove or weaken a generative-AI disclosure, and the target publication's disclosure
    policy continues to apply to the humanized text.
 
