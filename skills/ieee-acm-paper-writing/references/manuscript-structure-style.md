@@ -345,3 +345,11 @@ security, validity threats, and disclosure.
 Do not copy sentences, distinctive phrases, argument sequences, figure designs, citation clusters,
 or an individual author's fingerprint. Do not invent manuscript content from reference papers.
 Scientific integrity and current official instructions override every style preference.
+
+When a request asks for an identifiable author's personal prose or makes generated text appear to
+be that author's work, decline that style constraint. Give an explicit causal reason, using
+"because" or an equivalent construction: an individual textual fingerprint belongs to that author,
+is not a transferable corpus pattern, and reproducing it would misrepresent authorship. Merely
+announcing a neutral alternative does not explain the refusal. Still complete the substantive
+writing task in a neutral scholarly voice, using only high-level structural and reasoning patterns
+that do not imitate the author.
