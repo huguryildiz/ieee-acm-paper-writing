@@ -322,6 +322,8 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         self.assertIn("cannot directly query the named bibliographic database", integrity)
         self.assertIn("An undated ranking reported by a secondary source does not satisfy", integrity)
         self.assertIn("plausible-looking top-three list", integrity)
+        self.assertIn("do not evade this boundary by supplying the same number of remembered", integrity)
+        self.assertIn("contains no paper identities and must never be cited as provenance", integrity)
 
     def test_expand_missing_details_remain_external_actions(self):
         skill = (

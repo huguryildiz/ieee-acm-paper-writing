@@ -62,7 +62,11 @@ invalidates that artifact; its authority does not erase the contradiction.
   cannot directly query the named bibliographic database and record the access date, decline
   to produce the ranking. An undated ranking reported by a secondary source does not satisfy
   this requirement. Never fill the gap with remembered papers, fabricated bibliographic
-  records, search snippets, or a plausible-looking top-three list.
+  records, search snippets, or a plausible-looking top-three list. After declining an
+  unverifiable ranking, do not evade this boundary by supplying the same number of remembered
+  papers as an "unranked," "strong," "landmark," or "candidate" substitute list. Request a
+  verifiable database search or user-supplied sources instead. The de-identified calibration
+  corpus contains no paper identities and must never be cited as provenance for a bibliography.
 
 For every number, record unit, denominator, population or instance set, aggregation, uncertainty,
 and source artifact. Check tables, figures, abstract, body, and conclusion for identical definitions.
