@@ -105,7 +105,8 @@ In-text citations:
 - Cite on the line, in square brackets, inside the punctuation. Citations may read as nouns:
   "according to [1]," "Brown and Jones [5]," "Wood et al. [7]."
 - Write every cited number out; do not use en-dash ranges: "[1], [2], [3], [4]," never "[1]–[4]."
-- Use "et al." in text when a cited work has three or more authors.
+- Use "et al." in text when a cited work has three or more authors. Set the Latin abbreviation in
+  roman type, not italics; in Markdown output write `et al.` rather than `*et al.*`.
 - Cite parts of a work as "[3, Thm. 1]," "[3, pp. 5–10]," "[3, eq. (2)]," "[3, Fig. 1],"
   "[3, Sect. 4.5]," "[3, Ch. 2, pp. 5–10]," "[3, Algorithm 5]." Replace "ibid." and "op. cit."
   with the explicit earlier reference number and renumber accordingly.
@@ -114,7 +115,8 @@ Reference-list mechanics:
 
 - Reference numbers sit flush left in square brackets, forming their own hanging column.
 - Give authors' names as initials preceding the surname; no commas around Jr., Sr., or III.
-- List up to six author names; for more than six, give the first author followed by "et al."
+- List up to six author names; for more than six, give the first author followed by roman
+  "et al." (for example, `A. Author et al.`, not `A. Author *et al.*`).
   For non-IEEE sources, "et al." is also acceptable when further names are unavailable.
 - End every reference with a period unless it ends with a URL. When a reference carries both a
   DOI or accessed date and a URL, place the DOI or accessed date first, close it with a period,

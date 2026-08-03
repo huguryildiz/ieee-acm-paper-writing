@@ -1,5 +1,39 @@
 # Changelog
 
+## Unreleased — 0.6.2 candidate
+
+### Added
+
+- Four adversarial behavioral cases for `expand`, `compress`, `outline`, and the complete
+  `--html-map` artifact path, bringing the suite to 27 cases and covering every declared mode.
+- An explicit mode-to-case coverage map and validator gates that reject missing mode or modifier
+  coverage.
+- Artifact-aware behavioral collection: declared files must stay under `tmp/evals/`, are archived
+  and hashed with the response, and make a report stale if missing or replaced.
+- A retained, multi-client behavioral evidence bundle and CI gate that validates every response,
+  generated artifact, case contract, score, denominator, and failed-case declaration.
+
+### Changed
+
+- The stable README and showcase commands keep both the `skills` installer (`1.5.21`) and the latest
+  existing skill release (`v0.6.1`) pinned until the candidate is tagged.
+- The plugin manifests declare the `0.6.2-rc.1` rolling candidate without presenting a nonexistent
+  `v0.6.2` tag as a stable install channel.
+- The README now separates mechanical evidence validation from release approval and records that
+  the retained behavioral evidence describes the post-64cec1a candidate rather than `v0.6.1`.
+- Installation documentation now labels Git-backed plugin marketplaces as rolling channels and
+  distinguishes them from release-stable tagged-clone, CLI, and manual-copy paths.
+- The collector now pins the repository-local `SKILL.md` as its sole authority, scans both default
+  and environment-selected Codex and Claude configuration roots, and passes the checked environment
+  unchanged to a direct, shell-free agent subprocess. Known skill/cache collisions and authority-
+  changing command wrappers or options are rejected before invoking an agent.
+- The installable-skill hash now covers every distributed file recursively, including the renderer
+  and all JSON/HTML examples. Symlinks are rejected before generated-cache exclusions are applied.
+- Retained review ledgers now require a non-empty evidence quotation or an explicit full-response
+  absence-inspection record for every criterion decision.
+- The IEEE reference-format cases and final output gate now reject duplicated brackets and
+  italicized `et al.`, closing false-positive and observed model-output gaps.
+
 ## v0.6.1 — 2026-08-03
 
 ### Added
