@@ -44,13 +44,22 @@ statistical-analysis package, or automatic submission-acceptance judge.
 ## Quick start
 
 Invoke the skill in an agent conversation with the manuscript path, the requested mode, and the
-evidence that controls the text:
+evidence that controls the text. **The invocation prefix is host-specific** — the examples in this
+README use the Codex form:
+
+| Agent host | Prefix | Example |
+| --- | --- | --- |
+| Codex CLI and IDE extension | `@` | `@ieee-acm-paper-writing audit manuscript.md` |
+| Claude Code | `/` | `/ieee-acm-paper-writing audit manuscript.md` |
+
+Either host also selects the skill from a plain-language request that matches its description, so
+the prefix is a way to name the skill explicitly rather than a required syntax.
 
 ```text
-$ieee-acm-paper-writing rewrite sections/results.md using results/ and preserve all numbers, citations, and figure labels
-$ieee-acm-paper-writing draft abstract from manuscript.md and verified results in artifacts/
-$ieee-acm-paper-writing humanize sections/introduction.md without changing claims or evidence-bearing hedges
-$ieee-acm-paper-writing section-audit sections/method.md against config/, logs/, and cited sources
+@ieee-acm-paper-writing rewrite sections/results.md using results/ and preserve all numbers, citations, and figure labels
+@ieee-acm-paper-writing draft abstract from manuscript.md and verified results in artifacts/
+@ieee-acm-paper-writing humanize sections/introduction.md without changing claims or evidence-bearing hedges
+@ieee-acm-paper-writing section-audit sections/method.md against config/, logs/, and cited sources
 ```
 
 The skill returns text in the conversation unless the user requests an in-place file edit. It asks
@@ -170,10 +179,13 @@ codex plugin marketplace add .
 codex plugin add ieee-acm-paper-writing@ieee-acm-paper-writing
 ```
 
-For a Git-backed install after the plugin-bearing revision is available on GitHub, replace `.` with
-`huguryildiz/ieee-acm-paper-writing`. Start a new Codex thread after installation so the skill is
-discovered. The plugin adds no MCP server, app connector, authentication flow, or background
-service; manuscript access remains limited to the permissions of the active Codex session.
+For a Git-backed install, replace `.` with `huguryildiz/ieee-acm-paper-writing`. Start a new Codex
+thread after installation so the skill is discovered. The plugin adds no MCP server, app connector,
+credential prompt, or background service; manuscript access remains limited to the permissions of
+the active Codex session. The `authentication` key in
+[`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json) is a required Codex
+marketplace-schema field with no "none" value, so it declares when a credential *would* be
+requested, not that this plugin requests one.
 
 ### Install in an LLM agent host
 
@@ -190,12 +202,20 @@ This installs the skill from the repository's default branch, so it tracks `main
 Use the `skills` CLI path below when a specific released version is required.
 Update later with `/plugin update ieee-acm-paper-writing`.
 
+This path was last exercised end to end on 2026-08-03 with Claude Code 2.1.220: the marketplace
+resolved, the plugin installed and reported `enabled`, and the component inventory registered the
+single `ieee-acm-paper-writing` skill. Because the marketplace entry's source is the repository
+root, this path caches the whole repository (about 9 MB) even though only
+`skills/ieee-acm-paper-writing/` is loaded; the Codex plugin and manual paths copy the skill alone.
+The two manifests behind this path are gated by `scripts/validate_skill.py` in CI, but installing
+through a session command is not something CI can run.
+
 #### Codex and other Agent Skills hosts
 
 Run this from the manuscript repository in which the skill should be available:
 
 ```bash
-npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.0 -a codex -y
+npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.1 -a codex -y
 ```
 
 The repository publishes a single skill, so no `--skill` selector is needed. Replace `-a codex`
@@ -211,35 +231,57 @@ After installation, start a new session in the selected agent host so it discove
 These invocations are agent prompts, not commands for a standalone manuscript-processing
 executable.
 
+#### Manual install, without Node.js or a plugin marketplace
+
+Any host that reads the shared Agent Skills format can load the skill from a plain directory copy.
+Download a release, then place `skills/ieee-acm-paper-writing/` — the whole directory, since
+`SKILL.md` routes to its sibling `references/`, `examples/`, and `scripts/` — under the skill
+directory your host scans:
+
+```bash
+curl -fsSL https://github.com/huguryildiz/ieee-acm-paper-writing/archive/refs/tags/v0.6.1.tar.gz \
+  | tar -xz
+cp -R ieee-acm-paper-writing-0.6.1/skills/ieee-acm-paper-writing <target-directory>/
+```
+
+| Host | Project-scoped target | User-scoped target |
+| --- | --- | --- |
+| Codex CLI and IDE extension | `.agents/skills/` in the repository | `~/.agents/skills/` |
+| Claude Code | `.claude/skills/` in the repository | `~/.claude/skills/` |
+
+The copied directory is self-contained: every link inside it resolves without the rest of this
+repository, and the audit-map renderer needs only Python 3 with no third-party packages. Start a
+new session in the host afterwards so it discovers the skill.
+
 ### Complete skill invocation reference
 
 The supported invocation shape is:
 
 ```text
-$ieee-acm-paper-writing <mode> [supported modifier] <input> [evidence and constraints]
+@ieee-acm-paper-writing <mode> [supported modifier] <input> [evidence and constraints]
 ```
 
 All nine modes are shown below:
 
 ```text
-$ieee-acm-paper-writing draft abstract from evidence.md
-$ieee-acm-paper-writing rewrite sections/results.md
-$ieee-acm-paper-writing expand sections/method.md
-$ieee-acm-paper-writing compress manuscript.md
-$ieee-acm-paper-writing humanize sections/introduction.md
-$ieee-acm-paper-writing outline evidence.md
-$ieee-acm-paper-writing audit manuscript.md
-$ieee-acm-paper-writing section-audit sections/results.md
-$ieee-acm-paper-writing venue-adapt manuscript.md for <publication and article type>
+@ieee-acm-paper-writing draft abstract from evidence.md
+@ieee-acm-paper-writing rewrite sections/results.md
+@ieee-acm-paper-writing expand sections/method.md
+@ieee-acm-paper-writing compress manuscript.md
+@ieee-acm-paper-writing humanize sections/introduction.md
+@ieee-acm-paper-writing outline evidence.md
+@ieee-acm-paper-writing audit manuscript.md
+@ieee-acm-paper-writing section-audit sections/results.md
+@ieee-acm-paper-writing venue-adapt manuscript.md for <publication and article type>
 ```
 
 Style or landmark-paper calibration is a natural-language modifier of the applicable mode, not a
 tenth mode or command-line flag:
 
 ```text
-$ieee-acm-paper-writing draft introduction from evidence.md using the de-identified landmark-paper calibration
-$ieee-acm-paper-writing rewrite sections/method.md using the applicable corpus-calibration exposition pattern
-$ieee-acm-paper-writing outline evidence.md in the exposition pattern appropriate to <technical area>
+@ieee-acm-paper-writing draft introduction from evidence.md using the de-identified landmark-paper calibration
+@ieee-acm-paper-writing rewrite sections/method.md using the applicable corpus-calibration exposition pattern
+@ieee-acm-paper-writing outline evidence.md in the exposition pattern appropriate to <technical area>
 ```
 
 There are no mode-specific CLI flags beyond the optional HTML modifier documented below. State
@@ -283,10 +325,10 @@ JSON, and uses the dependency-free
 present the same findings as a self-contained HTML file.
 
 ```text
-$ieee-acm-paper-writing audit --html-map manuscript.md
-$ieee-acm-paper-writing audit --html-map --out reports/manuscript-audit.html manuscript.md
-$ieee-acm-paper-writing section-audit --html-map manuscript.md
-$ieee-acm-paper-writing section-audit --html-map --out reports/results-audit.html manuscript.md
+@ieee-acm-paper-writing audit --html-map manuscript.md
+@ieee-acm-paper-writing audit --html-map --out reports/manuscript-audit.html manuscript.md
+@ieee-acm-paper-writing section-audit --html-map manuscript.md
+@ieee-acm-paper-writing section-audit --html-map --out reports/results-audit.html manuscript.md
 ```
 
 Every audit-map request returns three distinct deliverables:
@@ -315,7 +357,7 @@ skill installation. To inspect audit-map JSON without sending it to a hosted ser
 matching release and start the loopback-only server:
 
 ```bash
-git clone --branch v0.6.0 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
+git clone --branch v0.6.1 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
 cd ieee-acm-paper-writing
 python3 scripts/serve_local_audit.py
 ```

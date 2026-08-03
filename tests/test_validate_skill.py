@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import subprocess
 import tempfile
 import unittest
@@ -237,16 +238,16 @@ class HtmlMapDocumentationTests(unittest.TestCase):
             "section-audit",
             "venue-adapt",
         ):
-            self.assertIn(f"$ieee-acm-paper-writing {mode}", readme)
+            self.assertIn(f"@ieee-acm-paper-writing {mode}", readme)
         self.assertIn("manuscript-section-audit-map.json", readme)
         self.assertIn("reports/results-audit.json", readme)
 
     def test_readme_documents_complete_modifier_surface(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("### Complete skill invocation reference", readme)
-        self.assertIn("$ieee-acm-paper-writing audit --html-map manuscript.md", readme)
+        self.assertIn("@ieee-acm-paper-writing audit --html-map manuscript.md", readme)
         self.assertIn(
-            "$ieee-acm-paper-writing audit --html-map --out reports/manuscript-audit.html manuscript.md",
+            "@ieee-acm-paper-writing audit --html-map --out reports/manuscript-audit.html manuscript.md",
             readme,
         )
         self.assertIn("natural-language modifier", readme)
@@ -273,13 +274,13 @@ class ModeDocumentationTests(unittest.TestCase):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         for mode in self.MODES:
             self.assertIn(f"`{mode}`", skill)
-            self.assertIn(f"$ieee-acm-paper-writing {mode}", readme)
+            self.assertIn(f"@ieee-acm-paper-writing {mode}", readme)
 
     def test_release_pinned_install_and_workbench_scope_are_documented(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.0", readme)
+        self.assertIn("npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.1", readme)
         self.assertIn("is **not included**", readme)
-        self.assertIn("git clone --branch v0.6.0 --depth 1", readme)
+        self.assertIn("git clone --branch v0.6.1 --depth 1", readme)
 
     def test_plugin_install_path_states_that_it_tracks_the_default_branch(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -338,3 +339,74 @@ class AuditMapShowcaseTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ClaudePluginPackageTests(unittest.TestCase):
+    """Gate the Claude Code manifests, which no CI job can install and exercise."""
+
+    def setUp(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def tearDown(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    @staticmethod
+    def build(root, *, plugin_version="1.2.3", market_version="1.2.3",
+              entry_version="1.2.3", codex_version="1.2.3", source="./",
+              readme="Install with git clone --branch v1.2.3\n"):
+        (root / ".claude-plugin").mkdir(parents=True, exist_ok=True)
+        (root / ".claude-plugin" / "plugin.json").write_text(json.dumps({
+            "name": "ieee-acm-paper-writing",
+            "version": plugin_version,
+            "description": "d",
+            "license": "MIT",
+            "repository": "https://example.invalid/repo",
+        }), encoding="utf-8")
+        (root / ".claude-plugin" / "marketplace.json").write_text(json.dumps({
+            "name": "ieee-acm-paper-writing",
+            "owner": {"name": "owner"},
+            "metadata": {"description": "m", "version": market_version},
+            "plugins": [{
+                "name": "ieee-acm-paper-writing",
+                "source": source,
+                "description": "d",
+                "version": entry_version,
+                "license": "MIT",
+            }],
+        }), encoding="utf-8")
+        codex = root / "plugins" / "ieee-acm-paper-writing" / ".codex-plugin"
+        codex.mkdir(parents=True, exist_ok=True)
+        (codex / "plugin.json").write_text(
+            json.dumps({"name": "ieee-acm-paper-writing", "version": codex_version}),
+            encoding="utf-8",
+        )
+        skill = root / "skills" / "ieee-acm-paper-writing"
+        skill.mkdir(parents=True, exist_ok=True)
+        (skill / "SKILL.md").write_text("---\nname: x\ndescription: y\n---\n", encoding="utf-8")
+        (root / "README.md").write_text(readme, encoding="utf-8")
+
+    def run_check(self, **kwargs):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.build(root, **kwargs)
+            VALIDATOR_MODULE.check_claude_plugin_package(root)
+            return list(VALIDATOR_MODULE.errors)
+
+    def test_aligned_manifests_pass(self):
+        self.assertEqual(self.run_check(), [])
+
+    def test_version_drift_between_manifests_is_rejected(self):
+        errors = self.run_check(codex_version="9.9.9")
+        self.assertTrue(any("disagree on version" in error for error in errors))
+
+    def test_release_not_pinned_in_readme_is_rejected(self):
+        errors = self.run_check(readme="Install from main\n")
+        self.assertTrue(any("pins no install command" in error for error in errors))
+
+    def test_source_without_an_installable_skill_is_rejected(self):
+        errors = self.run_check(source="./docs")
+        self.assertTrue(any("source" in error for error in errors))
+
+    def test_repository_manifests_are_aligned(self):
+        VALIDATOR_MODULE.check_claude_plugin_package(ROOT)
+        self.assertEqual(list(VALIDATOR_MODULE.errors), [])

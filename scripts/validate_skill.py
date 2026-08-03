@@ -8,6 +8,7 @@ Standard library only (no PyYAML). Checks:
   4. evals/cases.json parses, uses safe case names, and matches the v2 schema.
   5. Eval criteria share no distinctive 6-word phrase with any skill file (M5 guard).
   6. agents/openai.yaml exists and is non-empty.
+  6b. Claude Code plugin and marketplace manifests are valid and version-aligned.
   7. The audit-map renderer accepts each example JSON and reproduces its checked-in HTML.
   8. The interactive showcase stays self-contained (no external asset fetch) and intact.
 
@@ -366,8 +367,81 @@ def check_agent_interface(root: Path):
     if description and not 25 <= len(description) <= 64:
         err("skills/ieee-acm-paper-writing/agents/openai.yaml: short_description must be 25-64 characters")
     prompt = values.get("default_prompt", "")
-    if prompt and "$ieee-acm-paper-writing" not in prompt:
-        err("skills/ieee-acm-paper-writing/agents/openai.yaml: default_prompt must mention $ieee-acm-paper-writing")
+    if prompt and "@ieee-acm-paper-writing" not in prompt:
+        err("skills/ieee-acm-paper-writing/agents/openai.yaml: default_prompt must mention @ieee-acm-paper-writing")
+
+
+def check_claude_plugin_package(root: Path):
+    """Validate the Claude Code plugin manifest, marketplace entry, and version agreement.
+
+    The Claude Code install path is a session command, so no CI job can exercise it. This
+    check gates the two manifests it depends on and keeps their version aligned with the
+    Codex manifest and the release the README pins.
+    """
+    plugin_path = root / ".claude-plugin" / "plugin.json"
+    market_path = root / ".claude-plugin" / "marketplace.json"
+    codex_path = root / "plugins" / "ieee-acm-paper-writing" / ".codex-plugin" / "plugin.json"
+    documents = {}
+    for label, path in (
+        ("plugin.json", plugin_path),
+        ("marketplace.json", market_path),
+        ("codex plugin.json", codex_path),
+    ):
+        if not path.is_file():
+            err(f"{path.relative_to(root)}: missing plugin manifest")
+            return
+        try:
+            documents[label] = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            err(f"{path.relative_to(root)}: invalid JSON: {exc}")
+            return
+
+    plugin = documents["plugin.json"]
+    for field in ("name", "version", "description", "license", "repository"):
+        if not isinstance(plugin.get(field), str) or not plugin[field].strip():
+            err(f".claude-plugin/plugin.json: '{field}' must be a non-empty string")
+    if plugin.get("name") != "ieee-acm-paper-writing":
+        err(".claude-plugin/plugin.json: name must equal the skill directory name")
+
+    market = documents["marketplace.json"]
+    entries = market.get("plugins")
+    if not isinstance(entries, list) or len(entries) != 1:
+        err(".claude-plugin/marketplace.json: 'plugins' must list exactly one entry")
+        return
+    entry = entries[0]
+    if not isinstance(entry, dict):
+        err(".claude-plugin/marketplace.json: plugin entry must be an object")
+        return
+    if entry.get("name") != plugin.get("name"):
+        err(".claude-plugin/marketplace.json: entry name must match plugin.json name")
+    source = entry.get("source")
+    if not isinstance(source, str) or not source.strip():
+        err(".claude-plugin/marketplace.json: entry must declare a non-empty 'source'")
+    elif not (root / source).is_dir():
+        err(f".claude-plugin/marketplace.json: source does not resolve to a directory: {source}")
+    elif not (root / source / "skills" / "ieee-acm-paper-writing" / "SKILL.md").is_file():
+        err(f".claude-plugin/marketplace.json: source {source} contains no installable skill")
+    owner = market.get("owner")
+    if not isinstance(owner, dict) or not owner.get("name"):
+        err(".claude-plugin/marketplace.json: 'owner.name' is required")
+
+    versions = {
+        ".claude-plugin/plugin.json": plugin.get("version"),
+        ".claude-plugin/marketplace.json (metadata)": (market.get("metadata") or {}).get("version"),
+        ".claude-plugin/marketplace.json (entry)": entry.get("version"),
+        ".codex-plugin/plugin.json": documents["codex plugin.json"].get("version"),
+    }
+    distinct = {value for value in versions.values() if value is not None}
+    if len(distinct) > 1:
+        detail = ", ".join(f"{name}={value!r}" for name, value in versions.items())
+        err(f"plugin manifests disagree on version: {detail}")
+    declared = plugin.get("version")
+    readme = (root / "README.md").read_text(encoding="utf-8")
+    if isinstance(declared, str) and f"v{declared}" not in readme:
+        err(
+            f"README.md pins no install command for the declared plugin version v{declared}; "
+            "tag the release and update the pinned install and clone commands"
+        )
 
 
 def check_audit_map_renderer(root: Path):
@@ -468,6 +542,7 @@ def main():
         check_readme_case_count(root)
         check_criteria_independence(root)
         check_agent_interface(root)
+        check_claude_plugin_package(root)
         check_audit_map_renderer(root)
         check_audit_map_showcase(root)
     if errors:
@@ -477,7 +552,7 @@ def main():
         sys.exit(1)
     print(
         "OK: frontmatter, calibration policy, links, eval cases, criteria independence, "
-        "agent interface, and audit map valid"
+        "agent interface, Claude plugin manifests, and audit map valid"
     )
 
 

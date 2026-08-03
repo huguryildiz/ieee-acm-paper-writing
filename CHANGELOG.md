@@ -1,5 +1,34 @@
 # Changelog
 
+## v0.6.1 — 2026-08-03
+
+### Added
+
+- A manual installation path that needs neither Node.js nor a plugin marketplace, with the
+  project- and user-scoped skill directories each supported host scans.
+- A host-specific invocation-prefix table in the quick start, so a Claude Code reader is no longer
+  shown only the Codex form.
+- Validation of the Claude Code plugin and marketplace manifests, including agreement between the
+  Claude manifests, the Codex manifest, and the release the README pins, with regression tests. The
+  Claude install path is a session command that CI cannot run, so its manifests are now gated
+  instead.
+
+### Changed
+
+- Invocation examples in the README and the packaged agent interface now use the `@` prefix that
+  Codex accepts, replacing the earlier `$` form; the validator and its tests were updated with them.
+- The Codex plugin card description now matches the Claude plugin card.
+- Installation notes record that the Claude Code marketplace entry caches the whole repository,
+  that the `authentication` key is a required marketplace-schema field rather than a credential
+  prompt this plugin adds, and the date the Claude path was last exercised end to end.
+
+### Fixed
+
+- Release pinning: the previous release predated the author-style refusal rule in
+  `manuscript-structure-style.md`, so the release-pinned install and the default-branch install
+  delivered different behavioral rules. The pinned commands now reference this release, and the
+  validator fails when a declared plugin version has no pinned install command in the README.
+
 ## v0.6.0 — 2026-08-03
 
 ### Added
