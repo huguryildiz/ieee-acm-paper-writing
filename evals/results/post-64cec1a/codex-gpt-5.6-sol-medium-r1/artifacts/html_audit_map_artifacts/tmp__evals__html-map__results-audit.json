@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "title": "Results Section-Audit Map",
+  "subject": "optimality, runtime, and deployment claims",
+  "eyebrow": "Generic IEEE/ACM engineering conventions · synthetic Results excerpt",
+  "summary": "Three findings map the excerpt's load-bearing claims to the supplied solver-log evidence. The map distinguishes exact global optimality from solver status under a relative MIP-gap tolerance, wall-clock guarantees from incomplete solver-log timing, and finite offline optimization evidence from real-time deployment readiness.",
+  "source_label": "Audited Results excerpt",
+  "revision_label": "Evidence-scoped response",
+  "footer": "Generated on 3 August 2026 from the supplied synthetic excerpt by applying the repository-local ieee-acm-paper-writing skill. No target publication was supplied, so venue-specific compliance was not exercised. The HTML presents the canonical text audit and adds no finding or conclusion.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Universal exact-optimality claim is contradicted",
+      "location": "Results excerpt · sentence 1, first clause",
+      "source": "The optimizer always returns the global optimum",
+      "evidence": "The solver logs show that only 9 of 12 runs ended with status OPTIMAL under a 1% relative MIP-gap tolerance. The other 3 reached the time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%. No exact-optimality certificate is supplied.",
+      "consequence": "The universal guarantee is false for the reported evaluation set, and the 9 tolerance-based solver statuses do not establish exact global optimality without an applicable exact certificate.",
+      "correction": "Remove the guarantee. Report the observed statuses and tolerance: 9 of 12 runs ended with solver status OPTIMAL under the 1% relative MIP-gap tolerance; 3 timed out with feasible incumbents at final gaps of 4.1%, 5.3%, and 7.8%.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "2",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Ten-second runtime guarantee is contradicted and unmeasured",
+      "location": "Results excerpt · sentence 1, final clause",
+      "source": "within 10 s.",
+      "evidence": "Three runs reached the 60 s time limit, directly contradicting the claim for the complete 12-instance set. No per-run timing measurements outside the solver logs are supplied, so the 10 s bound is also unsupported for the 9 remaining runs.",
+      "consequence": "The excerpt states a deterministic wall-clock bound that the supplied evidence disproves for at least 3 runs and does not verify for the others.",
+      "correction": "Delete the 10 s claim. If runtime is to be reported, supply per-instance wall-clock measurements with the measurement method, hardware, solver version and settings, thread count, and aggregation; retain the three 60 s timeouts in the reported distribution.",
+      "disposition": "remove"
+    },
+    {
+      "id": "3",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "Real-time deployment readiness is unsupported",
+      "location": "Results excerpt · sentence 3",
+      "source": "The method is therefore ready for real-time deployment.",
+      "evidence": "No deployment experiment is supplied. Solver logs from 12 instances, including three 60 s timeouts, do not establish an operational deadline, end-to-end latency, tail behavior, jitter, scheduling effects, hardware suitability, integration overhead, deadline-miss consequences, or safety under deployment conditions.",
+      "consequence": "The conclusion crosses from bounded offline solver behavior to system-level real-time and deployment readiness without an evaluated bridge.",
+      "correction": "Remove the deployment-readiness conclusion. State only the finite solver outcomes. A future readiness claim requires a defined operational deadline and representative end-to-end deployment measurements, including latency distributions and deadline misses, on the intended hardware and workload.",
+      "disposition": "remove"
+    }
+  ]
+}

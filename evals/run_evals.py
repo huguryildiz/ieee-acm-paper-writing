@@ -29,32 +29,55 @@ import argparse
 import hashlib
 import json
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 HERE = Path(__file__).resolve().parent
 CASES = HERE / "cases.json"
 REFERENCES = HERE.parent / "skills" / "ieee-acm-paper-writing" / "references"
 SKILL_DIR = HERE.parent / "skills" / "ieee-acm-paper-writing"
 CASE_NAME_RE = re.compile(r"[a-z0-9][a-z0-9_-]*")
+REQUIRED_MODES = (
+    "draft", "rewrite", "expand", "compress", "humanize", "outline",
+    "audit", "section-audit", "venue-adapt",
+)
+REQUIRED_MODIFIERS = ("html-map",)
 
 SKILL_PREAMBLE = (
-    "You have the 'ieee-acm-paper-writing' agent skill installed. Read its "
-    "SKILL.md first and follow it exactly, loading the reference files it "
-    "routes to for this task. Then complete the task below and return the "
-    "deliverable a user would see.\n\nTASK:\n"
+    "For this evaluation, the sole authoritative skill copy is the repository-local "
+    "'skills/ieee-acm-paper-writing/SKILL.md'. Do not use a user-level, global, cached, "
+    "or otherwise installed copy with the same name. Read that exact SKILL.md first and "
+    "follow it exactly, resolving every routed reference relative to its directory. Then "
+    "complete the task below and return the deliverable a user would see.\n\nTASK:\n"
 )
 
 
-def load_cases():
+def load_document():
     data = json.loads(CASES.read_text(encoding="utf-8"))
     if not isinstance(data, dict) or data.get("version") != 2:
         sys.exit("cases.json: expected schema version 2")
     if not isinstance(data.get("cases"), list):
         sys.exit("cases.json: 'cases' must be a list")
-    return data["cases"]
+    return data
+
+
+def load_cases():
+    return load_document()["cases"]
+
+
+def valid_artifact_path(value):
+    if not isinstance(value, str) or not value or "\\" in value:
+        return False
+    path = PurePosixPath(value)
+    return (
+        not path.is_absolute()
+        and ".." not in path.parts
+        and len(path.parts) > 2
+        and path.parts[:2] == ("tmp", "evals")
+    )
 
 
 def case_problems(cases):
@@ -93,20 +116,62 @@ def case_problems(cases):
             for ref in routing:
                 if isinstance(ref, str) and not (REFERENCES / ref).exists():
                     problems.append(f"{name}: expected_routing references missing file: {ref}")
+        artifacts = case.get("artifacts", [])
+        if not isinstance(artifacts, list):
+            problems.append(f"{name}: artifacts must be a list when present")
+        elif not all(isinstance(artifact, str) for artifact in artifacts):
+            problems.append(f"{name}: artifacts entries must be strings")
+        elif len(set(artifacts)) != len(artifacts):
+            problems.append(f"{name}: artifacts entries must be unique")
+        else:
+            for artifact in artifacts:
+                if not valid_artifact_path(artifact):
+                    problems.append(
+                        f"{name}: artifact paths must be safe relative paths below tmp/evals: "
+                        f"{artifact!r}"
+                    )
+    return problems
+
+
+def coverage_problems(data, cases):
+    problems = []
+    coverage = data.get("coverage")
+    if not isinstance(coverage, dict):
+        return ["coverage must be an object"]
+    known = {case.get("name") for case in cases if isinstance(case, dict)}
+    for group, required in (("modes", REQUIRED_MODES),
+                            ("modifiers", REQUIRED_MODIFIERS)):
+        mapping = coverage.get(group)
+        if not isinstance(mapping, dict):
+            problems.append(f"coverage.{group} must be an object")
+            continue
+        for name in required:
+            case_names = mapping.get(name)
+            if not isinstance(case_names, list) or not case_names:
+                problems.append(f"coverage.{group}.{name} must name at least one case")
+                continue
+            missing = [case_name for case_name in case_names if case_name not in known]
+            if missing:
+                problems.append(
+                    f"coverage.{group}.{name} references unknown cases: "
+                    + ", ".join(missing)
+                )
     return problems
 
 
 def validated_cases():
-    cases = load_cases()
-    problems = case_problems(cases)
+    data = load_document()
+    cases = data["cases"]
+    problems = case_problems(cases) + coverage_problems(data, cases)
     if problems:
         sys.exit("cases.json invalid:\n  - " + "\n  - ".join(problems))
     return cases
 
 
 def cmd_validate(_args):
-    cases = load_cases()
-    problems = case_problems(cases)
+    data = load_document()
+    cases = data["cases"]
+    problems = case_problems(cases) + coverage_problems(data, cases)
     if problems:
         print(f"FAIL: {len(problems)} problem(s)")
         for p in problems:
@@ -153,6 +218,7 @@ def case_hash(case):
         "prompt": case["prompt"],
         "must_pass": case["must_pass"],
         "must_not": case["must_not"],
+        "artifacts": case.get("artifacts", []),
     }
     encoded = json.dumps(
         scored_contract, ensure_ascii=False, sort_keys=True, separators=(",", ":")
@@ -162,6 +228,36 @@ def case_hash(case):
 
 def output_hash(path):
     return sha256_bytes(path.read_bytes())
+
+
+def case_artifact_source_path(declared):
+    root = HERE.parent.resolve()
+    safe_root = (root / "tmp" / "evals").resolve()
+    candidate = root.joinpath(*PurePosixPath(declared).parts)
+    try:
+        candidate.parent.resolve().relative_to(safe_root)
+    except ValueError as exc:
+        raise ValueError(f"unsafe declared artifact path: {declared!r}") from exc
+    return candidate
+
+
+def case_artifact_archive_path(outdir, case_name, declared):
+    safe_name = declared.replace("/", "__")
+    root = Path(outdir).resolve() / "artifacts" / case_name
+    candidate = (root / safe_name).resolve()
+    if candidate.parent != root.resolve():
+        raise ValueError(f"unsafe artifact archive path: {declared!r}")
+    return candidate
+
+
+def archived_artifact_hashes(outdir, case):
+    hashes = {}
+    for declared in case.get("artifacts", []):
+        archived = case_artifact_archive_path(outdir, case["name"], declared)
+        if not archived.is_file():
+            return None
+        hashes[declared] = output_hash(archived)
+    return hashes
 
 
 def skill_hash():
@@ -191,21 +287,57 @@ def cmd_collect(args):
         prompt = SKILL_PREAMBLE + case["prompt"]
         print(f"collect: {case['name']} ...", flush=True)
         output_file = case_output_path(outdir, case["name"])
+        declared_artifacts = case.get("artifacts", [])
+        source_artifacts = [case_artifact_source_path(item) for item in declared_artifacts]
+        existing = [str(path.relative_to(HERE.parent)) for path in source_artifacts if path.exists()]
+        if existing:
+            failures.append(case["name"])
+            print("  error: declared artifact path already exists; remove before collection: "
+                  + ", ".join(existing))
+            continue
         try:
-            result = subprocess.run(args.agent_cmd, shell=True, input=prompt,
-                                    capture_output=True, text=True, timeout=args.timeout)
+            result = subprocess.run(
+                args.agent_cmd, shell=True, input=prompt, capture_output=True,
+                text=True, timeout=args.timeout, cwd=HERE.parent,
+            )
         except subprocess.TimeoutExpired:
             failures.append(case["name"])
             print(f"  error: agent timed out after {args.timeout} s")
+            for source in source_artifacts:
+                if source.is_file() and not source.is_symlink():
+                    source.unlink()
             continue
         if result.returncode != 0:
             failures.append(case["name"])
             print(f"  error: agent exited {result.returncode}; stderr head: "
                   f"{result.stderr[:200]}")
+            for source in source_artifacts:
+                if source.is_file() and not source.is_symlink():
+                    source.unlink()
             continue
         if not result.stdout.strip():
             failures.append(case["name"])
             print("  error: agent returned an empty response")
+            for source in source_artifacts:
+                if source.is_file() and not source.is_symlink():
+                    source.unlink()
+            continue
+        artifact_problem = None
+        for declared, source in zip(declared_artifacts, source_artifacts):
+            if not source.is_file() or source.is_symlink():
+                artifact_problem = f"missing or unsafe declared artifact: {declared}"
+                break
+            try:
+                source.resolve().relative_to((HERE.parent / "tmp" / "evals").resolve())
+            except ValueError:
+                artifact_problem = f"declared artifact escaped tmp/evals: {declared}"
+                break
+        if artifact_problem:
+            failures.append(case["name"])
+            print(f"  error: {artifact_problem}")
+            for source in source_artifacts:
+                if source.is_file() and not source.is_symlink():
+                    source.unlink()
             continue
         temporary = None
         try:
@@ -214,10 +346,17 @@ def cmd_collect(args):
                     prefix=f".{case['name']}.", suffix=".tmp", delete=False) as handle:
                 handle.write(result.stdout)
                 temporary = Path(handle.name)
+            for declared, source in zip(declared_artifacts, source_artifacts):
+                archived = case_artifact_archive_path(outdir, case["name"], declared)
+                archived.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, archived)
             temporary.replace(output_file)
         finally:
             if temporary is not None:
                 temporary.unlink(missing_ok=True)
+            for source in source_artifacts:
+                if source.is_file() and not source.is_symlink():
+                    source.unlink()
     print(f"outputs in {outdir}")
     if failures:
         print(f"failed collections: {', '.join(failures)}")
@@ -244,6 +383,11 @@ def cmd_score(args):
             print(f"skip {case['name']}: empty output file")
             scores.pop(case["name"], None)
             continue
+        current_artifact_hashes = archived_artifact_hashes(outdir, case)
+        if current_artifact_hashes is None:
+            print(f"skip {case['name']}: missing declared artifact")
+            scores.pop(case["name"], None)
+            continue
         old_entry = scores.get(case["name"], {})
         current_case_hash = case_hash(case)
         current_output_hash = output_hash(output_file)
@@ -252,11 +396,13 @@ def cmd_score(args):
             and old_entry.get("case_hash") == current_case_hash
             and old_entry.get("output_hash") == current_output_hash
             and old_entry.get("skill_hash") == current_skill_hash
+            and old_entry.get("artifact_hashes", {}) == current_artifact_hashes
         )
         entry = {
             "case_hash": current_case_hash,
             "output_hash": current_output_hash,
             "skill_hash": current_skill_hash,
+            "artifact_hashes": current_artifact_hashes,
             "must_pass": {},
             "must_not": {},
         }
@@ -308,7 +454,8 @@ def cmd_report(args):
             continue
         if (entry.get("case_hash") != case_hash(case)
                 or entry.get("output_hash") != output_hash(output_file)
-                or entry.get("skill_hash") != current_skill_hash):
+                or entry.get("skill_hash") != current_skill_hash
+                or entry.get("artifact_hashes", {}) != archived_artifact_hashes(args.outdir, case)):
             stale += 1
             print(f"STALE     {name}")
             continue

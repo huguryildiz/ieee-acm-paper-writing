@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "title": "Post-64cec1a candidate behavioral evidence",
+  "base_commit": "64cec1afeb6d42a8bb1f2b0aec281f6f2bb91a32",
+  "candidate": {
+    "skill_hash": "ea1badec6ce9cbfe590b73bf81265ddaad3c24e117ab3a17af44e936f906333d",
+    "cases_sha256": "2d824f6d18d003a5e2d8df3d8e08adf825f005a581782fb5af68488a068b007a",
+    "case_count": 27,
+    "must_pass_criteria": 92,
+    "must_not_criteria": 55
+  },
+  "collection": {
+    "repository_skill_authority": "skills/ieee-acm-paper-writing/SKILL.md",
+    "same_named_user_or_cached_copy_allowed": false,
+    "expected_routing_scored": false,
+    "date": "2026-08-03",
+    "timezone": "Europe/Istanbul"
+  },
+  "scoring": {
+    "method": "agent-assisted criterion scoring",
+    "judge_cli": "Claude Code 2.1.220",
+    "requested_model": "opus",
+    "resolved_primary_model": "claude-opus-5",
+    "requested_effort": "high",
+    "independent_human_review": false,
+    "ambiguous_or_missing_must_pass": false
+  },
+  "campaigns": [
+    {
+      "id": "codex-gpt-5.6-sol-medium-r1",
+      "client": "Codex CLI",
+      "client_version": "0.144.6",
+      "model": "gpt-5.6-sol",
+      "effort": "medium",
+      "replication": 1,
+      "started_at": "2026-08-03T12:55:45+03:00",
+      "completed_at": "2026-08-03T13:21:23+03:00",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "codex-gpt-5.6-sol-medium-r1/responses.jsonl",
+      "scores": "codex-gpt-5.6-sol-medium-r1/scores.json",
+      "review_ledger": "codex-gpt-5.6-sol-medium-r1/review-ledger.json",
+      "artifacts_dir": "codex-gpt-5.6-sol-medium-r1/artifacts",
+      "strict_pass": false,
+      "failed_case_ids": [
+        "citation_metadata_vs_support",
+        "landmark_corpus_not_ranking"
+      ]
+    },
+    {
+      "id": "codex-gpt-5.6-sol-medium-r2",
+      "client": "Codex CLI",
+      "client_version": "0.144.6",
+      "model": "gpt-5.6-sol",
+      "effort": "medium",
+      "replication": 2,
+      "started_at": "2026-08-03T12:55:55+03:00",
+      "completed_at": "2026-08-03T13:22:57+03:00",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "codex-gpt-5.6-sol-medium-r2/responses.jsonl",
+      "scores": "codex-gpt-5.6-sol-medium-r2/scores.json",
+      "review_ledger": "codex-gpt-5.6-sol-medium-r2/review-ledger.json",
+      "artifacts_dir": "codex-gpt-5.6-sol-medium-r2/artifacts",
+      "strict_pass": true,
+      "failed_case_ids": []
+    },
+    {
+      "id": "claude-sonnet-high-r1",
+      "client": "Claude Code",
+      "client_version": "2.1.220",
+      "model": "sonnet (requested alias)",
+      "effort": "high",
+      "replication": 1,
+      "started_at": "2026-08-03T12:56:27+03:00",
+      "completed_at": "2026-08-03T13:33:05+03:00",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "claude-sonnet-high-r1/responses.jsonl",
+      "scores": "claude-sonnet-high-r1/scores.json",
+      "review_ledger": "claude-sonnet-high-r1/review-ledger.json",
+      "artifacts_dir": "claude-sonnet-high-r1/artifacts",
+      "strict_pass": false,
+      "failed_case_ids": [
+        "industrial_style_profile",
+        "humanize_preserves_claims"
+      ]
+    }
+  ]
+}
