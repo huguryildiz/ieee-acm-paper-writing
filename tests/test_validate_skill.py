@@ -316,11 +316,19 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         self.assertIn("ledger must name each comparator carried through", skill)
 
     def test_rankings_require_a_direct_dated_database_query(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
         integrity = (
             ROOT / "skills" / "ieee-acm-paper-writing" / "references" / "integrity-audit.md"
         ).read_text(encoding="utf-8")
-        self.assertIn("cannot directly query the named bibliographic database", integrity)
-        self.assertIn("An undated ranking reported by a secondary source does not satisfy", integrity)
+        self.assertIn("Apply this binary gate whenever the user asks", skill)
+        self.assertIn("inspectable, retained bibliographic-database export", skill)
+        self.assertIn("unsupported statement that a database was queried", skill)
+        self.assertIn("Output\nno specific paper title", skill)
+        self.assertIn('"complementary," or "candidates,"', skill)
+        self.assertIn("Require an inspectable, retained", integrity)
+        self.assertIn("unsupported claim of a database query", integrity)
         self.assertIn("plausible-looking top-three list", integrity)
         self.assertIn("do not evade this boundary by supplying the same number of remembered", integrity)
         self.assertIn("contains no paper identities and must never be cited as provenance", integrity)
