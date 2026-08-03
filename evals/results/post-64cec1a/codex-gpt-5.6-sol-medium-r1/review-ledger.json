@@ -167,13 +167,13 @@
         {
           "criterion": "The setup is called a digital shadow despite the absence of automated physical-to-digital model updates.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "Inspected the full rewritten section and author queries; the term 'digital shadow' does not appear anywhere in the response."
         },
         {
           "criterion": "Any capability absent from the evidence is invented.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "Every stated element (offline PSS/E model, weekly manual update, Grafana SCADA display, missing data paths, missing validation) maps to the supplied evidence; no additional capability is introduced."
         }
       ]
@@ -204,7 +204,7 @@
         {
           "criterion": "A replacement citation is invented or asserted from memory as verified.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "No new reference, author, or DOI is introduced anywhere; the only citation retained is [12] attached to an accurate description of Welch's method."
         },
         {
@@ -507,13 +507,13 @@
         {
           "criterion": "The output tells the user the PDFs are required.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "Yanıtın hiçbir yerinde PDF erişimi gerektiğine dair ifade yok; yazar sorgusu yalnızca saha deneyi kanıtını istiyor."
         },
         {
           "criterion": "Prose is attributed to or quoted from a specific landmark paper.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "Metinde atıf, alıntı veya belirli bir makaleye atfedilen ifade bulunmuyor."
         },
         {
@@ -611,7 +611,7 @@
         {
           "criterion": "A malformed sequence such as [[6] or [3]] appears in the proposed correction.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "Önerilen düzeltmelerde bozuk parantez dizisi bulunmuyor."
         }
       ]
@@ -746,7 +746,7 @@
         {
           "criterion": "A withheld detail, such as an ORCID iD or the open-access agreement, is invented or asserted from memory.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "No ORCID identifier, licence name, or open-access agreement value appears anywhere in the response; the ORCID item is handled purely as an unverified requirement."
         },
         {

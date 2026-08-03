@@ -30,7 +30,9 @@ report aggregate numbers without the denominator and the failed-case list.
 import argparse
 import hashlib
 import json
+import os
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -51,6 +53,17 @@ SKILL_NAME = "ieee-acm-paper-writing"
 SKILL_HASH_IGNORED_DIRS = {"__pycache__", ".pytest_cache"}
 SKILL_HASH_IGNORED_NAMES = {".DS_Store"}
 SKILL_HASH_IGNORED_SUFFIXES = {".pyc", ".pyo"}
+UNSAFE_AGENT_WRAPPERS = {
+    "env", "sh", "bash", "dash", "zsh", "fish", "cmd", "powershell", "pwsh",
+}
+SUPPORTED_AGENT_EXECUTABLES = {"claude", "codex"}
+UNSAFE_AGENT_OPTIONS = {
+    "claude": {
+        "--add-dir", "--agent", "--agents", "--mcp-config", "--plugin-dir",
+        "--plugin-url", "--settings", "--setting-sources",
+    },
+    "codex": {"--add-dir", "--cd", "--config", "--profile", "-C", "-c", "-p"},
+}
 
 SKILL_PREAMBLE = (
     "For this evaluation, the sole authoritative skill copy is the repository-local "
@@ -236,28 +249,56 @@ def output_hash(path):
     return sha256_bytes(path.read_bytes())
 
 
-def authority_collisions(home=None):
+def authority_roots(home=None, env=None):
+    """Return the default and effective user configuration roots for supported hosts."""
+    environment = os.environ if env is None else env
+    if home is None:
+        home_value = environment.get("HOME")
+        home = Path(home_value) if home_value else Path.home()
+    else:
+        home = Path(home)
+    default_codex = home / ".codex"
+    default_claude = home / ".claude"
+    codex = Path(environment.get("CODEX_HOME") or default_codex)
+    claude = Path(environment.get("CLAUDE_CONFIG_DIR") or default_claude)
+    return {
+        "agents": home / ".agents",
+        "codex_default": default_codex,
+        "codex_effective": codex,
+        "claude_default": default_claude,
+        "claude_effective": claude,
+    }
+
+
+def authority_collisions(home=None, env=None):
     """Return known same-named skill copies that can contaminate collection.
 
     This is deliberately read-only. It checks the user/global skill locations documented by
     Codex and Claude plus their plugin-cache trees. Collection must run under an isolated user
     environment when any collision is present; the runner never deletes or renames installations.
     """
-    home = Path.home() if home is None else Path(home)
+    roots = authority_roots(home=home, env=env)
     candidates = [
-        home / ".agents" / "skills" / SKILL_NAME,
-        home / ".codex" / "skills" / SKILL_NAME,
-        home / ".claude" / "skills" / SKILL_NAME,
+        roots["agents"] / "skills" / SKILL_NAME,
+        roots["codex_default"] / "skills" / SKILL_NAME,
+        roots["codex_effective"] / "skills" / SKILL_NAME,
+        roots["claude_default"] / "skills" / SKILL_NAME,
+        roots["claude_effective"] / "skills" / SKILL_NAME,
     ]
-    for cache_root in (home / ".codex" / "plugins" / "cache",
-                       home / ".claude" / "plugins" / "cache"):
+    cache_roots = {
+        roots["codex_default"] / "plugins" / "cache",
+        roots["codex_effective"] / "plugins" / "cache",
+        roots["claude_default"] / "plugins" / "cache",
+        roots["claude_effective"] / "plugins" / "cache",
+    }
+    for cache_root in sorted(cache_roots, key=str):
         if cache_root.is_dir():
             candidates.extend(cache_root.glob(f"**/skills/{SKILL_NAME}"))
     return sorted({path.absolute() for path in candidates if path.exists()}, key=str)
 
 
-def require_clean_authority():
-    collisions = authority_collisions()
+def require_clean_authority(env=None):
+    collisions = authority_collisions(env=env)
     if collisions:
         detail = "\n".join(f"  - {path}" for path in collisions)
         raise SystemExit(
@@ -268,8 +309,40 @@ def require_clean_authority():
 
 
 def cmd_authority_check(_args):
-    require_clean_authority()
+    require_clean_authority(env=os.environ)
     print(f"OK: no known same-named {SKILL_NAME} skill copy found outside the repository")
+
+
+def agent_command(value):
+    """Parse a direct agent invocation without a shell or environment-changing wrapper."""
+    try:
+        command = shlex.split(value)
+    except ValueError as exc:
+        raise ValueError(f"invalid agent command: {exc}") from exc
+    if not command:
+        raise ValueError("agent command must not be empty")
+    executable = Path(command[0]).name.lower()
+    if executable in UNSAFE_AGENT_WRAPPERS or "=" in command[0]:
+        raise ValueError(
+            "agent command must invoke the agent directly; environment and shell wrappers "
+            "are not allowed"
+        )
+    if executable not in SUPPORTED_AGENT_EXECUTABLES:
+        raise ValueError(
+            "agent command must directly invoke a supported host: claude or codex"
+        )
+    for token in command[1:]:
+        option = token.split("=", 1)[0]
+        compact_codex_override = (
+            executable == "codex"
+            and any(option.startswith(prefix) and option != prefix
+                    for prefix in ("-C", "-c", "-p"))
+        )
+        if option in UNSAFE_AGENT_OPTIONS[executable] or compact_codex_override:
+            raise ValueError(
+                f"agent command option can change collection authority and is not allowed: {option}"
+            )
+    return command
 
 
 def case_artifact_source_path(declared):
@@ -307,12 +380,12 @@ def skill_tree_files(root=SKILL_DIR):
     files = []
     for path in sorted(root.rglob("*")):
         relative = path.relative_to(root)
+        if path.is_symlink():
+            raise ValueError(f"installable skill hash refuses symlink: {relative.as_posix()}")
         if (any(part in SKILL_HASH_IGNORED_DIRS for part in relative.parts)
                 or path.name in SKILL_HASH_IGNORED_NAMES
                 or path.suffix in SKILL_HASH_IGNORED_SUFFIXES):
             continue
-        if path.is_symlink():
-            raise ValueError(f"installable skill hash refuses symlink: {relative.as_posix()}")
         if path.is_file():
             files.append(path)
     return files
@@ -330,7 +403,12 @@ def skill_hash(root=SKILL_DIR):
 
 
 def cmd_collect(args):
-    require_clean_authority()
+    collection_env = os.environ.copy()
+    require_clean_authority(env=collection_env)
+    try:
+        command = agent_command(args.agent_cmd)
+    except ValueError as exc:
+        raise SystemExit(f"behavioral collection refused: {exc}") from exc
     outdir = Path(args.outdir).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
     failures = []
@@ -348,8 +426,8 @@ def cmd_collect(args):
             continue
         try:
             result = subprocess.run(
-                args.agent_cmd, shell=True, input=prompt, capture_output=True,
-                text=True, timeout=args.timeout, cwd=HERE.parent,
+                command, shell=False, input=prompt, capture_output=True,
+                text=True, timeout=args.timeout, cwd=HERE.parent, env=collection_env,
             )
         except subprocess.TimeoutExpired:
             failures.append(case["name"])

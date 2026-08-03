@@ -23,11 +23,14 @@
   the retained behavioral evidence describes the post-64cec1a candidate rather than `v0.6.1`.
 - Installation documentation now labels Git-backed plugin marketplaces as rolling channels and
   distinguishes them from release-stable tagged-clone, CLI, and manual-copy paths.
-- The collector now pins the repository-local `SKILL.md` as its sole authority, preventing a
-  same-named user or cached installation from silently invalidating candidate evidence; collection
-  now refuses known conflicting Codex and Claude skill/cache locations before invoking an agent.
+- The collector now pins the repository-local `SKILL.md` as its sole authority, scans both default
+  and environment-selected Codex and Claude configuration roots, and passes the checked environment
+  unchanged to a direct, shell-free agent subprocess. Known skill/cache collisions and authority-
+  changing command wrappers or options are rejected before invoking an agent.
 - The installable-skill hash now covers every distributed file recursively, including the renderer
-  and all JSON/HTML examples, while excluding only generated cache files.
+  and all JSON/HTML examples. Symlinks are rejected before generated-cache exclusions are applied.
+- Retained review ledgers now require a non-empty evidence quotation or an explicit full-response
+  absence-inspection record for every criterion decision.
 - The IEEE reference-format cases and final output gate now reject duplicated brackets and
   italicized `et al.`, closing false-positive and observed model-output gaps.
 

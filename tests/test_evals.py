@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -40,15 +41,51 @@ class RunnerAuthorityTests(unittest.TestCase):
     def test_known_user_and_cache_copies_are_detected(self):
         with tempfile.TemporaryDirectory() as tmp:
             home = Path(tmp)
-            direct = home / ".codex" / "skills" / "ieee-acm-paper-writing"
+            agents = home / ".agents" / "skills" / "ieee-acm-paper-writing"
+            codex = home / ".codex" / "skills" / "ieee-acm-paper-writing"
+            claude = home / ".claude" / "skills" / "ieee-acm-paper-writing"
             cached = (home / ".claude" / "plugins" / "cache" / "owner" / "plugin" /
                       "1.0.0" / "skills" / "ieee-acm-paper-writing")
-            direct.mkdir(parents=True)
-            cached.mkdir(parents=True)
+            for path in (agents, codex, claude, cached):
+                path.mkdir(parents=True)
             self.assertEqual(
                 RUNNER_MODULE.authority_collisions(home),
-                sorted([direct.absolute(), cached.absolute()], key=str),
+                sorted([path.absolute() for path in (agents, codex, claude, cached)], key=str),
             )
+
+    def test_alternate_codex_and_claude_roots_are_detected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            home = root / "home"
+            default = home / ".codex" / "skills" / "ieee-acm-paper-writing"
+            codex = root / "codex" / "skills" / "ieee-acm-paper-writing"
+            claude = (root / "claude" / "plugins" / "cache" / "owner" / "plugin" /
+                      "1.0.0" / "skills" / "ieee-acm-paper-writing")
+            for path in (default, codex, claude):
+                path.mkdir(parents=True)
+            env = {
+                "HOME": str(home),
+                "CODEX_HOME": str(root / "codex"),
+                "CLAUDE_CONFIG_DIR": str(root / "claude"),
+            }
+            self.assertEqual(
+                RUNNER_MODULE.authority_collisions(env=env),
+                sorted([path.absolute() for path in (default, codex, claude)], key=str),
+            )
+
+    def test_agent_command_rejects_environment_and_config_overrides(self):
+        for command in (
+            "env HOME=/tmp/dirty codex exec",
+            "sh -c 'HOME=/tmp/dirty codex exec'",
+            "codex exec --config model=o3",
+            "codex exec -C/tmp/dirty",
+            "claude -p --plugin-dir /tmp/dirty",
+        ):
+            with self.subTest(command=command), self.assertRaisesRegex(
+                    ValueError, "not allowed|supported host"):
+                RUNNER_MODULE.agent_command(command)
+        self.assertEqual(RUNNER_MODULE.agent_command("codex exec"), ["codex", "exec"])
+        self.assertEqual(RUNNER_MODULE.agent_command("claude -p"), ["claude", "-p"])
 
     def test_collection_refuses_collision_before_agent_invocation(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -57,6 +94,30 @@ class RunnerAuthorityTests(unittest.TestCase):
                                    agent_cmd="agent", timeout=1)
             with mock.patch.object(RUNNER_MODULE, "authority_collisions",
                                    return_value=[collision]), \
+                    mock.patch.object(RUNNER_MODULE.subprocess, "run") as agent:
+                with self.assertRaisesRegex(SystemExit, "collection refused"):
+                    RUNNER_MODULE.cmd_collect(args)
+                agent.assert_not_called()
+
+    def test_collection_passes_the_checked_environment_without_a_shell(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args = SimpleNamespace(outdir=Path(tmp) / "out", case=CASES[0]["name"],
+                                   agent_cmd="codex exec", timeout=1)
+            completed = SimpleNamespace(returncode=0, stdout="agent output", stderr="")
+            with mock.patch.object(RUNNER_MODULE, "authority_collisions", return_value=[]), \
+                    mock.patch.object(RUNNER_MODULE.subprocess, "run",
+                                      return_value=completed) as agent:
+                RUNNER_MODULE.cmd_collect(args)
+            positional, keyword = agent.call_args
+            self.assertEqual(positional[0], ["codex", "exec"])
+            self.assertIs(keyword["shell"], False)
+            self.assertEqual(keyword["env"]["HOME"], os.environ["HOME"])
+
+    def test_collection_rejects_environment_override_before_agent_invocation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            args = SimpleNamespace(outdir=Path(tmp) / "out", case=CASES[0]["name"],
+                                   agent_cmd="env HOME=/tmp/dirty codex exec", timeout=1)
+            with mock.patch.object(RUNNER_MODULE, "authority_collisions", return_value=[]), \
                     mock.patch.object(RUNNER_MODULE.subprocess, "run") as agent:
                 with self.assertRaisesRegex(SystemExit, "collection refused"):
                     RUNNER_MODULE.cmd_collect(args)
@@ -97,11 +158,24 @@ class SkillHashTests(unittest.TestCase):
             self.assertEqual(RUNNER_MODULE.skill_hash(skill), baseline)
 
     def test_hash_rejects_symlinks(self):
+        for relative in ("linked.md", "linked.pyc", "__pycache__/linked.pyc"):
+            with self.subTest(relative=relative), tempfile.TemporaryDirectory() as tmp:
+                skill = Path(tmp)
+                target = skill / "SKILL.md"
+                target.write_text("skill", encoding="utf-8")
+                link = skill / relative
+                link.parent.mkdir(parents=True, exist_ok=True)
+                link.symlink_to(target)
+                with self.assertRaisesRegex(ValueError, "refuses symlink"):
+                    RUNNER_MODULE.skill_hash(skill)
+
+    def test_hash_rejects_ignored_directory_symlink(self):
         with tempfile.TemporaryDirectory() as tmp:
             skill = Path(tmp)
-            target = skill / "SKILL.md"
-            target.write_text("skill", encoding="utf-8")
-            (skill / "linked.md").symlink_to(target)
+            (skill / "SKILL.md").write_text("skill", encoding="utf-8")
+            target = skill / "cache-target"
+            target.mkdir()
+            (skill / "__pycache__").symlink_to(target, target_is_directory=True)
             with self.assertRaisesRegex(ValueError, "refuses symlink"):
                 RUNNER_MODULE.skill_hash(skill)
 

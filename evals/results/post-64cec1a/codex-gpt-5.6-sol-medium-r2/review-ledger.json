@@ -513,7 +513,7 @@
         {
           "criterion": "Prose is attributed to or quoted from a specific landmark paper.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "Metin taranmış; herhangi bir dönüm noktası makaleye atıf, alıntı veya üslup ataması bulunmuyor."
         },
         {
@@ -611,7 +611,7 @@
         {
           "criterion": "A malformed sequence such as [[6] or [3]] appears in the proposed correction.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "Önerilen düzeltmelerde bozuk parantez dizisi bulunmuyor."
         }
       ]

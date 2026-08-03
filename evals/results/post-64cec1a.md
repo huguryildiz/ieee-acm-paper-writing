@@ -31,7 +31,8 @@ absolute collection paths where the HTML-map criterion required exact workspace-
 the earlier judge had incorrectly relaxed that criterion. No retained campaign is a strict pass.
 
 Every campaign includes the complete response set, criterion-level score file, scoring rationale,
-and generated HTML-map JSON/HTML pair. The machine-readable [manifest](post-64cec1a/manifest.json)
+non-empty quoted evidence or an explicit full-response absence-inspection record, and generated
+HTML-map JSON/HTML pair. The machine-readable [manifest](post-64cec1a/manifest.json)
 links the files and declares every failure. `scripts/validate_behavioral_evidence.py` recomputes the
 current skill, case, response, and artifact hashes; checks all criterion keys and verdicts; requires
 two clients and two distinct Codex replications; and fails if a declared denominator or failure list
