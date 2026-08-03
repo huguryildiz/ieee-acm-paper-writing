@@ -230,7 +230,10 @@ Reference-list mechanics:
 
 - Order each entry as author(s), year, then title: "A. B. Author, C. D. Author, and E. F. Author.
   Year. Title of work." Give full given names as printed, not initials, when the source provides
-  them; separate the final author with "and."
+  them; separate the final author with "and." During an audit, compare the original field order
+  before presenting a correction. If the supplied entry begins with the title and places the
+  author afterward, explicitly flag that original title-first order as incorrect; a silently
+  corrected author-year-title rendering does not satisfy the audit.
 - Put the year immediately after the author list and end the title with a period.
 - Close a reference that carries a DOI with the full resolver form (a doi.org URL) and no trailing
   period; older ACM output uses a "DOI:" prefix — prefer the bare resolver URL.
