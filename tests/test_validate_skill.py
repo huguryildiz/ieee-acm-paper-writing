@@ -299,9 +299,13 @@ class HtmlMapDocumentationTests(unittest.TestCase):
                         if case["name"] == "humanize_preserves_claims")
         self.assertIn("Do not introduce a causal explanation, mechanism claim", skill)
         self.assertIn("Keep an observed comparison descriptive", skill)
+        self.assertIn("Never infer that it was the only variable", skill)
+        self.assertIn("isolating ablation, randomization, or another stated identification", skill)
         self.assertIn("pivotal role of adaptive batching", humanize["prompt"])
         self.assertIn("No experiments beyond 64 nodes and no statistical test supplied",
                       humanize["prompt"])
+        self.assertIn("causally attributed to adaptive batching without an identification design",
+                      humanize["must_not"][-1])
 
     def test_humanize_preserves_relative_result_comparators(self):
         skill = (

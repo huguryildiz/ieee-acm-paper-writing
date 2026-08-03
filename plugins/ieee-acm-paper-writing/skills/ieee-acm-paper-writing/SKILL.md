@@ -182,7 +182,14 @@ catalog in [manuscript-structure-style.md](references/manuscript-structure-style
    unanchored comparative number.
 4. Do not introduce a causal explanation, mechanism claim, or component attribution that
    is absent from the supplied evidence. Keep an observed comparison descriptive unless
-   the study design identifies the claimed cause and defends that identification.
+   the study design identifies the claimed cause and defends that identification. Matched
+   hardware and workload, or a label such as `adaptive` versus `fixed`, establishes a
+   comparison but does not by itself establish that the named component was the only changed
+   factor or caused the observed difference. Never infer that it was the only variable. Unless
+   the evidence supplies an isolating ablation, randomization, or another stated identification
+   design, write only that the method showed the observed result versus the named comparator;
+   do not write that the result was `because of`, `due to`, `attributable to`, or demonstrates
+   the role or effect of the component.
 5. Keep the formal register of the target venue. Humanizing means natural expert prose, not
    conversational tone.
 6. This mode improves prose quality; it is not a tool for concealing AI assistance. Never
