@@ -14,9 +14,13 @@ Modes
   collect --agent-cmd CMD        Run each case prompt through an agent command
           --outdir DIR           (prompt on stdin, output captured to
           [--case NAME]          DIR/<case>.md). CMD example:
-                                 'claude -p' or 'codex exec'.
+                                 'claude -p' or 'codex exec'. Writes
+                                 DIR/collection.json with the collection-time
+                                 skill and case identity.
   score   --outdir DIR           Build DIR/scores.json listing every criterion.
           [--case NAME]          Verdicts are left null for manual scoring.
+                                 Refuses to score if the skill changed after
+                                 collection.
   report  --outdir DIR           Aggregate scores.json: a case passes only if
           [--strict]             all must_pass are true and all must_not are
                                  false. Prints per-case results and the
@@ -402,6 +406,58 @@ def skill_hash(root=SKILL_DIR):
     return digest.hexdigest()
 
 
+def collection_record_path(outdir):
+    return Path(outdir) / "collection.json"
+
+
+def write_collection_record(outdir, env):
+    """Capture the skill and case identity that collection actually ran against.
+
+    Recomputing the skill hash at scoring time cannot detect a skill edited after
+    collection, so the hash is captured here and scoring refuses to drift from it.
+    """
+    record = {
+        "skill_hash": skill_hash(),
+        "cases_sha256": sha256_bytes(CASES.read_bytes()),
+        "authority_roots": {
+            name: str(path) for name, path in sorted(authority_roots(env=env).items())
+        },
+    }
+    collection_record_path(outdir).write_text(
+        json.dumps(record, indent=2) + "\n", encoding="utf-8"
+    )
+    return record
+
+
+def read_collection_record(outdir):
+    path = collection_record_path(outdir)
+    if not path.is_file():
+        return None
+    try:
+        record = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        sys.exit(f"{path}: unreadable collection record: {exc}")
+    if not isinstance(record, dict) or not isinstance(record.get("skill_hash"), str):
+        sys.exit(f"{path}: collection record must declare a string skill_hash")
+    return record
+
+
+def attested_skill_hash(outdir):
+    """Return the collection-time skill hash, refusing any post-collection skill drift."""
+    record = read_collection_record(outdir)
+    current = skill_hash()
+    if record is None:
+        print("warning: no collection.json; the recorded skill hash attests the current tree, "
+              "not the tree collection ran against")
+        return current
+    if record["skill_hash"] != current:
+        sys.exit(
+            f"{collection_record_path(outdir)}: the installable skill changed after collection "
+            f"({record['skill_hash']} at collection, {current} now); recollect before scoring"
+        )
+    return record["skill_hash"]
+
+
 def cmd_collect(args):
     collection_env = os.environ.copy()
     require_clean_authority(env=collection_env)
@@ -411,6 +467,7 @@ def cmd_collect(args):
         raise SystemExit(f"behavioral collection refused: {exc}") from exc
     outdir = Path(args.outdir).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
+    write_collection_record(outdir, collection_env)
     failures = []
     for case in selected(validated_cases(), args.case):
         prompt = SKILL_PREAMBLE + case["prompt"]
@@ -438,8 +495,11 @@ def cmd_collect(args):
             continue
         if result.returncode != 0:
             failures.append(case["name"])
-            print(f"  error: agent exited {result.returncode}; stderr head: "
-                  f"{result.stderr[:200]}")
+            # Hosts report setup failures such as "Not logged in" on stdout, so a
+            # stderr-only diagnostic can leave a whole campaign with no explanation.
+            print(f"  error: agent exited {result.returncode}; "
+                  f"stderr head: {result.stderr[:200].strip()!r}; "
+                  f"stdout head: {result.stdout[:200].strip()!r}")
             for source in source_artifacts:
                 if source.is_file() and not source.is_symlink():
                     source.unlink()
@@ -487,6 +547,9 @@ def cmd_collect(args):
                 if source.is_file() and not source.is_symlink():
                     source.unlink()
     print(f"outputs in {outdir}")
+    if skill_hash() != read_collection_record(outdir)["skill_hash"]:
+        failures.append("skill tree changed during collection")
+        print("  error: the installable skill changed while collecting; discard these outputs")
     if failures:
         print(f"failed collections: {', '.join(failures)}")
         sys.exit(1)
@@ -499,7 +562,7 @@ def cmd_score(args):
     if not isinstance(scores, dict):
         sys.exit(f"{scores_path}: expected a JSON object keyed by case name")
     cases = validated_cases()
-    current_skill_hash = skill_hash()
+    current_skill_hash = attested_skill_hash(outdir)
     valid_names = {case["name"] for case in cases}
     scores = {name: entry for name, entry in scores.items() if name in valid_names}
     for case in selected(cases, args.case):
@@ -556,7 +619,7 @@ def cmd_report(args):
     if not isinstance(scores, dict):
         sys.exit(f"{scores_path}: expected a JSON object keyed by case name")
     cases = validated_cases()
-    current_skill_hash = skill_hash()
+    current_skill_hash = attested_skill_hash(args.outdir)
     total = len(cases)
     passed = unscored = missing = stale = 0
     failed_cases = []
