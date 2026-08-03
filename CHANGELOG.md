@@ -1,5 +1,29 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Four adversarial behavioral cases for `expand`, `compress`, `outline`, and the complete
+  `--html-map` artifact path, bringing the suite to 27 cases and covering every declared mode.
+- An explicit mode-to-case coverage map and validator gates that reject missing mode or modifier
+  coverage.
+- Artifact-aware behavioral collection: declared files must stay under `tmp/evals/`, are archived
+  and hashed with the response, and make a report stale if missing or replaced.
+- A retained, multi-client behavioral evidence bundle and CI gate that validates every response,
+  generated artifact, case contract, score, denominator, and failed-case declaration.
+
+### Changed
+
+- The primary README and showcase commands now pin both the `skills` installer (`1.5.21`) and the
+  skill release (`v0.6.1`).
+- Installation documentation now labels Git-backed plugin marketplaces as rolling channels and
+  distinguishes them from release-stable tagged-clone, CLI, and manual-copy paths.
+- The collector now pins the repository-local `SKILL.md` as its sole authority, preventing a
+  same-named user or cached installation from silently invalidating candidate evidence.
+- The IEEE reference-format cases and final output gate now reject duplicated brackets and
+  italicized `et al.`, closing false-positive and observed model-output gaps.
+
 ## v0.6.1 — 2026-08-03
 
 ### Added

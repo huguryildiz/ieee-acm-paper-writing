@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "title": "Section-Audit Map",
+  "subject": "synthetic Results excerpt · solver-status and deployment claims",
+  "eyebrow": "Synthetic evaluation fixture · no target venue supplied",
+  "summary": "A synthetic Results excerpt describing a 12-instance solver run, mapped finding by finding. Each entry preserves the concern layer, identifies the triggering sentence, and shows the bounded correction or author action supported by the excerpt's own solver-log evidence and the explicit statement that no deployment experiment, exact-optimality certificate, or outside timing measurement was supplied.",
+  "source_label": "Flawed source",
+  "revision_label": "Evidence-scoped response",
+  "footer": "Generated on 3 August 2026 by applying the checked-in ieee-acm-paper-writing skill's section-audit mode with the --html-map modifier to a synthetic Results excerpt. The excerpt and its numbers are synthetic evaluation material, not a real manuscript.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Universal optimality claim contradicted by the reported runs",
+      "location": "Results excerpt · sentence 1 vs. sentence 2",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "The next sentence reports that only 9 of 12 runs ended with solver status OPTIMAL, and only under a 1% relative MIP-gap tolerance; the remaining 3 runs reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%.",
+      "consequence": "The unbounded 'always' and 'global optimum' claim is directly contradicted by the study's own data: one quarter of the runs did not terminate at any certified optimum, let alone the exact global optimum.",
+      "correction": "Report the actual disposition: 9 of 12 instances (75%) reached solver status OPTIMAL under a 1% relative MIP-gap tolerance; the remaining 3 (25%) reached the 60 s time limit with feasible incumbents at gaps of 4.1%, 5.3%, and 7.8%. Remove the unbounded 'always' and 'global optimum' wording.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "2",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Unsupported 10 s timing figure",
+      "location": "Results excerpt · sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "The supplied evidence states explicitly that no timing measurements outside these solver logs exist, and the only timing figure in the solver logs is the 60 s time limit applied to the 3 non-optimal runs; no per-instance solve-time data supporting a 10 s figure is supplied.",
+      "consequence": "A specific, precise-sounding timing bound appears in the manuscript text with no supporting measurement, which reads as a fabricated number rather than a reported one.",
+      "correction": "Remove the 10 s claim. If solve-time data for the 9 OPTIMAL runs is later supplied, report that measured figure instead; otherwise state only the 60 s time limit that governs the 3 time-limited runs.",
+      "disposition": "remove"
+    },
+    {
+      "id": "3",
+      "layer": "scientific-support",
+      "severity": "Major",
+      "title": "MIP-gap-tolerance OPTIMAL status conflated with an exact global optimum",
+      "location": "Results excerpt · sentence 2",
+      "source": "9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance",
+      "evidence": "A solver-reported OPTIMAL status at a 1% relative MIP-gap tolerance certifies a solution within 1% of the true optimum, not an exact global optimum; the excerpt itself notes no exact-optimality certificate is supplied.",
+      "consequence": "Labeling these 9 runs as returning 'the global optimum' overstates the certificate the solver actually produced and blurs a bounded-suboptimality guarantee with an exact one.",
+      "correction": "State that the 9 runs are certified within a 1% relative MIP gap, not that they returned the exact global optimum.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "4",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Deployment-readiness claim exceeds a solver-log study",
+      "location": "Results excerpt · sentence 3",
+      "source": "The method is therefore ready for real-time deployment.",
+      "evidence": "The supplied evidence states explicitly that no deployment experiment is supplied, and 3 of 12 (25%) runs did not certify optimality within the 60 s time limit.",
+      "consequence": "The conclusion converts an offline solver-log study with a nontrivial timeout rate into an unsupported real-time deployment-readiness guarantee.",
+      "correction": "Remove the deployment claim. If deployment readiness must be discussed, scope it to the evaluated solver behavior only (9 of 12 instances certified within a 1% gap inside 60 s; 3 of 12 timed out with gaps up to 7.8%) and state that deployment readiness was not evaluated.",
+      "disposition": "remove"
+    }
+  ]
+}

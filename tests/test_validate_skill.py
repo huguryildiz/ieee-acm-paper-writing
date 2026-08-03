@@ -201,11 +201,76 @@ class ReadmeCaseCountTests(unittest.TestCase):
             return list(VALIDATOR_MODULE.errors)
 
     def test_matching_count_passes(self):
-        self.assertEqual(self.check(23, 23), [])
+        self.assertEqual(self.check(27, 27), [])
 
     def test_stale_count_is_rejected(self):
-        errors = self.check(22, 23)
-        self.assertTrue(any("evals/cases.json has 23" in error for error in errors))
+        errors = self.check(26, 27)
+        self.assertTrue(any("evals/cases.json has 27" in error for error in errors))
+
+
+class EvalCoverageTests(unittest.TestCase):
+    def setUp(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def tearDown(self):
+        VALIDATOR_MODULE.errors.clear()
+
+    def test_missing_mode_coverage_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "evals").mkdir()
+            refs = root / "skills" / "ieee-acm-paper-writing" / "references"
+            refs.mkdir(parents=True)
+            case = {
+                "name": "sample", "prompt": "p", "must_pass": ["observable result"],
+                "must_not": [], "expected_routing": [],
+            }
+            modes = {
+                mode: ["sample"]
+                for mode in VALIDATOR_MODULE.REQUIRED_EVAL_MODES
+                if mode != "compress"
+            }
+            document = {
+                "version": 2,
+                "coverage": {
+                    "modes": modes,
+                    "modifiers": {"html-map": ["sample"]},
+                },
+                "cases": [case],
+            }
+            (root / "evals" / "cases.json").write_text(
+                json.dumps(document), encoding="utf-8"
+            )
+            VALIDATOR_MODULE.check_cases(root)
+            self.assertTrue(
+                any("coverage.modes.compress" in error for error in VALIDATOR_MODULE.errors)
+            )
+
+    def test_unsafe_artifact_path_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "evals").mkdir()
+            refs = root / "skills" / "ieee-acm-paper-writing" / "references"
+            refs.mkdir(parents=True)
+            case = {
+                "name": "sample", "prompt": "p", "must_pass": ["observable result"],
+                "must_not": [], "expected_routing": [], "artifacts": ["../escape.html"],
+            }
+            document = {
+                "version": 2,
+                "coverage": {
+                    "modes": {
+                        mode: ["sample"] for mode in VALIDATOR_MODULE.REQUIRED_EVAL_MODES
+                    },
+                    "modifiers": {"html-map": ["sample"]},
+                },
+                "cases": [case],
+            }
+            (root / "evals" / "cases.json").write_text(
+                json.dumps(document), encoding="utf-8"
+            )
+            VALIDATOR_MODULE.check_cases(root)
+            self.assertTrue(any("artifact paths" in error for error in VALIDATOR_MODULE.errors))
 
 
 class HtmlMapDocumentationTests(unittest.TestCase):
@@ -278,7 +343,7 @@ class ModeDocumentationTests(unittest.TestCase):
 
     def test_release_pinned_install_and_workbench_scope_are_documented(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.1", readme)
+        self.assertIn("npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.1", readme)
         self.assertIn("is **not included**", readme)
         self.assertIn("git clone --branch v0.6.1 --depth 1", readme)
 
@@ -353,7 +418,12 @@ class ClaudePluginPackageTests(unittest.TestCase):
     @staticmethod
     def build(root, *, plugin_version="1.2.3", market_version="1.2.3",
               entry_version="1.2.3", codex_version="1.2.3", source="./",
-              readme="Install with git clone --branch v1.2.3\n"):
+              readme=(
+                  "npx skills@1.5.21 add "
+                  "https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v1.2.3\n"
+                  "archive/refs/tags/v1.2.3.tar.gz\n"
+                  "git clone --branch v1.2.3 --depth 1\n"
+              )):
         (root / ".claude-plugin").mkdir(parents=True, exist_ok=True)
         (root / ".claude-plugin" / "plugin.json").write_text(json.dumps({
             "name": "ieee-acm-paper-writing",
@@ -401,7 +471,17 @@ class ClaudePluginPackageTests(unittest.TestCase):
 
     def test_release_not_pinned_in_readme_is_rejected(self):
         errors = self.run_check(readme="Install from main\n")
-        self.assertTrue(any("pins no install command" in error for error in errors))
+        self.assertTrue(any("declared plugin version" in error for error in errors))
+
+    def test_unversioned_installer_is_rejected(self):
+        readme = (
+            "npx skills add "
+            "https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v1.2.3\n"
+            "archive/refs/tags/v1.2.3.tar.gz\n"
+            "git clone --branch v1.2.3 --depth 1\n"
+        )
+        errors = self.run_check(readme=readme)
+        self.assertTrue(any("versioned skills installer" in error for error in errors))
 
     def test_source_without_an_installable_skill_is_rejected(self):
         errors = self.run_check(source="./docs")

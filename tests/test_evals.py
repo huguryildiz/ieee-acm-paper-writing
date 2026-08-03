@@ -21,9 +21,19 @@ def passing_entry(case, output_file):
         "case_hash": RUNNER_MODULE.case_hash(case),
         "output_hash": RUNNER_MODULE.output_hash(output_file),
         "skill_hash": RUNNER_MODULE.skill_hash(),
+        "artifact_hashes": RUNNER_MODULE.archived_artifact_hashes(output_file.parent, case),
         "must_pass": {criterion: True for criterion in case["must_pass"]},
         "must_not": {criterion: False for criterion in case.get("must_not", [])},
     }
+
+
+class RunnerAuthorityTests(unittest.TestCase):
+    def test_collection_preamble_pins_the_repository_skill_copy(self):
+        self.assertIn(
+            "skills/ieee-acm-paper-writing/SKILL.md",
+            RUNNER_MODULE.SKILL_PREAMBLE,
+        )
+        self.assertIn("Do not use a user-level", RUNNER_MODULE.SKILL_PREAMBLE)
 
 
 class ReportTests(unittest.TestCase):
@@ -35,6 +45,12 @@ class ReportTests(unittest.TestCase):
             for case in selected_cases:
                 output_file = outdir / f"{case['name']}.md"
                 output_file.write_text("test output", encoding="utf-8")
+                for declared in case.get("artifacts", []):
+                    artifact = RUNNER_MODULE.case_artifact_archive_path(
+                        outdir, case["name"], declared
+                    )
+                    artifact.parent.mkdir(parents=True, exist_ok=True)
+                    artifact.write_text(f"artifact for {declared}", encoding="utf-8")
                 scores[case["name"]] = passing_entry(case, output_file)
             (outdir / "scores.json").write_text(json.dumps(scores), encoding="utf-8")
             if replace_first and selected_cases:
@@ -87,6 +103,32 @@ class ReportTests(unittest.TestCase):
         result = self.run_report(CASES, wrong_skill_hash=True)
         self.assertEqual(result.returncode, 1)
         self.assertIn(f"STALE     {CASES[0]['name']}", result.stdout)
+
+    def test_missing_declared_artifact_is_stale(self):
+        case = next(case for case in CASES if case.get("artifacts"))
+        with tempfile.TemporaryDirectory() as tmp:
+            outdir = Path(tmp)
+            output_file = outdir / f"{case['name']}.md"
+            output_file.write_text("test output", encoding="utf-8")
+            for declared in case["artifacts"]:
+                artifact = RUNNER_MODULE.case_artifact_archive_path(
+                    outdir, case["name"], declared
+                )
+                artifact.parent.mkdir(parents=True, exist_ok=True)
+                artifact.write_text("artifact", encoding="utf-8")
+            scores = {case["name"]: passing_entry(case, output_file)}
+            (outdir / "scores.json").write_text(json.dumps(scores), encoding="utf-8")
+            first = RUNNER_MODULE.case_artifact_archive_path(
+                outdir, case["name"], case["artifacts"][0]
+            )
+            first.unlink()
+            result = subprocess.run(
+                [sys.executable, str(RUNNER), "report", "--outdir", str(outdir), "--strict"],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(result.returncode, 1)
+            self.assertIn(f"STALE     {case['name']}", result.stdout)
 
     def test_score_resets_verdicts_after_output_change(self):
         case = CASES[0]
@@ -161,6 +203,33 @@ class SchemaTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(ValueError):
                 RUNNER_MODULE.case_output_path(tmp, "../victim")
+
+    def test_artifacts_must_stay_below_eval_tmp(self):
+        base = {
+            "name": "x", "prompt": "p", "must_pass": ["y"],
+            "must_not": [], "expected_routing": [],
+        }
+        for artifact in ("../victim", "/tmp/victim", "tmp/other/file.json", "tmp\\evals\\x"):
+            with self.subTest(artifact=artifact):
+                case = dict(base, artifacts=[artifact])
+                problems = RUNNER_MODULE.case_problems([case])
+                self.assertTrue(any("artifact paths" in problem for problem in problems))
+
+    def test_artifact_entries_must_be_strings(self):
+        case = {
+            "name": "x", "prompt": "p", "must_pass": ["y"],
+            "must_not": [], "expected_routing": [], "artifacts": [{"path": "x"}],
+        }
+        problems = RUNNER_MODULE.case_problems([case])
+        self.assertTrue(any("entries must be strings" in problem for problem in problems))
+
+    def test_coverage_requires_every_mode_and_html_modifier(self):
+        cases = [{"name": "only"}]
+        problems = RUNNER_MODULE.coverage_problems(
+            {"coverage": {"modes": {}, "modifiers": {}}}, cases
+        )
+        self.assertTrue(any("coverage.modes.expand" in problem for problem in problems))
+        self.assertTrue(any("coverage.modifiers.html-map" in problem for problem in problems))
 
 
 if __name__ == "__main__":

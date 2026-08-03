@@ -19,5 +19,7 @@ jobs:
         run: python3 scripts/validate_codex_plugin.py
       - name: Validate evaluation cases (schema v2)
         run: python3 evals/run_evals.py validate
+      - name: Validate retained behavioral evidence
+        run: python3 scripts/validate_behavioral_evidence.py
       - name: Run evaluation-runner regression tests
         run: python3 -m unittest discover -s tests -v
