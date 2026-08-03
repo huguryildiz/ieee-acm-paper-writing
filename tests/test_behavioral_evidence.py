@@ -13,7 +13,7 @@ SPEC.loader.exec_module(VALIDATOR_MODULE)
 
 
 def campaign_inputs(campaign):
-    cases = VALIDATOR_MODULE.RUNNER.validated_cases()
+    cases = VALIDATOR_MODULE.bundle_cases(VALIDATOR_MODULE.BUNDLE)
     scores = VALIDATOR_MODULE.load_json(VALIDATOR_MODULE.BUNDLE / campaign["scores"])
     responses = VALIDATOR_MODULE.read_responses(
         VALIDATOR_MODULE.BUNDLE / campaign["responses"], cases

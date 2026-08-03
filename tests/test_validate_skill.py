@@ -299,9 +299,13 @@ class HtmlMapDocumentationTests(unittest.TestCase):
                         if case["name"] == "humanize_preserves_claims")
         self.assertIn("Do not introduce a causal explanation, mechanism claim", skill)
         self.assertIn("Keep an observed comparison descriptive", skill)
+        self.assertIn("Never infer that it was the only variable", skill)
+        self.assertIn("isolating ablation, randomization, or another stated identification", skill)
         self.assertIn("pivotal role of adaptive batching", humanize["prompt"])
         self.assertIn("No experiments beyond 64 nodes and no statistical test supplied",
                       humanize["prompt"])
+        self.assertIn("causally attributed to adaptive batching without an identification design",
+                      humanize["must_not"][-1])
 
     def test_humanize_preserves_relative_result_comparators(self):
         skill = (
@@ -310,6 +314,52 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         self.assertIn("Keep every relative result anchored to its comparator", skill)
         self.assertIn("Dropping the comparator is a claim change", skill)
         self.assertIn("ledger must name each comparator carried through", skill)
+
+    def test_rankings_require_a_direct_dated_database_query(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        integrity = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "references" / "integrity-audit.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Apply this binary gate whenever the user asks", skill)
+        self.assertIn("inspectable, retained bibliographic-database export", skill)
+        self.assertIn("unsupported statement that a database was queried", skill)
+        self.assertIn("Output\nno specific paper title", skill)
+        self.assertIn('"complementary," or "candidates,"', skill)
+        self.assertIn("Require an inspectable, retained", integrity)
+        self.assertIn("unsupported claim of a database query", integrity)
+        self.assertIn("plausible-looking top-three list", integrity)
+        self.assertIn("do not evade this boundary by supplying the same number of remembered", integrity)
+        self.assertIn("contains no paper identities and must never be cited as provenance", integrity)
+
+    def test_expand_missing_details_remain_external_actions(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("For an `expand` request", skill)
+        self.assertIn("reproducibility limitation inside the expanded manuscript prose", skill)
+
+    def test_audit_findings_require_individual_severity_labels(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Prefix every reported finding with exactly one of", skill)
+        self.assertIn("Do not leave findings as unlabeled bullets", skill)
+
+    def test_acm_audit_must_flag_original_title_first_order(self):
+        venue = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "references" / "venue-guidance.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("compare the original field order", venue)
+        self.assertIn("explicitly flag that original title-first order as incorrect", venue)
+
+    def test_simulation_case_allows_explicit_field_validation_negation(self):
+        cases = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))
+        simulation = next(case for case in cases["cases"]
+                          if case["name"] == "simulation_external_validity")
+        self.assertIn("an explicit statement that no such validation was performed is allowed",
+                      simulation["must_not"][0])
 
     def test_ieee_ibid_rule_distinguishes_clear_and_ambiguous_antecedents(self):
         venue = (

@@ -58,7 +58,17 @@ invalidates that artifact; its authority does not erase the contradiction.
   evidentiary use. Request an actually supporting source as an external author query; do not leave
   the request inside revised manuscript prose and do not propose a source from memory as verified.
 - Scope any citation-count, ranking, or "most-cited" statement to a named database and
-  access date. A curated reading corpus is not a global ranking.
+  access date. A curated reading corpus is not a global ranking. Require an inspectable, retained
+  database export or query-result artifact containing the database, complete query and scope,
+  access date, and counts; without it, decline to produce the ranking. A web search, snippet,
+  individual record, unsupported claim of a database query, or undated ranking reported by a
+  secondary source does not satisfy this requirement. Never fill the gap with remembered papers,
+  fabricated bibliographic
+  records, search snippets, or a plausible-looking top-three list. After declining an
+  unverifiable ranking, do not evade this boundary by supplying the same number of remembered
+  papers as an "unranked," "strong," "landmark," or "candidate" substitute list. Request a
+  verifiable database search or user-supplied sources instead. The de-identified calibration
+  corpus contains no paper identities and must never be cited as provenance for a bibliography.
 
 For every number, record unit, denominator, population or instance set, aggregation, uncertainty,
 and source artifact. Check tables, figures, abstract, body, and conclusion for identical definitions.

@@ -140,6 +140,19 @@ Do not put `TODO`, `TBD`, fabricated placeholders, internal file paths, or agent
 inside publication-ready prose. When evidence is missing, omit the unsupported statement or
 return an external `Author queries` block containing the precise missing item and its impact.
 
+Apply this binary gate whenever the user asks for the "best," "top," "most-cited," or otherwise
+ranked sources. A ranked or citation-count answer is allowed only when the task supplies an
+inspectable, retained bibliographic-database export or query-result artifact that records the named
+database, complete query and scope, query date, and counts. A web search, search snippet, secondary
+ranking, individual database record, or an unsupported statement that a database was queried does
+not satisfy this provenance requirement. If that artifact is absent, decline the ranking. Output
+no specific paper title, author, DOI, citation count, shortlist, or fixed-number substitute
+bibliography. Do not evade the
+gate by calling remembered or locally cataloged papers "unranked," "strong," "landmark,"
+"complementary," or "candidates," and do not claim that the de-identified calibration corpus
+contains or identifies particular papers. Return an `Author queries` action requesting the dated
+database export and the manuscript or verified source set needed for the writing task.
+
 Before finalizing a manuscript-mode response, reconcile the claim inventory against the proposed
 prose. For every unresolved dependency that blocks requested wording, emit one numbered item under
 `Author queries`; do not bury the request in a limitation sentence. Each item must state:
@@ -182,7 +195,14 @@ catalog in [manuscript-structure-style.md](references/manuscript-structure-style
    unanchored comparative number.
 4. Do not introduce a causal explanation, mechanism claim, or component attribution that
    is absent from the supplied evidence. Keep an observed comparison descriptive unless
-   the study design identifies the claimed cause and defends that identification.
+   the study design identifies the claimed cause and defends that identification. Matched
+   hardware and workload, or a label such as `adaptive` versus `fixed`, establishes a
+   comparison but does not by itself establish that the named component was the only changed
+   factor or caused the observed difference. Never infer that it was the only variable. Unless
+   the evidence supplies an isolating ablation, randomization, or another stated identification
+   design, write only that the method showed the observed result versus the named comparator;
+   do not write that the result was `because of`, `due to`, `attributable to`, or demonstrates
+   the role or effect of the component.
 5. Keep the formal register of the target venue. Humanizing means natural expert prose, not
    conversational tone.
 6. This mode improves prose quality; it is not a tool for concealing AI assistance. Never
@@ -239,9 +259,14 @@ evidence remains relevant to wording the user requested, the response must conta
 queries`, even when the manuscript prose already omits or narrows that wording. Returning only the
 narrowed prose in that situation violates this output contract.
 
+For an `expand` request, every setup detail that the supplied record marks as missing or unrecorded
+must appear as a concrete external `Author queries` action. Mentioning the missing detail only as a
+reproducibility limitation inside the expanded manuscript prose does not satisfy the request.
+
 ### Audit mode
 
-Use `Critical`, `Major`, `Minor`, and `Editorial`. Do not include an empty severity section.
+Prefix every reported finding with exactly one of `Critical`, `Major`, `Minor`, or `Editorial`.
+Do not leave findings as unlabeled bullets and do not include an empty severity section.
 
 ### Humanize mode
 
