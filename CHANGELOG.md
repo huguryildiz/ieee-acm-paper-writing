@@ -30,7 +30,30 @@
 - The installable-skill hash now covers every distributed file recursively, including the renderer
   and all JSON/HTML examples. Symlinks are rejected before generated-cache exclusions are applied.
 - Retained review ledgers now require a non-empty evidence quotation or an explicit full-response
-  absence-inspection record for every criterion decision.
+  absence-inspection record for every criterion decision, and every quotation must appear verbatim
+  in the retained response it cites.
+- `collect` writes a `collection.json` identity record and `score` and `report --strict` refuse to
+  run once the installable skill has changed since collection, so a recorded skill hash attests the
+  tree the agents read instead of the tree it is filed under. The retained post-64cec1a bundle
+  predates that record and declares `skill_hash_captured_at_collection: false`.
+- The evidence validator accepts a truthful `independent_human_review: true` when a review record
+  accompanies it, instead of hard-coding the boundary to `false` and blocking the release path it
+  is meant to gate.
+- A prerelease manifest must pin stable install channels to a version this repository actually
+  released, checked against the CHANGELOG.
+- `scripts/build_evidence_bundle.py` assembles a retained bundle from collected campaigns instead
+  of leaving `responses.jsonl`, `review-ledger.json`, and `manifest.json` to hand assembly, which
+  is how a relaxed criterion and paraphrased quotations entered the previous record.
+- A failed collection now reports the head of both stdout and stderr. Hosts print setup failures
+  such as `Not logged in` on stdout, so the previous stderr-only diagnostic could leave an entire
+  campaign with no explanation.
+- The evidence gate no longer names Codex specifically. It requires two agent hosts and two
+  distinct replications on one of them, matching the stated release gate; which host carries the
+  replications is the collector's choice.
+- `scripts/validate_behavioral_evidence.py` validates every bundle under `evals/results/` rather
+  than one hard-coded directory. Each bundle now carries its own `cases.json` snapshot, so evidence
+  stays checkable after the skill or case set moves on, and the summary states whether a bundle
+  still describes the current tree.
 - The IEEE reference-format cases and final output gate now reject duplicated brackets and
   italicized `et al.`, closing false-positive and observed model-output gaps.
 

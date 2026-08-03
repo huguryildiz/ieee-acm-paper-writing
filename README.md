@@ -417,12 +417,31 @@ has binary, output-observable `must_pass` and `must_not` criteria:
 ```bash
 python3 evals/run_evals.py validate
 python3 evals/run_evals.py list
-python3 evals/run_evals.py authority-check
-python3 evals/run_evals.py collect --agent-cmd '<your agent CLI>' --outdir out/
-python3 evals/run_evals.py score --outdir out/
-# Fill each null verdict in out/scores.json after manual review.
-python3 evals/run_evals.py report --outdir out/ --strict
+ISO=~/.eval-isolation/ieee-acm            # HOME/CODEX_HOME/CLAUDE_CONFIG_DIR with credentials only
+export HOME="$ISO/home" CODEX_HOME="$ISO/codex" CLAUDE_CONFIG_DIR="$ISO/claude"
+python3 evals/run_evals.py authority-check                       # must print OK before collecting
+python3 evals/run_evals.py collect --agent-cmd 'codex exec' --outdir out/codex-r1
+python3 evals/run_evals.py score --outdir out/codex-r1
+# Fill each null verdict in out/codex-r1/scores.json after manual review.
+python3 evals/run_evals.py report --outdir out/codex-r1 --strict
 ```
+
+To retain a campaign as evidence rather than as a one-off run, assemble it instead of writing the
+bundle by hand:
+
+```bash
+python3 scripts/build_evidence_bundle.py scaffold --outdir out/codex-r1
+# Fill every verdict, verbatim quotation, and rationale in out/codex-r1/review.json,
+# and the host metadata in out/codex-r1/campaign.json.
+python3 scripts/build_evidence_bundle.py build --config bundle.json
+python3 scripts/validate_behavioral_evidence.py
+```
+
+The builder derives every mechanical field and refuses to emit a bundle when a campaign has no
+collection-time skill record, when the skill changed after collection, when a verdict is missing or
+disagrees with the scores, or when a quotation does not appear in the retained response. The
+environment variables must be set on the runner itself: `--agent-cmd` rejects `env` and shell
+wrappers, and the runner passes the environment it checked to the agent unchanged.
 
 Collection accepts a direct `codex` or `claude` invocation only. It does not use a shell, rejects
 environment-changing wrappers and host options that can add alternate config, plugin, or workspace
@@ -442,7 +461,10 @@ also validates the hashes, scoring completeness, denominator, and failed-case de
 retained [post-64cec1a behavioral evidence](evals/results/post-64cec1a.md). That bundle describes
 the candidate built from base commit `64cec1a`; it is not a retroactive measurement of the earlier
 `v0.6.1` files, whose skill hash differs. The corrected records report 24/27, 26/27, and 25/27;
-every campaign has at least one named failed case. CI does
+every campaign has at least one named failed case. That bundle's skill hash was recomputed after
+collection rather than captured during it, so it identifies the tree the evidence is filed under and
+does not attest the tree the agents read; `collect` now records that identity and `score` refuses to
+run against a skill edited since. CI does
 **not** rerun a host model and therefore cannot establish behavior beyond those retained executions.
 A behavioral claim requires retained model outputs, completed scoring, the full denominator, and the
 failed-case list. The historical
@@ -466,13 +488,21 @@ successes. A tagged release therefore requires all of:
 - independent human review of the criterion decisions and no unresolved failure involving invented
   support, concealed disclosure, lost comparators or scope conditions, copied author fingerprints,
   or unsupported guarantees; and
+- a skill hash captured at collection time, so the evidence attests the tree the agents actually
+  read rather than the tree it was later filed under; and
 - a clean install from the exact candidate commit, followed by a second clean install from the tag
   before the GitHub release is published.
 
+These conditions are the whole gate. A finding outside them — a wording improvement, a coverage idea,
+a tooling nicety — is recorded and scheduled for a later minor release rather than treated as a
+release blocker. That is what keeps the audit loop bounded: the loop ends when these conditions hold,
+not when no one can think of another finding.
+
 The retained post-64cec1a bundle is valuable negative and variability evidence, but it does not
 qualify a release under this gate: its scoring was agent-assisted without independent human review,
-its collection was not mechanically isolated, and all three campaigns contain at least one failed
-case after the corrected HTML-path verdicts.
+its collection was not mechanically isolated, its skill hash was recomputed after collection rather
+than captured during it, and all three campaigns contain at least one failed case after the corrected
+HTML-path verdicts.
 
 ## Scope and limitations
 

@@ -53,6 +53,22 @@ observation of which `SKILL.md` copy each host actually opened. The collection p
 repository-local copy as the sole authority, but mechanical collision refusal was added only after
 these campaigns were retained.
 
+The recorded skill hash also postdates collection, and the manifest declares this as
+`skill_hash_captured_at_collection: false`. These campaigns were collected before the runner wrote a
+collection-time identity record, and the hash algorithm was widened afterwards to cover the whole
+installable tree, so the stored value was recomputed rather than captured. Commit `9ccbeaa`, which
+edited `SKILL.md` and `references/venue-guidance.md`, is dated after every campaign's
+`completed_at`; the retained record cannot establish whether those edits were present in the working
+tree during collection. Treat the hash as an identifier for the tree the evidence is *filed under*,
+not as an attestation of the tree the agents read. `run_evals.py collect` now writes
+`collection.json` and `score` refuses to proceed when the skill has changed since, so future bundles
+carry a real attestation; this one does not.
+
+Six review-ledger quotations were paraphrases or normalizations rather than literal excerpts. They
+were replaced with verbatim text from the same retained response supporting the same verdict, and
+`validate_behavioral_evidence.py` now rejects any quotation that is not present in the response.
+No verdict changed in that repair.
+
 ## Scoring boundary
 
 Scoring was schema-constrained, agent-assisted criterion review with Claude Code 2.1.220,
