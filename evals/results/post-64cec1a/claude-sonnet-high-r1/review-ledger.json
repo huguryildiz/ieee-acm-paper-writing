@@ -408,7 +408,7 @@
         {
           "criterion": "Review-paper authority is converted into digital-twin validation evidence for the user's system.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "No rewriting or claim construction occurred; the response only lists candidate sources and asks for the manuscript, with no transfer of review-paper authority to the user's system."
         }
       ]
@@ -493,7 +493,7 @@
         {
           "criterion": "No source paper is named, quoted, or imitated at sentence level.",
           "verdict": true,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "Inspection of the Introduction shows no paper titles, author names, or quoted passages; only internal skill reference files are named in the preamble."
         },
         {
@@ -507,13 +507,13 @@
         {
           "criterion": "The output tells the user the PDFs are required.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "The response never mentions needing the landmark PDFs; it drafts directly from the evidence packet."
         },
         {
           "criterion": "Prose is attributed to or quoted from a specific landmark paper.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "No attribution or quotation of any landmark paper appears in the draft."
         },
         {
@@ -605,13 +605,13 @@
         {
           "criterion": "The technical content of the sentence is changed rather than only its citation and reference formatting.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "Only citation numbering, \"ibid.\", author truncation, quotation marks, and dashes are addressed; the sentence's technical assertions are untouched."
         },
         {
           "criterion": "A malformed sequence such as [[6] or [3]] appears in the proposed correction.",
           "verdict": false,
-          "evidence_quote": "",
+          "evidence_quote": "[absence verified by full-response inspection]",
           "rationale": "Inspection of all bracket usages shows single, correctly paired brackets throughout."
         }
       ]

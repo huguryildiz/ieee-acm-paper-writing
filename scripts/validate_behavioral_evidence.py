@@ -100,6 +100,9 @@ def validate_ledger(path: Path, cases: list[dict], scores: dict) -> None:
                     fail(f"{path.relative_to(ROOT)}: {case['name']} has a non-binary verdict")
                 if scores[case["name"]][field][row["criterion"]] is not verdict:
                     fail(f"{path.relative_to(ROOT)}: {case['name']} ledger and scores disagree")
+                if (not isinstance(row.get("evidence_quote"), str)
+                        or not row["evidence_quote"].strip()):
+                    fail(f"{path.relative_to(ROOT)}: {case['name']} has empty evidence")
                 if not isinstance(row.get("rationale"), str) or not row["rationale"].strip():
                     fail(f"{path.relative_to(ROOT)}: {case['name']} has an empty rationale")
 

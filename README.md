@@ -424,6 +424,13 @@ python3 evals/run_evals.py score --outdir out/
 python3 evals/run_evals.py report --outdir out/ --strict
 ```
 
+Collection accepts a direct `codex` or `claude` invocation only. It does not use a shell, rejects
+environment-changing wrappers and host options that can add alternate config, plugin, or workspace
+roots, and checks both the default and effective `CODEX_HOME` / `CLAUDE_CONFIG_DIR` trees. The same
+checked environment snapshot is passed to the agent subprocess. Run collection with isolated
+`HOME`, `CODEX_HOME`, and `CLAUDE_CONFIG_DIR` directories containing only the credentials required
+by the selected host.
+
 `--strict` succeeds only when every case has a present agent response, matching response and case
 hashes, complete manual verdicts, and no failed criterion. Missing, unscored, stale, or failed cases
 remain in the denominator. The HTML-map case also declares its paired JSON and HTML files; the
@@ -453,8 +460,9 @@ successes. A tagged release therefore requires all of:
   commit;
 - retained behavioral evidence covering the complete case set on at least two agent hosts, with at
   least two replications on one host;
-- collection performed after `authority-check` passes in an isolated user environment, so no known
-  same-named user/global/cache skill can be discovered;
+- collection performed after `authority-check` passes in an isolated user environment, using a
+  direct supported-host command and the checked `HOME`, `CODEX_HOME`, and `CLAUDE_CONFIG_DIR`, so no
+  known same-named user/global/cache skill can be discovered;
 - independent human review of the criterion decisions and no unresolved failure involving invented
   support, concealed disclosure, lost comparators or scope conditions, copied author fingerprints,
   or unsupported guarantees; and
