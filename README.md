@@ -195,7 +195,7 @@ Update later with `/plugin update ieee-acm-paper-writing`.
 Run this from the manuscript repository in which the skill should be available:
 
 ```bash
-npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.5.0 -a codex -y
+npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.0 -a codex -y
 ```
 
 The repository publishes a single skill, so no `--skill` selector is needed. Replace `-a codex`
@@ -314,7 +314,7 @@ skill installation. To inspect audit-map JSON without sending it to a hosted ser
 matching release and start the loopback-only server:
 
 ```bash
-git clone --branch v0.5.0 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
+git clone --branch v0.6.0 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
 cd ieee-acm-paper-writing
 python3 scripts/serve_local_audit.py
 ```
