@@ -173,12 +173,19 @@ catalog in [manuscript-structure-style.md](references/manuscript-structure-style
    table, or section labels, scope conditions, or hedges that encode real evidential
    uncertainty. Remove a hedge only when it softens a claim the supplied evidence fully
    supports.
-3. Do not introduce a causal explanation, mechanism claim, or component attribution that
+3. Keep every relative result anchored to its comparator. A percentage change, speedup,
+   reduction, or improvement must name what it was measured against, in the same sentence or
+   the one immediately adjacent. Dropping the comparator is a claim change, not a surface
+   change, even when the number itself is copied exactly. If the supplied prose states the
+   number without its comparator, recover the comparator from the supplied evidence and name
+   it; if the evidence identifies none, raise an author query instead of returning an
+   unanchored comparative number.
+4. Do not introduce a causal explanation, mechanism claim, or component attribution that
    is absent from the supplied evidence. Keep an observed comparison descriptive unless
    the study design identifies the claimed cause and defends that identification.
-4. Keep the formal register of the target venue. Humanizing means natural expert prose, not
+5. Keep the formal register of the target venue. Humanizing means natural expert prose, not
    conversational tone.
-5. This mode improves prose quality; it is not a tool for concealing AI assistance. Never
+6. This mode improves prose quality; it is not a tool for concealing AI assistance. Never
    remove or weaken a generative-AI disclosure, and the target publication's disclosure
    policy continues to apply to the humanized text.
 
@@ -240,7 +247,8 @@ Use `Critical`, `Major`, `Minor`, and `Editorial`. Do not include an empty sever
 
 Return the humanized text plus a compact change ledger grouped by machine-idiom category,
 stating what changed and confirming that claims, numbers, citations, notation, and
-evidence-bearing hedges are unchanged.
+evidence-bearing hedges are unchanged. The ledger must name each comparator carried through,
+so a relative result that lost its comparison base is visible rather than silently absent.
 
 ### Outline mode
 
