@@ -518,6 +518,19 @@ def check_claude_plugin_package(root: Path):
                     stable_versions.append(match.group(1))
             if len(set(stable_versions)) > 1:
                 err("README.md stable install channels disagree on release version")
+            elif stable_versions:
+                # A prerelease manifest must still point installers at a version this
+                # repository has actually released, not at an aspirational tag.
+                pinned = stable_versions[0]
+                changelog = root / "CHANGELOG.md"
+                if not changelog.is_file():
+                    err("CHANGELOG.md is missing; a prerelease cannot confirm its stable channel")
+                elif not re.search(rf"^##\s+v{re.escape(pinned)}\s+—",
+                                   changelog.read_text(encoding="utf-8"), re.M):
+                    err(
+                        f"CHANGELOG.md has no released 'v{pinned}' section; the stable install "
+                        "channels pin a version this repository never released"
+                    )
         else:
             release = re.escape(declared)
             required_patterns = {

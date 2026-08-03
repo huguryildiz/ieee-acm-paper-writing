@@ -124,6 +124,45 @@ class RunnerAuthorityTests(unittest.TestCase):
                 agent.assert_not_called()
 
 
+class CollectionProvenanceTests(unittest.TestCase):
+    """The recorded skill hash must attest the tree collection ran against."""
+
+    def collect(self, outdir):
+        args = SimpleNamespace(outdir=outdir, case=CASES[0]["name"],
+                               agent_cmd="codex exec", timeout=1)
+        completed = SimpleNamespace(returncode=0, stdout="agent output", stderr="")
+        with mock.patch.object(RUNNER_MODULE, "authority_collisions", return_value=[]), \
+                mock.patch.object(RUNNER_MODULE.subprocess, "run", return_value=completed):
+            RUNNER_MODULE.cmd_collect(args)
+
+    def test_collection_records_the_skill_hash_it_ran_against(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            outdir = Path(tmp) / "out"
+            self.collect(outdir)
+            record = json.loads((outdir / "collection.json").read_text(encoding="utf-8"))
+            self.assertEqual(record["skill_hash"], RUNNER_MODULE.skill_hash())
+            self.assertIn("claude_effective", record["authority_roots"])
+
+    def test_scoring_refuses_a_skill_edited_after_collection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            outdir = Path(tmp) / "out"
+            self.collect(outdir)
+            record_path = outdir / "collection.json"
+            record = json.loads(record_path.read_text(encoding="utf-8"))
+            record["skill_hash"] = "0" * 64
+            record_path.write_text(json.dumps(record), encoding="utf-8")
+            args = SimpleNamespace(outdir=outdir, case=CASES[0]["name"])
+            with self.assertRaisesRegex(SystemExit, "changed after collection"):
+                RUNNER_MODULE.cmd_score(args)
+
+    def test_missing_record_falls_back_to_the_current_tree_with_a_warning(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            outdir = Path(tmp)
+            self.assertIsNone(RUNNER_MODULE.read_collection_record(outdir))
+            self.assertEqual(RUNNER_MODULE.attested_skill_hash(outdir),
+                             RUNNER_MODULE.skill_hash())
+
+
 class SkillHashTests(unittest.TestCase):
     def test_hash_covers_every_distributed_file_type(self):
         with tempfile.TemporaryDirectory() as tmp:
