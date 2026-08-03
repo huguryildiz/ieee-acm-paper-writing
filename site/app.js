@@ -50,7 +50,7 @@
     codex: {
       name: "Codex",
       prompt: "$",
-      command: "npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.5.0 -a codex -y",
+      command: "npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.0 -a codex -y",
       guidance: "Run this in your manuscript project, then start a new Codex session.",
     },
     "claude-code": {
