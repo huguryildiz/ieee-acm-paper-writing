@@ -15,6 +15,12 @@
 
 ### Changed
 
+- `humanize` must keep every relative result anchored to its comparator, and must recover a missing
+  comparator from the supplied evidence or raise an author query rather than return an unanchored
+  percentage. Dropping the comparison base is now stated to be a claim change rather than a surface
+  change, and the change ledger must name each comparator carried through. An isolated behavioral
+  run reproduced the unanchored-percentage failure twice before this rule and passed after it; that
+  is a single observation per configuration, not a reliability estimate.
 - The stable README and showcase commands keep both the `skills` installer (`1.5.21`) and the latest
   existing skill release (`v0.6.1`) pinned until the candidate is tagged.
 - The plugin manifests declare the `0.6.2-rc.1` rolling candidate without presenting a nonexistent
