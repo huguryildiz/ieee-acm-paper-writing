@@ -1008,9 +1008,9 @@
         },
         {
           "criterion": "The reported artifact paths exactly match the requested workspace-relative destinations.",
-          "verdict": true,
+          "verdict": false,
           "evidence_quote": "/repo/tmp/evals/html-map/results-audit.json",
-          "rationale": "Both reported paths resolve to the requested tmp/evals/html-map/results-audit.json and .html destinations under the workspace root, with identical directories and filenames."
+          "rationale": "The response reports absolute temporary-repository paths rather than the exact workspace-relative destinations required by the criterion."
         }
       ],
       "must_not": [

@@ -5,6 +5,8 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,6 +36,74 @@ class RunnerAuthorityTests(unittest.TestCase):
             RUNNER_MODULE.SKILL_PREAMBLE,
         )
         self.assertIn("Do not use a user-level", RUNNER_MODULE.SKILL_PREAMBLE)
+
+    def test_known_user_and_cache_copies_are_detected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            direct = home / ".codex" / "skills" / "ieee-acm-paper-writing"
+            cached = (home / ".claude" / "plugins" / "cache" / "owner" / "plugin" /
+                      "1.0.0" / "skills" / "ieee-acm-paper-writing")
+            direct.mkdir(parents=True)
+            cached.mkdir(parents=True)
+            self.assertEqual(
+                RUNNER_MODULE.authority_collisions(home),
+                sorted([direct.absolute(), cached.absolute()], key=str),
+            )
+
+    def test_collection_refuses_collision_before_agent_invocation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            collision = Path(tmp) / "ieee-acm-paper-writing"
+            args = SimpleNamespace(outdir=Path(tmp) / "out", case=CASES[0]["name"],
+                                   agent_cmd="agent", timeout=1)
+            with mock.patch.object(RUNNER_MODULE, "authority_collisions",
+                                   return_value=[collision]), \
+                    mock.patch.object(RUNNER_MODULE.subprocess, "run") as agent:
+                with self.assertRaisesRegex(SystemExit, "collection refused"):
+                    RUNNER_MODULE.cmd_collect(args)
+                agent.assert_not_called()
+
+
+class SkillHashTests(unittest.TestCase):
+    def test_hash_covers_every_distributed_file_type(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            skill = Path(tmp)
+            files = (
+                "SKILL.md",
+                "scripts/render_audit_map.py",
+                "examples/example.json",
+                "examples/example.html",
+                "references/integrity-audit.md",
+            )
+            for relative in files:
+                path = skill / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(relative, encoding="utf-8")
+            baseline = RUNNER_MODULE.skill_hash(skill)
+            for relative in files:
+                path = skill / relative
+                original = path.read_text(encoding="utf-8")
+                path.write_text(original + " changed", encoding="utf-8")
+                self.assertNotEqual(RUNNER_MODULE.skill_hash(skill), baseline, relative)
+                path.write_text(original, encoding="utf-8")
+
+    def test_hash_ignores_generated_cache_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            skill = Path(tmp)
+            (skill / "SKILL.md").write_text("skill", encoding="utf-8")
+            baseline = RUNNER_MODULE.skill_hash(skill)
+            cache = skill / "scripts" / "__pycache__" / "renderer.pyc"
+            cache.parent.mkdir(parents=True)
+            cache.write_bytes(b"generated")
+            self.assertEqual(RUNNER_MODULE.skill_hash(skill), baseline)
+
+    def test_hash_rejects_symlinks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            skill = Path(tmp)
+            target = skill / "SKILL.md"
+            target.write_text("skill", encoding="utf-8")
+            (skill / "linked.md").symlink_to(target)
+            with self.assertRaisesRegex(ValueError, "refuses symlink"):
+                RUNNER_MODULE.skill_hash(skill)
 
 
 class ReportTests(unittest.TestCase):

@@ -1,6 +1,6 @@
 {
   "name": "ieee-acm-paper-writing",
-  "version": "0.6.2",
+  "version": "0.6.2-rc.1",
   "description": "Evidence-bounded drafting, rewriting, auditing, and venue adaptation for IEEE and ACM engineering manuscripts.",
   "author": {
     "name": "huguryildiz",

@@ -491,21 +491,49 @@ def check_claude_plugin_package(root: Path):
     declared = plugin.get("version")
     readme = (root / "README.md").read_text(encoding="utf-8")
     if isinstance(declared, str):
-        release = re.escape(declared)
-        required_patterns = {
-            "versioned skills installer and release URL": (
-                rf"npx\s+skills@\d+\.\d+\.\d+\s+add\s+"
-                rf"https://github\.com/huguryildiz/ieee-acm-paper-writing/tree/v{release}\b"
-            ),
-            "manual release archive": rf"archive/refs/tags/v{release}\.tar\.gz",
-            "release-pinned workbench clone": rf"git clone --branch v{release} --depth 1",
-        }
-        for label, pattern in required_patterns.items():
-            if not re.search(pattern, readme):
-                err(
-                    f"README.md has no {label} for declared plugin version v{declared}; "
-                    "tag the release and update every stable install channel"
-                )
+        prerelease = "-" in declared.partition("+")[0]
+        if prerelease:
+            if declared not in readme:
+                err(f"README.md does not identify rolling plugin candidate {declared}")
+            stable = r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
+            stable_patterns = {
+                "versioned skills installer and stable release URL": (
+                    rf"npx\s+skills@\d+\.\d+\.\d+\s+add\s+"
+                    rf"https://github\.com/huguryildiz/ieee-acm-paper-writing/tree/v({stable})"
+                    r"(?![-+0-9A-Za-z.])"
+                ),
+                "manual stable release archive": (
+                    rf"archive/refs/tags/v({stable})\.tar\.gz"
+                ),
+                "stable-pinned workbench clone": (
+                    rf"git clone --branch v({stable})(?![-+0-9A-Za-z.]) --depth 1"
+                ),
+            }
+            stable_versions = []
+            for label, pattern in stable_patterns.items():
+                match = re.search(pattern, readme)
+                if not match:
+                    err(f"README.md has no {label} while manifests declare {declared}")
+                else:
+                    stable_versions.append(match.group(1))
+            if len(set(stable_versions)) > 1:
+                err("README.md stable install channels disagree on release version")
+        else:
+            release = re.escape(declared)
+            required_patterns = {
+                "versioned skills installer and release URL": (
+                    rf"npx\s+skills@\d+\.\d+\.\d+\s+add\s+"
+                    rf"https://github\.com/huguryildiz/ieee-acm-paper-writing/tree/v{release}\b"
+                ),
+                "manual release archive": rf"archive/refs/tags/v{release}\.tar\.gz",
+                "release-pinned workbench clone": rf"git clone --branch v{release} --depth 1",
+            }
+            for label, pattern in required_patterns.items():
+                if not re.search(pattern, readme):
+                    err(
+                        f"README.md has no {label} for declared plugin version v{declared}; "
+                        "tag the release and update every stable install channel"
+                    )
 
 
 def check_audit_map_renderer(root: Path):

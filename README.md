@@ -189,8 +189,9 @@ codex plugin marketplace add .
 codex plugin add ieee-acm-paper-writing@ieee-acm-paper-writing
 ```
 
-For a rolling Git-backed install, replace `.` with `huguryildiz/ieee-acm-paper-writing`. For a
-release-stable native install, clone `v0.6.2`, run the two commands above from that clone, and keep
+For a rolling Git-backed install, replace `.` with `huguryildiz/ieee-acm-paper-writing`. The rolling
+plugin manifests currently identify the untagged candidate as `0.6.2-rc.1`. For a release-stable
+native install, clone `v0.6.1`, run the two commands above from that clone, and keep
 the marketplace source local. Start a new Codex thread after installation so the skill is
 discovered. The plugin adds no MCP server, app connector,
 credential prompt, or background service; manuscript access remains limited to the permissions of
@@ -227,7 +228,7 @@ through a session command is not something CI can run.
 Run this from the manuscript repository in which the skill should be available:
 
 ```bash
-npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.2 -a codex -y
+npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.1 -a codex -y
 ```
 
 The repository publishes a single skill, so no `--skill` selector is needed. Replace `-a codex`
@@ -236,7 +237,7 @@ rather than the installer's selected strategy, and `--global` only when the skil
 available across all projects.
 
 This project-scoped command installs under `.agents/skills/` for Codex and `.claude/skills/` for
-Claude Code. Both the installer (`1.5.21`) and skill (`v0.6.2`) are pinned. The upstream installer
+Claude Code. Both the installer (`1.5.21`) and skill (`v0.6.1`) are pinned. The upstream installer
 collects anonymous usage telemetry by default; prefix the command with
 `DISABLE_TELEMETRY=1` to opt out for that invocation.
 
@@ -252,9 +253,9 @@ Download a release, then place `skills/ieee-acm-paper-writing/` — the whole di
 directory your host scans:
 
 ```bash
-curl -fsSL https://github.com/huguryildiz/ieee-acm-paper-writing/archive/refs/tags/v0.6.2.tar.gz \
+curl -fsSL https://github.com/huguryildiz/ieee-acm-paper-writing/archive/refs/tags/v0.6.1.tar.gz \
   | tar -xz
-cp -R ieee-acm-paper-writing-0.6.2/skills/ieee-acm-paper-writing <target-directory>/
+cp -R ieee-acm-paper-writing-0.6.1/skills/ieee-acm-paper-writing <target-directory>/
 ```
 
 | Host | Project-scoped target | User-scoped target |
@@ -370,7 +371,7 @@ skill installation. To inspect audit-map JSON without sending it to a hosted ser
 matching release and start the loopback-only server:
 
 ```bash
-git clone --branch v0.6.2 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
+git clone --branch v0.6.1 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
 cd ieee-acm-paper-writing
 python3 scripts/serve_local_audit.py
 ```
@@ -416,6 +417,7 @@ has binary, output-observable `must_pass` and `must_not` criteria:
 ```bash
 python3 evals/run_evals.py validate
 python3 evals/run_evals.py list
+python3 evals/run_evals.py authority-check
 python3 evals/run_evals.py collect --agent-cmd '<your agent CLI>' --outdir out/
 python3 evals/run_evals.py score --outdir out/
 # Fill each null verdict in out/scores.json after manual review.
@@ -431,30 +433,38 @@ stale.
 Repository CI runs structural validation, evaluation-schema validation, and regression tests. It
 also validates the hashes, scoring completeness, denominator, and failed-case declarations in the
 retained [post-64cec1a behavioral evidence](evals/results/post-64cec1a.md). That bundle describes
-the candidate built on commit `64cec1a`; it is not a retroactive measurement of the earlier `v0.6.1`
-files, whose skill hash differs. Two of its three campaigns each declare two failed cases. CI does
+the candidate built from base commit `64cec1a`; it is not a retroactive measurement of the earlier
+`v0.6.1` files, whose skill hash differs. The corrected records report 24/27, 26/27, and 25/27;
+every campaign has at least one named failed case. CI does
 **not** rerun a host model and therefore cannot establish behavior beyond those retained executions.
 A behavioral claim requires retained model outputs, completed scoring, the full denominator, and the
 failed-case list. The historical
 [A/B comparison](evals/comparisons/optimization-claim-scope.md) is a worked snapshot, not current
 general evidence of model improvement.
 
-### Release-readiness threshold
+### Release-qualification gate
 
-Because this is a prompt-authored skill rather than deterministic code, no amount of evidence proves
-behavior across every model and execution. A release is therefore cut against a fixed threshold
-rather than against the absence of remaining findings. A tagged release requires all of:
+Because this is a prompt-authored skill rather than deterministic code, no finite campaign proves
+behavior across every model and execution. A raw pass percentage is also not a sufficient release
+gate: one lost comparator or fabricated citation can be more consequential than several editorial
+successes. A tagged release therefore requires all of:
 
-- every structural, plugin, evidence, schema, and regression check green in CI on the release commit;
-- retained behavioral evidence covering at least two agent hosts, with at least two replications on
-  one of them, over the complete case set;
-- at least 90 percent of scored cases passing per campaign, with every failed case named in the
-  manifest, the summary, and this README's linked evidence;
-- pinned installer and release tag consistent across the README, the showcase site, and every plugin
-  manifest, plus a clean install verified from the tag being published.
+- every structural, plugin, evidence, schema, and regression check green in CI on the exact release
+  commit;
+- retained behavioral evidence covering the complete case set on at least two agent hosts, with at
+  least two replications on one host;
+- collection performed after `authority-check` passes in an isolated user environment, so no known
+  same-named user/global/cache skill can be discovered;
+- independent human review of the criterion decisions and no unresolved failure involving invented
+  support, concealed disclosure, lost comparators or scope conditions, copied author fingerprints,
+  or unsupported guarantees; and
+- a clean install from the exact candidate commit, followed by a second clean install from the tag
+  before the GitHub release is published.
 
-Findings that survive that threshold are recorded and scheduled for a later minor release; they do
-not block the current one. This keeps the audit loop bounded, which the threshold exists to do.
+The retained post-64cec1a bundle is valuable negative and variability evidence, but it does not
+qualify a release under this gate: its scoring was agent-assisted without independent human review,
+its collection was not mechanically isolated, and all three campaigns contain at least one failed
+case after the corrected HTML-path verdicts.
 
 ## Scope and limitations
 

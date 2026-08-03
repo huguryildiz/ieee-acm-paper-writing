@@ -3,7 +3,7 @@
   "title": "Post-64cec1a candidate behavioral evidence",
   "base_commit": "64cec1afeb6d42a8bb1f2b0aec281f6f2bb91a32",
   "candidate": {
-    "skill_hash": "ea1badec6ce9cbfe590b73bf81265ddaad3c24e117ab3a17af44e936f906333d",
+    "skill_hash": "7b4ad1b27eaebec0802eaebc9d06d821bef7b2619029f2c2f996c7f38ad8c037",
     "cases_sha256": "2d824f6d18d003a5e2d8df3d8e08adf825f005a581782fb5af68488a068b007a",
     "case_count": 27,
     "must_pass_criteria": 92,
@@ -12,6 +12,7 @@
   "collection": {
     "repository_skill_authority": "skills/ieee-acm-paper-writing/SKILL.md",
     "same_named_user_or_cached_copy_allowed": false,
+    "mechanical_authority_isolation": false,
     "expected_routing_scored": false,
     "date": "2026-08-03",
     "timezone": "Europe/Istanbul"
@@ -43,7 +44,8 @@
       "strict_pass": false,
       "failed_case_ids": [
         "citation_metadata_vs_support",
-        "landmark_corpus_not_ranking"
+        "landmark_corpus_not_ranking",
+        "html_audit_map_artifacts"
       ]
     },
     {
@@ -60,8 +62,10 @@
       "scores": "codex-gpt-5.6-sol-medium-r2/scores.json",
       "review_ledger": "codex-gpt-5.6-sol-medium-r2/review-ledger.json",
       "artifacts_dir": "codex-gpt-5.6-sol-medium-r2/artifacts",
-      "strict_pass": true,
-      "failed_case_ids": []
+      "strict_pass": false,
+      "failed_case_ids": [
+        "html_audit_map_artifacts"
+      ]
     },
     {
       "id": "claude-sonnet-high-r1",

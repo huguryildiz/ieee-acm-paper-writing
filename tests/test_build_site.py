@@ -44,7 +44,7 @@ class SiteBuildTests(unittest.TestCase):
         self.assertIn('data-example-html="/examples/venue-adaptation-audit-map.html"', landing_page)
         self.assertIn('#local-audit-workbench', landing_page)
         self.assertIn('npx skills@1.5.21 add', landing_page)
-        self.assertIn('/tree/v0.6.2 -a codex -y', landing_page)
+        self.assertIn('/tree/v0.6.1 -a codex -y', landing_page)
         self.assertIn('data-agent="codex"', landing_page)
         self.assertIn('data-agent="claude-code"', landing_page)
         self.assertIn('id="first-prompt"', landing_page)

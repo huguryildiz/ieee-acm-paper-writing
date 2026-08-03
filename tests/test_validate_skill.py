@@ -343,9 +343,9 @@ class ModeDocumentationTests(unittest.TestCase):
 
     def test_release_pinned_install_and_workbench_scope_are_documented(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.2", readme)
+        self.assertIn("npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.1", readme)
         self.assertIn("is **not included**", readme)
-        self.assertIn("git clone --branch v0.6.2 --depth 1", readme)
+        self.assertIn("git clone --branch v0.6.1 --depth 1", readme)
 
     def test_plugin_install_path_states_that_it_tracks_the_default_branch(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -482,6 +482,33 @@ class ClaudePluginPackageTests(unittest.TestCase):
         )
         errors = self.run_check(readme=readme)
         self.assertTrue(any("versioned skills installer" in error for error in errors))
+
+    def test_prerelease_manifests_keep_previous_stable_install_pinned(self):
+        readme = (
+            "Rolling plugin candidate `1.2.4-rc.1`.\n"
+            "npx skills@1.5.21 add "
+            "https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v1.2.3\n"
+            "archive/refs/tags/v1.2.3.tar.gz\n"
+            "git clone --branch v1.2.3 --depth 1\n"
+        )
+        errors = self.run_check(
+            plugin_version="1.2.4-rc.1", market_version="1.2.4-rc.1",
+            entry_version="1.2.4-rc.1", codex_version="1.2.4-rc.1", readme=readme,
+        )
+        self.assertEqual(errors, [])
+
+    def test_prerelease_manifests_require_candidate_disclosure(self):
+        readme = (
+            "npx skills@1.5.21 add "
+            "https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v1.2.3\n"
+            "archive/refs/tags/v1.2.3.tar.gz\n"
+            "git clone --branch v1.2.3 --depth 1\n"
+        )
+        errors = self.run_check(
+            plugin_version="1.2.4-rc.1", market_version="1.2.4-rc.1",
+            entry_version="1.2.4-rc.1", codex_version="1.2.4-rc.1", readme=readme,
+        )
+        self.assertTrue(any("rolling plugin candidate" in error for error in errors))
 
     def test_source_without_an_installable_skill_is_rejected(self):
         errors = self.run_check(source="./docs")
