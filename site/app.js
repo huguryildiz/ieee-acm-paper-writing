@@ -7,6 +7,7 @@
   const installPrompt = document.getElementById("install-prompt");
   const installCommand = document.getElementById("install-command");
   const installGuidance = document.getElementById("install-guidance");
+  const firstPrompt = document.getElementById("first-prompt");
   const exampleButtons = [...document.querySelectorAll(".example-choice")];
   const previewFrame = document.getElementById("preview-frame");
   const previewFilename = document.getElementById("preview-filename");
@@ -52,6 +53,8 @@
       prompt: "$",
       command: "npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.0 -a codex -y",
       guidance: "Run this in your manuscript project, then start a new Codex session.",
+      // Codex mentions an installed skill with @; Claude Code invokes it with /.
+      firstPrompt: "@ieee-acm-paper-writing audit manuscript.md against the supplied evidence.",
     },
     "claude-code": {
       name: "Claude Code",
@@ -59,6 +62,7 @@
       command:
         "/plugin marketplace add huguryildiz/ieee-acm-paper-writing\n/plugin install ieee-acm-paper-writing",
       guidance: "Enter both lines in Claude Code, then restart the session.",
+      firstPrompt: "/ieee-acm-paper-writing audit manuscript.md against the supplied evidence.",
     },
   };
 
@@ -72,6 +76,7 @@
     installPrompt.textContent = target.prompt;
     installCommand.textContent = target.command;
     installGuidance.textContent = target.guidance;
+    firstPrompt.textContent = target.firstPrompt;
     const copyButton = document.querySelector('[data-copy="install-command"]');
     copyButton.setAttribute("aria-label", `Copy the ${target.name} install command`);
   }
