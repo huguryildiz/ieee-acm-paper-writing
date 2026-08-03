@@ -8,7 +8,7 @@ Standard library only (no PyYAML). Checks:
   4. evals/cases.json parses, uses safe case names, and matches the v2 schema.
   5. Eval criteria share no distinctive 6-word phrase with any skill file (M5 guard).
   6. agents/openai.yaml exists and is non-empty.
-  7. The audit-map renderer accepts its example JSON and reproduces the checked-in HTML.
+  7. The audit-map renderer accepts each example JSON and reproduces its checked-in HTML.
   8. The interactive showcase stays self-contained (no external asset fetch) and intact.
 
 Usage:  python3 scripts/validate_skill.py [repo_root]
@@ -373,37 +373,47 @@ def check_agent_interface(root: Path):
 def check_audit_map_renderer(root: Path):
     skill = root / "skills" / "ieee-acm-paper-writing"
     renderer = skill / "scripts" / "render_audit_map.py"
-    example_json = skill / "examples" / "section-audit-map.json"
-    example_html = skill / "examples" / "section-audit-map-rendered.html"
     template = skill / "assets" / "section-audit-map-template.html"
-    for path in (renderer, example_json, example_html, template):
+    example_pairs = (
+        (
+            skill / "examples" / "section-audit-map.json",
+            skill / "examples" / "section-audit-map-rendered.html",
+        ),
+        (
+            skill / "examples" / "method-reproducibility-audit-map.json",
+            skill / "examples" / "method-reproducibility-audit-map.html",
+        ),
+        (
+            skill / "examples" / "venue-adaptation-audit-map.json",
+            skill / "examples" / "venue-adaptation-audit-map.html",
+        ),
+    )
+    for path in (renderer, template, *(item for pair in example_pairs for item in pair)):
         if not path.is_file():
             err(f"{path.relative_to(root)}: missing audit-map renderer artifact")
             return
     with tempfile.TemporaryDirectory() as tmp:
-        output = Path(tmp) / "section-audit-map-rendered.html"
-        result = subprocess.run(
-            [
-                sys.executable,
-                str(renderer),
-                str(example_json),
-                "--out",
-                str(output),
-                "--workspace-root",
-                tmp,
-            ],
-            capture_output=True,
-            text=True,
-        )
-        if result.returncode != 0:
-            detail = result.stderr.strip() or result.stdout.strip() or "unknown renderer failure"
-            err(f"audit-map renderer rejected its example input: {detail}")
-            return
-        if output.read_bytes() != example_html.read_bytes():
-            err(
-                "skills/ieee-acm-paper-writing/examples/section-audit-map-rendered.html: "
-                "stale renderer output"
+        for example_json, example_html in example_pairs:
+            output = Path(tmp) / example_html.name
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(renderer),
+                    str(example_json),
+                    "--out",
+                    str(output),
+                    "--workspace-root",
+                    tmp,
+                ],
+                capture_output=True,
+                text=True,
             )
+            if result.returncode != 0:
+                detail = result.stderr.strip() or result.stdout.strip() or "unknown renderer failure"
+                err(f"audit-map renderer rejected {example_json.name}: {detail}")
+                continue
+            if output.read_bytes() != example_html.read_bytes():
+                err(f"{example_html.relative_to(root)}: stale renderer output")
 
 
 # Tokens that only appear when an interactive page pulls an asset from a remote

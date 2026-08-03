@@ -1,0 +1,20 @@
+{
+  "name": "ieee-acm-paper-writing",
+  "interface": {
+    "displayName": "IEEE / ACM Paper Writing"
+  },
+  "plugins": [
+    {
+      "name": "ieee-acm-paper-writing",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ieee-acm-paper-writing"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Research"
+    }
+  ]
+}

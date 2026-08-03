@@ -1,0 +1,41 @@
+{
+  "name": "ieee-acm-paper-writing",
+  "version": "0.5.0",
+  "description": "Evidence-bounded drafting and auditing for IEEE and ACM engineering manuscripts.",
+  "author": {
+    "name": "Huseyin Ugur Yildiz",
+    "url": "https://github.com/huguryildiz"
+  },
+  "homepage": "https://ieee-acm-paper-writing.vercel.app",
+  "repository": "https://github.com/huguryildiz/ieee-acm-paper-writing",
+  "license": "MIT",
+  "keywords": [
+    "academic-writing",
+    "engineering",
+    "ieee",
+    "acm",
+    "manuscript-audit"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "IEEE / ACM Paper Writing",
+    "shortDescription": "Draft and audit engineering manuscripts against supplied evidence.",
+    "longDescription": "Draft, rewrite, structure, and audit IEEE- and ACM-style engineering manuscripts while preserving claim scope, technical notation, uncertainty, citation boundaries, and venue-specific verification limits.",
+    "developerName": "Huseyin Ugur Yildiz",
+    "category": "Research",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Local files"
+    ],
+    "websiteURL": "https://ieee-acm-paper-writing.vercel.app",
+    "brandColor": "#0B1F33",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg",
+    "defaultPrompt": [
+      "Audit this engineering manuscript against its supplied evidence.",
+      "Rewrite this section without changing its supported claims.",
+      "Adapt this manuscript to the named IEEE or ACM venue."
+    ]
+  }
+}

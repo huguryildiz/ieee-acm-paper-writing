@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "title": "Venue-Adaptation Map",
+  "subject": "keeping ACM production rules separate from scientific authority",
+  "eyebrow": "ACM proceedings · production-stage LaTeX fixture · verified general guidance",
+  "summary": "A realistic but synthetic three-page ACM proceedings production package audited against publisher-level LaTeX guidance. The audit first exposes the missing conference and track, then applies only general ACM production requirements confirmed in the cited sources; conference-specific review, anonymity, length, rights, and disclosure rules remain unresolved.",
+  "source_label": "Production source",
+  "revision_label": "Venue-bounded response",
+  "footer": "Generated on 3 August 2026 by applying the checked-in ieee-acm-paper-writing skill to venue-adaptation-audit-example.md. This realistic package is synthetic and the retained example run is not behavioral benchmark evidence or a submission-readiness decision. General ACM LaTeX rules were checked against the official acmart class guide at https://portalparts.acm.org/hippo/latex_templates/acmart.pdf and ACM's LaTeX best-practices guide at https://authors.acm.org/binaries/content/assets/publications/taps/latex-best_practices-06-may-2020.pdf. Exact conference instructions remain unresolved.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "venue-compliance",
+      "severity": "Major",
+      "title": "Exact conference and track are not identified",
+      "location": "Package record and LaTeX class declaration",
+      "source": "Package label: “three-page ACM proceedings paper, final source”; \\documentclass[sigconf]{acmart}",
+      "evidence": "The fixture supplies no conference name, track, current author-instruction URL, rights-form metadata, or source for the assumed three-page target.",
+      "consequence": "The audit cannot verify whether sigconf is the correct production mode or resolve conference-specific length, anonymity, artifact, ethics, or disclosure requirements.",
+      "correction": "Obtain the exact conference and track, current author instructions, production-stage notice, and rights-form metadata. Apply the verified publisher-level repairs below, but do not declare venue compliance until the missing venue ledger is resolved.",
+      "disposition": "author-query"
+    },
+    {
+      "id": "2",
+      "layer": "venue-compliance",
+      "severity": "Major",
+      "title": "Template geometry is manually altered",
+      "location": "LaTeX preamble",
+      "source": "\\usepackage[margin=0.62in]{geometry} % fit the paper into three pages",
+      "evidence": "The official ACM production guidance requires authors to use the acmart class and not override its margins or text dimensions with visual formatting hacks.",
+      "consequence": "The source no longer represents the publisher-controlled layout and may fail production processing.",
+      "correction": "Remove the geometry override and restore the designated acmart class settings. Resolve length against the exact conference policy without changing template dimensions.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "3",
+      "layer": "venue-compliance",
+      "severity": "Major",
+      "title": "ACM Reference Format is disabled",
+      "location": "LaTeX top matter",
+      "source": "\\settopmatter{printacmref=false} % save space",
+      "evidence": "The current acmart class guide states that the ACM Reference Format is mandatory for papers longer than one page. The fixture is three pages.",
+      "consequence": "A required production element is removed for layout convenience.",
+      "correction": "Restore the ACM Reference Format block. Do not suppress required metadata to satisfy an unverified page target.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "4",
+      "layer": "venue-compliance",
+      "severity": "Major",
+      "title": "CCS concepts are omitted",
+      "location": "Top matter after the abstract",
+      "source": "The CCS Concepts block was deleted because the terms are not part of the scientific argument.",
+      "evidence": "The current acmart class guide requires CCS concepts for papers longer than two pages. The fixture is three pages.",
+      "consequence": "Scientific relevance does not control publisher indexing requirements; the production source is incomplete.",
+      "correction": "Select applicable concepts with the ACM CCS tool and insert the generated CCS metadata. Treat concept selection as indexing metadata, not evidence for a technical claim.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "5",
+      "layer": "venue-compliance",
+      "severity": "Major",
+      "title": "Keywords are omitted",
+      "location": "Top matter after CCS Concepts",
+      "source": "\\keywords{}",
+      "evidence": "The current acmart class guide requires keywords for papers longer than two pages. The fixture is three pages.",
+      "consequence": "An empty command leaves required indexing metadata unresolved.",
+      "correction": "Add concise keywords drawn from terminology already supported by the manuscript. Do not introduce unsupported novelty or application claims through the keyword list.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "6",
+      "layer": "venue-compliance",
+      "severity": "Major",
+      "title": "Figure description is missing",
+      "location": "Architecture figure environment",
+      "source": "\\includegraphics{architecture.pdf}\\caption{System architecture.}",
+      "evidence": "ACM's official LaTeX best-practices guide instructs authors to place a \\Description{...} command inside every figure and explains that the description complements rather than repeats the caption.",
+      "consequence": "The production source does not provide an equivalent description for readers who cannot inspect the image.",
+      "correction": "Add a meaningful \\Description{...} that conveys the figure's structure and relationships without copying the caption. Verify that the description matches the actual figure.",
+      "disposition": "author-query"
+    },
+    {
+      "id": "7",
+      "layer": "venue-compliance",
+      "severity": "Minor",
+      "title": "Reference author names are abbreviated",
+      "location": "Bibliography source",
+      "source": "author = {Researcher, J. Q.}",
+      "evidence": "ACM's official LaTeX best-practices guide directs authors to spell out authors' first names rather than abbreviate them, while retaining the ACM-Reference-Format bibliography style.",
+      "consequence": "The hand-written entry conflicts with ACM reference-production guidance and may also omit source metadata.",
+      "correction": "Retrieve the authoritative source metadata, supply the authors' names as published, and let ACM-Reference-Format generate the entry. The synthetic name in this fixture is not a citable source.",
+      "disposition": "verify"
+    },
+    {
+      "id": "8",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Production validation is mistaken for scientific validation",
+      "location": "Submission note · final sentence",
+      "source": "Once the source passes ACM production validation, the reported results are scientifically validated and the paper is submission-ready.",
+      "evidence": "Publisher production checks assess source structure and processing requirements. They do not verify data, experiments, citations, statistical analysis, or claim support.",
+      "consequence": "A venue-compliance signal is used as evidence for scientific correctness and overall readiness.",
+      "correction": "Report production validation only as a venue-processing check. Audit scientific claims against their controlling evidence and resolve conference-specific requirements before making any readiness statement.",
+      "disposition": "rewrite"
+    }
+  ]
+}

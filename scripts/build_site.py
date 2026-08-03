@@ -11,6 +11,14 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE_SOURCE = ROOT / "site"
 SITE_OUTPUT = ROOT / "site-dist"
 EXAMPLES = ROOT / "skills" / "ieee-acm-paper-writing" / "examples"
+EXAMPLE_ARTIFACTS = (
+    "section-audit-map.html",
+    "section-audit-map.json",
+    "method-reproducibility-audit-map.html",
+    "method-reproducibility-audit-map.json",
+    "venue-adaptation-audit-map.html",
+    "venue-adaptation-audit-map.json",
+)
 
 
 def build_site() -> None:
@@ -22,7 +30,7 @@ def build_site() -> None:
 
     output_examples = SITE_OUTPUT / "examples"
     output_examples.mkdir()
-    for name in ("section-audit-map.html", "section-audit-map.json"):
+    for name in EXAMPLE_ARTIFACTS:
         shutil.copy2(EXAMPLES / name, output_examples / name)
 
 

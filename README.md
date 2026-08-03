@@ -2,63 +2,137 @@
 
 <img src="assets/icon.svg" alt="IEEE / ACM Paper Writing icon" width="112" height="112" />
 
-# IEEE / ACM Paper Writing
+# Evidence-Bounded IEEE / ACM Manuscript Writing
 
-### Evidence-bounded manuscript drafting and auditing for engineering research
+### Draft, rewrite, humanize, and audit engineering manuscripts without crossing the evidence boundary
 
-An agent skill for turning supplied technical evidence into defensible IEEE- and ACM-style
-manuscript prose—without using polished language to conceal missing support.
+A native Codex plugin and Agent Skills package for Codex, Claude Code, and compatible LLM-based
+research agents. It turns supplied technical evidence into defensible manuscript prose while
+preserving claims, numbers, citations, notation, scope conditions, and uncertainty.
 
-<b><a href="https://ieee-acm-paper-writing.vercel.app">Live showcase</a> · <a href="#capabilities">Capabilities</a> · <a href="#how-it-works">Design</a> · <a href="#installation">Installation</a> · <a href="#examples">Examples</a> · <a href="#evaluation-and-validation">Validation</a> · <a href="skills/ieee-acm-paper-writing/SKILL.md">SKILL.md</a></b>
+<b><a href="#quick-start">Quick start</a> · <a href="#working-modes">Modes</a> · <a href="#installation">Installation</a> · <a href="#examples">Examples</a> · <a href="#evaluation-and-validation">Validation</a> · <a href="skills/ieee-acm-paper-writing/SKILL.md">SKILL.md</a> · <a href="https://ieee-acm-paper-writing.vercel.app">Audit-map showcase</a></b>
 
 </div>
 
 ---
 
-## Overview
+## What this skill does
 
-The skill drafts, rewrites, compresses, structures, adapts, and audits engineering manuscripts.
-It keeps three authorities separate:
+This is a manuscript-writing skill with an evidence gate. It can draft a new section, rewrite an
+existing one, expand or compress technical exposition, remove machine-like prose patterns, build
+an evidence-aware outline, audit a manuscript, or adapt it to a named IEEE or ACM venue.
 
-1. **Scientific support** — what verified formulations, code, data, experiments, and cited
+The writing modes are the primary workflow. Audit is the protection layer around that workflow,
+not a replacement for it. Before producing publication-ready prose, the skill identifies the
+intended claim, its supporting artifact, its scope, and any unresolved dependency. When the
+available evidence does not support requested wording, the skill narrows or omits the claim and
+returns a structured author query instead of filling the gap with plausible language.
+
+Typical uses include:
+
+- rewriting a Results section while preserving every number, unit, comparator, and uncertainty;
+- drafting an Abstract from verified findings without importing claims absent from the body;
+- restructuring an Introduction around the technical obstacle, contribution, evidence, and scope;
+- explaining a formulation or algorithm without changing notation or guarantee boundaries;
+- compressing a manuscript without deleting conditions needed to interpret a result;
+- humanizing repetitive or AI-flavored prose without concealing AI-use disclosures; and
+- auditing claims, citations, equations, baselines, failures, reproducibility, and venue rules.
+
+It is not a general documentation writer, literature-retrieval system, experiment runner,
+statistical-analysis package, or automatic submission-acceptance judge.
+
+## Quick start
+
+Invoke the skill in an agent conversation with the manuscript path, the requested mode, and the
+evidence that controls the text:
+
+```text
+$ieee-acm-paper-writing rewrite sections/results.md using results/ and preserve all numbers, citations, and figure labels
+$ieee-acm-paper-writing draft abstract from manuscript.md and verified results in artifacts/
+$ieee-acm-paper-writing humanize sections/introduction.md without changing claims or evidence-bearing hedges
+$ieee-acm-paper-writing section-audit sections/method.md against config/, logs/, and cited sources
+```
+
+The skill returns text in the conversation unless the user requests an in-place file edit. It asks
+for clarification only when a missing fact would change the scientific content; otherwise it uses
+the narrowest defensible interpretation and reports the limitation outside the manuscript.
+
+## Working modes
+
+The router exposes nine modes. Style and landmark-paper calibration are modifiers of a writing
+mode, not additional modes.
+
+| Mode | Purpose | Primary output |
+| --- | --- | --- |
+| `draft` | Write a new section from supplied technical evidence | Manuscript-ready prose plus unresolved author queries |
+| `rewrite` | Reorganize and improve existing prose without changing its supported scientific meaning | Revised text with protected content preserved |
+| `expand` | Add explanation, logical connections, or reproducibility detail already supported by the evidence | Expanded manuscript text without invented content |
+| `compress` | Reduce length while retaining conditions, comparators, units, and uncertainty | Shorter evidence-equivalent prose |
+| `humanize` | Remove formulaic transitions, uniform rhythm, filler, and unquantified praise | Natural expert prose plus a compact change ledger |
+| `outline` | Plan section and paragraph functions before drafting | Structure, required evidence, and unresolved dependencies |
+| `audit` | Inspect the complete claim chain and submission-readiness boundaries | Severity-ordered findings and bounded corrections |
+| `section-audit` | Apply the same audit contract to a selected section | Section-scoped findings and corrections |
+| `venue-adapt` | Adapt structure and presentation to a named publication and article type | Adapted text plus a verified compliance ledger |
+
+### What `rewrite` protects
+
+`rewrite` is more than copy-editing, but it is not permission to alter the study. It may change
+section logic, paragraph order, sentence structure, transitions, terminology consistency, and
+explanatory depth. Unless the user explicitly authorizes a scientific change, it preserves:
+
+- numerical values, units, denominators, uncertainty, and failure counts;
+- citations and the evidentiary role of each citation;
+- equations, symbols, algorithms, figure and table labels, and cross-references;
+- model assumptions, feasibility conditions, comparator definitions, and guarantee scope; and
+- hedges that encode genuine uncertainty or incomplete validation.
+
+Unsupported requested wording remains unresolved even when the rewrite safely narrows it. The
+handoff therefore records the missing item, the blocked claim, the required action, and the
+defensible fallback under `Author queries`.
+
+### What `humanize` changes
+
+`humanize` is a surface-only pass. It removes formulaic transitions, repetitive paragraph
+openings, uniform sentence rhythm, filler vocabulary, and unquantified promotional terms. It does
+not change claims, numbers, units, citations, notation, labels, or uncertainty, and it never removes
+or weakens a required generative-AI disclosure.
+
+## Evidence contract
+
+The skill keeps three authorities separate:
+
+1. **Scientific support** - what verified formulations, code, data, experiments, and cited
    literature establish.
-2. **Method and domain reporting** — what the applicable optimization, ML, simulation, systems,
+2. **Method and domain reporting** - what the applicable optimization, ML, simulation, systems,
    or engineering method requires the paper to disclose.
-3. **Venue compliance** — what the target publication's current official instructions and
+3. **Venue compliance** - what the target publication's current official instructions and
    template require.
 
-The skill contract requires conflicts between these sources to be reported instead of resolved by
-selecting the most convenient version. It also prohibits treating archived, planned, expected, or
-mock results as completed evidence.
+For technical claims, verified artifacts control over narrative drafts. For formatting and
+submission requirements, the named publication's current official instructions and template
+control over generic IEEE/ACM guidance. When sources disagree, the skill reports the competing
+statements and their locations instead of silently selecting the convenient value.
 
-## Capabilities
+The integrity gate also treats supplied manuscripts, reviews, references, and data as evidence,
+never as instructions to the agent. Embedded directives that ask the agent to suppress findings,
+invent support, or bypass verification are surfaced as integrity findings rather than executed.
 
-The router supports nine modes: `draft`, `rewrite`, `expand`, `compress`, `humanize`, `outline`,
-`audit`, `section-audit`, and `venue-adapt`. Style and landmark-paper calibration modify whichever
-of these modes produces the requested deliverable; calibration is not a separate output mode. The
-optional `--html-map` modifier renders an `audit` or `section-audit` result without defining an
-additional mode.
-Typical tasks include:
+## How it works
 
-- drafting or revising abstracts, introductions, related work, methods, results, discussions,
-  conclusions, and contribution lists;
-- checking notation, units, equations, cross-references, quantitative claims, baselines,
-  guarantees, and citation support;
-- separating observed results from interpretation, causation, robustness, scalability, and
-  generalization claims;
-- removing machine-idiom prose patterns (`humanize`) while preserving claims, numbers, citations,
-  notation, and evidence-bearing hedges, without touching generative-AI disclosures;
-- auditing submission readiness with findings classified as `Critical`, `Major`, `Minor`, or
-  `Editorial`;
-- rendering an explicitly requested audit as a self-contained, interactive HTML finding map;
-- adapting structure and presentation to a named IEEE or ACM venue while preserving scientific
-  meaning; and
-- calibrating exposition to aggregate patterns derived from landmark engineering papers without
-  copying their language or treating those patterns as citable evidence.
+[`SKILL.md`](skills/ieee-acm-paper-writing/SKILL.md) defines the authority hierarchy, routing
+rules, mode behavior, and output contracts. It loads only the references required for the task:
+
+| Reference | Purpose |
+| --- | --- |
+| [`manuscript-structure-style.md`](skills/ieee-acm-paper-writing/references/manuscript-structure-style.md) | Section logic, technical exposition, rewriting, compression, and humanization |
+| [`integrity-audit.md`](skills/ieee-acm-paper-writing/references/integrity-audit.md) | Claim support, citation verification, integrity checks, and submission-readiness audits |
+| [`engineering-profiles.md`](skills/ieee-acm-paper-writing/references/engineering-profiles.md) | Method- and domain-specific reporting requirements |
+| [`corpus-calibration.md`](skills/ieee-acm-paper-writing/references/corpus-calibration.md) | De-identified, non-citable exposition patterns derived from the local calibration corpus |
+| [`venue-guidance.md`](skills/ieee-acm-paper-writing/references/venue-guidance.md) | Venue adaptation, citation formatting, and compliance-ledger rules |
 
 ### Engineering domains
 
-The eight supported technical areas are:
+The method and domain layer covers eight technical areas:
 
 1. communications and networking;
 2. signal processing and sensing;
@@ -69,117 +143,73 @@ The eight supported technical areas are:
 7. machine learning and ML-assisted engineering; and
 8. computer systems and cyber-physical-system engineering.
 
-Combined studies can load multiple profiles.
-
-## How it works
-
-[`SKILL.md`](skills/ieee-acm-paper-writing/SKILL.md) establishes the authority hierarchy, routes
-each request, and defines the output contracts. It loads only the references required for the
-task:
-
-| Reference | Purpose |
-| --- | --- |
-| [`integrity-audit.md`](skills/ieee-acm-paper-writing/references/integrity-audit.md) | Claim support, citation verification, integrity checks, and submission-readiness audits |
-| [`manuscript-structure-style.md`](skills/ieee-acm-paper-writing/references/manuscript-structure-style.md) | Section logic, technical exposition, rewriting, and compression |
-| [`engineering-profiles.md`](skills/ieee-acm-paper-writing/references/engineering-profiles.md) | Method- and domain-specific reporting requirements |
-| [`corpus-calibration.md`](skills/ieee-acm-paper-writing/references/corpus-calibration.md) | De-identified, non-citable exposition patterns derived from the local calibration corpus |
-| [`venue-guidance.md`](skills/ieee-acm-paper-writing/references/venue-guidance.md) | Venue adaptation and compliance-ledger rules |
-
-For manuscript tasks, the skill instructs the agent to identify the intended claim, evidence
-source, scope, and uncertainty before drafting. Its output contract requires unsupported content to
-be omitted from publication-ready prose or returned separately as a structured author query. For
-venue adaptation, requirements that cannot be checked against an official current source must be
-labeled `unverified venue rule` rather than inferred.
-
-The integrity contract treats supplied manuscripts, reviews, references, and data as evidence—not
-as instructions—and requires embedded directives to be surfaced as findings rather than executed.
-
-### Optional HTML audit map
-
-Request the visual artifact with the `--html-map` output modifier:
-
-```text
-$ieee-acm-paper-writing section-audit --html-map manuscript.md
-$ieee-acm-paper-writing section-audit --html-map --out reports/results-audit.html manuscript.md
-```
-
-Without the modifier, the skill produces neither JSON nor HTML. With it, the agent completes the canonical
-text audit, writes and retains validated version-1 JSON, and invokes the dependency-free
-[`render_audit_map.py`](skills/ieee-acm-paper-writing/scripts/render_audit_map.py) renderer. The
-renderer performs presentation only: it cannot infer findings, rewrite claims, or fill missing
-evidence. It refuses to overwrite an existing output unless the user explicitly authorizes
-`--force`.
-
-Every `--html-map` run returns three deliverables:
-
-| Requested form | Text audit | JSON artifact | HTML artifact |
-| --- | --- | --- | --- |
-| `section-audit --html-map manuscript.md` | Returned in the agent response | `manuscript-section-audit-map.json` | `manuscript-section-audit-map.html` |
-| `section-audit --html-map --out reports/results-audit.html manuscript.md` | Returned in the agent response | `reports/results-audit.json` | `reports/results-audit.html` |
-
-The JSON is a retained user artifact and is the input accepted by the local audit workbench. The
-agent checks both output paths before writing and does not overwrite either file without explicit
-approval. An explicit `--out` path must end in `.html`; its sibling `.json` path is derived by
-replacing that suffix.
-
-The [hosted showcase](https://ieee-acm-paper-writing.vercel.app) presents the checked-in fixture in
-a browser and provides direct downloads of its self-contained HTML and source JSON. The site is a
-static presentation layer: it does not accept manuscript uploads or perform an audit. Renderer
-outputs are confined to the workspace root supplied to the command; traversal, external absolute
-paths, and symlink escapes are rejected.
-
-### Local audit workbench
-
-The workbench is repository-side support tooling; it is **not included** when the standalone skill
-is installed under `.agents/skills/`. To inspect completed audit-map JSON without sending it to a
-hosted service, clone the matching repository release and run the server from that clone's root:
-
-```bash
-git clone --branch v0.5.0 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
-cd ieee-acm-paper-writing
-python3 scripts/serve_local_audit.py
-```
-
-The command opens a loopback-only workbench on a random local port. Drop or select version-1 JSON,
-then inspect the canonical renderer output, download the self-contained HTML, or open it full
-screen. The browser sends the JSON only to the local `127.0.0.1` process; the request is session
-bound, limited to 2 MiB, and is not persisted. Use `--no-open` to suppress automatic browser launch
-or `--port PORT` to request a specific local port.
-
-The workbench remains a presentation tool. It does not read a manuscript, discover findings, or
-establish submission readiness. Stop it with `Ctrl+C` when finished.
+Hybrid studies can load multiple profiles. These profiles define what a study should report; they
+do not by themselves establish scientific validity.
 
 ## Installation
 
 ### Prerequisites
 
-- Node.js 22.20.0 or newer for the pinned `skills@1.5.21` CLI used below;
-- an agent host that supports the shared Agent Skills format; and
-- Python 3 when generating the optional HTML audit map or running the repository-side local
+- an LLM-based agent host that supports the shared Agent Skills format;
+- Node.js 22.20.0 or newer for the `skills` CLI path below - not required for the Claude Code
+  plugin path; and
+- Python 3 only when generating an optional HTML audit map or running the repository-side local
   workbench.
 
-The repository has been exercised with Codex. The upstream CLI supports other agent hosts, but this
-repository does not claim equivalent behavioral validation for every host or model.
+The installation paths below have been exercised for Codex and Claude Code. This repository does
+not claim equivalent behavioral validation across their underlying models or every other
+compatible host.
 
-### Reproducible Codex install
+### Install as a native Codex plugin
 
-Run this from the manuscript repository in which the skill should be available. It pins both the
-installer and the released skill source, targets Codex explicitly, copies rather than symlinks the
-files, and skips interactive prompts:
+The native plugin bundles the canonical skill in an install-safe package and adds Codex card
+metadata. From a local clone of this repository, register its marketplace and install the plugin:
 
 ```bash
-DISABLE_TELEMETRY=1 npx --yes skills@1.5.21 add \
-  https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.5.0/skills/ieee-acm-paper-writing \
-  --skill ieee-acm-paper-writing --agent codex --copy -y
+codex plugin marketplace add .
+codex plugin add ieee-acm-paper-writing@ieee-acm-paper-writing
 ```
 
-This project-scoped command installs under `.agents/skills/`. Add `--global` only when the skill
-should be available to Codex across all projects. The upstream installer collects anonymous usage
-telemetry by default; `DISABLE_TELEMETRY=1` opts out for this invocation.
+For a Git-backed install after the plugin-bearing revision is available on GitHub, replace `.` with
+`huguryildiz/ieee-acm-paper-writing`. Start a new Codex thread after installation so the skill is
+discovered. The plugin adds no MCP server, app connector, authentication flow, or background
+service; manuscript access remains limited to the permissions of the active Codex session.
 
-After installation, start a **new agent session** so the host discovers the skill. Then invoke it
-with a manuscript path and an explicit mode. These are agent prompts, not commands for a separate
-standalone manuscript-processing executable.
+### Install in an LLM agent host
+
+#### Claude Code
+
+Enter both lines in a Claude Code session; no Node.js or shell command is involved:
+
+```text
+/plugin marketplace add huguryildiz/ieee-acm-paper-writing
+/plugin install ieee-acm-paper-writing
+```
+
+This installs the skill from the repository's default branch, so it tracks `main` rather than a pinned release.
+Use the `skills` CLI path below when a specific released version is required.
+Update later with `/plugin update ieee-acm-paper-writing`.
+
+#### Codex and other Agent Skills hosts
+
+Run this from the manuscript repository in which the skill should be available:
+
+```bash
+npx skills add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.5.0 -a codex -y
+```
+
+The repository publishes a single skill, so no `--skill` selector is needed. Replace `-a codex`
+with `-a claude-code`, or with `-a codex claude-code` for both. Add `--copy` to copy rather than
+symlink the files, and `--global` only when the skill should be available across all projects.
+
+This project-scoped command installs under `.agents/skills/` for Codex and `.claude/skills/` for
+Claude Code. Pin the installer with `npx skills@1.5.21` when its version matters. The upstream
+installer collects anonymous usage telemetry by default; prefix the command with
+`DISABLE_TELEMETRY=1` to opt out for that invocation.
+
+After installation, start a new session in the selected agent host so it discovers the skill.
+These invocations are agent prompts, not commands for a standalone manuscript-processing
+executable.
 
 ### Complete skill invocation reference
 
@@ -189,8 +219,7 @@ The supported invocation shape is:
 $ieee-acm-paper-writing <mode> [supported modifier] <input> [evidence and constraints]
 ```
 
-All nine modes are shown below. Replace the example paths and angle-bracketed descriptions with
-your own material:
+All nine modes are shown below:
 
 ```text
 $ieee-acm-paper-writing draft abstract from evidence.md
@@ -205,7 +234,7 @@ $ieee-acm-paper-writing venue-adapt manuscript.md for <publication and article t
 ```
 
 Style or landmark-paper calibration is a natural-language modifier of the applicable mode, not a
-tenth mode and not a command-line flag. Representative calibrated requests are:
+tenth mode or command-line flag:
 
 ```text
 $ieee-acm-paper-writing draft introduction from evidence.md using the de-identified landmark-paper calibration
@@ -213,8 +242,45 @@ $ieee-acm-paper-writing rewrite sections/method.md using the applicable corpus-c
 $ieee-acm-paper-writing outline evidence.md in the exposition pattern appropriate to <technical area>
 ```
 
-`--html-map` is supported only with `audit` and `section-audit`. `--out` belongs to that modifier,
-must name an `.html` file, and also causes the paired `.json` file to be retained:
+There are no mode-specific CLI flags beyond the optional HTML modifier documented below. State
+the target venue, article type, section, evidence sources, output-file request, protected content,
+and scientific constraints in ordinary language.
+
+## Examples
+
+### Writing and rewriting
+
+- [Routing example](skills/ieee-acm-paper-writing/examples/routing-example.md) - selects the
+  references needed to rewrite a technical section without loading unrelated guidance.
+- [Section-audit and evidence-scoped rewrite](skills/ieee-acm-paper-writing/examples/section-audit-example.md) -
+  starts with a flawed Results and Conclusion fixture, identifies twelve planted defects, and
+  shows a bounded rewrite that does not invent replacement evidence.
+- [Reference-format example](skills/ieee-acm-paper-writing/examples/reference-format-example.md) -
+  audits and produces IEEE/ACM reference-list entries without filling absent metadata from memory.
+
+### Method and venue audits
+
+- [Method-reproducibility input](skills/ieee-acm-paper-writing/examples/method-reproducibility-audit-example.md),
+  its [audit JSON](skills/ieee-acm-paper-writing/examples/method-reproducibility-audit-map.json),
+  and [rendered map](skills/ieee-acm-paper-writing/examples/method-reproducibility-audit-map.html) -
+  a seven-finding simulated robotics fixture covering disclosure, leakage, replication, timing,
+  and excluded failures.
+- [Venue-adaptation input](skills/ieee-acm-paper-writing/examples/venue-adaptation-audit-example.md),
+  its [audit JSON](skills/ieee-acm-paper-writing/examples/venue-adaptation-audit-map.json), and
+  [rendered map](skills/ieee-acm-paper-writing/examples/venue-adaptation-audit-map.html) - an
+  eight-finding ACM production fixture that separates verified publisher rules, scientific
+  validation, and unresolved conference-specific requirements.
+
+The example fixtures are synthetic. They demonstrate the expected output contract but are not
+behavioral benchmark results, findings from real manuscripts, or estimates of agent reliability.
+
+## Optional audit maps
+
+`--html-map` is an output modifier for `audit` and `section-audit`; it is not a tenth mode and is
+never produced by default. The agent completes the canonical text audit first, retains version-1
+JSON, and uses the dependency-free
+[`render_audit_map.py`](skills/ieee-acm-paper-writing/scripts/render_audit_map.py) renderer to
+present the same findings as a self-contained HTML file.
 
 ```text
 $ieee-acm-paper-writing audit --html-map manuscript.md
@@ -223,139 +289,108 @@ $ieee-acm-paper-writing section-audit --html-map manuscript.md
 $ieee-acm-paper-writing section-audit --html-map --out reports/results-audit.html manuscript.md
 ```
 
-There are no mode-specific CLI flags beyond this documented HTML modifier. State target venue,
-article type, section, evidence sources, output-file requests, claim boundaries, and other
-scientific constraints in ordinary language. If paired audit-map outputs already exist, explicitly
-authorize replacement in the request; the skill does not infer overwrite permission.
+Every audit-map request returns three distinct deliverables:
 
-Text modes return the requested prose or audit in the conversation unless the user requests a file
-edit. The HTML modifier writes the paired JSON and HTML artifacts inside the active workspace and
-returns both paths; it does not turn the renderer into an analysis engine. Review the installed
-skill before use, because agent skills execute with the host agent's permissions.
+| Requested form | Text audit | JSON artifact | HTML artifact |
+| --- | --- | --- | --- |
+| `section-audit --html-map manuscript.md` | Agent response | `manuscript-section-audit-map.json` | `manuscript-section-audit-map.html` |
+| `section-audit --html-map --out reports/results-audit.html manuscript.md` | Agent response | `reports/results-audit.json` | `reports/results-audit.html` |
 
-For a manual installation, copy [`skills/ieee-acm-paper-writing`](skills/ieee-acm-paper-writing)
-into the skill directory used by the selected agent host, then begin a new session. Manual skill
-installation copies only the distributable skill; it does not install the repository-side local
-workbench.
+The renderer performs presentation only. It cannot read a manuscript, infer a finding, verify a
+claim, rewrite text, or establish submission readiness. It rejects path escapes and refuses to
+overwrite either paired artifact without explicit authorization.
 
-## Examples
+The [hosted showcase](https://ieee-acm-paper-writing.vercel.app) displays checked-in synthetic
+fixtures; it does not accept manuscript uploads or perform audits. The
+[live section-audit example](https://ieee-acm-paper-writing.vercel.app/examples/section-audit-map.html),
+[source JSON](skills/ieee-acm-paper-writing/examples/section-audit-map.json), and
+[deterministic renderer fixture](skills/ieee-acm-paper-writing/examples/section-audit-map-rendered.html)
+make the renderer contract inspectable.
 
-- [Routing example](skills/ieee-acm-paper-writing/examples/routing-example.md) — selects the
-  necessary references and audit boundaries for a manuscript request.
-- [Reference-format example](skills/ieee-acm-paper-writing/examples/reference-format-example.md) —
-  audits and produces IEEE/ACM reference-list entries using publisher-level screening guidance.
-- [Section-audit example](skills/ieee-acm-paper-writing/examples/section-audit-example.md) — a
-  flawed Results and Conclusion fixture with a planted-flaw answer key and an illustrative
-  evidence-scoped rewrite; it is not a retained behavioral result.
-- [Live interactive section-audit map](https://ieee-acm-paper-writing.vercel.app/examples/section-audit-map.html),
-  [source JSON](skills/ieee-acm-paper-writing/examples/section-audit-map.json), and
-  [deterministic renderer fixture](skills/ieee-acm-paper-writing/examples/section-audit-map-rendered.html) —
-  installable, self-contained visual artifacts. Each of the twelve planted flaws is tied to its
-  triggering sentence, concern layer, evidentiary defect, consequence, and bounded response. The
-  renderer fixture is generated from the JSON; the live showcase is maintained separately. Neither
-  is behavioral evidence about an agent run.
+### Local audit workbench
 
-### Section-audit map gallery
+The local workbench is repository-side support tooling and is **not included** in the standalone
+skill installation. To inspect audit-map JSON without sending it to a hosted service, clone the
+matching release and start the loopback-only server:
 
-The same synthetic fixture makes the three-concern separation inspectable: scientific support,
-method/domain reporting, and verified venue style remain distinct while every numbered finding
-links its source text to a bounded response.
+```bash
+git clone --branch v0.5.0 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
+cd ieee-acm-paper-writing
+python3 scripts/serve_local_audit.py
+```
 
-<a href="https://ieee-acm-paper-writing.vercel.app/examples/section-audit-map.html">
-  <img src="assets/screenshots/section-audit-map-scientific-support.png" alt="Interactive section-audit map focused on an unscoped optimality claim in the scientific-support layer" width="100%">
-</a>
-
-<table>
-  <tr>
-    <td width="50%">
-      <img src="assets/screenshots/section-audit-map-method-reporting.png" alt="Section-audit map focused on a potentially leaking evaluation split in the method and domain reporting layer" width="100%">
-    </td>
-    <td width="50%">
-      <img src="assets/screenshots/section-audit-map-venue-compliance.png" alt="Section-audit map focused on an IEEE figure-citation correction in the venue-compliance layer" width="100%">
-    </td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Method / domain reporting</strong> — split integrity and reproducibility</td>
-    <td align="center"><strong>Venue compliance</strong> — verified IEEE figure-citation style</td>
-  </tr>
-</table>
+The browser sends JSON only to the local `127.0.0.1` process. Requests are session-bound, limited
+to 2 MiB, and not persisted. The workbench can inspect and render a completed audit map; it cannot
+discover or repair manuscript findings.
 
 ## Calibration corpus
 
-The local catalog contains 24 papers spanning the [eight supported technical
-areas](#engineering-domains). Their bibliographic provenance is recorded in
-[`docs/papers/catalog.tsv`](docs/papers/catalog.tsv); downloaded PDFs and derived full-text
-artifacts are excluded from Git.
+The local catalog contains 24 papers spanning the [eight engineering domains](#engineering-domains).
+Bibliographic provenance is recorded in [`docs/papers/catalog.tsv`](docs/papers/catalog.tsv);
+downloaded PDFs and derived full-text artifacts are excluded from Git.
 
-The installable skill contains only de-identified, derivative patterns such as contribution
-archetypes, paragraph functions, method-presentation sequences, guarantee boundaries, evaluation
-organization, and conclusion structure. These patterns do not establish technical claims, venue
-rules, citation rankings, source anonymity, or permission to imitate an author's distinctive
-language. A specialist may still recognize a technical lineage. End users do not need the local
-PDFs to use the calibration reference.
+The installable skill contains only de-identified derivative patterns: contribution archetypes,
+paragraph functions, method-presentation sequences, guarantee boundaries, evaluation organization,
+and conclusion structure. These patterns are writing preferences, not technical evidence, venue
+rules, citation rankings, proof of anonymity, or permission to imitate an author's distinctive
+language. End users do not need the source PDFs to use the calibration reference.
 
 ## Evaluation and validation
 
-The dependency-free repository validator checks the skill frontmatter, calibration identity
-policy, selected Markdown links and their tracked targets, safe evaluation-case names and schema,
-the agent interface, and deterministic regeneration of the checked-in audit map:
+The dependency-free repository validators check the skill frontmatter, calibration identity
+policy, selected Markdown links and tracked targets, evaluation schema, agent interface, audit-map
+regeneration, Codex plugin manifest, marketplace entry, and synchronized install-safe snapshot:
 
 ```bash
 python3 scripts/validate_skill.py
+python3 scripts/validate_codex_plugin.py
 python3 skills/ieee-acm-paper-writing/scripts/render_audit_map.py \
   skills/ieee-acm-paper-writing/examples/section-audit-map.json --check
+python3 -m unittest discover -s tests -v
 ```
 
-The behavioral suite defines 23 self-contained adversarial cases with binary, output-observable
-`must_pass` and `must_not` criteria. The runner validates cases, collects agent responses, creates
-a manual scoring file, and reports results:
+The behavioral suite defines 23 self-contained adversarial cases. Together they test claim scope,
+failure accounting, citation support, method classification, venue uncertainty, reference
+formatting, corpus use, humanization, and prompt injection. Each case has binary, output-observable
+`must_pass` and `must_not` criteria:
 
 ```bash
 python3 evals/run_evals.py validate
 python3 evals/run_evals.py list
 python3 evals/run_evals.py collect --agent-cmd '<your agent CLI>' --outdir out/
-python3 evals/run_evals.py score   --outdir out/
-# Replace each null verdict in out/scores.json with true or false after review.
-python3 evals/run_evals.py report  --outdir out/ --strict
+python3 evals/run_evals.py score --outdir out/
+# Fill each null verdict in out/scores.json after manual review.
+python3 evals/run_evals.py report --outdir out/ --strict
 ```
 
-`--strict` succeeds only when every defined case has a present agent-response artifact whose hash
-matches the manually scored output, whose case hash matches the current prompt and criteria, and
-whose verdicts are complete and passing. Missing, unscored, or stale entries remain in the
-denominator and cause a non-zero exit. Regression tests cover this aggregation behavior:
+`--strict` succeeds only when every case has a present agent response, matching response and case
+hashes, complete manual verdicts, and no failed criterion. Missing, unscored, stale, or failed cases
+remain in the denominator.
 
-```bash
-python3 -m unittest discover -s tests -v
-```
-
-The repository CI runs the validator, evaluation-schema validation, and regression tests on pushes
-to `main` and on pull requests. These are structural and deterministic checks; CI does **not** run a
-host model and therefore does not establish behavioral compliance. A behavioral claim requires a
-collected agent response for every case, manual criterion scoring, and a strict report with the
-denominator and failed-case list. Renderer tests reject stale checked-in HTML, unsafe unescaped
-content, invalid concern layers, duplicate finding identifiers, implicit overwrite, output-path
-escapes, external asset dependencies, and empty-layer wording that could be mistaken for a pass.
+Repository CI runs structural validation, evaluation-schema validation, and regression tests. It
+does **not** run a host model and therefore does not establish behavioral compliance. A behavioral
+claim requires retained model outputs, completed manual scoring, the full denominator, and the
+failed-case list. The historical
+[A/B comparison](evals/comparisons/optimization-claim-scope.md) is a worked snapshot, not current
+general evidence of model improvement.
 
 ## Scope and limitations
 
-- The integrity contract prohibits inventing citations, identifiers, evidence, methods, datasets,
-  results, guarantees, or novelty claims.
-- The venue contract prohibits assuming that one template, page limit, review format,
-  anonymization policy, or AI disclosure rule applies to every IEEE or ACM publication.
-- The skill guidance does not replace a target venue's current official author instructions or
+- The skill can reorganize and rewrite supported content; it cannot create missing scientific
+  evidence.
+- It does not replace source verification, experiment execution, statistical analysis, or expert
+  manuscript review.
+- Venue guidance does not replace the named publication's current official instructions and
   template.
-- The audit contract prohibits calling a manuscript submission-ready while a load-bearing claim,
-  citation, result, or venue requirement remains unresolved.
-- The HTML renderer presents a completed audit; it is not an analysis engine and cannot establish
-  evidence, generate findings, or repair unsupported claims.
-- The evaluation runner uses manual criterion verdicts; it is a regression and smoke-test harness,
-  not an automated model judge or comparative benchmarking framework.
-- The skill is independently usable. ALETHEIA may be used upstream for evidence retrieval and
-  claim support, but it is not required.
+- An audit-map renderer presents completed findings; it is not an analysis engine.
+- The evaluation runner uses manual criterion verdicts and is not an automated model judge or
+  comparative benchmark by itself.
+- Rules encoded in an agent skill are behavioral instructions, not a guarantee that every host
+  model will follow them on every run.
 
-These are requirements encoded by the skill, not a guarantee that every host model will comply on
-every run. Validate consequential outputs against the supplied evidence and retain the relevant
-prompt, response, and scoring artifacts.
+Never call a manuscript submission-ready while a load-bearing claim, citation, result, or venue
+requirement remains unresolved. Consequential outputs should be checked against their controlling
+artifacts, with prompts, responses, and scoring records retained where reproducibility matters.
 
 ## Repository structure
 
@@ -365,9 +400,11 @@ skills/ieee-acm-paper-writing/
 ├── LICENSE                  # MIT terms shipped with the installable copy
 ├── agents/openai.yaml       # Agent interface metadata
 ├── assets/                  # Self-contained HTML audit-map template
-├── examples/                # Routing, audit data, interactive showcase, and renderer fixture
+├── examples/                # Writing, routing, audit data, and renderer fixtures
 ├── scripts/                 # Dependency-free audit-map renderer
 └── references/              # Integrity, style, domain, corpus, and venue guidance
+.agents/plugins/marketplace.json  # Repository marketplace entry for Codex
+plugins/ieee-acm-paper-writing/   # Native Codex plugin manifest and install-safe snapshots
 evals/
 ├── cases.json               # Schema-v2 behavioral cases
 ├── run_evals.py             # Collection, manual scoring, and reporting harness
@@ -379,6 +416,8 @@ site/                        # Dependency-free hosted showcase source
 assets/                      # Repo-side icon and showcase screenshots (not installed)
 scripts/build_site.py        # Builds the Vercel output from tracked site and example files
 scripts/serve_local_audit.py # Runs the loopback-only local audit workbench
+scripts/sync_codex_plugin.py # Refreshes or checks install-safe plugin snapshots
+scripts/validate_codex_plugin.py # Validates the Codex manifest, marketplace, and snapshots
 scripts/validate_skill.py    # Dependency-free repository validator
 tests/                       # Evaluation-runner and validator regression tests
 vercel.json                  # Static-site build and output configuration
