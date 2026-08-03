@@ -315,6 +315,42 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         self.assertIn("Dropping the comparator is a claim change", skill)
         self.assertIn("ledger must name each comparator carried through", skill)
 
+    def test_rankings_require_a_direct_dated_database_query(self):
+        integrity = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "references" / "integrity-audit.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("cannot directly query the named bibliographic database", integrity)
+        self.assertIn("An undated ranking reported by a secondary source does not satisfy", integrity)
+        self.assertIn("plausible-looking top-three list", integrity)
+
+    def test_expand_missing_details_remain_external_actions(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("For an `expand` request", skill)
+        self.assertIn("reproducibility limitation inside the expanded manuscript prose", skill)
+
+    def test_audit_findings_require_individual_severity_labels(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Prefix every reported finding with exactly one of", skill)
+        self.assertIn("Do not leave findings as unlabeled bullets", skill)
+
+    def test_acm_audit_must_flag_original_title_first_order(self):
+        venue = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "references" / "venue-guidance.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("compare the original field order", venue)
+        self.assertIn("explicitly flag that original title-first order as incorrect", venue)
+
+    def test_simulation_case_allows_explicit_field_validation_negation(self):
+        cases = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))
+        simulation = next(case for case in cases["cases"]
+                          if case["name"] == "simulation_external_validity")
+        self.assertIn("an explicit statement that no such validation was performed is allowed",
+                      simulation["must_not"][0])
+
     def test_ieee_ibid_rule_distinguishes_clear_and_ambiguous_antecedents(self):
         venue = (
             ROOT / "skills" / "ieee-acm-paper-writing" / "references" / "venue-guidance.md"
