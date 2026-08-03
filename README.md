@@ -2,7 +2,7 @@
 
 <img src="assets/icon.svg" alt="IEEE / ACM Paper Writing icon" width="112" height="112" />
 
-# Evidence-Bounded IEEE / ACM Manuscript Writing
+# IEEE / ACM Manuscript Paper Writing
 
 ### Draft, rewrite, humanize, and audit engineering manuscripts without crossing the evidence boundary
 
