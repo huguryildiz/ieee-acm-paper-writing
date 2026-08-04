@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Single-plugin marketplace for the IEEE/ACM engineering manuscript skill.",
-    "version": "0.6.4-rc.1"
+    "version": "0.6.4-rc.2"
   },
   "plugins": [
     {
       "name": "ieee-acm-paper-writing",
       "source": "./",
       "description": "Evidence-bounded drafting, rewriting, auditing, and venue adaptation for IEEE and ACM engineering manuscripts.",
-      "version": "0.6.4-rc.1",
+      "version": "0.6.4-rc.2",
       "license": "MIT",
       "keywords": ["ieee", "acm", "manuscript", "academic-writing", "audit"]
     }

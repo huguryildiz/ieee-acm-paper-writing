@@ -274,6 +274,41 @@ class EvalCoverageTests(unittest.TestCase):
 
 
 class HtmlMapDocumentationTests(unittest.TestCase):
+    def test_non_negotiable_preflight_closes_observed_behavior_gaps(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        profiles = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "references" /
+            "engineering-profiles.md"
+        ).read_text(encoding="utf-8")
+        manuscript_style = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "references" /
+            "manuscript-structure-style.md"
+        ).read_text(encoding="utf-8")
+        integrity = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "references" /
+            "integrity-audit.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("Run the non-negotiable response preflight", skill)
+        self.assertIn("relation,\n   quantifier, modifier", skill)
+        self.assertIn("A reporting field named in this skill", skill)
+        self.assertIn("Do not browse for,\n   append, or cite an external record", skill)
+        self.assertIn("make zero positive\n   publisher-wide statements", skill)
+        self.assertIn("after all Markdown formatting is complete", skill)
+        self.assertIn("Every listed field is a reporting checklist", profiles)
+        self.assertIn("Do not infer\nmodel contents, study types", profiles)
+        self.assertIn("Do not infer a communication graph", profiles)
+        self.assertIn("end the system statement after the supplied message type", profiles)
+        self.assertIn("Do not complete it with “with the others,”", profiles)
+        self.assertIn("a corresponding send/receive rule does\nnot identify", profiles)
+        self.assertIn("These categories do not supply the theorem's assumptions", profiles)
+        self.assertIn("does not relax the closed-world\ngate", manuscript_style)
+        self.assertIn("small grammatical complements", manuscript_style)
+        self.assertIn("does not ask\n  for independent verification", integrity)
+        self.assertIn("Render every finding heading as", integrity)
+
     def test_skill_requires_json_and_html_as_deliverables(self):
         skill = (
             ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"

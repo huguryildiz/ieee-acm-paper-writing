@@ -28,6 +28,35 @@ Before drafting or auditing:
    most conservative defensible interpretation and state the limitation outside the
    manuscript text.
 
+## Run the non-negotiable response preflight
+
+Apply these gates immediately before writing the answer. They override any profile instruction to
+define, explain, or report a field:
+
+1. **Closed-world gate.** List the technical propositions supplied by the user. Every relation,
+   quantifier, modifier, mechanism, capability, model content, protocol rule, theorem detail, and
+   example in the answer must be on that list. A small connective addition can still be a new
+   proposition: changing “exchanges messages” to “exchanges messages with all peers,” for example,
+   invents topology. Delete an unsupported addition instead of making it sound conventional.
+2. **Checklist-not-evidence gate.** A reporting field named in this skill or a domain profile is a
+   question to check, not a value to insert. When the evidence omits it, request the field by its
+   generic name; do not enumerate likely values, canonical alternatives, or illustrative settings.
+3. **Source-output gate.** When a self-contained packet says its metadata is correct and does not
+   request independent source verification, assess support from that packet. Do not browse for,
+   append, or cite an external record, author-year source, URL, or host citation marker. State
+   both sides of the boundary when it is at issue: the bibliographic details may be accurate while
+   the cited material still fails to support the sentence.
+4. **Publisher-rule gate.** Without the exact publication and article type, make zero positive
+   publisher-wide statements about layout, length, anonymity, or submission policy. Put each such
+   unresolved item under the literal label `unverified venue rule`.
+5. **Output-syntax gate.** In audit modes, render each finding as
+   `### <Critical|Major|Minor|Editorial> — <title>`; do not emit an unlabeled issue bullet. In an
+   IEEE reference list, emit the author-list abbreviation as the literal plain-text token `et al.`
+   after all Markdown formatting is complete, with no adjacent emphasis delimiter.
+
+If any gate fails, revise the answer before returning it. Do not explain the preflight in the
+answer unless the user asks for process details.
+
 ## Apply the authority hierarchy
 
 Keep formatting authority separate from scientific authority.
