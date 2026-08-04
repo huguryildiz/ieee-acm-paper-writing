@@ -18,10 +18,11 @@ No change to the installable skill.
 - The v0.6.4 evidence claim below said every campaign retains its *collector-created*
   `collection.json`. That overstates what the bundle can show. Collection predates the create-once
   guard and the retained responses carry no timestamps, so no campaign can demonstrate from inside
-  the bundle that its receipt is the record its own responses were collected under. An external
-  review reported that the `luna-medium-r2` receipt was restamped by a late single-case repair,
-  leaving 26 of its 27 responses older than the recorded campaign start; the raw local files that
-  review cited are not retained, so this repository can neither confirm nor refute it. The manifest,
+  the bundle that its receipt is the record its own responses were collected under. The
+  `luna-medium-r2` receipt is known to have been restamped this way: it records a collection start
+  of `2026-08-04T13:40:41Z`, while 26 of its 27 responses were written earlier and only the repaired
+  case follows it. That was checked against collector output kept outside version control; the
+  bundle does not retain it, so a clean clone cannot reproduce the check. The manifest,
   its blocking findings, and the README now state the limitation, and it applies to every earlier
   retained bundle. Recorded case results are unaffected: no criterion decision depended on the
   receipt.

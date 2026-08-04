@@ -496,10 +496,13 @@ tree rather than a historical one.
 Receipt originality in that bundle is unverified. It was collected before the create-once receipt
 guard, when a single-case repair rewrote the campaign receipt in place, and the retained responses
 carry no timestamps, so no campaign can show from inside the bundle that its `collection.json` is the
-record its own responses were collected under. An external review reported that the `luna-medium-r2`
-receipt was restamped by a late single-case repair, leaving 26 of its 27 responses older than the
-recorded campaign start; the raw local files that review cited are not retained, so this repository
-can neither confirm nor refute it. The same limitation applies to every earlier retained bundle.
+record its own responses were collected under. The `luna-medium-r2` receipt is known to have been
+restamped this way: it records a collection start of `2026-08-04T13:40:41Z`, while 26 of its 27
+responses were written earlier, the last of those at `13:40:40Z`, and only the repaired case follows
+at `13:41:02Z`. That was checked against the collector output kept outside version control in the
+maintainer's workspace; the bundle does not retain that output and carries no response timestamps of
+its own, so a clean clone cannot reproduce the check. The same limitation applies to every earlier
+retained bundle.
 Collection now claims a receipt once and refuses to overwrite it, but that guard cannot repair
 evidence already collected.
 
