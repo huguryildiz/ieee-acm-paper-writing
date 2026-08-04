@@ -456,9 +456,19 @@ remain in the denominator. The HTML-map case also declares its paired JSON and H
 collector archives and hashes those artifacts, and a missing or replaced artifact makes the score
 stale.
 
+The retained [release 0.6.2 evidence bundle](evals/results/release-0.6.2-d685cc0/manifest.json)
+covers all 27 cases on Codex Luna Medium twice and Claude Sonnet Medium once. The recorded results
+are 26/27, 25/27, and 26/27, with every failed case named in the manifest. Collection used isolated
+agent environments after the authority gate passed, and the installable-skill hash was captured at
+collection time. Claude Sonnet Medium assisted the initial criterion scoring; the maintainer then
+reviewed and accepted all 441 criterion decisions and confirmed that the remaining failures do not
+belong to a release-blocking core-invariant class. These executions qualify the behavioral-evidence
+portion of the 0.6.2 gate; they do not guarantee identical behavior on later model runs.
+
 Repository CI runs structural validation, evaluation-schema validation, and regression tests. It
 also validates the hashes, scoring completeness, denominator, and failed-case declarations in the
-retained [post-64cec1a behavioral evidence](evals/results/post-64cec1a.md). That bundle describes
+retained bundles, including the historical
+[post-64cec1a behavioral evidence](evals/results/post-64cec1a.md). That bundle describes
 the candidate built from base commit `64cec1a`; it is not a retroactive measurement of the earlier
 `v0.6.1` files, whose skill hash differs. The corrected records report 24/27, 26/27, and 25/27;
 every campaign has at least one named failed case. That bundle's skill hash was recomputed after

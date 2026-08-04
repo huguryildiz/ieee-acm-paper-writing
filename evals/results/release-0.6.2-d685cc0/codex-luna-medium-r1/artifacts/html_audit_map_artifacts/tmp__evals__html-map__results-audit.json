@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "title": "Results Section-Audit Map",
+  "subject": "solver optimality, runtime, and deployment-readiness claims",
+  "eyebrow": "Generic IEEE/ACM engineering audit · synthetic Results excerpt",
+  "summary": "The supplied solver logs contradict the unconditional optimality and 10 s runtime claims and do not support real-time deployment readiness. The bounded evidence is that 9 of 12 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, whereas 3 reached the 60 s limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%.",
+  "source_label": "Audited Results excerpt",
+  "revision_label": "Evidence-scoped response",
+  "footer": "Generated on 4 August 2026 from the supplied synthetic Results excerpt by applying the repository-local ieee-acm-paper-writing skill. No target publication was supplied; venue-specific compliance was not assessed. The HTML presents the canonical text audit and adds no finding.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Universal optimality claim is contradicted by the reported runs",
+      "location": "Results excerpt · sentence 1 versus sentence 2",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "Only 9 of 12 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance. The other 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%. No exact-optimality certificate is supplied.",
+      "consequence": "The sentence makes an unbounded exact-optimality guarantee that the reported runs directly contradict; a tolerance-based solver status does not establish the exact global optimum.",
+      "correction": "Remove the universal wording and report the finite observed outcomes: 9 of 12 runs ended with solver status OPTIMAL under the 1% relative MIP-gap tolerance, while 3 reached the 60 s limit with feasible incumbents at the reported final gaps.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "2",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Ten-second runtime claim is contradicted and unmeasured",
+      "location": "Results excerpt · sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "Three runs reached the 60 s time limit, so the asserted universal 10 s bound is contradicted for those runs. No timing measurements outside the solver logs are supplied, and no per-run measurement supports the 10 s figure for the remaining runs.",
+      "consequence": "The excerpt presents a precise runtime guarantee without supporting measurements and conflicts with the reported time-limited runs.",
+      "correction": "Delete the 10 s claim. Any runtime claim requires per-instance wall-clock measurements with the solver, hardware, thread, and measurement configuration reported; retain the 60 s value only as the stated time limit.",
+      "disposition": "remove"
+    },
+    {
+      "id": "3",
+      "layer": "scientific-support",
+      "severity": "Major",
+      "title": "Real-time deployment readiness is unsupported",
+      "location": "Results excerpt · sentence 3",
+      "source": "The method is therefore ready for real-time deployment.",
+      "evidence": "No deployment experiment, operational deadline, end-to-end latency measurement, jitter analysis, resource assessment, or deadline-miss analysis is supplied. In addition, 3 of 12 runs reached the 60 s limit without an optimality certificate.",
+      "consequence": "Solver-log outcomes from a finite offline evaluation do not establish system-level real-time behavior, operational readiness, or safe deployment.",
+      "correction": "Remove the deployment-readiness conclusion. Before making a scoped readiness claim, define the operational deadline and evaluate representative end-to-end latency, tail behavior, deadline misses, resources, and relevant failure modes.",
+      "disposition": "remove"
+    },
+    {
+      "id": "4",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "Optimization reporting is insufficient for reproducibility",
+      "location": "Results excerpt · sentence 2",
+      "source": "Across 12 instances, 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%.",
+      "evidence": "The excerpt supplies the instance count, gap tolerance, time limit, statuses, and timeout gaps, but not the solver and version, formulation and configuration, hardware, thread count, instance identities or selection rule, or per-instance runtime, primal value, and best bound.",
+      "consequence": "Readers cannot reconstruct the runs, assess configuration dependence, or interpret runtime and solution-quality behavior beyond the supplied summary.",
+      "correction": "Request the solver/version, formulation and settings, hardware and threads, instance family and selection rule, seeds where applicable, and per-instance runtime, status, primal value, best bound, and final gap. Until supplied, keep the numerical statement descriptive of these 12 logs only.",
+      "disposition": "author-query"
+    }
+  ]
+}
