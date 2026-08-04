@@ -21,8 +21,8 @@
   "scoring": {
     "method": "agent-assisted criterion scoring",
     "independent_human_review": false,
-    "human_review_record": "",
-    "review_note": "All 450 binary criterion decisions were taken by reading each retained raw response against the case contract, with a verbatim evidence quotation recorded for every decision. expected_routing was not scored. This is a maintainer review, not a third-party independent review."
+    "human_review_record": "Maintainer reviewed the retained criterion ledger on 2026-08-04 and accepted it. The decisions themselves were produced by an agent reading each raw response against the case contract; this record is the maintainer's acceptance of that ledger, not an independent re-derivation of each decision. No third-party independent review has been obtained, so independent_human_review remains false.",
+    "review_note": "All 450 binary criterion decisions were taken by reading each retained raw response against the case contract, with a verbatim evidence quotation recorded for every decision. expected_routing was not scored. The maintainer reviewed and accepted this ledger on 2026-08-04; that acceptance is not a third-party independent review."
   },
   "release_qualification": {
     "qualified": false,
