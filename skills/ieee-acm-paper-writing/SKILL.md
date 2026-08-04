@@ -55,6 +55,10 @@ changes, or audits a scientific claim. Apply these invariants:
 - Scope every guarantee to the assumptions, feasible region, certificate, data regime, and
   implementation actually supporting it.
 - Keep association, prediction, explanation, and causation distinct.
+- Never add an explanatory mechanism, failure cause, or causal hypothesis absent from the supplied
+  evidence, even if it sounds plausible or is labeled as speculation, interpretation, or a
+  hypothesis. Report the observed failure regime descriptively and request the analysis needed to
+  investigate its cause.
 - Keep statistical significance, effect size, practical importance, and robustness
   distinct.
 - Report failed, infeasible, unstable, and negative cases when they belong to the evaluated
@@ -120,6 +124,10 @@ pattern. Never attribute a theorem, number, quotation, or historical claim to it
 needs a source attribution, verify the external source separately and keep bibliographic provenance
 outside the skill references.
 
+When the user supplies style excerpts, do not reproduce their sentences or distinctive phrases in
+manuscript prose, ledgers, explanations, or compliance notes. Describe transferred structure in
+generic functional terms without quoting fragments to demonstrate that copying was avoided.
+
 ## Draft or rewrite
 
 1. Build a claim inventory before prose: intended claim, evidence source, scope, and
@@ -135,6 +143,39 @@ outside the skill references.
 5. Present observed results before interpretation. Move mechanisms, implications, and
    generalization claims to the Discussion unless the target publication combines them.
 6. Return manuscript-ready prose only when every included claim is supported.
+
+Before returning any `draft`, `rewrite`, or `expand` output, apply a sentence-level evidence trace:
+every technical noun phrase, example, mechanism, condition, outcome, and causal or explanatory
+clause must map to an explicit item in the supplied evidence. Delete any clause that does not map;
+do not rescue it by labeling it plausible, illustrative, generic, or hypothetical. Concrete domain
+examples are technical content and may not be invented to make an abstract formulation vivid. A
+reported timeout without an optimality certificate does not establish that no incumbent existed,
+that the instance was infeasible, why the search was slow, or any stronger failure regime unless
+the evidence states that fact separately.
+
+Treat a user-supplied evidence packet as a closed world for technical content. Familiar meanings of
+domain terms are not additional evidence: do not unpack a named constraint, algorithm component,
+metric, or dataset into properties the packet does not state. In particular, do not infer locality,
+separability, admissibility rules, interaction semantics, scaling trends, exactness, termination
+behavior, feasibility of individual components, or a literature gap from a technical label or from
+one observed threshold. Style calibration may change organization, emphasis, and sentence rhythm;
+it may not increase the set of technical propositions. Before finalizing, reduce every sentence to
+its technical propositions and remove each proposition that cannot be pointed to verbatim in the
+packet. When the remaining evidence cannot support a conventional narrative transition, prefer a
+sparse, explicitly bounded draft plus an external `Author queries` item over an inferred bridge.
+
+For an Introduction drafted from a short enumerated evidence packet, use a sparse-evidence
+protocol. Turn the task statement, observed failure regime, supplied mechanism, guarantee boundary,
+and evaluation design into separate paragraphs in that order, using only rhetorical transitions.
+Make the task paragraph no more informative than `This paper addresses <task statement>.`; never
+expand its nouns with assumed meanings such as capable assignments, limited or competing resources,
+or coupled decisions. Do not define the task or its constraints beyond the packet; do not explain
+why the failure occurs or what a timeout implies; do not claim that an observed threshold is a
+general scaling boundary; and do not assign unstated properties, benefits, costs, or guarantees to
+a baseline or mechanism.
+Contribution bullets may restate the supplied mechanism and evaluation as scoped artifacts, but
+must not add a performance outcome or novelty claim. If a technically informative transition would
+need any additional fact, omit it and put that missing fact in `Author queries`.
 
 Do not put `TODO`, `TBD`, fabricated placeholders, internal file paths, or agent commentary
 inside publication-ready prose. When evidence is missing, omit the unsupported statement or
@@ -235,9 +276,10 @@ defect to an editorial issue because the proposed prose sounds cautious.
 5. Mark any rule not verified from the target publication as `unverified venue rule` in the
    handoff, not in the manuscript.
 
-For an IEEE reference list returned as Markdown, run a literal final cleanup: replace `*et al*.`
-or `_et al_.` with plain `et al.`. Emphasis may remain on publication titles, but never on this
-author-list abbreviation.
+For an IEEE reference list returned as Markdown, run a literal final cleanup over the entire
+response: replace every `*et al*.`, `*et al.*`, `_et al_.`, or `_et al._` occurrence with plain
+`et al.`. Do not show an italicized counterexample in a note or explanation. Emphasis may remain on
+publication titles, but never on this author-list abbreviation.
 
 Never infer that all IEEE or all ACM publications share one page limit, section order,
 review layout, bibliography rule, anonymization policy, or generative-AI disclosure format.
