@@ -78,13 +78,29 @@ class RunnerAuthorityTests(unittest.TestCase):
             "env HOME=/tmp/dirty codex exec",
             "sh -c 'HOME=/tmp/dirty codex exec'",
             "codex exec --config model=o3",
+            "codex exec -c 'model_reasoning_effort=high'",
+            "codex exec --config 'model_reasoning_effort=low'",
+            "codex exec --config=model_reasoning_effort=medium",
             "codex exec -C/tmp/dirty",
             "claude -p --plugin-dir /tmp/dirty",
+            "claude -p --append-system-prompt injected",
+            "claude -p --append-system-prompt-file /tmp/injected.txt",
+            "claude -p --system-prompt injected",
+            "claude -p --system-prompt-file /tmp/injected.txt",
+            "claude -p --permission-prompt-tool unsafe-tool",
+            "/tmp/codex exec",
         ):
             with self.subTest(command=command), self.assertRaisesRegex(
-                    ValueError, "not allowed|supported host"):
+                    ValueError, "not allowed|supported host|checked PATH"):
                 RUNNER_MODULE.agent_command(command)
         self.assertEqual(RUNNER_MODULE.agent_command("codex exec"), ["codex", "exec"])
+        self.assertEqual(
+            RUNNER_MODULE.agent_command(
+                "codex exec -m gpt-5.6-luna -c 'model_reasoning_effort=\"medium\"'"
+            ),
+            ["codex", "exec", "-m", "gpt-5.6-luna", "-c",
+             'model_reasoning_effort="medium"'],
+        )
         self.assertEqual(RUNNER_MODULE.agent_command("claude -p"), ["claude", "-p"])
 
     def test_collection_refuses_collision_before_agent_invocation(self):
@@ -140,7 +156,12 @@ class CollectionProvenanceTests(unittest.TestCase):
             outdir = Path(tmp) / "out"
             self.collect(outdir)
             record = json.loads((outdir / "collection.json").read_text(encoding="utf-8"))
+            self.assertEqual(record["schema_version"], 2)
             self.assertEqual(record["skill_hash"], RUNNER_MODULE.skill_hash())
+            self.assertEqual(record["agent_command"], ["codex", "exec"])
+            self.assertEqual(record["authority_collisions"], [])
+            self.assertTrue(record["mechanical_authority_isolation"])
+            self.assertEqual(RUNNER_MODULE.release_collection_problems(record), [])
             self.assertIn("claude_effective", record["authority_roots"])
 
     def test_scoring_refuses_a_skill_edited_after_collection(self):

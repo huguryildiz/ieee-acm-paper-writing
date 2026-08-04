@@ -568,6 +568,7 @@ class ClaudePluginPackageTests(unittest.TestCase):
     @staticmethod
     def build(root, *, plugin_version="1.2.3", market_version="1.2.3",
               entry_version="1.2.3", codex_version="1.2.3", source="./",
+              citation_version=None,
               changelog="# Changelog\n\n## v1.2.3 — 2026-01-01\n",
               readme=(
                   "npx skills@1.5.21 add "
@@ -606,6 +607,10 @@ class ClaudePluginPackageTests(unittest.TestCase):
         (skill / "SKILL.md").write_text("---\nname: x\ndescription: y\n---\n", encoding="utf-8")
         (root / "README.md").write_text(readme, encoding="utf-8")
         (root / "CHANGELOG.md").write_text(changelog, encoding="utf-8")
+        (root / "CITATION.cff").write_text(
+            f"cff-version: 1.2.0\nversion: {citation_version or plugin_version}\n",
+            encoding="utf-8",
+        )
 
     def run_check(self, **kwargs):
         with tempfile.TemporaryDirectory() as tmp:
@@ -619,6 +624,10 @@ class ClaudePluginPackageTests(unittest.TestCase):
 
     def test_version_drift_between_manifests_is_rejected(self):
         errors = self.run_check(codex_version="9.9.9")
+        self.assertTrue(any("disagree on version" in error for error in errors))
+
+    def test_citation_version_drift_is_rejected(self):
+        errors = self.run_check(citation_version="9.9.9")
         self.assertTrue(any("disagree on version" in error for error in errors))
 
     def test_release_not_pinned_in_readme_is_rejected(self):
@@ -646,6 +655,10 @@ class ClaudePluginPackageTests(unittest.TestCase):
         errors = self.run_check(
             plugin_version="1.2.4-rc.1", market_version="1.2.4-rc.1",
             entry_version="1.2.4-rc.1", codex_version="1.2.4-rc.1", readme=readme,
+            changelog=(
+                "# Changelog\n\n## v1.2.4-rc.1 — 2026-01-02\n\n"
+                "## v1.2.3 — 2026-01-01\n"
+            ),
         )
         self.assertEqual(errors, [])
 
@@ -659,6 +672,10 @@ class ClaudePluginPackageTests(unittest.TestCase):
         errors = self.run_check(
             plugin_version="1.2.4-rc.1", market_version="1.2.4-rc.1",
             entry_version="1.2.4-rc.1", codex_version="1.2.4-rc.1", readme=readme,
+            changelog=(
+                "# Changelog\n\n## v1.2.4-rc.1 — 2026-01-02\n\n"
+                "## v1.2.3 — 2026-01-01\n"
+            ),
         )
         self.assertTrue(any("rolling plugin candidate" in error for error in errors))
 
@@ -673,6 +690,10 @@ class ClaudePluginPackageTests(unittest.TestCase):
         errors = self.run_check(
             plugin_version="1.2.4-rc.1", market_version="1.2.4-rc.1",
             entry_version="1.2.4-rc.1", codex_version="1.2.4-rc.1", readme=readme,
+            changelog=(
+                "# Changelog\n\n## v1.2.4-rc.1 — 2026-01-02\n\n"
+                "## v1.2.3 — 2026-01-01\n"
+            ),
         )
         self.assertTrue(any("never released" in error for error in errors))
 

@@ -1,5 +1,41 @@
 # Changelog
 
+## v0.6.4-rc.1 — 2026-08-04
+
+### Changed
+
+- Replaced the repository-side IEEE mathematics text export and reference-format catalog with
+  original provenance summaries that link to the official sources without redistributing their
+  paragraphs, examples, source-type templates, or abbreviation tables.
+- Strengthened three behavioral cases so their supplied evidence and prohibited technical additions
+  are consistent with the skill's closed-world invariant.
+- Retained evidence now carries each collector-created `collection.json`, including the exact parsed
+  agent command, checked authority roots, empty collision set, collection time, and collection-time
+  skill and case hashes.
+- Rolling plugin manifests identify this prerelease candidate while stable installation commands
+  remain pinned to `v0.6.3`.
+
+### Fixed
+
+- Evidence-integrity mismatch branches now produce bounded failures instead of raising `NameError`,
+  with regression tests for case, output, skill, artifact, criterion, and unscored-verdict failures.
+- Claude collection rejects system-prompt replacement/appending and permission-prompt-tool options
+  known to alter evaluation authority.
+- The local audit workbench rejects non-loopback `Host` headers.
+
+### Evidence boundary
+
+- Fresh, isolated 27-case campaigns were retained for Claude Sonnet Medium once and Codex Luna
+  Medium twice. Agent-assisted strict results are 25/27, 23/27, and 22/27; every campaign has named
+  failures, and no independent human review is claimed. The candidate is therefore explicitly not
+  release-qualified.
+- The retained v0.6.2 and v0.6.3 bundles do not include their original `collection.json` files or
+  exact agent commands. Their prior isolation and collection-time-identity claims are therefore
+  marked unverified, not recreated after collection.
+- The v0.6.3 case-local scores remain a historical record of the original rubric, but a later
+  raw-response audit found an uncovered closed-world invariant failure. They are not current
+  behavior-qualified release proof.
+
 ## v0.6.3 — 2026-08-04
 
 ### Fixed
@@ -20,6 +56,10 @@
   Codex Luna Medium twice. The independently reviewed results are 27/27, 26/27, and 25/27; the
   remaining failures are limited to reference-format audit details, and no unresolved
   release-blocking core invariant failure was found.
+
+Correction recorded in v0.6.4-rc.1: the bundle proves record consistency, not the quoted
+qualification claim. The original collection receipts were not retained, and later raw-response
+review found a closed-world invariant that the case rubric did not score.
 
 ## v0.6.2 — 2026-08-04
 

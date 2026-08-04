@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "title": "Results Section Audit",
+  "subject": "auditing optimization claims against supplied solver-log evidence",
+  "eyebrow": "Generic IEEE/ACM engineering manuscript · Results section",
+  "summary": "The excerpt reports solver statuses and final relative gaps for 12 instances, but its universal optimality, 10-second timing, and deployment-readiness claims are unsupported or contradicted by those logs. No venue-specific compliance finding is exercised because no target venue was supplied.",
+  "source_label": "Audited Results excerpt",
+  "revision_label": "Evidence-scoped response",
+  "footer": "Generated from the repository-local ieee-acm-paper-writing skill. The HTML is a presentation of the canonical text audit and adds no scientific finding.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Universal exact-optimality and 10-second claim is contradicted",
+      "location": "Results excerpt · sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "The supplied logs report solver status OPTIMAL for only 9 of 12 instances under a 1% relative MIP-gap tolerance. The other 3 instances reached a 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%. No exact-optimality certificate or timing measurement outside these logs is supplied.",
+      "consequence": "The sentence is both contradicted by the reported time-limited runs and stronger than a tolerance-based solver status; it cannot establish a universal global-optimum guarantee or a 10 s bound.",
+      "correction": "Replace it with the bounded observation: Across 12 instances, 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%. Do not claim exact global optimality or a 10 s bound without the corresponding certificates and measurements.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "2",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Deployment readiness is unsupported",
+      "location": "Results excerpt · sentence 3",
+      "source": "The method is therefore ready for real-time deployment.",
+      "evidence": "No deployment experiment or timing measurements outside the supplied solver logs are provided. The logs include three time-limited runs with nonzero final gaps, and they do not establish operational real-time performance or deployment validity.",
+      "consequence": "The conclusion converts a bounded solver-log observation into an operational readiness claim that the evidence does not test.",
+      "correction": "Remove the deployment-readiness sentence. At most, state that the excerpt reports the listed solver outcomes for the 12 instances; reserve deployment or real-time claims for a supplied deployment evaluation with its timing and correctness evidence.",
+      "disposition": "remove"
+    },
+    {
+      "id": "3",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "Optimization configuration is not reproducible",
+      "location": "Results excerpt · sentences 1–2",
+      "source": "Across 12 instances, 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%.",
+      "evidence": "The excerpt does not identify the solver or version, hardware, thread configuration, random seeds, or the precise stopping and logging configuration. The supplied tolerance and time limit are not sufficient to reconstruct the optimization runs.",
+      "consequence": "Readers cannot reproduce the statuses, gaps, or timing behavior or assess whether implementation settings influenced the observed outcomes.",
+      "correction": "Add the verified solver identity and version, hardware, thread configuration, seeds, and complete stopping/logging settings. Keep the reported 1% relative MIP-gap tolerance and 60 s time limit exactly as supplied; do not invent omitted values.",
+      "disposition": "author-query"
+    }
+  ]
+}

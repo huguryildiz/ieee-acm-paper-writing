@@ -10,17 +10,27 @@
     "must_not_criteria": 55
   },
   "collection": {
-    "mechanical_authority_isolation": true,
+    "mechanical_authority_isolation": false,
     "repository_skill_authority": "skills/ieee-acm-paper-writing/SKILL.md",
     "same_named_user_or_cached_copy_allowed": false,
     "expected_routing_scored": false,
-    "skill_hash_captured_at_collection": true
+    "skill_hash_captured_at_collection": false,
+    "agent_command_captured_at_collection": false,
+    "collection_record_retained": false
   },
   "scoring": {
     "independent_human_review": true,
     "human_review_record": "Maintainer reviewed and accepted the exact-HEAD criterion decisions and rationales for d685cc039cf7adabdf1d5947d024cbcfebc5b5ff in the Codex release thread on 2026-08-04; maintainer confirmed no remaining release-blocking core invariant failure.",
     "review_note": "Claude Sonnet Medium assisted initial criterion scoring; independent maintainer review and attestation completed on 2026-08-04.",
     "method": "agent-assisted criterion scoring"
+  },
+  "release_qualification": {
+    "qualified": false,
+    "review_record": "Qualification corrected during the v0.6.4-rc.1 audit; record integrity remains checkable, but the original collection receipts and exact agent commands were not retained.",
+    "blocking_findings": [
+      "Mechanical authority isolation cannot be independently verified from the retained bundle.",
+      "The exact collection-time agent commands are absent."
+    ]
   },
   "campaigns": [
     {

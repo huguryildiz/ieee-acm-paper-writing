@@ -109,6 +109,39 @@ class LocalAuditUiTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "loopback"):
             SERVER_MODULE.create_server(host="0.0.0.0", port=0)
 
+    def test_non_loopback_host_header_is_rejected(self):
+        invalid_hosts = (
+            "attacker.example",
+            "127.0.0.1.evil.example",
+            "attacker.example@127.0.0.1",
+            "localhost/path",
+            f"localhost:{self.port + 1}",
+        )
+        for host in invalid_hosts:
+            with self.subTest(host=host):
+                status, _, body = self.request("GET", "/", headers={"Host": host})
+                self.assertEqual(status, 421)
+                self.assertEqual(json.loads(body), {"error": "invalid local host"})
+
+        status, _, body = self.request(
+            "POST",
+            "/render",
+            EXAMPLE_JSON.read_bytes(),
+            {
+                "Host": "127.0.0.1.evil.example",
+                "Content-Type": "application/json",
+                "X-Audit-Session": self.token,
+            },
+        )
+        self.assertEqual(status, 421)
+        self.assertEqual(json.loads(body), {"error": "invalid local host"})
+
+    def test_loopback_host_headers_are_accepted(self):
+        for host in ("localhost", "127.0.0.1", f"localhost:{self.port}"):
+            with self.subTest(host=host):
+                status, _, _ = self.request("GET", "/health", headers={"Host": host})
+                self.assertEqual(status, 200)
+
     def test_ui_sources_have_privacy_accessibility_and_theme_contracts(self):
         ui_root = ROOT / "scripts" / "local_audit_ui"
         html = (ui_root / "index.html").read_text(encoding="utf-8")
