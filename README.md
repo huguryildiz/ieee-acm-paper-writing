@@ -478,10 +478,11 @@ historical evidence, not current behavior-qualified release proof.
 
 The retained [0.6.4-rc.1 candidate bundle](evals/results/release-0.6.4-rc.1-56e7b47/manifest.json)
 recollects the strengthened 27-case contract on Claude Sonnet Medium once and Codex Luna Medium
-twice. The complete agent-assisted results are 25/27, 23/27, and 22/27. Every campaign retains its
-collector-created `collection.json`, exact parsed agent command, checked authority roots, empty
-collision set, collection-time skill and case hashes, all 27 raw responses, all 150 criterion
-decisions, and both declared HTML-map artifacts. The bundle is explicitly unqualified: all three
+twice. The complete agent-assisted results are 25/27, 23/27, and 22/27. Every campaign retains a
+`collection.json` (receipt originality unverified below), exact parsed agent command, checked
+authority roots, empty collision set, collection-time skill and case hashes, all 27 raw responses,
+all 150 criterion decisions, and both declared HTML-map artifacts. The bundle is explicitly
+unqualified: all three
 campaigns have named strict failures, and no independent human review is claimed.
 
 The retained [0.6.4 candidate bundle](evals/results/release-0.6.4-2c76b19/manifest.json) recollects
@@ -564,16 +565,19 @@ The retained 0.6.4-rc.1 candidate bundle does not qualify a stable release under
 campaign has strict failures and its 450 criterion decisions have not received independent human
 review.
 
-**`v0.6.4` was tagged with one gate condition explicitly unmet.** The
-[0.6.4 bundle](evals/results/release-0.6.4-2c76b19/manifest.json) satisfies the campaign coverage,
-replication, isolation, collection-time hash, and clean-install conditions, and its six remaining
-case failures all fall outside the enumerated blocking categories. It does **not** satisfy the
-independent-review condition. The 450 criterion decisions were produced by an agent reading each
-raw response against the case contract; the maintainer reviewed and accepted that ledger on
-2026-08-04. Maintainer acceptance is not third-party independence, and it is not a re-derivation of
-each decision. The bundle therefore records `"qualified": false`, and this release is offered as a
-maintainer-accepted stable tag rather than an independently reviewed one. Anyone relying on the
-behavioral numbers should read the bundle's `blocking_findings` before citing them.
+**`v0.6.4` was tagged with independent review explicitly unmet, and its collection-provenance
+condition was later found unverified.** The
+[0.6.4 bundle](evals/results/release-0.6.4-2c76b19/manifest.json) satisfies the campaign-coverage,
+replication, case-local hash-consistency, and clean-install conditions. Its retained receipts record
+authority isolation and collection-time hashes, but their originality is unverified, so the bundle
+cannot independently demonstrate that the responses were collected under those recorded
+conditions. Its six remaining case failures fall outside the enumerated blocking categories. The
+450 criterion decisions were produced by an agent reading each raw response against the case
+contract; the maintainer reviewed and accepted that ledger on 2026-08-04. Maintainer acceptance is
+not third-party independence, and it is not a re-derivation of each decision. The bundle therefore
+records `"qualified": false`, and this release is offered as a maintainer-accepted stable tag rather
+than an independently reviewed one. Anyone relying on the behavioral numbers should read the
+bundle's `blocking_findings` before citing them.
 
 ## Scope and limitations
 

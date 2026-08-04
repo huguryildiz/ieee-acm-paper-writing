@@ -25,7 +25,10 @@ No change to the installable skill.
   bundle does not retain it, so a clean clone cannot reproduce the check. The manifest,
   its blocking findings, and the README now state the limitation, and it applies to every earlier
   retained bundle. Recorded case results are unaffected: no criterion decision depended on the
-  receipt.
+  receipt. The manifest no longer presents the restamped receipt time as the `luna-medium-r2`
+  campaign start: `started_at` is unknown, while a machine-readable timing status preserves why.
+  The README also no longer says the bundle independently satisfies isolation and collection-time
+  hash gates that the non-original receipts cannot establish for the retained responses.
 
 ## v0.6.4 — 2026-08-04
 
@@ -95,9 +98,9 @@ the behavioral evidence that the release candidate lacked.
   paragraphs, examples, source-type templates, or abbreviation tables.
 - Strengthened three behavioral cases so their supplied evidence and prohibited technical additions
   are consistent with the skill's closed-world invariant.
-- Retained evidence now carries each collector-created `collection.json`, including the exact parsed
-  agent command, checked authority roots, empty collision set, collection time, and collection-time
-  skill and case hashes.
+- Retained evidence now carries each `collection.json` (receipt originality corrected under
+  Unreleased above), including the exact parsed agent command, checked authority roots, empty
+  collision set, collection time, and collection-time skill and case hashes.
 - Rolling plugin manifests identify this prerelease candidate while stable installation commands
   remain pinned to `v0.6.3`.
 
