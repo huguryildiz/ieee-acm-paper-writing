@@ -409,6 +409,15 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         self.assertIn("compare the original field order", venue)
         self.assertIn("explicitly flag that original title-first order as incorrect", venue)
 
+    def test_unknown_venue_never_gets_positive_length_compliance(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("make no positive length-compliance statement", skill)
+        self.assertIn("not even that an excerpt is short, trivially within", skill)
+        self.assertIn("A fragment's size does not verify", skill)
+        self.assertIn("Length belongs only\nin the unresolved ledger", skill)
+
     def test_venue_adapt_returns_visible_adapted_prose(self):
         skill = (
             ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
