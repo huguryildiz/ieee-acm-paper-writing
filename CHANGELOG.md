@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — 0.6.2 candidate
+## v0.6.2 — 2026-08-04
 
 ### Added
 
@@ -21,10 +21,9 @@
   change, and the change ledger must name each comparator carried through. An isolated behavioral
   run reproduced the unanchored-percentage failure twice before this rule and passed after it; that
   is a single observation per configuration, not a reliability estimate.
-- The stable README and showcase commands keep both the `skills` installer (`1.5.21`) and the latest
-  existing skill release (`v0.6.1`) pinned until the candidate is tagged.
-- The plugin manifests declare the `0.6.2-rc.1` rolling candidate without presenting a nonexistent
-  `v0.6.2` tag as a stable install channel.
+- The stable README and showcase commands pin both the `skills` installer (`1.5.21`) and skill
+  release (`v0.6.2`).
+- The plugin manifests declare stable version `0.6.2`, aligned with every stable install channel.
 - The README now separates mechanical evidence validation from release approval and records that
   the retained behavioral evidence describes the post-64cec1a candidate rather than `v0.6.1`.
 - Installation documentation now labels Git-backed plugin marketplaces as rolling channels and
