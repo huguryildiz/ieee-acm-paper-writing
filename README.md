@@ -476,6 +476,14 @@ closed-world invariant prohibited them, and the retained bundle omitted the coll
 claims are therefore marked unverified rather than reconstructed after the fact. This bundle is
 historical evidence, not current behavior-qualified release proof.
 
+The retained [0.6.4-rc.1 candidate bundle](evals/results/release-0.6.4-rc.1-56e7b47/manifest.json)
+recollects the strengthened 27-case contract on Claude Sonnet Medium once and Codex Luna Medium
+twice. The complete agent-assisted results are 25/27, 23/27, and 22/27. Every campaign retains its
+collector-created `collection.json`, exact parsed agent command, checked authority roots, empty
+collision set, collection-time skill and case hashes, all 27 raw responses, all 150 criterion
+decisions, and both declared HTML-map artifacts. The bundle is explicitly unqualified: all three
+campaigns have named strict failures, and no independent human review is claimed.
+
 Repository CI runs structural validation, evaluation-schema validation, and regression tests. It
 also validates the hashes, scoring completeness, denominator, and failed-case declarations in the
 retained bundles, including the historical
@@ -519,11 +527,11 @@ These conditions are the minimum technical evidence gate, not a substitute for l
 or artifact-distribution review. A wording improvement or coverage idea may be scheduled later, but
 an unresolved legal, security, provenance, or core-invariant finding still blocks a stable release.
 
-The retained post-64cec1a bundle is valuable negative and variability evidence, but it does not
-qualify a release under this gate: its scoring was agent-assisted without independent human review,
-its collection was not mechanically isolated, its skill hash was recomputed after collection rather
-than captured during it, and all three campaigns contain at least one failed case after the corrected
-HTML-path verdicts.
+The current 0.6.4-rc.1 candidate bundle does not qualify a stable release under this gate: every
+campaign has strict failures and its 450 criterion decisions have not received independent human
+review. Unlike the historical bundles, its collection-time identity, safe commands, and mechanical
+authority isolation are retained and validator-checkable. It can support an explicitly unqualified
+release candidate, not a stable behavior-qualified release.
 
 ## Scope and limitations
 

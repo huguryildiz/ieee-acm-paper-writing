@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "title": "Results Section Audit",
+  "subject": "evidence-scoped audit of a synthetic optimizer-results excerpt",
+  "eyebrow": "Section audit · synthetic Results excerpt",
+  "summary": "The excerpt contains a universal optimality and timing claim that is contradicted by the reported solver logs, followed by an unsupported real-time deployment conclusion. The supplied evidence supports only a bounded description of the 12 solver runs.",
+  "source_label": "Audited excerpt",
+  "revision_label": "Evidence-scoped response",
+  "footer": "Generated from the canonical text audit. The HTML is a presentation of that audit and adds no scientific finding, number, correction, or conclusion.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Global-optimum guarantee is contradicted by the solver logs",
+      "location": "Results excerpt · sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "The excerpt reports that only 9 of 12 runs ended with solver status OPTIMAL. The other 3 reached the 60 s time limit with feasible incumbents and final relative gaps of 4.1%, 5.3%, and 7.8%.",
+      "consequence": "The universal claim of global optimality within 10 s is false for the supplied evaluation set and is also inconsistent with the reported 60 s time limit and nonzero final gaps.",
+      "correction": "Replace the sentence with a bounded report of the logs: 9 of 12 runs ended with solver status OPTIMAL under the stated 1% relative MIP-gap tolerance, while 3 reached the 60 s limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%. Do not call the latter runs globally optimal without an exact-optimality certificate.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "2",
+      "layer": "scientific-support",
+      "severity": "Major",
+      "title": "Real-time deployment readiness is unsupported",
+      "location": "Results excerpt · sentence 3",
+      "source": "The method is therefore ready for real-time deployment.",
+      "evidence": "No deployment experiment, exact-optimality certificate, or timing measurements outside the solver logs are supplied. The logs include three time-limited runs with final gaps up to 7.8%.",
+      "consequence": "The conclusion extends bounded solver-log observations to operational readiness without evidence for deployment behavior, timing compliance, or exact solution quality.",
+      "correction": "Remove the deployment-readiness conclusion. Restrict the result to the observed 12 solver runs and state that deployment readiness was not evaluated.",
+      "disposition": "remove"
+    },
+    {
+      "id": "3",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "The reported timing does not support a 10-second claim",
+      "location": "Results excerpt · sentence 1 and sentence 3",
+      "source": "The optimizer always returns the global optimum within 10 s. ... The method is therefore ready for real-time deployment.",
+      "evidence": "The supplied timing evidence consists only of solver logs reporting a 60 s time limit; no per-run wall-clock measurements or deployment timing measurements are provided.",
+      "consequence": "A reader cannot verify the 10 s threshold or infer real-time deadline compliance from the reported logs.",
+      "correction": "Provide per-run timing measurements and the deployment deadline and protocol before making a timing or real-time claim. If those artifacts remain unavailable, omit the 10 s and deployment statements and report only the stated solver-limit outcomes.",
+      "disposition": "author-query"
+    }
+  ]
+}

@@ -25,6 +25,10 @@
 
 ### Evidence boundary
 
+- Fresh, isolated 27-case campaigns were retained for Claude Sonnet Medium once and Codex Luna
+  Medium twice. Agent-assisted strict results are 25/27, 23/27, and 22/27; every campaign has named
+  failures, and no independent human review is claimed. The candidate is therefore explicitly not
+  release-qualified.
 - The retained v0.6.2 and v0.6.3 bundles do not include their original `collection.json` files or
   exact agent commands. Their prior isolation and collection-time-identity claims are therefore
   marked unverified, not recreated after collection.
