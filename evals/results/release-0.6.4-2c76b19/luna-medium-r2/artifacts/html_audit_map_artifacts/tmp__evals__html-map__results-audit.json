@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "title": "Results Section Audit",
+  "subject": "synthetic optimizer results excerpt",
+  "eyebrow": "IEEE / ACM engineering manuscript · section audit",
+  "summary": "The excerpt reports finite solver-log outcomes for 12 instances, but its global-optimum guarantee and real-time deployment conclusion are unsupported or contradicted by those outcomes. The audit keeps the observed statuses, feasible incumbents, and final gaps distinct from exact optimality and deployment evidence.",
+  "source_label": "Audited source",
+  "revision_label": "Evidence-scoped response",
+  "footer": "Generated from the canonical text audit of the supplied synthetic Results excerpt. The HTML is a presentation of that audit and adds no scientific finding.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Global-optimum guarantee is contradicted by the reported runs",
+      "location": "Results excerpt · sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "The supplied logs report that 3 of 12 runs reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%. They do not supply an exact-optimality certificate. The reported 60 s limit also conflicts with the sentence's 10 s bound.",
+      "consequence": "The sentence states an unbounded exact-optimality and timing guarantee that the supplied results contradict and cannot certify.",
+      "correction": "Remove the guarantee. Report only that 9 of 12 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and the stated final gaps; do not call these outcomes global-optimum certificates.",
+      "disposition": "remove"
+    },
+    {
+      "id": "2",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "Solver-log outcomes lack reproducibility context",
+      "location": "Results excerpt · sentence 2",
+      "source": "Across 12 instances, 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%.",
+      "evidence": "The excerpt supplies the instance count, status categories, tolerance, time limit, and three final gaps, but omits the solver identity and version, relevant solver settings, hardware, seeds, instance provenance, and the definition of the reported timing measurements.",
+      "consequence": "The finite outcome count is interpretable as stated, but the optimization experiment is not reproducible or sufficient to assess whether the timing and status results were obtained under a controlled configuration.",
+      "correction": "Retain the supplied counts and gaps, and request the omitted solver identity and version, solver settings, hardware, seeds, instance provenance, and timing-measurement definition before claiming reproducible performance.",
+      "disposition": "author-query"
+    },
+    {
+      "id": "3",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Deployment-readiness conclusion has no supporting evidence",
+      "location": "Results excerpt · sentence 3",
+      "source": "The method is therefore ready for real-time deployment.",
+      "evidence": "No deployment experiment, timing measurements outside the solver logs, or other real-time validation is supplied. The excerpt also reports three time-limited runs with nonzero final gaps.",
+      "consequence": "The conclusion converts a bounded solver-log observation into an operational deployment claim and suppresses failure evidence relevant to that claim.",
+      "correction": "Remove the deployment-readiness sentence. If deployment is to be claimed, supply and audit deployment-relevant timing and validation evidence; otherwise limit the Results section to the reported 12-instance solver outcomes.",
+      "disposition": "remove"
+    }
+  ]
+}

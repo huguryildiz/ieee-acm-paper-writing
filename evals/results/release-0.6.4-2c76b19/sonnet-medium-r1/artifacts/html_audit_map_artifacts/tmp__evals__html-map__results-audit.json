@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "title": "Results Excerpt — Section Audit",
+  "subject": "solver-log claims audited against the supplied evidence",
+  "eyebrow": "unspecified venue · section audit",
+  "summary": "A synthetic Results excerpt reporting solver outcomes across 12 instances, audited against the exact solver-log evidence supplied. The excerpt's absolute optimality, timing, and deployment-readiness statements are checked against the reported per-instance outcomes; no external timing, deployment, or certificate evidence was supplied beyond these solver logs.",
+  "source_label": "Audited excerpt",
+  "revision_label": "Evidence-scoped response",
+  "footer": "This HTML is a presentation of the canonical text audit and adds no finding, number, or correction beyond it.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Universal optimality claim contradicted by the excerpt's own counts",
+      "location": "Results excerpt · sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "The same excerpt reports that only 9 of 12 runs ended with solver status OPTIMAL; 3 runs reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%, which are not certified optima.",
+      "consequence": "The universal claim is directly contradicted by the excerpt's own reported outcomes: 3 of 12 instances did not return a certified global optimum.",
+      "correction": "Replace the universal claim with the reported split: 9 of 12 instances reached solver status OPTIMAL under a 1% relative MIP-gap tolerance, and 3 of 12 reached the 60 s time limit with feasible incumbents at gaps of 4.1%, 5.3%, and 7.8%.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "2",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Unsupported 10 s timing figure",
+      "location": "Results excerpt · sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "No solve-time measurement of 10 s appears anywhere in the supplied evidence. The only timing figure given is the 60 s limit reached by 3 of 12 runs.",
+      "consequence": "The 10 s figure is not derivable from the supplied solver logs and would present a fabricated timing value as a measured result.",
+      "correction": "Remove the 10 s figure unless the author supplies the actual per-instance or aggregate solve-time measurements it is meant to summarize.",
+      "disposition": "remove"
+    },
+    {
+      "id": "3",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Deployment-readiness claim exceeds the solver-log evidence",
+      "location": "Results excerpt · sentence 3",
+      "source": "The method is therefore ready for real-time deployment.",
+      "evidence": "The supplied evidence is limited to solver status, MIP-gap, and time-limit outcomes across 12 instances. No deployment experiment, exact-optimality certificate for all instances, or timing measurement outside these solver logs is supplied.",
+      "consequence": "The excerpt converts a finite, partly time-limited solver-log evaluation into a general real-time deployment-readiness conclusion, including for the 3 instances that did not reach a certified optimum.",
+      "correction": "Remove the deployment-readiness statement. State only the reported solver outcomes and request deployment-relevant evidence (timing under operational constraints, a deployment trial) as an author query before any readiness claim is made.",
+      "disposition": "remove"
+    },
+    {
+      "id": "4",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "Missing reproducibility and instance-set detail",
+      "location": "Results excerpt · sentence 2",
+      "source": "Across 12 instances, 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%.",
+      "evidence": "The excerpt gives instance counts, solver status, MIP-gap tolerance, and time limit, but no solver identity or version, hardware, seeds, or a description of what the 12 instances are drawn from.",
+      "consequence": "Without solver identity, hardware, and instance-set composition, the reported outcomes cannot be independently reconstructed or checked for configuration bias.",
+      "correction": "Request the solver name and version, hardware, seeds, and instance-set source/composition as an external author query; do not infer or insert these details.",
+      "disposition": "author-query"
+    }
+  ]
+}
