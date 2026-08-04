@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -75,6 +76,91 @@ class HumanReviewBoundaryTests(unittest.TestCase):
             {"independent_human_review": True, "human_review_record": "reviewed 2026-08-04"}, "x"
         )
         VALIDATOR_MODULE.check_human_review({"independent_human_review": False}, "x")
+
+
+class CampaignIntegrityFailureTests(unittest.TestCase):
+    """Exercise every fail-closed identity/verdict branch in validate_campaign."""
+
+    def copied_campaign(self, tmp):
+        bundle = Path(tmp) / "bundle"
+        shutil.copytree(VALIDATOR_MODULE.BUNDLE, bundle)
+        manifest = VALIDATOR_MODULE.load_json(bundle / "manifest.json")
+        campaign = manifest["campaigns"][0]
+        cases = VALIDATOR_MODULE.bundle_cases(bundle)
+        scores_path = bundle / campaign["scores"]
+        return bundle, manifest, campaign, cases, scores_path
+
+    def assert_score_mutation_rejected(self, mutate, message):
+        with tempfile.TemporaryDirectory() as tmp:
+            bundle, manifest, campaign, cases, scores_path = self.copied_campaign(tmp)
+            scores = VALIDATOR_MODULE.load_json(scores_path)
+            mutate(scores, cases)
+            scores_path.write_text(json.dumps(scores), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, message):
+                VALIDATOR_MODULE.validate_campaign(
+                    campaign, cases, manifest["candidate"]["skill_hash"], bundle
+                )
+
+    def test_score_case_set_mismatch_is_a_clean_failure(self):
+        self.assert_score_mutation_rejected(
+            lambda scores, _cases: scores.pop(next(iter(scores))),
+            "score case set or order differs",
+        )
+
+    def test_case_hash_mismatch_is_a_clean_failure(self):
+        self.assert_score_mutation_rejected(
+            lambda scores, cases: scores[cases[0]["name"]].update(case_hash="0" * 64),
+            "case hash mismatch",
+        )
+
+    def test_output_hash_mismatch_is_a_clean_failure(self):
+        self.assert_score_mutation_rejected(
+            lambda scores, cases: scores[cases[0]["name"]].update(output_hash="0" * 64),
+            "output hash mismatch",
+        )
+
+    def test_skill_hash_mismatch_is_a_clean_failure(self):
+        self.assert_score_mutation_rejected(
+            lambda scores, cases: scores[cases[0]["name"]].update(skill_hash="0" * 64),
+            "skill hash mismatch",
+        )
+
+    def test_artifact_declaration_mismatch_is_a_clean_failure(self):
+        self.assert_score_mutation_rejected(
+            lambda scores, cases: scores[cases[0]["name"]].update(
+                artifact_hashes={"tmp/evals/unexpected.txt": "0" * 64}
+            ),
+            "artifact declarations differ",
+        )
+
+    def test_artifact_hash_mismatch_is_a_clean_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bundle, manifest, campaign, cases, _scores_path = self.copied_campaign(tmp)
+            case = next(item for item in cases if item.get("artifacts"))
+            declared = case["artifacts"][0]
+            artifact = (
+                bundle
+                / campaign["artifacts_dir"]
+                / case["name"]
+                / declared.replace("/", "__")
+            )
+            artifact.write_bytes(b"tampered artifact")
+            with self.assertRaisesRegex(ValueError, "artifact hash mismatch"):
+                VALIDATOR_MODULE.validate_campaign(
+                    campaign, cases, manifest["candidate"]["skill_hash"], bundle
+                )
+
+    def test_criterion_set_mismatch_is_a_clean_failure(self):
+        def mutate(scores, cases):
+            scores[cases[0]["name"]]["must_pass"].pop(cases[0]["must_pass"][0])
+
+        self.assert_score_mutation_rejected(mutate, "must_pass criteria differ")
+
+    def test_unscored_criterion_is_a_clean_failure(self):
+        def mutate(scores, cases):
+            scores[cases[0]["name"]]["must_pass"][cases[0]["must_pass"][0]] = None
+
+        self.assert_score_mutation_rejected(mutate, "has unscored criteria")
 
 
 if __name__ == "__main__":

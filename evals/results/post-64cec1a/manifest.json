@@ -14,6 +14,8 @@
     "same_named_user_or_cached_copy_allowed": false,
     "mechanical_authority_isolation": false,
     "skill_hash_captured_at_collection": false,
+    "agent_command_captured_at_collection": false,
+    "collection_record_retained": false,
     "expected_routing_scored": false,
     "date": "2026-08-03",
     "timezone": "Europe/Istanbul"
@@ -26,6 +28,14 @@
     "requested_effort": "high",
     "independent_human_review": false,
     "ambiguous_or_missing_must_pass": false
+  },
+  "release_qualification": {
+    "qualified": false,
+    "review_record": "Historical bundle retained as negative evidence; it lacks mechanical isolation, collection-time identity, and independent review.",
+    "blocking_findings": [
+      "Every campaign has at least one failed case.",
+      "Original collection records were not retained."
+    ]
   },
   "campaigns": [
     {

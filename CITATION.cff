@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this skill, please cite the software and the exact release you installed."
+title: "IEEE/ACM Engineering Paper Writing Skill"
+type: software
+authors:
+  - family-names: "Yıldız"
+    given-names: "Hüseyin Uğur"
+license: MIT
+version: 0.6.4-rc.1
+date-released: "2026-08-04"
+repository-code: "https://github.com/huguryildiz/ieee-acm-paper-writing"
+url: "https://ieee-acm-paper-writing.vercel.app"
