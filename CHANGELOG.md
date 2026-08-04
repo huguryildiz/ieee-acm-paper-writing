@@ -4,8 +4,9 @@
 
 ### Changed
 
-- Replaced the repository-side IEEE mathematics text export with an original provenance summary
-  that links to the official source without redistributing its paragraphs, examples, or tables.
+- Replaced the repository-side IEEE mathematics text export and reference-format catalog with
+  original provenance summaries that link to the official sources without redistributing their
+  paragraphs, examples, source-type templates, or abbreviation tables.
 - Strengthened three behavioral cases so their supplied evidence and prohibited technical additions
   are consistent with the skill's closed-world invariant.
 - Retained evidence now carries each collector-created `collection.json`, including the exact parsed
