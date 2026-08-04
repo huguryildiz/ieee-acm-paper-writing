@@ -555,11 +555,12 @@ review.
 [0.6.4 bundle](evals/results/release-0.6.4-2c76b19/manifest.json) satisfies the campaign coverage,
 replication, isolation, collection-time hash, and clean-install conditions, and its six remaining
 case failures all fall outside the enumerated blocking categories. It does **not** satisfy the
-independent-review condition: the 450 criterion decisions were reviewed by the maintainer against
-the retained raw responses, not by an independent third party. The bundle therefore records
-`"qualified": false`, and this release is offered as a maintainer-reviewed stable tag rather than an
-independently reviewed one. Anyone relying on the behavioral numbers should read the bundle's
-`blocking_findings` before citing them.
+independent-review condition. The 450 criterion decisions were produced by an agent reading each
+raw response against the case contract; the maintainer reviewed and accepted that ledger on
+2026-08-04. Maintainer acceptance is not third-party independence, and it is not a re-derivation of
+each decision. The bundle therefore records `"qualified": false`, and this release is offered as a
+maintainer-accepted stable tag rather than an independently reviewed one. Anyone relying on the
+behavioral numbers should read the bundle's `blocking_findings` before citing them.
 
 ## Scope and limitations
 

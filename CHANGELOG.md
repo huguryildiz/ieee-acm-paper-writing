@@ -30,10 +30,11 @@ the behavioral evidence that the release candidate lacked.
   first author.
 - No failure involves invented support, concealed disclosure, a lost comparator or scope condition,
   a copied author fingerprint, or an unsupported guarantee.
-- **One release-gate condition is explicitly unmet.** The 450 criterion decisions were reviewed by
-  the maintainer against the retained raw responses, not by an independent third party. The bundle
-  records `"qualified": false` and this deviation is stated in the README rather than reconciled
-  after the fact.
+- **One release-gate condition is explicitly unmet.** The 450 criterion decisions were produced by
+  an agent reading each raw response against the case contract; the maintainer reviewed and accepted
+  that ledger on 2026-08-04. Maintainer acceptance is not third-party independence, and it is not a
+  re-derivation of each decision. The bundle records `"qualified": false` and this deviation is
+  stated in the README rather than reconciled after the fact.
 
 ## v0.6.4-rc.2 — 2026-08-04
 
