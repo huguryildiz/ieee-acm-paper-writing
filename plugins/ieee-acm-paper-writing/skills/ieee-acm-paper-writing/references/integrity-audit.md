@@ -47,6 +47,11 @@ invalidates that artifact; its authority does not erase the contradiction.
 
 - Verify identity, version, year, and persistent identifier against an authoritative record.
 - Read the relevant passage. Metadata correctness does not establish claim support.
+- For a self-contained support-check packet that stipulates metadata correctness and does not ask
+  for independent verification, do not add a source record, URL, author-year citation, or host
+  citation marker. Assess support from the supplied material and state both sides of the boundary
+  when material: accurate bibliographic details and evidentiary support for the sentence are
+  separate determinations.
 - Distinguish primary evidence from surveys, tutorials, perspectives, and research agendas.
 - Scope the citing sentence no more broadly than the source evidence.
 - Do not use citation count, publication venue, or author reputation as proof of correctness.
@@ -164,7 +169,8 @@ Classify findings:
 - **Editorial**: wording or presentation issue with no change to scientific meaning.
 
 For each finding give location, claim, evidence or missing evidence, consequence, and concrete
-correction. Do not create empty severity sections.
+correction. Render every finding heading as `### <Severity> — <title>`, using `Critical`, `Major`,
+`Minor`, or `Editorial`; do not leave issue bullets unlabeled or create empty severity sections.
 
 For drafting and rewriting, finish with a handoff reconciliation: every absent item that prevents
 requested claim wording becomes a separate external `Author queries` entry with the missing item,

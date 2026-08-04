@@ -190,7 +190,7 @@ codex plugin add ieee-acm-paper-writing@ieee-acm-paper-writing
 ```
 
 For a rolling Git-backed install, replace `.` with `huguryildiz/ieee-acm-paper-writing`. The rolling
-plugin manifests identify candidate `0.6.4-rc.1`; this is a prerelease, not a behavior-qualified
+plugin manifests identify candidate `0.6.4-rc.2`; this is a prerelease, not a behavior-qualified
 stable release. For a release-stable native install, clone `v0.6.3`, run the two commands above from
 that clone, and keep
 the marketplace source local. Start a new Codex thread after installation so the skill is
@@ -484,6 +484,12 @@ collision set, collection-time skill and case hashes, all 27 raw responses, all 
 decisions, and both declared HTML-map artifacts. The bundle is explicitly unqualified: all three
 campaigns have named strict failures, and no independent human review is claimed.
 
+The rolling manifests identify source candidate `0.6.4-rc.2`. Its local structural and regression
+gates pass, and two authority-isolated Codex Luna Medium smoke executions of the previously failing
+author-fingerprint case preserved the unspecified communication topology. Those targeted runs do
+not cover the full denominator and have no independent human review. No release-qualified
+0.6.4-rc.2 behavioral bundle is claimed yet.
+
 Repository CI runs structural validation, evaluation-schema validation, and regression tests. It
 also validates the hashes, scoring completeness, denominator, and failed-case declarations in the
 retained bundles, including the historical
@@ -527,11 +533,11 @@ These conditions are the minimum technical evidence gate, not a substitute for l
 or artifact-distribution review. A wording improvement or coverage idea may be scheduled later, but
 an unresolved legal, security, provenance, or core-invariant finding still blocks a stable release.
 
-The current 0.6.4-rc.1 candidate bundle does not qualify a stable release under this gate: every
+The retained 0.6.4-rc.1 candidate bundle does not qualify a stable release under this gate: every
 campaign has strict failures and its 450 criterion decisions have not received independent human
-review. Unlike the historical bundles, its collection-time identity, safe commands, and mechanical
-authority isolation are retained and validator-checkable. It can support an explicitly unqualified
-release candidate, not a stable behavior-qualified release.
+review. The current 0.6.4-rc.2 source candidate has only targeted smoke evidence, not a fresh full
+campaign or independent review. It can support an explicitly unqualified release candidate, not a
+stable behavior-qualified release.
 
 ## Scope and limitations
 

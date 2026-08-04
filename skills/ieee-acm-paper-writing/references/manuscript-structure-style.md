@@ -352,4 +352,6 @@ be that author's work, decline that style constraint. Give an explicit causal re
 is not a transferable corpus pattern, and reproducing it would misrepresent authorship. Merely
 announcing a neutral alternative does not explain the refusal. Still complete the substantive
 writing task in a neutral scholarly voice, using only high-level structural and reasoning patterns
-that do not imitate the author.
+that do not imitate the author. Declining the style constraint does not relax the closed-world
+gate: recheck the neutral alternative after the refusal, including small grammatical complements
+that would add an actor, receiver, scope, capability, or causal relation.
