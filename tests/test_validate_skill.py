@@ -387,6 +387,10 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("For an `expand` request", skill)
         self.assertIn("reproducibility limitation inside the expanded manuscript prose", skill)
+        self.assertIn("reduce the current manuscript text to an input-invariant list", skill)
+        self.assertIn("evaluation medium and every baseline's exact", skill)
+        self.assertIn("Repeat the exact name of each missing detail", skill)
+        self.assertIn("making the action conditional on whether reproducibility", skill)
 
     def test_audit_findings_require_individual_severity_labels(self):
         skill = (
@@ -394,6 +398,9 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("Prefix every reported finding with exactly one of", skill)
         self.assertIn("Do not leave findings as unlabeled bullets", skill)
+        self.assertIn("A `Problems` heading followed by unlabeled bullets fails", skill)
+        self.assertIn("Render every finding heading exactly as", skill)
+        self.assertIn("Do not put a number before the severity", skill)
 
     def test_acm_audit_must_flag_original_title_first_order(self):
         venue = (
@@ -401,6 +408,14 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("compare the original field order", venue)
         self.assertIn("explicitly flag that original title-first order as incorrect", venue)
+
+    def test_venue_adapt_returns_visible_adapted_prose(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Include the adapted manuscript prose directly in the response", skill)
+        self.assertIn("File links, compilation status, and a compliance handoff", skill)
+        self.assertIn("visible adapted prose rather than artifact links alone", skill)
 
     def test_simulation_case_allows_explicit_field_validation_negation(self):
         cases = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))
