@@ -307,6 +307,50 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         self.assertIn("causally attributed to adaptive batching without an identification design",
                       humanize["must_not"][-1])
 
+    def test_drafting_cannot_add_a_speculative_failure_mechanism(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Never add an explanatory mechanism, failure cause, or causal hypothesis",
+                      skill)
+        self.assertIn("even if it sounds plausible or is labeled as speculation", skill)
+        self.assertIn("apply a sentence-level evidence trace", skill)
+        self.assertIn("Concrete domain\nexamples are technical content", skill)
+        self.assertIn("does not establish that no incumbent existed", skill)
+        self.assertIn("evidence packet as a closed world for technical content", skill)
+        self.assertIn("do not infer locality,\nseparability", skill)
+        self.assertIn("may not increase the set of technical propositions", skill)
+        self.assertIn("cannot be pointed to verbatim in the\npacket", skill)
+        self.assertIn("use a sparse-evidence\nprotocol", skill)
+        self.assertIn("Make the task paragraph no more informative than", skill)
+        self.assertIn("capable assignments, limited or competing resources", skill)
+        self.assertIn("do not explain\nwhy the failure occurs or what a timeout implies", skill)
+        self.assertIn("must not add a performance outcome or novelty claim", skill)
+        self.assertIn("must close with an explicit\ncontributions list", skill)
+        self.assertIn("do not omit the list merely because", skill)
+
+    def test_style_calibration_never_quotes_the_supplied_excerpts(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("do not reproduce their sentences or distinctive phrases", skill)
+        self.assertIn("ledgers, explanations, or compliance notes", skill)
+        self.assertIn("Do not restate, enumerate, summarize, or name", skill)
+        self.assertIn("do not add a note claiming that no wording was reused", skill)
+        self.assertIn("the entire outside-manuscript answer must be exactly", skill)
+        self.assertIn("Add no publisher, template, policy, or", skill)
+        self.assertIn("do not transfer their limitations, future-work statements", skill)
+        self.assertIn("the only permitted non-manuscript line is exactly", skill)
+        self.assertIn("never import `future work`, `remains open`", skill)
+        self.assertIn("perform a final binary cleanup over the entire", skill)
+
+    def test_ieee_et_al_cleanup_covers_the_entire_response(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("literal final cleanup over the entire", skill)
+        self.assertIn("Do not show an italicized counterexample", skill)
+
     def test_humanize_preserves_relative_result_comparators(self):
         skill = (
             ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
@@ -327,6 +371,10 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         self.assertIn("unsupported statement that a database was queried", skill)
         self.assertIn("Output\nno specific paper title", skill)
         self.assertIn('"complementary," or "candidates,"', skill)
+        self.assertIn("do not inspect, summarize, or discuss the contents", skill)
+        self.assertIn("must not name records even as examples", skill)
+        self.assertIn("When the ranking gate declined a request", skill)
+        self.assertIn("remove every paper title, author, DOI, publication year", skill)
         self.assertIn("Require an inspectable, retained", integrity)
         self.assertIn("unsupported claim of a database query", integrity)
         self.assertIn("plausible-looking top-three list", integrity)
@@ -339,6 +387,10 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("For an `expand` request", skill)
         self.assertIn("reproducibility limitation inside the expanded manuscript prose", skill)
+        self.assertIn("reduce the current manuscript text to an input-invariant list", skill)
+        self.assertIn("evaluation medium and every baseline's exact", skill)
+        self.assertIn("Repeat the exact name of each missing detail", skill)
+        self.assertIn("making the action conditional on whether reproducibility", skill)
 
     def test_audit_findings_require_individual_severity_labels(self):
         skill = (
@@ -346,6 +398,9 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("Prefix every reported finding with exactly one of", skill)
         self.assertIn("Do not leave findings as unlabeled bullets", skill)
+        self.assertIn("A `Problems` heading followed by unlabeled bullets fails", skill)
+        self.assertIn("Render every finding heading exactly as", skill)
+        self.assertIn("Do not put a number before the severity", skill)
 
     def test_acm_audit_must_flag_original_title_first_order(self):
         venue = (
@@ -353,6 +408,23 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("compare the original field order", venue)
         self.assertIn("explicitly flag that original title-first order as incorrect", venue)
+
+    def test_unknown_venue_never_gets_positive_length_compliance(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("make no positive length-compliance statement", skill)
+        self.assertIn("not even that an excerpt is short, trivially within", skill)
+        self.assertIn("A fragment's size does not verify", skill)
+        self.assertIn("Length belongs only\nin the unresolved ledger", skill)
+
+    def test_venue_adapt_returns_visible_adapted_prose(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Include the adapted manuscript prose directly in the response", skill)
+        self.assertIn("File links, compilation status, and a compliance handoff", skill)
+        self.assertIn("visible adapted prose rather than artifact links alone", skill)
 
     def test_simulation_case_allows_explicit_field_validation_negation(self):
         cases = json.loads((ROOT / "evals" / "cases.json").read_text(encoding="utf-8"))
