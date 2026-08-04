@@ -190,8 +190,8 @@ codex plugin add ieee-acm-paper-writing@ieee-acm-paper-writing
 ```
 
 For a rolling Git-backed install, replace `.` with `huguryildiz/ieee-acm-paper-writing`. The rolling
-plugin manifests currently identify the untagged candidate as `0.6.2-rc.1`. For a release-stable
-native install, clone `v0.6.1`, run the two commands above from that clone, and keep
+plugin manifests identify stable release `0.6.2`. For a release-stable native install, clone
+`v0.6.2`, run the two commands above from that clone, and keep
 the marketplace source local. Start a new Codex thread after installation so the skill is
 discovered. The plugin adds no MCP server, app connector,
 credential prompt, or background service; manuscript access remains limited to the permissions of
@@ -228,7 +228,7 @@ through a session command is not something CI can run.
 Run this from the manuscript repository in which the skill should be available:
 
 ```bash
-npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.1 -a codex -y
+npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.2 -a codex -y
 ```
 
 The repository publishes a single skill, so no `--skill` selector is needed. Replace `-a codex`
@@ -237,7 +237,7 @@ rather than the installer's selected strategy, and `--global` only when the skil
 available across all projects.
 
 This project-scoped command installs under `.agents/skills/` for Codex and `.claude/skills/` for
-Claude Code. Both the installer (`1.5.21`) and skill (`v0.6.1`) are pinned. The upstream installer
+Claude Code. Both the installer (`1.5.21`) and skill (`v0.6.2`) are pinned. The upstream installer
 collects anonymous usage telemetry by default; prefix the command with
 `DISABLE_TELEMETRY=1` to opt out for that invocation.
 
@@ -253,9 +253,9 @@ Download a release, then place `skills/ieee-acm-paper-writing/` — the whole di
 directory your host scans:
 
 ```bash
-curl -fsSL https://github.com/huguryildiz/ieee-acm-paper-writing/archive/refs/tags/v0.6.1.tar.gz \
+curl -fsSL https://github.com/huguryildiz/ieee-acm-paper-writing/archive/refs/tags/v0.6.2.tar.gz \
   | tar -xz
-cp -R ieee-acm-paper-writing-0.6.1/skills/ieee-acm-paper-writing <target-directory>/
+cp -R ieee-acm-paper-writing-0.6.2/skills/ieee-acm-paper-writing <target-directory>/
 ```
 
 | Host | Project-scoped target | User-scoped target |
@@ -371,7 +371,7 @@ skill installation. To inspect audit-map JSON without sending it to a hosted ser
 matching release and start the loopback-only server:
 
 ```bash
-git clone --branch v0.6.1 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
+git clone --branch v0.6.2 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
 cd ieee-acm-paper-writing
 python3 scripts/serve_local_audit.py
 ```
