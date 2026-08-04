@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "collected_at": "2026-08-04T12:34:41.678465Z",
+  "skill_hash": "cf437abcf818496c8a335a0515d2bed7395469738723b008f0f07159f2cdcfbd",
+  "cases_sha256": "1de992a9c586cc17716610b105ff3bf1778d1ddffae9659b574d6a505798fc5b",
+  "agent_command": [
+    "codex",
+    "exec",
+    "--ephemeral",
+    "--ignore-user-config",
+    "--strict-config",
+    "-m",
+    "gpt-5.6-luna",
+    "-c",
+    "model_reasoning_effort=\"medium\"",
+    "-s",
+    "workspace-write",
+    "--disable",
+    "apps",
+    "--disable",
+    "browser_use",
+    "--disable",
+    "in_app_browser",
+    "--disable",
+    "image_generation"
+  ],
+  "agent_executable": "/Users/huguryildiz/.npm-global/bin/codex",
+  "working_directory": "/Users/huguryildiz/Documents/GitHub/ieee-acm-paper-writing",
+  "authority_roots": {
+    "agents": "/Users/huguryildiz/.eval-isolation/ieee-acm/home/.agents",
+    "claude_default": "/Users/huguryildiz/.eval-isolation/ieee-acm/home/.claude",
+    "claude_effective": "/Users/huguryildiz/.eval-isolation/ieee-acm/claude",
+    "codex_default": "/Users/huguryildiz/.eval-isolation/ieee-acm/home/.codex",
+    "codex_effective": "/Users/huguryildiz/.eval-isolation/ieee-acm/codex"
+  },
+  "authority_collisions": [],
+  "mechanical_authority_isolation": true
+}

@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "title": "Results Section Audit",
+  "subject": "Synthetic optimizer results excerpt",
+  "eyebrow": "Section audit · evidence-bounded review",
+  "summary": "The solver logs support a finite descriptive report for 12 instances, including 9 OPTIMAL statuses under a 1% relative MIP-gap tolerance and 3 time-limited feasible incumbents with reported final gaps. They do not support exact global-optimum or 10-second guarantees, or readiness for real-time deployment.",
+  "source_label": "Audited excerpt",
+  "revision_label": "Bounded response",
+  "footer": "This HTML is a presentation of the canonical text audit and adds no scientific finding, number, correction, or conclusion.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Global-optimum and 10-second claim is contradicted",
+      "location": "Results excerpt · sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "The supplied logs report 9 runs with solver status OPTIMAL under a 1% relative MIP-gap tolerance and 3 runs that reached the 60 s time limit with feasible incumbents and nonzero final gaps. No exact-optimality certificate is supplied.",
+      "consequence": "The sentence makes an unbounded exact-optimality guarantee and a 10-second runtime guarantee that the reported statuses, tolerance, time limit, and final gaps do not establish.",
+      "correction": "Replace the sentence with the supported finite observation: Across 12 instances, 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "2",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Deployment-readiness conclusion lacks evidence",
+      "location": "Results excerpt · sentence 3",
+      "source": "The method is therefore ready for real-time deployment.",
+      "evidence": "No deployment experiment or timing measurements outside the supplied solver logs are provided. The same logs include 60 s time-limit cases with feasible incumbents and final gaps.",
+      "consequence": "The conclusion extends solver-log observations into an operational deployment claim without evidence for deployment performance or the required real-time timing boundary.",
+      "correction": "Remove the deployment-readiness sentence. If deployment readiness is intended, supply a deployment experiment and timing measurements outside these solver logs before making that claim.",
+      "disposition": "author-query"
+    },
+    {
+      "id": "3",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "Solver-run reproducibility details are incomplete",
+      "location": "Results excerpt · sentence 2",
+      "source": "Across 12 instances, 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%.",
+      "evidence": "The excerpt reports the instance count, statuses, tolerance, time limit, and final gaps, but does not supply the solver identity and version, hardware, seeds, or the complete run configuration.",
+      "consequence": "The reported solver outcomes cannot be fully reconstructed or independently assessed from the excerpt alone.",
+      "correction": "Retain the reported outcomes, and request the solver identity and version, hardware, seeds, and complete run configuration as external reproducibility details. Do not fill in omitted values.",
+      "disposition": "author-query"
+    }
+  ]
+}
