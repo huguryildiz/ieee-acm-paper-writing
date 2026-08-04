@@ -451,10 +451,12 @@ the agent unchanged.
 
 Collection accepts a direct `codex` or `claude` invocation only. It does not use a shell, rejects
 environment-changing wrappers and known host options that can replace or append system prompts or
-add alternate config, plugin, permission-tool, or workspace roots, and checks both the default and
-effective `CODEX_HOME` / `CLAUDE_CONFIG_DIR` trees. This is a maintained denylist rather than a
-guarantee about every future host option. The same checked environment snapshot is passed to the
-agent subprocess. Run collection with isolated
+add alternate config, plugin, permission-tool, or workspace roots. Codex config overrides are
+rejected except for the exact `model_reasoning_effort="medium"` setting used by the release
+campaign. The runner checks both the default and effective `CODEX_HOME` /
+`CLAUDE_CONFIG_DIR` trees. This is a maintained denylist rather than a guarantee about every future
+host option. The same checked environment snapshot is passed to the agent subprocess. Run
+collection with isolated
 `HOME`, `CODEX_HOME`, and `CLAUDE_CONFIG_DIR` directories containing only the credentials required
 by the selected host.
 

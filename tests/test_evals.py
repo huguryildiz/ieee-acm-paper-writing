@@ -78,6 +78,9 @@ class RunnerAuthorityTests(unittest.TestCase):
             "env HOME=/tmp/dirty codex exec",
             "sh -c 'HOME=/tmp/dirty codex exec'",
             "codex exec --config model=o3",
+            "codex exec -c 'model_reasoning_effort=high'",
+            "codex exec --config 'model_reasoning_effort=low'",
+            "codex exec --config=model_reasoning_effort=medium",
             "codex exec -C/tmp/dirty",
             "claude -p --plugin-dir /tmp/dirty",
             "claude -p --append-system-prompt injected",
@@ -91,6 +94,13 @@ class RunnerAuthorityTests(unittest.TestCase):
                     ValueError, "not allowed|supported host|checked PATH"):
                 RUNNER_MODULE.agent_command(command)
         self.assertEqual(RUNNER_MODULE.agent_command("codex exec"), ["codex", "exec"])
+        self.assertEqual(
+            RUNNER_MODULE.agent_command(
+                "codex exec -m gpt-5.6-luna -c 'model_reasoning_effort=\"medium\"'"
+            ),
+            ["codex", "exec", "-m", "gpt-5.6-luna", "-c",
+             'model_reasoning_effort="medium"'],
+        )
         self.assertEqual(RUNNER_MODULE.agent_command("claude -p"), ["claude", "-p"])
 
     def test_collection_refuses_collision_before_agent_invocation(self):

@@ -71,6 +71,7 @@ UNSAFE_AGENT_OPTIONS = {
     },
     "codex": {"--add-dir", "--cd", "--config", "--profile", "-C", "-c", "-p"},
 }
+SAFE_CODEX_CONFIG_OVERRIDES = {'model_reasoning_effort="medium"'}
 
 SKILL_PREAMBLE = (
     "For this evaluation, the sole authoritative skill copy is the repository-local "
@@ -342,17 +343,30 @@ def agent_command(value):
         raise ValueError(
             "agent command must invoke claude or codex by name through the checked PATH"
         )
-    for token in command[1:]:
+    index = 1
+    while index < len(command):
+        token = command[index]
         option = token.split("=", 1)[0]
         compact_codex_override = (
             executable == "codex"
             and any(option.startswith(prefix) and option != prefix
                     for prefix in ("-C", "-c", "-p"))
         )
+        if executable == "codex" and option in {"-c", "--config"}:
+            value_index = index + 1
+            if (value_index < len(command)
+                    and command[value_index] in SAFE_CODEX_CONFIG_OVERRIDES):
+                index += 2
+                continue
+            raise ValueError(
+                "agent command option can change collection authority and is not allowed: "
+                f"{option} (only model_reasoning_effort=\"medium\" is allowed)"
+            )
         if option in UNSAFE_AGENT_OPTIONS[executable] or compact_codex_override:
             raise ValueError(
                 f"agent command option can change collection authority and is not allowed: {option}"
             )
+        index += 1
     return command
 
 
