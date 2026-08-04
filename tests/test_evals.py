@@ -143,9 +143,9 @@ class RunnerAuthorityTests(unittest.TestCase):
 class CollectionProvenanceTests(unittest.TestCase):
     """The recorded skill hash must attest the tree collection ran against."""
 
-    def collect(self, outdir):
+    def collect(self, outdir, agent_cmd="codex exec"):
         args = SimpleNamespace(outdir=outdir, case=CASES[0]["name"],
-                               agent_cmd="codex exec", timeout=1)
+                               agent_cmd=agent_cmd, timeout=1)
         completed = SimpleNamespace(returncode=0, stdout="agent output", stderr="")
         with mock.patch.object(RUNNER_MODULE, "authority_collisions", return_value=[]), \
                 mock.patch.object(RUNNER_MODULE.subprocess, "run", return_value=completed):
@@ -175,6 +175,64 @@ class CollectionProvenanceTests(unittest.TestCase):
             args = SimpleNamespace(outdir=outdir, case=CASES[0]["name"])
             with self.assertRaisesRegex(SystemExit, "changed after collection"):
                 RUNNER_MODULE.cmd_score(args)
+
+    def test_single_case_repair_retains_the_original_campaign_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            outdir = Path(tmp) / "out"
+            self.collect(outdir)
+            original = (outdir / "collection.json").read_text(encoding="utf-8")
+            self.collect(outdir)
+            self.assertEqual((outdir / "collection.json").read_text(encoding="utf-8"), original)
+
+    def test_collection_refuses_an_outdir_recorded_under_a_different_command(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            outdir = Path(tmp) / "out"
+            self.collect(outdir)
+            original = (outdir / "collection.json").read_text(encoding="utf-8")
+            with self.assertRaisesRegex(SystemExit, "agent_command"):
+                self.collect(outdir, agent_cmd="claude -p")
+            self.assertEqual((outdir / "collection.json").read_text(encoding="utf-8"), original)
+
+    def test_collection_refuses_an_outdir_recorded_against_a_different_skill(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            outdir = Path(tmp) / "out"
+            self.collect(outdir)
+            record_path = outdir / "collection.json"
+            record = json.loads(record_path.read_text(encoding="utf-8"))
+            record["skill_hash"] = "0" * 64
+            record_path.write_text(json.dumps(record), encoding="utf-8")
+            with self.assertRaisesRegex(SystemExit, "skill_hash"):
+                self.collect(outdir)
+
+    def collect_blind_to_an_existing_receipt(self, outdir, agent_cmd="codex exec"):
+        """Collect as a process that lost the creation race: it saw no receipt, one exists."""
+        real_read = RUNNER_MODULE.read_collection_record
+        seen = []
+
+        def blind_first(target):
+            seen.append(target)
+            return None if len(seen) == 1 else real_read(target)
+
+        with mock.patch.object(RUNNER_MODULE, "read_collection_record", blind_first):
+            self.collect(outdir, agent_cmd=agent_cmd)
+
+    def test_losing_the_creation_race_keeps_the_winning_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            outdir = Path(tmp) / "out"
+            self.collect(outdir)
+            winner = (outdir / "collection.json").read_text(encoding="utf-8")
+            self.collect_blind_to_an_existing_receipt(outdir)
+            self.assertEqual((outdir / "collection.json").read_text(encoding="utf-8"), winner)
+            self.assertEqual([path.name for path in outdir.glob("*.partial*")], [])
+
+    def test_losing_the_creation_race_refuses_a_conflicting_campaign(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            outdir = Path(tmp) / "out"
+            self.collect(outdir)
+            winner = (outdir / "collection.json").read_text(encoding="utf-8")
+            with self.assertRaisesRegex(SystemExit, "agent_command"):
+                self.collect_blind_to_an_existing_receipt(outdir, agent_cmd="claude -p")
+            self.assertEqual((outdir / "collection.json").read_text(encoding="utf-8"), winner)
 
     def test_missing_record_falls_back_to_the_current_tree_with_a_warning(self):
         with tempfile.TemporaryDirectory() as tmp:
