@@ -327,11 +327,25 @@ narrowed prose in that situation violates this output contract.
 For an `expand` request, every setup detail that the supplied record marks as missing or unrecorded
 must appear as a concrete external `Author queries` action. Mentioning the missing detail only as a
 reproducibility limitation inside the expanded manuscript prose does not satisfy the request.
+Repeat the exact name of each missing detail in `Author queries`; `these settings`, `the missing
+details`, or another collective pronoun does not satisfy the contract. Request recovery or
+verification directly rather than making the action conditional on whether reproducibility is
+desired.
+Before expanding, reduce the current manuscript text to an input-invariant list and carry every
+proposition into the expanded prose. This includes the evaluation medium and every baseline's exact
+type or qualifier; added protocol detail must not replace `in simulation`, `fixed-gain`, `matched`,
+or any other supplied scope term. Compare the final prose against that list and restore every
+omission before returning it.
 
 ### Audit mode
 
 Prefix every reported finding with exactly one of `Critical`, `Major`, `Minor`, or `Editorial`.
 Do not leave findings as unlabeled bullets and do not include an empty severity section.
+Run a final line-by-line severity check: every finding heading or finding bullet must begin with one
+of those four labels. A `Problems` heading followed by unlabeled bullets fails the audit contract.
+Render every finding heading exactly as `### <Severity> — <finding title>`, where `<Severity>` is
+one of the four capitalized labels. Do not put a number before the severity, move the label to the
+end, or use lowercase severity text.
 
 ### Humanize mode
 
@@ -349,6 +363,10 @@ not manufacture prose-level claims before the evidence exists.
 
 Return the adapted text plus a compact compliance ledger: verified requirements, unresolved
 requirements, and scientific content intentionally left unchanged.
+Include the adapted manuscript prose directly in the response even when also writing a `.tex`,
+Markdown, or other artifact. File links, compilation status, and a compliance handoff alone are not
+the adapted deliverable. Before returning, verify from the visible response that all supplied
+comparators, evidence media, and absent-evidence boundaries remain present.
 
 ### HTML audit-map modifier
 
@@ -404,6 +422,8 @@ Before handing off, check:
 - every number against its source artifact;
 - every citation's identity and claim support;
 - every comparison against the actual baseline and matched evaluation set;
+- every `expand` output against all propositions in its input text, including baseline type and
+  evaluation medium;
 - every guarantee against its precise scope;
 - every symbol, abbreviation, unit, and cross-reference for consistency;
 - every IEEE reference-list occurrence of `et al.` as roman text, never Markdown emphasis;
@@ -412,6 +432,8 @@ Before handing off, check:
 - every venue-specific rule against current official guidance;
 - every material use of generative AI against the target publication's current disclosure
   policy.
+- every audit finding for an explicit `Critical`, `Major`, `Minor`, or `Editorial` prefix;
+- every `venue-adapt` response for visible adapted prose rather than artifact links alone.
 
 When user-supplied style excerpts were used, perform a final binary cleanup over the entire
 response: remove all routing commentary, move-sequence descriptions, excerpt fragments, and claims
