@@ -203,6 +203,12 @@ gate by calling remembered or locally cataloged papers "unranked," "strong," "la
 contains or identifies particular papers. Return an `Author queries` action requesting the dated
 database export and the manuscript or verified source set needed for the writing task.
 
+Once the required ranking artifact is absent, do not inspect, summarize, or discuss the contents of
+a local catalog, bibliography, source library, search result, or remembered candidate set. A refusal
+must not name records even as examples of sources that were rejected. State only that the qualifying
+artifact was not supplied, then provide the required `Author queries`; do not narrate repository
+searches or explain the refusal with source-specific names, years, filenames, or metadata.
+
 Before finalizing a manuscript-mode response, reconcile the claim inventory against the proposed
 prose. For every unresolved dependency that blocks requested wording, emit one numbered item under
 `Author queries`; do not bury the request in a limitation sentence. Each item must state:
@@ -411,6 +417,11 @@ When user-supplied style excerpts were used, perform a final binary cleanup over
 response: remove all routing commentary, move-sequence descriptions, excerpt fragments, and claims
 about publisher or template rules. If an authority-boundary sentence was requested, retain only the
 exact single sentence specified by the manuscript-mode contract outside the manuscript.
+
+When the ranking gate declined a request, perform another final binary cleanup over the entire
+response: remove every paper title, author, DOI, publication year, citation count, catalog record,
+candidate, shortlist, and discussion of local source-file contents. The refusal and `Author queries`
+must identify only the missing artifact and requested action, never a rejected source example.
 
 State what was verified and what remains uncertain. Never call a manuscript submission-ready
 when a load-bearing claim, citation, result, or venue requirement remains unresolved.
