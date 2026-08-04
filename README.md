@@ -256,7 +256,7 @@ directory your host scans:
 ```bash
 curl -fsSL https://github.com/huguryildiz/ieee-acm-paper-writing/archive/refs/tags/v0.6.4.tar.gz \
   | tar -xz
-cp -R ieee-acm-paper-writing-0.6.3/skills/ieee-acm-paper-writing <target-directory>/
+cp -R ieee-acm-paper-writing-0.6.4/skills/ieee-acm-paper-writing <target-directory>/
 ```
 
 | Host | Project-scoped target | User-scoped target |
