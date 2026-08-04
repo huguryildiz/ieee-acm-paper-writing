@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "title": "Results Section Audit",
+  "subject": "checking optimality, timing, and deployment claims against solver-log evidence",
+  "eyebrow": "Synthetic Results excerpt · no venue specified",
+  "summary": "The excerpt reports solver statuses, a relative MIP-gap tolerance, timeouts, feasible incumbents, and final gaps for 12 instances. It does not support the universal exact-optimality and 10 s claim or the conclusion that the method is ready for real-time deployment.",
+  "source_label": "Audited Results excerpt",
+  "revision_label": "Evidence-bounded response",
+  "footer": "Generated on 4 August 2026 by applying the repository-local ieee-acm-paper-writing skill. The supplied excerpt is synthetic. The HTML is a presentation of the canonical text audit and adds no scientific finding.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Global-optimum and 10 s guarantee is contradicted",
+      "location": "Results excerpt · sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "The supplied logs report that 3 of 12 runs reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%. The 9 OPTIMAL statuses were obtained under a 1% relative MIP-gap tolerance, which does not establish exact global optimality.",
+      "consequence": "The sentence makes a universal exact-optimality and timing claim that is directly inconsistent with the reported failures and exceeds the stated certificate boundary.",
+      "correction": "Replace the sentence with a bounded report: 9 of 12 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%. Do not call these results exact global optima or claim completion within 10 s.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "2",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "Timing and solver configuration are insufficiently reported",
+      "location": "Results excerpt · sentences 1–2",
+      "source": "The optimizer always returns the global optimum within 10 s. Across 12 instances, 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%.",
+      "evidence": "The excerpt supplies a 60 s limit, a 1% relative MIP-gap tolerance, statuses, and final gaps, but no solver identity or version, hardware, thread setting, seeds, or per-run timing measurements. The supplied record therefore cannot verify the 10 s statement or support reproducibility of the timing result.",
+      "consequence": "Readers cannot reconstruct the solver experiment or distinguish an observed runtime distribution from a claimed fixed time bound.",
+      "correction": "Provide the solver identity and version, hardware, thread and seed settings, stopping configuration, and per-instance runtime measurements. Until then, retain only the reported status, time-limit, feasibility, and gap observations.",
+      "disposition": "author-query"
+    },
+    {
+      "id": "3",
+      "layer": "scientific-support",
+      "severity": "Major",
+      "title": "Real-time deployment readiness is unsupported",
+      "location": "Results excerpt · sentence 3",
+      "source": "The method is therefore ready for real-time deployment.",
+      "evidence": "No deployment experiment, operational validation, or timing measurements outside the solver logs are supplied. The same excerpt reports three time-limited runs with nonzero final gaps.",
+      "consequence": "The conclusion overgeneralizes bounded solver-log observations into an operational readiness claim and ignores failed or unresolved runs in the evaluated set.",
+      "correction": "Remove the deployment-readiness sentence. If real-time deployment is to be claimed, supply a deployment evaluation with its timing budget, workload, hardware, operational conditions, and treatment of the three time-limited runs; otherwise limit the conclusion to the reported solver-log results.",
+      "disposition": "remove"
+    }
+  ]
+}

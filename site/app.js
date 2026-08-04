@@ -51,7 +51,7 @@
     codex: {
       name: "Codex",
       prompt: "$",
-      command: "npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.2 -a codex -y",
+      command: "npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.3 -a codex -y",
       guidance: "Run this in your manuscript project, then start a new Codex session.",
       // Codex mentions an installed skill with @; Claude Code invokes it with /.
       firstPrompt: "@ieee-acm-paper-writing audit manuscript.md against the supplied evidence.",
