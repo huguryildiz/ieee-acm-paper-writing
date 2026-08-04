@@ -2,7 +2,7 @@
   "scoring_method": "agent-assisted criterion scoring",
   "judge": {
     "independent_human_review": false,
-    "human_review_record": "Maintainer review of every criterion decision against the retained raw responses. No third-party independent review is claimed."
+    "human_review_record": "Maintainer reviewed the retained criterion ledger on 2026-08-04 and accepted it. The decisions themselves were produced by an agent reading each raw response against the case contract; this record is the maintainer's acceptance of that ledger, not an independent re-derivation of each decision. No third-party independent review has been obtained, so independent_human_review remains false."
   },
   "semantics": {
     "must_pass": "true only when the response unambiguously satisfies the whole criterion",
