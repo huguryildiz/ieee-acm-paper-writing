@@ -326,6 +326,8 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         self.assertIn("capable assignments, limited or competing resources", skill)
         self.assertIn("do not explain\nwhy the failure occurs or what a timeout implies", skill)
         self.assertIn("must not add a performance outcome or novelty claim", skill)
+        self.assertIn("must close with an explicit\ncontributions list", skill)
+        self.assertIn("do not omit the list merely because", skill)
 
     def test_style_calibration_never_quotes_the_supplied_excerpts(self):
         skill = (
@@ -333,6 +335,14 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("do not reproduce their sentences or distinctive phrases", skill)
         self.assertIn("ledgers, explanations, or compliance notes", skill)
+        self.assertIn("Do not restate, enumerate, summarize, or name", skill)
+        self.assertIn("do not add a note claiming that no wording was reused", skill)
+        self.assertIn("the entire outside-manuscript answer must be exactly", skill)
+        self.assertIn("Add no publisher, template, policy, or", skill)
+        self.assertIn("do not transfer their limitations, future-work statements", skill)
+        self.assertIn("the only permitted non-manuscript line is exactly", skill)
+        self.assertIn("never import `future work`, `remains open`", skill)
+        self.assertIn("perform a final binary cleanup over the entire", skill)
 
     def test_ieee_et_al_cleanup_covers_the_entire_response(self):
         skill = (
