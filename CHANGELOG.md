@@ -1,5 +1,40 @@
 # Changelog
 
+## v0.6.4 — 2026-08-04
+
+No change to the installable skill. This tag promotes the `v0.6.4-rc.2` tree
+(`2c76b1919fad71d9dfc21439e24143b878af7732`, skill hash
+`cf437abcf818496c8a335a0515d2bed7395469738723b008f0f07159f2cdcfbd`) to a stable release and attaches
+the behavioral evidence that the release candidate lacked.
+
+### Added
+
+- Retained [0.6.4 candidate bundle](evals/results/release-0.6.4-2c76b19/manifest.json): three
+  complete 27-case campaigns collected against the exact installable skill tree on two agent hosts
+  (Claude Sonnet Medium once, Codex Luna Medium twice), each with its collector-created
+  `collection.json`, exact parsed agent command, checked authority roots, empty collision set,
+  collection-time skill and case hashes, all raw responses, all 450 criterion decisions with a
+  verbatim evidence quotation each, and both declared HTML-map artifacts. This is the first bundle
+  the evidence validator reports as describing the current tree rather than a historical one.
+
+### Evidence boundary
+
+- Case-local recorded results are 27/27 (Sonnet Medium R1), 25/27 (Luna Medium R1), and 23/27
+  (Luna Medium R2). Cite the denominator and the failed-case list, never a bare percentage.
+- Six unresolved case failures: `citation_metadata_vs_support` and `html_audit_map_artifacts` on
+  Luna Medium R1; `optimization_claim_scope`, `citation_metadata_vs_support`,
+  `unmatched_baseline_comparison`, and `ieee_reference_format_audit` on Luna Medium R2.
+- Five of the six are one behaviour class: the external `Author queries` handoff is missing or not
+  in the contract form. In every one of those the manuscript prose still kept its scope, comparator,
+  and disclosures. The sixth printed six author names before `et al.` instead of truncating to the
+  first author.
+- No failure involves invented support, concealed disclosure, a lost comparator or scope condition,
+  a copied author fingerprint, or an unsupported guarantee.
+- **One release-gate condition is explicitly unmet.** The 450 criterion decisions were reviewed by
+  the maintainer against the retained raw responses, not by an independent third party. The bundle
+  records `"qualified": false` and this deviation is stated in the README rather than reconciled
+  after the fact.
+
 ## v0.6.4-rc.2 — 2026-08-04
 
 ### Changed

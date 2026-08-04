@@ -190,8 +190,8 @@ codex plugin add ieee-acm-paper-writing@ieee-acm-paper-writing
 ```
 
 For a rolling Git-backed install, replace `.` with `huguryildiz/ieee-acm-paper-writing`. The rolling
-plugin manifests identify candidate `0.6.4-rc.2`; this is a prerelease, not a behavior-qualified
-stable release. For a release-stable native install, clone `v0.6.3`, run the two commands above from
+plugin manifests identify `0.6.4`. For a release-pinned native install, clone `v0.6.4`, run the two
+commands above from
 that clone, and keep
 the marketplace source local. Start a new Codex thread after installation so the skill is
 discovered. The plugin adds no MCP server, app connector,
@@ -229,7 +229,7 @@ through a session command is not something CI can run.
 Run this from the manuscript repository in which the skill should be available:
 
 ```bash
-npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.3 -a codex -y
+npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.4 -a codex -y
 ```
 
 The repository publishes a single skill, so no `--skill` selector is needed. Replace `-a codex`
@@ -238,7 +238,7 @@ rather than the installer's selected strategy, and `--global` only when the skil
 available across all projects.
 
 This project-scoped command installs under `.agents/skills/` for Codex and `.claude/skills/` for
-Claude Code. Both the installer (`1.5.21`) and skill (`v0.6.3`) are pinned. The upstream installer
+Claude Code. Both the installer (`1.5.21`) and skill (`v0.6.4`) are pinned. The upstream installer
 collects anonymous usage telemetry by default; prefix the command with
 `DISABLE_TELEMETRY=1` to opt out for that invocation.
 
@@ -254,7 +254,7 @@ Download a release, then place `skills/ieee-acm-paper-writing/` — the whole di
 directory your host scans:
 
 ```bash
-curl -fsSL https://github.com/huguryildiz/ieee-acm-paper-writing/archive/refs/tags/v0.6.3.tar.gz \
+curl -fsSL https://github.com/huguryildiz/ieee-acm-paper-writing/archive/refs/tags/v0.6.4.tar.gz \
   | tar -xz
 cp -R ieee-acm-paper-writing-0.6.3/skills/ieee-acm-paper-writing <target-directory>/
 ```
@@ -372,7 +372,7 @@ skill installation. To inspect audit-map JSON without sending it to a hosted ser
 matching release and start the loopback-only server:
 
 ```bash
-git clone --branch v0.6.3 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
+git clone --branch v0.6.4 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
 cd ieee-acm-paper-writing
 python3 scripts/serve_local_audit.py
 ```
@@ -484,11 +484,25 @@ collision set, collection-time skill and case hashes, all 27 raw responses, all 
 decisions, and both declared HTML-map artifacts. The bundle is explicitly unqualified: all three
 campaigns have named strict failures, and no independent human review is claimed.
 
-The rolling manifests identify source candidate `0.6.4-rc.2`. Its local structural and regression
-gates pass, and two authority-isolated Codex Luna Medium smoke executions of the previously failing
-author-fingerprint case preserved the unspecified communication topology. Those targeted runs do
-not cover the full denominator and have no independent human review. No release-qualified
-0.6.4-rc.2 behavioral bundle is claimed yet.
+The retained [0.6.4 candidate bundle](evals/results/release-0.6.4-2c76b19/manifest.json) recollects
+the 27-case contract on Claude Sonnet Medium once and Codex Luna Medium twice, against the exact
+installable skill tree that ships with this tag. The complete agent-assisted results are 27/27,
+25/27, and 23/27. Every campaign retains its collector-created `collection.json`, exact parsed agent
+command, checked authority roots, empty collision set, collection-time skill and case hashes, all 27
+raw responses, all 150 criterion decisions with a verbatim evidence quotation each, and both declared
+HTML-map artifacts. This is the first bundle the evidence validator reports as describing the current
+tree rather than a historical one.
+
+Six case failures remain named and unresolved across the two Luna campaigns: Luna Medium R1 failed
+`citation_metadata_vs_support` and `html_audit_map_artifacts`; Luna Medium R2 failed
+`optimization_claim_scope`, `citation_metadata_vs_support`, `unmatched_baseline_comparison`, and
+`ieee_reference_format_audit`. Five of the six are one behaviour class — the external `Author
+queries` handoff is missing or not in the contract form — and in every one of those the manuscript
+prose still kept its scope, comparator, and disclosures. The sixth printed six author names before
+`et al.` instead of truncating to the first author. Sonnet Medium R1 failed no case. No failure
+involves invented support, concealed disclosure, a lost comparator or scope condition, a copied
+author fingerprint, or an unsupported guarantee. Report the denominator and this failed-case list
+with any citation of these numbers; a bare percentage is not a release claim.
 
 Repository CI runs structural validation, evaluation-schema validation, and regression tests. It
 also validates the hashes, scoring completeness, denominator, and failed-case declarations in the
@@ -535,9 +549,17 @@ an unresolved legal, security, provenance, or core-invariant finding still block
 
 The retained 0.6.4-rc.1 candidate bundle does not qualify a stable release under this gate: every
 campaign has strict failures and its 450 criterion decisions have not received independent human
-review. The current 0.6.4-rc.2 source candidate has only targeted smoke evidence, not a fresh full
-campaign or independent review. It can support an explicitly unqualified release candidate, not a
-stable behavior-qualified release.
+review.
+
+**`v0.6.4` was tagged with one gate condition explicitly unmet.** The
+[0.6.4 bundle](evals/results/release-0.6.4-2c76b19/manifest.json) satisfies the campaign coverage,
+replication, isolation, collection-time hash, and clean-install conditions, and its six remaining
+case failures all fall outside the enumerated blocking categories. It does **not** satisfy the
+independent-review condition: the 450 criterion decisions were reviewed by the maintainer against
+the retained raw responses, not by an independent third party. The bundle therefore records
+`"qualified": false`, and this release is offered as a maintainer-reviewed stable tag rather than an
+independently reviewed one. Anyone relying on the behavioral numbers should read the bundle's
+`blocking_findings` before citing them.
 
 ## Scope and limitations
 
