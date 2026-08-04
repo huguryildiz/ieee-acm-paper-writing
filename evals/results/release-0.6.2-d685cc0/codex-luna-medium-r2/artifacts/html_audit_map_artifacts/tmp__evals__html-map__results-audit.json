@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "title": "Results Section-Audit Map",
+  "subject": "solver optimality, runtime, and deployment-readiness claims",
+  "eyebrow": "Generic IEEE/ACM engineering audit · synthetic Results excerpt",
+  "summary": "The supplied solver logs contradict the absolute optimality-and-runtime claim and do not support real-time deployment readiness. The bounded evidence is that 9 of 12 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, whereas 3 reached the 60 s limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%. Reproducibility details needed to interpret these outcomes are not supplied.",
+  "source_label": "Audited Results excerpt",
+  "revision_label": "Evidence-scoped response",
+  "footer": "Generated on 4 August 2026 from the supplied synthetic Results excerpt by applying the repository-local ieee-acm-paper-writing skill. No target publication was specified; venue-specific compliance was not assessed.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Global-optimality and 10 s guarantee is contradicted by the logs",
+      "location": "Results excerpt · sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "Only 9 of 12 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance. The other 3 runs reached the 60 s time limit with feasible incumbents and nonzero final gaps of 4.1%, 5.3%, and 7.8%. No exact-optimality certificate is supplied.",
+      "consequence": "The sentence makes both a universal runtime claim and an exact global-optimality claim that the controlling solver logs directly contradict. An OPTIMAL status under a 1% gap tolerance also does not establish exact global optimality.",
+      "correction": "Remove the sentence. Retain only the observed, tolerance-scoped report: 9 of 12 runs ended with solver status OPTIMAL under the 1% relative MIP-gap tolerance, while 3 reached the 60 s limit with feasible incumbents and the reported final gaps.",
+      "disposition": "remove"
+    },
+    {
+      "id": "2",
+      "layer": "scientific-support",
+      "severity": "Major",
+      "title": "Tolerance-based OPTIMAL status is overstated as exact optimality",
+      "location": "Results excerpt · sentence 1 and sentence 2",
+      "source": "The optimizer always returns the global optimum; 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance.",
+      "evidence": "The reported OPTIMAL statuses were obtained under a 1% relative MIP-gap tolerance, and no exact-optimality certificate is supplied. The stated evidence therefore supports the solver's tolerance-scoped status, not exact global optimality.",
+      "consequence": "The excerpt conflates a bounded solution-quality certificate with an exact mathematical guarantee, overstating what the solver logs establish.",
+      "correction": "Describe the 9 runs as ending with solver status OPTIMAL under the stated 1% relative MIP-gap tolerance. Do not call those solutions exact global optima without an exact-optimality certificate.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "3",
+      "layer": "scientific-support",
+      "severity": "Major",
+      "title": "Real-time deployment readiness is unsupported",
+      "location": "Results excerpt · sentence 3",
+      "source": "The method is therefore ready for real-time deployment.",
+      "evidence": "No deployment experiment, operational deadline, end-to-end latency measurement, scheduling or jitter analysis, or timing evidence outside the solver logs is supplied. Moreover, 3 of 12 runs reached the 60 s solver limit with feasible incumbents and nonzero final gaps.",
+      "consequence": "Solver-log outcomes alone do not establish deadline compliance, system-level real-time behavior, operational safety, or deployment readiness; the conclusion exceeds both the experiment and its external-validity scope.",
+      "correction": "Remove the deployment-readiness conclusion. If deployment is a target, define the operational deadline and evaluate end-to-end latency, tail behavior, deadline misses, resource use, and relevant operational failure modes in a representative environment before making a scoped readiness claim.",
+      "disposition": "remove"
+    },
+    {
+      "id": "4",
+      "layer": "method-domain",
+      "severity": "Major",
+      "title": "Optimization experiment is not reproducible from the supplied report",
+      "location": "Results excerpt · sentence 2",
+      "source": "Across 12 instances, 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance, while 3 reached the 60 s time limit with feasible incumbents and final gaps of 4.1%, 5.3%, and 7.8%.",
+      "evidence": "The report supplies the instance count, one tolerance, a time limit, statuses, and the three timeout gaps, but not the solver and version, instance identities or selection rule, formulation/configuration, hardware, thread count, seeds where applicable, per-instance runtimes, primal values, or best bounds.",
+      "consequence": "Readers cannot reconstruct the runs, assess configuration dependence, or determine the runtime distribution and solution-quality context across all 12 instances.",
+      "correction": "Report the solver/version, formulation and settings, hardware and threads, instance family and selection, seeds where applicable, and per-instance runtime, status, primal value, best bound, and final gap. Until then, keep the numerical statement explicitly descriptive of the supplied logs and do not generalize beyond these 12 runs.",
+      "disposition": "author-query"
+    }
+  ]
+}
