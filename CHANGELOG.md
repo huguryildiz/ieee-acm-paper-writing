@@ -12,6 +12,9 @@
   and hashed with the response, and make a report stale if missing or replaced.
 - A retained, multi-client behavioral evidence bundle and CI gate that validates every response,
   generated artifact, case contract, score, denominator, and failed-case declaration.
+- Exact-candidate release evidence from two Codex Luna Medium replications and one Claude Sonnet
+  Medium run, with collection-time skill identity, mechanical authority isolation, all 441
+  criterion decisions retained, and independent maintainer review.
 
 ### Changed
 
