@@ -1,5 +1,26 @@
 # Changelog
 
+## v0.6.3 — 2026-08-04
+
+### Fixed
+
+- Sparse-evidence drafts no longer turn absent measurements into prose-level failure mechanisms or
+  guarantees; unsupported details remain external author actions.
+- Supplied style excerpts are treated only as structural calibration and are never copied into the
+  generated manuscript text.
+- Citation-ranking refusals no longer disclose identities from the private calibration catalog.
+- Expansion preserves every supplied scope condition and comparator instead of broadening claims
+  while adding detail.
+- When the exact venue and article type are unknown, venue adaptation makes no positive
+  length-compliance statement and records length only as an unverified venue rule.
+
+### Evidence
+
+- Retained exact-skill behavioral campaigns cover all 27 cases on Claude Sonnet Medium once and
+  Codex Luna Medium twice. The independently reviewed results are 27/27, 26/27, and 25/27; the
+  remaining failures are limited to reference-format audit details, and no unresolved
+  release-blocking core invariant failure was found.
+
 ## v0.6.2 — 2026-08-04
 
 ### Added
