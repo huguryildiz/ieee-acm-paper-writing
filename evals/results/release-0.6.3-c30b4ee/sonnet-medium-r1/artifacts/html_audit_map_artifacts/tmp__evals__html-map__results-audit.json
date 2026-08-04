@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "title": "Section-Audit Map",
+  "subject": "tracing solver-log claims to bounded, evidence-scoped corrections",
+  "eyebrow": "synthetic Results excerpt · target venue not specified",
+  "summary": "A synthetic Results excerpt reporting outcomes across 12 solver instances, mapped finding by finding. Each numbered entry preserves the concern layer, identifies the sentence that triggered the finding, and shows the bounded correction or author action supported by the excerpt's own supplied numbers.",
+  "source_label": "Audited excerpt",
+  "revision_label": "Evidence-scoped correction",
+  "footer": "This audit map covers only the supplied Results excerpt. No target venue or article type was supplied, so no venue-compliance finding is included and no length or formatting compliance claim is made.",
+  "findings": [
+    {
+      "id": "1",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Universal optimality claim contradicted by the excerpt's own data",
+      "location": "paragraph 1, sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "The very next sentence reports that 3 of the 12 instances reached the 60 s time limit and returned only feasible incumbents with final gaps of 4.1%, 5.3%, and 7.8%, not certified optima within 10 s.",
+      "consequence": "The universal claim (\"always,\" \"the global optimum,\" \"within 10 s\") is directly falsified by 3 of the 12 reported runs, so a reader cannot trust the headline guarantee.",
+      "correction": "Remove the universal claim. State the outcome distribution actually observed: 9 of 12 runs terminated with solver status OPTIMAL under the stated tolerance; 3 of 12 reached the 60 s time limit with feasible incumbents at the stated gaps.",
+      "disposition": "remove"
+    },
+    {
+      "id": "2",
+      "layer": "scientific-support",
+      "severity": "Major",
+      "title": "\"Global optimum\" overstates a tolerance-bound solver status",
+      "location": "paragraph 1, sentences 1-2",
+      "source": "The optimizer always returns the global optimum ... 9 runs ended with solver status OPTIMAL under a 1% relative MIP-gap tolerance.",
+      "evidence": "A supplementary note accompanying the excerpt states that no exact-optimality certificate is supplied. Solver status OPTIMAL at a 1% relative MIP-gap tolerance certifies a solution within 1% of the best known bound, not an exact global optimum.",
+      "consequence": "Equating tolerance-bound OPTIMAL status with the exact global optimum overstates the guarantee actually certified by the solver logs.",
+      "correction": "Report only what the logs certify: solver status OPTIMAL under the 1% relative MIP-gap tolerance for 9 of 12 instances. Do not describe this as the exact global optimum.",
+      "disposition": "rewrite"
+    },
+    {
+      "id": "3",
+      "layer": "scientific-support",
+      "severity": "Major",
+      "title": "Unsupported \"within 10 s\" timing figure",
+      "location": "paragraph 1, sentence 1",
+      "source": "The optimizer always returns the global optimum within 10 s.",
+      "evidence": "No per-instance or aggregate solve-time value is reported anywhere in the excerpt for the 9 OPTIMAL runs. The only timing figure supplied is the 60 s time limit that applied to the 3 non-optimal runs. A supplementary note states that no timing measurements outside these solver logs are supplied.",
+      "consequence": "The \"10 s\" figure cannot be reconstructed from the reported solver logs and reads as an invented timing claim.",
+      "correction": "Remove \"within 10 s\" unless the author supplies the actual per-instance or aggregate solve-time data with its aggregation statistic and instance count.",
+      "disposition": "author-query"
+    },
+    {
+      "id": "4",
+      "layer": "scientific-support",
+      "severity": "Critical",
+      "title": "Deployment-readiness claim exceeds the supplied evidence",
+      "location": "paragraph 1, final sentence",
+      "source": "The method is therefore ready for real-time deployment.",
+      "evidence": "A supplementary note states that no deployment experiment is supplied. The reported evaluation is limited to solver logs over 12 instances, of which 3 (25%) failed to certify optimality within the reported time budget and returned incumbents with gaps up to 7.8%.",
+      "consequence": "The excerpt converts a bounded, partially non-optimal solver-log observation into an operational deployment guarantee with no deployment trial to support it.",
+      "correction": "Remove the deployment claim. State only the solver-log outcome distribution over the 12 evaluated instances, and note that real-time deployment has not been evaluated.",
+      "disposition": "remove"
+    },
+    {
+      "id": "5",
+      "layer": "method-domain",
+      "severity": "Minor",
+      "title": "Missing reproducibility and instance-provenance reporting",
+      "location": "paragraph 1, whole excerpt",
+      "source": "Across 12 instances, 9 runs ended with solver status OPTIMAL ... while 3 reached the 60 s time limit.",
+      "evidence": "The excerpt names no solver identity or version, hardware, seeds, or the source and selection rule for the 12 instances.",
+      "consequence": "The reported 9/12-versus-3/12 outcome split cannot be independently reconstructed or checked for selection or configuration bias.",
+      "correction": "Request the solver name and version, hardware, and instance-generation or selection procedure as an external author query before treating the split as reproducible.",
+      "disposition": "author-query"
+    }
+  ]
+}

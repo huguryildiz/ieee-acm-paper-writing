@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "title": "Release 0.6.3 behavioral evidence for c30b4ee",
+  "base_commit": "c30b4ee8cbeb8a36ed46c416925610e1604b5caf",
+  "candidate": {
+    "skill_hash": "33d671038750d6aa9f013fe6d289d5aa1c45e2b2cb44b71b40743252ec6e53c7",
+    "cases_sha256": "4327f145dcc62cb1f820897d7bd3735b652ce32e638499cd39e516a15f1c360d",
+    "case_count": 27,
+    "must_pass_criteria": 92,
+    "must_not_criteria": 55
+  },
+  "collection": {
+    "mechanical_authority_isolation": true,
+    "repository_skill_authority": "skills/ieee-acm-paper-writing/SKILL.md",
+    "same_named_user_or_cached_copy_allowed": false,
+    "expected_routing_scored": false,
+    "skill_hash_captured_at_collection": true
+  },
+  "scoring": {
+    "independent_human_review": true,
+    "human_review_record": "Independent maintainer review completed in the Codex release thread on 2026-08-04. The maintainer confirmed reading and inspecting all 441 criterion decisions and rationales for exact candidate c30b4ee, approved the 27/27, 26/27, and 25/27 results, and found no remaining release-blocking core invariant violation. The maintainer explicitly corrected the commit name in their initial attestation from 6dc0fb8 to c30b4ee.",
+    "method": "agent-assisted criterion scoring"
+  },
+  "campaigns": [
+    {
+      "id": "sonnet-medium-r1",
+      "client": "Claude Code",
+      "client_version": "2.1.220",
+      "model": "sonnet",
+      "effort": "medium",
+      "replication": 1,
+      "started_at": "2026-08-04T03:02:24.029110Z",
+      "completed_at": "2026-08-04T03:21:05.641547Z",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "sonnet-medium-r1/responses.jsonl",
+      "scores": "sonnet-medium-r1/scores.json",
+      "review_ledger": "sonnet-medium-r1/review-ledger.json",
+      "artifacts_dir": "sonnet-medium-r1/artifacts",
+      "strict_pass": true,
+      "failed_case_ids": []
+    },
+    {
+      "id": "luna-medium-r1",
+      "client": "Codex CLI",
+      "client_version": "0.144.6",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "replication": 1,
+      "started_at": "2026-08-04T03:21:12.948221Z",
+      "completed_at": "2026-08-04T03:43:21.826899Z",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "luna-medium-r1/responses.jsonl",
+      "scores": "luna-medium-r1/scores.json",
+      "review_ledger": "luna-medium-r1/review-ledger.json",
+      "artifacts_dir": "luna-medium-r1/artifacts",
+      "strict_pass": false,
+      "failed_case_ids": [
+        "ieee_reference_format_audit"
+      ]
+    },
+    {
+      "id": "luna-medium-r2",
+      "client": "Codex CLI",
+      "client_version": "0.144.6",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "replication": 2,
+      "started_at": "2026-08-04T03:43:32.102445Z",
+      "completed_at": "2026-08-04T03:59:55.161018Z",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "luna-medium-r2/responses.jsonl",
+      "scores": "luna-medium-r2/scores.json",
+      "review_ledger": "luna-medium-r2/review-ledger.json",
+      "artifacts_dir": "luna-medium-r2/artifacts",
+      "strict_pass": false,
+      "failed_case_ids": [
+        "ieee_reference_format_audit",
+        "acm_reference_format_audit"
+      ]
+    }
+  ]
+}

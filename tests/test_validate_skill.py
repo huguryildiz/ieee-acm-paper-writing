@@ -493,9 +493,9 @@ class ModeDocumentationTests(unittest.TestCase):
 
     def test_release_pinned_install_and_workbench_scope_are_documented(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.2", readme)
+        self.assertIn("npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.3", readme)
         self.assertIn("is **not included**", readme)
-        self.assertIn("git clone --branch v0.6.2 --depth 1", readme)
+        self.assertIn("git clone --branch v0.6.3 --depth 1", readme)
 
     def test_plugin_install_path_states_that_it_tracks_the_default_branch(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
