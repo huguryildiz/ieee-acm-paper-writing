@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "title": "Release 0.6.4 exact-candidate behavioral evidence",
+  "base_commit": "2c76b1919fad71d9dfc21439e24143b878af7732",
+  "candidate": {
+    "skill_hash": "cf437abcf818496c8a335a0515d2bed7395469738723b008f0f07159f2cdcfbd",
+    "cases_sha256": "1de992a9c586cc17716610b105ff3bf1778d1ddffae9659b574d6a505798fc5b",
+    "case_count": 27,
+    "must_pass_criteria": 92,
+    "must_not_criteria": 58
+  },
+  "collection": {
+    "repository_skill_authority": "skills/ieee-acm-paper-writing/SKILL.md",
+    "same_named_user_or_cached_copy_allowed": false,
+    "expected_routing_scored": false,
+    "mechanical_authority_isolation": true,
+    "skill_hash_captured_at_collection": true,
+    "agent_command_captured_at_collection": true,
+    "collection_record_retained": true
+  },
+  "scoring": {
+    "method": "agent-assisted criterion scoring",
+    "independent_human_review": false,
+    "human_review_record": "",
+    "review_note": "All 450 binary criterion decisions were taken by reading each retained raw response against the case contract, with a verbatim evidence quotation recorded for every decision. expected_routing was not scored. This is a maintainer review, not a third-party independent review."
+  },
+  "release_qualification": {
+    "qualified": false,
+    "review_record": "Three complete 27-case campaigns were collected against the exact installable skill tree cf437abcf818496c8a335a0515d2bed7395469738723b008f0f07159f2cdcfbd on two agent hosts, with two replications on the Codex Luna host. Every campaign retains its collector-created collection.json, exact parsed agent command, checked authority roots, empty collision set, and collection-time skill and case hashes. Case-local recorded results are 27/27, 25/27, and 23/27. The v0.6.4 tag was published with this bundle attached and with one release-gate condition explicitly unmet: no third-party independent review of the 450 criterion decisions was obtained. That deviation is recorded here and in the README rather than being reconciled after the fact.",
+    "blocking_findings": [
+      "Sonnet medium r1 failed 0 of 27 cases.",
+      "Luna medium r1 failed 2 of 27 cases: citation_metadata_vs_support and html_audit_map_artifacts.",
+      "Luna medium r2 failed 4 of 27 cases: optimization_claim_scope, citation_metadata_vs_support, unmatched_baseline_comparison, and ieee_reference_format_audit.",
+      "Five of the six failures are one behaviour class: the external Author queries handoff is missing or not in the contract form, while the manuscript prose kept its scope in every case. The sixth, ieee_reference_format_audit on luna medium r2, printed six author names before et al. instead of truncating to the first author.",
+      "No failure involves invented support, concealed disclosure, a lost comparator or scope condition, a copied author fingerprint, or an unsupported guarantee.",
+      "No independent third-party review of the 450 retained criterion decisions has been completed; the review recorded here is a maintainer review."
+    ]
+  },
+  "campaigns": [
+    {
+      "id": "sonnet-medium-r1",
+      "client": "claude",
+      "client_version": "2.1.220",
+      "model": "sonnet",
+      "effort": "medium",
+      "replication": 1,
+      "started_at": "2026-08-04T12:14:20.681549Z",
+      "completed_at": "2026-08-04T12:34:29Z",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "sonnet-medium-r1/responses.jsonl",
+      "scores": "sonnet-medium-r1/scores.json",
+      "review_ledger": "sonnet-medium-r1/review-ledger.json",
+      "collection_record": "sonnet-medium-r1/collection.json",
+      "collection_record_sha256": "730d53613b83a80391c061c4599f8ddaffc7685ad544bfb1491e3d7430623de6",
+      "artifacts_dir": "sonnet-medium-r1/artifacts",
+      "strict_pass": true,
+      "failed_case_ids": []
+    },
+    {
+      "id": "luna-medium-r1",
+      "client": "codex",
+      "client_version": "0.144.6",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "replication": 1,
+      "started_at": "2026-08-04T12:34:41.678465Z",
+      "completed_at": "2026-08-04T12:50:54Z",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "luna-medium-r1/responses.jsonl",
+      "scores": "luna-medium-r1/scores.json",
+      "review_ledger": "luna-medium-r1/review-ledger.json",
+      "collection_record": "luna-medium-r1/collection.json",
+      "collection_record_sha256": "ef1882230eec8e667299810e118f2f21127675b5ba8d21a91dd940d59c93faf8",
+      "artifacts_dir": "luna-medium-r1/artifacts",
+      "strict_pass": false,
+      "failed_case_ids": [
+        "citation_metadata_vs_support",
+        "html_audit_map_artifacts"
+      ]
+    },
+    {
+      "id": "luna-medium-r2",
+      "client": "codex",
+      "client_version": "0.144.6",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "replication": 2,
+      "started_at": "2026-08-04T13:40:41.066135Z",
+      "completed_at": "2026-08-04T13:41:02Z",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "luna-medium-r2/responses.jsonl",
+      "scores": "luna-medium-r2/scores.json",
+      "review_ledger": "luna-medium-r2/review-ledger.json",
+      "collection_record": "luna-medium-r2/collection.json",
+      "collection_record_sha256": "b06d49a65ddae75cb90401caa54169ee00977dfb676eaf6b9e577b6a11377961",
+      "artifacts_dir": "luna-medium-r2/artifacts",
+      "strict_pass": false,
+      "failed_case_ids": [
+        "optimization_claim_scope",
+        "citation_metadata_vs_support",
+        "unmatched_baseline_comparison",
+        "ieee_reference_format_audit"
+      ]
+    }
+  ]
+}
