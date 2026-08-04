@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "title": "Release 0.6.2 exact-candidate behavioral evidence",
+  "base_commit": "d685cc039cf7adabdf1d5947d024cbcfebc5b5ff",
+  "candidate": {
+    "skill_hash": "e2a604139b2bd7d41f91a9f60b45307d07968caeca732db1bc924f99febc8116",
+    "cases_sha256": "4327f145dcc62cb1f820897d7bd3735b652ce32e638499cd39e516a15f1c360d",
+    "case_count": 27,
+    "must_pass_criteria": 92,
+    "must_not_criteria": 55
+  },
+  "collection": {
+    "mechanical_authority_isolation": true,
+    "repository_skill_authority": "skills/ieee-acm-paper-writing/SKILL.md",
+    "same_named_user_or_cached_copy_allowed": false,
+    "expected_routing_scored": false,
+    "skill_hash_captured_at_collection": true
+  },
+  "scoring": {
+    "independent_human_review": true,
+    "human_review_record": "Maintainer reviewed and accepted the exact-HEAD criterion decisions and rationales for d685cc039cf7adabdf1d5947d024cbcfebc5b5ff in the Codex release thread on 2026-08-04; maintainer confirmed no remaining release-blocking core invariant failure.",
+    "review_note": "Claude Sonnet Medium assisted initial criterion scoring; independent maintainer review and attestation completed on 2026-08-04.",
+    "method": "agent-assisted criterion scoring"
+  },
+  "campaigns": [
+    {
+      "id": "codex-luna-medium-r1",
+      "client": "Codex CLI",
+      "client_version": "0.144.6",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "replication": 1,
+      "started_at": "2026-08-03T23:27:38.720124Z",
+      "completed_at": "2026-08-03T23:43:44.293874Z",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "codex-luna-medium-r1/responses.jsonl",
+      "scores": "codex-luna-medium-r1/scores.json",
+      "review_ledger": "codex-luna-medium-r1/review-ledger.json",
+      "artifacts_dir": "codex-luna-medium-r1/artifacts",
+      "strict_pass": false,
+      "failed_case_ids": [
+        "inaccessible_landmark_style"
+      ]
+    },
+    {
+      "id": "codex-luna-medium-r2",
+      "client": "Codex CLI",
+      "client_version": "0.144.6",
+      "model": "gpt-5.6-luna",
+      "effort": "medium",
+      "replication": 2,
+      "started_at": "2026-08-03T23:43:55.818928Z",
+      "completed_at": "2026-08-04T00:02:21.304772Z",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "codex-luna-medium-r2/responses.jsonl",
+      "scores": "codex-luna-medium-r2/scores.json",
+      "review_ledger": "codex-luna-medium-r2/review-ledger.json",
+      "artifacts_dir": "codex-luna-medium-r2/artifacts",
+      "strict_pass": false,
+      "failed_case_ids": [
+        "acm_venue_adaptation",
+        "inaccessible_landmark_style"
+      ]
+    },
+    {
+      "id": "claude-sonnet-medium-r1",
+      "client": "Claude Code",
+      "client_version": "2.1.220",
+      "model": "sonnet",
+      "effort": "medium",
+      "replication": 1,
+      "started_at": "2026-08-04T00:02:29.566194Z",
+      "completed_at": "2026-08-04T00:26:22.917831Z",
+      "authority_path": "skills/ieee-acm-paper-writing/SKILL.md",
+      "responses": "claude-sonnet-medium-r1/responses.jsonl",
+      "scores": "claude-sonnet-medium-r1/scores.json",
+      "review_ledger": "claude-sonnet-medium-r1/review-ledger.json",
+      "artifacts_dir": "claude-sonnet-medium-r1/artifacts",
+      "strict_pass": false,
+      "failed_case_ids": [
+        "ieee_reference_format_generate"
+      ]
+    }
+  ]
+}
