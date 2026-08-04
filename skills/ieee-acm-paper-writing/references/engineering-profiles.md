@@ -2,6 +2,9 @@
 
 Use the applicable sections for the manuscript's methods and domains. Load multiple sections for
 hybrid work. These reporting contracts complement, but do not establish, scientific validity.
+Every listed field is a reporting checklist, not a source of facts or default values. If the
+supplied evidence omits a field, name only the missing field in an author query. Do not populate or
+illustrate it with customary values, canonical model variants, likely capabilities, or examples.
 
 ## Contents
 
@@ -126,6 +129,10 @@ estimator, model version, and operational purpose. With no automated field-to-mo
 physical-to-digital path. Do not infer synchronization from a dashboard that merely displays live
 measurements beside older simulation results.
 
+These field names do not establish what a particular model represents or supports. Do not infer
+model contents, study types, update operations, data-path endpoints, estimators, or operational
+uses from the phrases “digital twin,” “network model,” a software product name, or a dashboard.
+
 Separate connectivity from calibration, calibration from validation, prediction from decision
 support, and decision support from control. Bidirectional data alone does not establish model
 validity or safe decisions. Measure operational claims against a comparator using accuracy, delay,
@@ -152,6 +159,16 @@ implemented, simulated, mocked, and offline components.
 Define events, state, clocks, communication, failure model, attacker model, and physical process
 before reasoning about order, consistency, deadlines, resilience, or control. Distinguish logical
 order, wall-clock time, synchronized estimates, and observed message order.
+
+Do not infer a communication graph from the existence of message exchanges. In particular,
+“exchanges messages” does not establish broadcast, all-to-all communication, adjacency, reliable
+delivery, delay bounds, or any other channel or topology property.
+
+When the receiver set is absent, end the system statement after the supplied message type: use the
+form `<component> exchanges <message type>.` Do not complete it with “with the others,” “with other
+components,” “with its peers,” “with each other,” or a similar receiver phrase. Before returning,
+scan the neutral prose for such complements and remove them; a corresponding send/receive rule does
+not identify the communication graph.
 
 For real-time work, report sampling, actuation, delay, jitter, scheduling, clock error, deadlines,
 miss consequences, and timing distributions. Mean latency does not prove deadline compliance.
@@ -192,6 +209,9 @@ information.
 For analytical work, state placement, traffic, reception, resource, asymptotic, probability,
 stationarity, independence, and identifiability assumptions. Label upper bound, lower bound, and
 achievable construction separately. A scaling law is not finite-system measured throughput.
+These categories do not supply the theorem's assumptions. If a packet omits their values, request
+an assumption-by-assumption mapping without listing candidate placement, interference, traffic,
+probability, or asymptotic models as though they applied.
 
 For signal recovery, place signal class, sensing conditions, noise, decoder, norm, and probability
 next to the guarantee. For spectral estimators, specify segmentation, overlap, window,

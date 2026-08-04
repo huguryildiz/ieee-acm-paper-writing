@@ -1,5 +1,27 @@
 # Changelog
 
+## v0.6.4-rc.2 — 2026-08-04
+
+### Changed
+
+- Added a compact response preflight for closed-world technical propositions, reporting fields,
+  self-contained citation checks, unknown venue rules, audit severity headings, and roman `et al.`
+  output.
+- Clarified that domain-profile reporting fields are questions to verify rather than facts,
+  examples, model assumptions, or capabilities that may be inserted into manuscript prose.
+- Added low-freedom handling for unspecified communication receiver sets so neutral rewrites do not
+  create topology through grammatical completions.
+- Synchronized the native Codex plugin snapshot with the canonical skill.
+
+### Targeted evidence boundary
+
+- The previously failing `reject_author_fingerprint` case was recollected twice on Codex Luna
+  Medium in an authority-isolated environment. Both raw responses preserved the supplied message
+  statement without adding a receiver set and satisfied the case criteria.
+- These two targeted executions are smoke evidence only. They do not replace a fresh full 3 x 27
+  campaign on the frozen candidate, independent human review, clean tagged installation, or the
+  other stable-release gates.
+
 ## v0.6.4-rc.1 — 2026-08-04
 
 ### Changed
