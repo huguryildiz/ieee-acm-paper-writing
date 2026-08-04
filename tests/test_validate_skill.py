@@ -307,6 +307,40 @@ class HtmlMapDocumentationTests(unittest.TestCase):
         self.assertIn("causally attributed to adaptive batching without an identification design",
                       humanize["must_not"][-1])
 
+    def test_drafting_cannot_add_a_speculative_failure_mechanism(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Never add an explanatory mechanism, failure cause, or causal hypothesis",
+                      skill)
+        self.assertIn("even if it sounds plausible or is labeled as speculation", skill)
+        self.assertIn("apply a sentence-level evidence trace", skill)
+        self.assertIn("Concrete domain\nexamples are technical content", skill)
+        self.assertIn("does not establish that no incumbent existed", skill)
+        self.assertIn("evidence packet as a closed world for technical content", skill)
+        self.assertIn("do not infer locality,\nseparability", skill)
+        self.assertIn("may not increase the set of technical propositions", skill)
+        self.assertIn("cannot be pointed to verbatim in the\npacket", skill)
+        self.assertIn("use a sparse-evidence\nprotocol", skill)
+        self.assertIn("Make the task paragraph no more informative than", skill)
+        self.assertIn("capable assignments, limited or competing resources", skill)
+        self.assertIn("do not explain\nwhy the failure occurs or what a timeout implies", skill)
+        self.assertIn("must not add a performance outcome or novelty claim", skill)
+
+    def test_style_calibration_never_quotes_the_supplied_excerpts(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("do not reproduce their sentences or distinctive phrases", skill)
+        self.assertIn("ledgers, explanations, or compliance notes", skill)
+
+    def test_ieee_et_al_cleanup_covers_the_entire_response(self):
+        skill = (
+            ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("literal final cleanup over the entire", skill)
+        self.assertIn("Do not show an italicized counterexample", skill)
+
     def test_humanize_preserves_relative_result_comparators(self):
         skill = (
             ROOT / "skills" / "ieee-acm-paper-writing" / "SKILL.md"
