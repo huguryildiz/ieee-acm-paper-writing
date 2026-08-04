@@ -431,7 +431,7 @@ def collection_record_path(outdir):
     return Path(outdir) / "collection.json"
 
 
-def write_collection_record(outdir, env, command):
+def build_collection_record(env, command):
     """Capture the skill and case identity that collection actually ran against.
 
     Recomputing the skill hash at scoring time cannot detect a skill edited after
@@ -441,7 +441,7 @@ def write_collection_record(outdir, env, command):
     if not isinstance(command, list) or not command or not all(
             isinstance(part, str) and part for part in command):
         raise ValueError("collection record requires the parsed direct agent command")
-    record = {
+    return {
         "schema_version": 2,
         "collected_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "skill_hash": skill_hash(),
@@ -455,9 +455,35 @@ def write_collection_record(outdir, env, command):
         "authority_collisions": [],
         "mechanical_authority_isolation": True,
     }
-    collection_record_path(outdir).write_text(
-        json.dumps(record, indent=2) + "\n", encoding="utf-8"
-    )
+
+
+def claim_collection_record(outdir, record):
+    """Create the campaign receipt exactly once; return None when another collector won.
+
+    The record is staged under a per-process name and published with os.link, which fails
+    rather than replaces when the destination exists. Concurrent first collectors therefore
+    cannot each publish a receipt and leave the loser's responses attested by the winner's
+    conditions, and no reader ever observes a half-written record.
+    """
+    path = collection_record_path(outdir)
+    handle, staged = tempfile.mkstemp(dir=path.parent, prefix=path.name + ".", suffix=".partial")
+    try:
+        with os.fdopen(handle, "w", encoding="utf-8") as staged_file:
+            staged_file.write(json.dumps(record, indent=2) + "\n")
+        try:
+            os.link(staged, path)
+        except FileExistsError:
+            return None
+        return record
+    finally:
+        os.unlink(staged)
+
+
+def write_collection_record(outdir, env, command):
+    """Claim the campaign receipt for a directory that does not already hold one."""
+    record = build_collection_record(env, command)
+    if claim_collection_record(outdir, record) is None:
+        sys.exit(f"{collection_record_path(outdir)}: a campaign receipt already exists here")
     return record
 
 
@@ -514,6 +540,45 @@ def read_collection_record(outdir):
     return record
 
 
+COLLECTION_IDENTITY_FIELDS = ("skill_hash", "cases_sha256", "agent_command", "authority_roots")
+
+
+def collection_identity_conflicts(existing, fresh):
+    """Return the identity fields where a retained receipt disagrees with this invocation."""
+    return [
+        field for field in COLLECTION_IDENTITY_FIELDS
+        if existing.get(field) != fresh.get(field)
+    ]
+
+
+def open_collection_record(outdir, env, command):
+    """Create the campaign receipt once, then reuse it for later single-case repairs.
+
+    A `--case` repair must not restamp the campaign it repairs: rewriting the record would
+    give `collected_at` the repair's time and re-attest the responses already in the
+    directory against conditions they never ran under. So an existing receipt is retained
+    whenever it attests the same skill, cases, command, and authority roots, and any
+    disagreement is refused instead of overwritten. A collector that loses the creation
+    race reaches the same comparison against the winner's receipt.
+    """
+    fresh = build_collection_record(env, command)
+    existing = read_collection_record(outdir)
+    if existing is None:
+        claimed = claim_collection_record(outdir, fresh)
+        if claimed is not None:
+            return claimed
+        existing = read_collection_record(outdir)
+    conflicts = collection_identity_conflicts(existing, fresh)
+    if conflicts:
+        sys.exit(
+            f"{collection_record_path(outdir)}: this invocation disagrees with the retained "
+            f"campaign receipt on {', '.join(conflicts)}; collect into a fresh --outdir "
+            "instead of overwriting the provenance of the responses already collected here"
+        )
+    print(f"collect: retaining campaign receipt collected at {existing['collected_at']}")
+    return existing
+
+
 def attested_skill_hash(outdir):
     """Return the collection-time skill hash, refusing any post-collection skill drift."""
     record = read_collection_record(outdir)
@@ -539,7 +604,7 @@ def cmd_collect(args):
         raise SystemExit(f"behavioral collection refused: {exc}") from exc
     outdir = Path(args.outdir).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
-    write_collection_record(outdir, collection_env, command)
+    open_collection_record(outdir, collection_env, command)
     failures = []
     for case in selected(validated_cases(), args.case):
         prompt = SKILL_PREAMBLE + case["prompt"]
