@@ -162,6 +162,12 @@ def build_campaign(entry: dict, cases: list[dict], into: Path, skill_hash: str) 
     if record["skill_hash"] != skill_hash:
         fail(f"{campaign_id}: the installable skill changed after collection "
              f"({record['skill_hash']} at collection, {skill_hash} now)")
+    record_problems = RUNNER.release_collection_problems(record)
+    if record_problems:
+        fail(f"{campaign_id}: collection.json cannot support release provenance: "
+             + "; ".join(record_problems))
+    if record["cases_sha256"] != sha256_bytes(CASES_PATH.read_bytes()):
+        fail(f"{campaign_id}: cases.json changed after collection; recollect before bundling")
 
     metadata = read_json(outdir / "campaign.json")
     missing = [field for field in CAMPAIGN_FIELDS
@@ -186,6 +192,8 @@ def build_campaign(entry: dict, cases: list[dict], into: Path, skill_hash: str) 
 
     target = into / campaign_id
     target.mkdir(parents=True, exist_ok=True)
+    collection_target = target / "collection.json"
+    shutil.copy2(outdir / "collection.json", collection_target)
     responses_lines = []
     failed_cases = []
     ledger_cases = []
@@ -266,6 +274,8 @@ def build_campaign(entry: dict, cases: list[dict], into: Path, skill_hash: str) 
         "responses": f"{campaign_id}/responses.jsonl",
         "scores": f"{campaign_id}/scores.json",
         "review_ledger": f"{campaign_id}/review-ledger.json",
+        "collection_record": f"{campaign_id}/collection.json",
+        "collection_record_sha256": sha256_bytes(collection_target.read_bytes()),
         "artifacts_dir": f"{campaign_id}/artifacts",
         "strict_pass": not failed_cases,
         "failed_case_ids": failed_cases,
@@ -302,14 +312,41 @@ def cmd_build(args) -> int:
             scoring.get("human_review_record", "")).strip():
         fail("independent human review is claimed without a review record")
 
-    collection = dict(config.get("collection") or {})
+    collection_config = dict(config.get("collection") or {})
+    if "mechanical_authority_isolation" in collection_config:
+        fail("config may not declare mechanical_authority_isolation; it is derived from retained "
+             "collection records")
+    collection = collection_config
     collection.setdefault("repository_skill_authority", "skills/ieee-acm-paper-writing/SKILL.md")
     collection.setdefault("same_named_user_or_cached_copy_allowed", False)
     collection.setdefault("expected_routing_scored", False)
-    # Derived, never declared by hand: every campaign carried a collection-time record.
+    # Derived, never declared by hand: every campaign carried a validated retained record.
+    collection["mechanical_authority_isolation"] = True
     collection["skill_hash_captured_at_collection"] = True
-    if type(collection.get("mechanical_authority_isolation")) is not bool:
-        fail("config collection.mechanical_authority_isolation must be a boolean")
+    collection["agent_command_captured_at_collection"] = True
+    collection["collection_record_retained"] = True
+
+    qualification = dict(config.get("release_qualification") or {})
+    if type(qualification.get("qualified")) is not bool:
+        fail("config release_qualification.qualified must be a boolean")
+    if not isinstance(qualification.get("review_record"), str) or not qualification[
+            "review_record"].strip():
+        fail("config release_qualification.review_record must explain the qualification decision")
+    blocking = qualification.get("blocking_findings")
+    if not isinstance(blocking, list) or not all(
+            isinstance(item, str) and item.strip() for item in blocking):
+        fail("config release_qualification.blocking_findings must be a string array")
+    if qualification["qualified"]:
+        if blocking:
+            fail("qualified release evidence cannot retain blocking findings")
+        if not scoring["independent_human_review"]:
+            fail("release qualification requires independent human review")
+        failed_campaigns = [entry["id"] for entry in built if not entry["strict_pass"]]
+        if failed_campaigns:
+            fail("release qualification requires every campaign to pass strictly; failed: "
+                 + ", ".join(failed_campaigns))
+    elif not blocking:
+        fail("unqualified release evidence must retain at least one blocking finding")
 
     manifest = {
         "schema_version": 1,
@@ -324,6 +361,7 @@ def cmd_build(args) -> int:
         },
         "collection": collection,
         "scoring": scoring,
+        "release_qualification": qualification,
         "campaigns": built,
     }
     write_json(into / "manifest.json", manifest)

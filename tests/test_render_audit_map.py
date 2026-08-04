@@ -1,6 +1,7 @@
 import importlib.util
 import json
 import re
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -30,7 +31,12 @@ FIXTURE_PAIRS = (
 )
 SPEC = importlib.util.spec_from_file_location("render_audit_map", RENDERER)
 RENDER_MODULE = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(RENDER_MODULE)
+PREVIOUS_DONT_WRITE_BYTECODE = sys.dont_write_bytecode
+sys.dont_write_bytecode = True
+try:
+    SPEC.loader.exec_module(RENDER_MODULE)
+finally:
+    sys.dont_write_bytecode = PREVIOUS_DONT_WRITE_BYTECODE
 
 
 class AuditMapRendererTests(unittest.TestCase):

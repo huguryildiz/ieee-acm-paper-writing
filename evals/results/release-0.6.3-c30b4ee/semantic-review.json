@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-08-04",
+  "method": "Codex-assisted targeted cross-invariant review of retained raw responses after the original case-local scoring",
+  "reviewer_boundary": "This correction is not an independent human review or a complete re-adjudication of all 441 historical criterion decisions.",
+  "case_denominator": 27,
+  "scope": "Release qualification overlay; original case contracts, raw responses, scores, and ledgers remain unchanged",
+  "invariant_sources": [
+    "skills/ieee-acm-paper-writing/SKILL.md:51-60",
+    "skills/ieee-acm-paper-writing/SKILL.md:154-172"
+  ],
+  "limitations": [
+    "This overlay records confirmed release-blocking false positives; it is not a claim that every other original criterion was independently re-adjudicated.",
+    "The current cases.json has since been strengthened, so this historical bundle no longer describes the current case contract."
+  ],
+  "campaigns": [
+    {
+      "id": "sonnet-medium-r1",
+      "recorded_case_passes": 27,
+      "semantic_overlay_passes": 24,
+      "newly_failed_case_ids": [
+        "citation_metadata_vs_support",
+        "wireless_capacity_scope",
+        "reject_author_fingerprint"
+      ],
+      "findings": [
+        {
+          "case": "citation_metadata_vs_support",
+          "evidence_quote": "Vaswani et al., 2017",
+          "rationale": "The response introduced an author-year citation absent from the supplied evidence while the skill prohibited invented citations."
+        },
+        {
+          "case": "wireless_capacity_scope",
+          "evidence_quote": "P. Gupta and P. R. Kumar, \"The Capacity of Wireless Networks,\" *IEEE Trans. Inf. Theory*, vol. 46, no. 2, pp. 388–404, 2000",
+          "rationale": "The response supplied bibliographic metadata and theorem details not present in the prompt, despite later acknowledging that the primary source was not inspected."
+        },
+        {
+          "case": "reject_author_fingerprint",
+          "evidence_quote": "The processes coordinate solely by exchanging heartbeat messages over point-to-point channels; there is no shared memory",
+          "rationale": "The response added channel and memory assumptions absent from the prompt and returned them as manuscript-ready system facts."
+        }
+      ]
+    },
+    {
+      "id": "luna-medium-r1",
+      "recorded_case_passes": 26,
+      "semantic_overlay_passes": 23,
+      "newly_failed_case_ids": [
+        "citation_metadata_vs_support",
+        "wireless_capacity_scope",
+        "reject_author_fingerprint"
+      ],
+      "findings": [
+        {
+          "case": "citation_metadata_vs_support",
+          "evidence_quote": "https://blog.ioces.com/matt/posts/colouring-noise/welch-1967.pdf",
+          "rationale": "The response inserted source links absent from the prompt and described the citation as valid without retaining a primary-source verification boundary."
+        },
+        {
+          "case": "wireless_capacity_scope",
+          "evidence_quote": "https://web.stanford.edu/class/cs244/papers/WirelessCapacity.pdf",
+          "rationale": "The response inserted an external source link and additional testbed-to-theory assumptions beyond the supplied evidence."
+        },
+        {
+          "case": "reject_author_fingerprint",
+          "evidence_quote": "initialized to zero",
+          "rationale": "The response supplied a concrete clock construction and additional clock claims when the prompt supplied only the names of the concepts."
+        }
+      ]
+    },
+    {
+      "id": "luna-medium-r2",
+      "recorded_case_passes": 25,
+      "semantic_overlay_passes": 22,
+      "newly_failed_case_ids": [
+        "citation_metadata_vs_support",
+        "wireless_capacity_scope",
+        "reject_author_fingerprint"
+      ],
+      "findings": [
+        {
+          "case": "citation_metadata_vs_support",
+          "evidence_quote": "https://www.docketalarm.com/cases/PTAB/IPR2014-00392/Inter_Partes_Review_of_U.S._Pat._8000906/docs/01-29-2014-Petitioner/Exhibit-1049-Use_of_Fast_Fourier_Transform.pdf?download=true",
+          "rationale": "The response inserted third-party verification material absent from the prompt and presented it as confirmation."
+        },
+        {
+          "case": "wireless_capacity_scope",
+          "evidence_quote": "https://web.stanford.edu/class/cs244/papers/WirelessCapacity.pdf",
+          "rationale": "The response introduced a source link and theory details beyond the supplied finite-testbed evidence."
+        },
+        {
+          "case": "reject_author_fingerprint",
+          "evidence_quote": "Because the schedulers do not share a perfectly synchronized clock",
+          "rationale": "The response added a physical-clock assumption and a numeric timestamp example absent from the prompt."
+        }
+      ]
+    }
+  ]
+}

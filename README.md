@@ -190,8 +190,9 @@ codex plugin add ieee-acm-paper-writing@ieee-acm-paper-writing
 ```
 
 For a rolling Git-backed install, replace `.` with `huguryildiz/ieee-acm-paper-writing`. The rolling
-plugin manifests identify stable release `0.6.3`. For a release-stable native install, clone
-`v0.6.3`, run the two commands above from that clone, and keep
+plugin manifests identify candidate `0.6.4-rc.1`; this is a prerelease, not a behavior-qualified
+stable release. For a release-stable native install, clone `v0.6.3`, run the two commands above from
+that clone, and keep
 the marketplace source local. Start a new Codex thread after installation so the skill is
 discovered. The plugin adds no MCP server, app connector,
 credential prompt, or background service; manuscript access remains limited to the permissions of
@@ -376,15 +377,18 @@ cd ieee-acm-paper-writing
 python3 scripts/serve_local_audit.py
 ```
 
-The browser sends JSON only to the local `127.0.0.1` process. Requests are session-bound, limited
-to 2 MiB, and not persisted. The workbench can inspect and render a completed audit map; it cannot
-discover or repair manuscript findings.
+The browser sends JSON only to the local `127.0.0.1` process. Requests require a loopback `Host`
+header, are session-bound, limited to 2 MiB, and not persisted. The workbench can inspect and render
+a completed audit map; it cannot discover or repair manuscript findings.
 
 ## Calibration corpus
 
 The local catalog contains 24 papers spanning the [eight engineering domains](#engineering-domains).
 Bibliographic provenance is recorded in [`docs/papers/catalog.tsv`](docs/papers/catalog.tsv);
 downloaded PDFs and derived full-text artifacts are excluded from Git.
+The ignored local `docs/papers/library/huy/` maintainer archive is explicitly excluded from this
+declared corpus unless a source is first entered in the catalog and reviewed under the same
+provenance rules.
 
 The installable skill contains only de-identified derivative patterns: contribution archetypes,
 paragraph functions, method-presentation sequences, guarantee boundaries, evaluation organization,
@@ -438,15 +442,19 @@ python3 scripts/validate_behavioral_evidence.py
 ```
 
 The builder derives every mechanical field and refuses to emit a bundle when a campaign has no
-collection-time skill record, when the skill changed after collection, when a verdict is missing or
-disagrees with the scores, or when a quotation does not appear in the retained response. The
-environment variables must be set on the runner itself: `--agent-cmd` rejects `env` and shell
-wrappers, and the runner passes the environment it checked to the agent unchanged.
+collection-time skill record, when the skill or cases changed after collection, when the exact safe
+agent command was not retained, when a verdict is missing or disagrees with the scores, or when a
+quotation does not appear in the retained response. Each retained campaign includes its original
+`collection.json` and hash. The environment variables must be set on the runner itself:
+`--agent-cmd` rejects `env` and shell wrappers, and the runner passes the environment it checked to
+the agent unchanged.
 
 Collection accepts a direct `codex` or `claude` invocation only. It does not use a shell, rejects
-environment-changing wrappers and host options that can add alternate config, plugin, or workspace
-roots, and checks both the default and effective `CODEX_HOME` / `CLAUDE_CONFIG_DIR` trees. The same
-checked environment snapshot is passed to the agent subprocess. Run collection with isolated
+environment-changing wrappers and known host options that can replace or append system prompts or
+add alternate config, plugin, permission-tool, or workspace roots, and checks both the default and
+effective `CODEX_HOME` / `CLAUDE_CONFIG_DIR` trees. This is a maintained denylist rather than a
+guarantee about every future host option. The same checked environment snapshot is passed to the
+agent subprocess. Run collection with isolated
 `HOME`, `CODEX_HOME`, and `CLAUDE_CONFIG_DIR` directories containing only the credentials required
 by the selected host.
 
@@ -457,13 +465,14 @@ collector archives and hashes those artifacts, and a missing or replaced artifac
 stale.
 
 The retained [release 0.6.3 evidence bundle](evals/results/release-0.6.3-c30b4ee/manifest.json)
-covers all 27 cases on Codex Luna Medium twice and Claude Sonnet Medium once. The recorded results
-are 26/27, 25/27, and 27/27, with every failed case named in the manifest. Collection used isolated
-agent environments after the authority gate passed, and the installable-skill hash was captured at
-collection time. Claude Sonnet Medium assisted the initial criterion scoring; the maintainer then
-reviewed and accepted all 441 criterion decisions and confirmed that the remaining failures do not
-belong to a release-blocking core-invariant class. These executions qualify the behavioral-evidence
-portion of the 0.6.3 gate; they do not guarantee identical behavior on later model runs.
+covers all 27 cases on Codex Luna Medium twice and Claude Sonnet Medium once. Its case-local recorded
+results are 26/27, 25/27, and 27/27, with every criterion decision and originally declared failure
+retained. A later raw-response audit found that these counts do not establish release qualification:
+the author-fingerprint case did not test unsupported technical additions even though the skill's
+closed-world invariant prohibited them, and the retained bundle omitted the collector-created
+`collection.json` files and exact agent commands. The original isolation and full semantic-review
+claims are therefore marked unverified rather than reconstructed after the fact. This bundle is
+historical evidence, not current behavior-qualified release proof.
 
 Repository CI runs structural validation, evaluation-schema validation, and regression tests. It
 also validates the hashes, scoring completeness, denominator, and failed-case declarations in the
@@ -494,7 +503,8 @@ successes. A tagged release therefore requires all of:
   least two replications on one host;
 - collection performed after `authority-check` passes in an isolated user environment, using a
   direct supported-host command and the checked `HOME`, `CODEX_HOME`, and `CLAUDE_CONFIG_DIR`, so no
-  known same-named user/global/cache skill can be discovered;
+  known same-named user/global/cache skill can be discovered, with each original `collection.json`
+  and exact safe agent command retained in the final evidence bundle;
 - independent human review of the criterion decisions and no unresolved failure involving invented
   support, concealed disclosure, lost comparators or scope conditions, copied author fingerprints,
   or unsupported guarantees; and
@@ -503,10 +513,9 @@ successes. A tagged release therefore requires all of:
 - a clean install from the exact candidate commit, followed by a second clean install from the tag
   before the GitHub release is published.
 
-These conditions are the whole gate. A finding outside them — a wording improvement, a coverage idea,
-a tooling nicety — is recorded and scheduled for a later minor release rather than treated as a
-release blocker. That is what keeps the audit loop bounded: the loop ends when these conditions hold,
-not when no one can think of another finding.
+These conditions are the minimum technical evidence gate, not a substitute for licensing, security,
+or artifact-distribution review. A wording improvement or coverage idea may be scheduled later, but
+an unresolved legal, security, provenance, or core-invariant finding still blocks a stable release.
 
 The retained post-64cec1a bundle is valuable negative and variability evidence, but it does not
 qualify a release under this gate: its scoring was agent-assisted without independent human review,
