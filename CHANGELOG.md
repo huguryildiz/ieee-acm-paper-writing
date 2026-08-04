@@ -1,5 +1,31 @@
 # Changelog
 
+## Unreleased
+
+No change to the installable skill.
+
+### Fixed
+
+- `run_evals.py collect` claims the campaign receipt once instead of rewriting it on every
+  invocation. A `--case` repair into an existing outdir used to restamp `collection.json`, so the
+  receipt re-attested responses already in the directory against conditions they never ran under. A
+  later invocation now reuses the retained receipt when the skill hash, cases hash, agent command,
+  and authority roots all agree, and is refused by name when any of them disagree. The receipt is
+  published with `os.link`, so concurrent first collectors cannot each publish one.
+
+### Corrected
+
+- The v0.6.4 evidence claim below said every campaign retains its *collector-created*
+  `collection.json`. That overstates what the bundle can show. Collection predates the create-once
+  guard and the retained responses carry no timestamps, so no campaign can demonstrate from inside
+  the bundle that its receipt is the record its own responses were collected under. An external
+  review reported that the `luna-medium-r2` receipt was restamped by a late single-case repair,
+  leaving 26 of its 27 responses older than the recorded campaign start; the raw local files that
+  review cited are not retained, so this repository can neither confirm nor refute it. The manifest,
+  its blocking findings, and the README now state the limitation, and it applies to every earlier
+  retained bundle. Recorded case results are unaffected: no criterion decision depended on the
+  receipt.
+
 ## v0.6.4 — 2026-08-04
 
 No change to the installable skill. This tag promotes the `v0.6.4-rc.2` tree
@@ -11,11 +37,12 @@ the behavioral evidence that the release candidate lacked.
 
 - Retained [0.6.4 candidate bundle](evals/results/release-0.6.4-2c76b19/manifest.json): three
   complete 27-case campaigns collected against the exact installable skill tree on two agent hosts
-  (Claude Sonnet Medium once, Codex Luna Medium twice), each with its collector-created
-  `collection.json`, exact parsed agent command, checked authority roots, empty collision set,
-  collection-time skill and case hashes, all raw responses, all 450 criterion decisions with a
-  verbatim evidence quotation each, and both declared HTML-map artifacts. This is the first bundle
-  the evidence validator reports as describing the current tree rather than a historical one.
+  (Claude Sonnet Medium once, Codex Luna Medium twice), each with a `collection.json` (receipt
+  originality unverified; see Corrected above), exact parsed agent command, checked authority
+  roots, empty collision set, collection-time skill and case hashes, all raw responses, all 450
+  criterion decisions with a verbatim evidence quotation each, and both declared HTML-map artifacts.
+  This is the first bundle the evidence validator reports as describing the current tree rather than
+  a historical one.
 
 ### Evidence boundary
 

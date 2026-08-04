@@ -487,11 +487,21 @@ campaigns have named strict failures, and no independent human review is claimed
 The retained [0.6.4 candidate bundle](evals/results/release-0.6.4-2c76b19/manifest.json) recollects
 the 27-case contract on Claude Sonnet Medium once and Codex Luna Medium twice, against the exact
 installable skill tree that ships with this tag. The complete agent-assisted results are 27/27,
-25/27, and 23/27. Every campaign retains its collector-created `collection.json`, exact parsed agent
+25/27, and 23/27. Every campaign retains a `collection.json`, exact parsed agent
 command, checked authority roots, empty collision set, collection-time skill and case hashes, all 27
 raw responses, all 150 criterion decisions with a verbatim evidence quotation each, and both declared
 HTML-map artifacts. This is the first bundle the evidence validator reports as describing the current
 tree rather than a historical one.
+
+Receipt originality in that bundle is unverified. It was collected before the create-once receipt
+guard, when a single-case repair rewrote the campaign receipt in place, and the retained responses
+carry no timestamps, so no campaign can show from inside the bundle that its `collection.json` is the
+record its own responses were collected under. An external review reported that the `luna-medium-r2`
+receipt was restamped by a late single-case repair, leaving 26 of its 27 responses older than the
+recorded campaign start; the raw local files that review cited are not retained, so this repository
+can neither confirm nor refute it. The same limitation applies to every earlier retained bundle.
+Collection now claims a receipt once and refuses to overwrite it, but that guard cannot repair
+evidence already collected.
 
 Six case failures remain named and unresolved across the two Luna campaigns: Luna Medium R1 failed
 `citation_metadata_vs_support` and `html_audit_map_artifacts`; Luna Medium R2 failed
