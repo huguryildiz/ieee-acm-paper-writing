@@ -298,6 +298,11 @@ publication titles, but never on this author-list abbreviation.
 
 Never infer that all IEEE or all ACM publications share one page limit, section order,
 review layout, bibliography rule, anonymization policy, or generative-AI disclosure format.
+When the exact venue and article type are missing, make no positive length-compliance statement at
+all — not even that an excerpt is short, trivially within, below, unlikely to approach, or plausible
+for essentially any venue. A fragment's size does not verify the full submission or any unknown
+limit. Put length only under unresolved `unverified venue rule` and request the named venue, article
+type, current instructions, and full manuscript needed for the check.
 
 ## Output contracts
 
@@ -363,6 +368,9 @@ not manufacture prose-level claims before the evidence exists.
 
 Return the adapted text plus a compact compliance ledger: verified requirements, unresolved
 requirements, and scientific content intentionally left unchanged.
+If no exact venue and article type were supplied, the verified ledger and bottom line must contain
+no claim about satisfying, approaching, or being safely within a length limit. Length belongs only
+in the unresolved ledger as an `unverified venue rule`.
 Include the adapted manuscript prose directly in the response even when also writing a `.tex`,
 Markdown, or other artifact. File links, compilation status, and a compliance handoff alone are not
 the adapted deliverable. Before returning, verify from the visible response that all supplied
