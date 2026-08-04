@@ -12,12 +12,14 @@ import argparse
 import importlib.util
 import json
 import secrets
+import sys
 import threading
 import webbrowser
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, Optional, Tuple
+from urllib.parse import urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,11 +31,16 @@ MAX_REQUEST_BYTES = 2 * 1024 * 1024
 
 
 def load_renderer() -> Any:
+    previous = sys.dont_write_bytecode
+    sys.dont_write_bytecode = True
     spec = importlib.util.spec_from_file_location("local_audit_renderer", RENDERER_PATH)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot load renderer: {RENDERER_PATH}")
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    try:
+        spec.loader.exec_module(module)
+    finally:
+        sys.dont_write_bytecode = previous
     return module
 
 
@@ -77,6 +84,27 @@ class LocalAuditHandler(BaseHTTPRequestHandler):
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         self._send(status, "application/json; charset=utf-8", body)
 
+    def _valid_host_header(self) -> bool:
+        """Reject DNS-rebinding hostnames before exposing the local session."""
+        raw = self.headers.get("Host", "")
+        try:
+            parsed = urlsplit(f"//{raw}")
+            hostname = (parsed.hostname or "").lower()
+            port = parsed.port
+        except ValueError:
+            return False
+        return (
+            parsed.username is None
+            and parsed.password is None
+            and not parsed.path
+            and not parsed.query
+            and not parsed.fragment
+            and hostname in {"127.0.0.1", "::1", "localhost"}
+            and (
+            port is None or port == self.server.server_port
+            )
+        )
+
     def _serve_workbench(self) -> None:
         template = (UI_ROOT / "index.html").read_text(encoding="utf-8")
         body = template.replace("@@SESSION_TOKEN@@", self.server.session_token).encode("utf-8")
@@ -95,6 +123,9 @@ class LocalAuditHandler(BaseHTTPRequestHandler):
         )
 
     def do_GET(self) -> None:
+        if not self._valid_host_header():
+            self._send_json(HTTPStatus.MISDIRECTED_REQUEST, {"error": "invalid local host"})
+            return
         path = self.path.split("?", 1)[0]
         if path in ("/", "/local-audit.html"):
             self._serve_workbench()
@@ -133,10 +164,14 @@ class LocalAuditHandler(BaseHTTPRequestHandler):
         self._send_json(HTTPStatus.NOT_FOUND, {"error": "not found"})
 
     def do_POST(self) -> None:
+        if not self._valid_host_header():
+            self._send_json(HTTPStatus.MISDIRECTED_REQUEST, {"error": "invalid local host"})
+            return
         if self.path != "/render":
             self._send_json(HTTPStatus.NOT_FOUND, {"error": "not found"})
             return
-        if self.headers.get("X-Audit-Session") != self.server.session_token:
+        supplied_token = self.headers.get("X-Audit-Session", "")
+        if not secrets.compare_digest(supplied_token, self.server.session_token):
             self._send_json(HTTPStatus.FORBIDDEN, {"error": "invalid local session"})
             return
         content_type = self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower()

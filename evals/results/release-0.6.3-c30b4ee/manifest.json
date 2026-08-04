@@ -10,16 +10,30 @@
     "must_not_criteria": 55
   },
   "collection": {
-    "mechanical_authority_isolation": true,
+    "mechanical_authority_isolation": false,
     "repository_skill_authority": "skills/ieee-acm-paper-writing/SKILL.md",
     "same_named_user_or_cached_copy_allowed": false,
     "expected_routing_scored": false,
-    "skill_hash_captured_at_collection": true
+    "skill_hash_captured_at_collection": false,
+    "agent_command_captured_at_collection": false,
+    "collection_record_retained": false
   },
   "scoring": {
     "independent_human_review": true,
     "human_review_record": "Independent maintainer review completed in the Codex release thread on 2026-08-04. The maintainer confirmed reading and inspecting all 441 criterion decisions and rationales for exact candidate c30b4ee, approved the 27/27, 26/27, and 25/27 results, and found no remaining release-blocking core invariant violation. The maintainer explicitly corrected the commit name in their initial attestation from 6dc0fb8 to c30b4ee.",
     "method": "agent-assisted criterion scoring"
+  },
+  "release_qualification": {
+    "qualified": false,
+    "review_record": "Qualification corrected during the v0.6.4-rc.1 raw-response audit. The original case-local verdicts are retained, but they did not cover every closed-world invariant and the collection receipts were not retained.",
+    "blocking_findings": [
+      "The original rubrics did not score confirmed closed-world violations in citation_metadata_vs_support, wireless_capacity_scope, and reject_author_fingerprint across every retained campaign.",
+      "Mechanical authority isolation and exact collection commands cannot be independently verified from the retained bundle."
+    ]
+  },
+  "semantic_review": {
+    "path": "semantic-review.json",
+    "sha256": "c0ffab79800e5b14bdc9e160b78d186c2f25aa664521717484843c9f32b3492d"
   },
   "campaigns": [
     {

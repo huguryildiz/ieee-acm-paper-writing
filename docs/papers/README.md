@@ -12,6 +12,12 @@ the empty directory skeleton are tracked.
 4. Record any replacement DOI, version-of-record issue, or access limitation in the catalog.
 5. Do not commit PDFs, extracted full text, publisher packages, or supplementary archives.
 
+The optional local-only `library/huy/` directory is a maintainer archive, not part of the declared
+24-paper calibration corpus. Nothing in that directory may inform
+`references/corpus-calibration.md` unless the source is first added to `catalog.tsv` with the same
+provenance checks as every other calibration paper. The directory and its contents remain ignored
+by Git.
+
 The corpus is a calibration and retrieval aid. Inclusion does not make a paper an authority for
 venue formatting, prove that its claims are correct, or authorize sentence-level imitation.
 
@@ -35,5 +41,6 @@ docs/papers/
     ├── mathematical-optimization/
     ├── simulation-digital-twins/
     ├── ml-assisted-engineering/
-    └── computer-cyber-physical-systems/
+    ├── computer-cyber-physical-systems/
+    └── huy/                         # optional maintainer archive; not calibration input
 ```

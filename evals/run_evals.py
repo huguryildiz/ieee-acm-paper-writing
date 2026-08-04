@@ -32,6 +32,7 @@ report aggregate numbers without the denominator and the failed-case list.
 """
 
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import json
 import os
@@ -65,6 +66,8 @@ UNSAFE_AGENT_OPTIONS = {
     "claude": {
         "--add-dir", "--agent", "--agents", "--mcp-config", "--plugin-dir",
         "--plugin-url", "--settings", "--setting-sources",
+        "--append-system-prompt", "--append-system-prompt-file",
+        "--system-prompt", "--system-prompt-file", "--permission-prompt-tool",
     },
     "codex": {"--add-dir", "--cd", "--config", "--profile", "-C", "-c", "-p"},
 }
@@ -335,6 +338,10 @@ def agent_command(value):
         raise ValueError(
             "agent command must directly invoke a supported host: claude or codex"
         )
+    if command[0] != executable:
+        raise ValueError(
+            "agent command must invoke claude or codex by name through the checked PATH"
+        )
     for token in command[1:]:
         option = token.split("=", 1)[0]
         compact_codex_override = (
@@ -410,23 +417,74 @@ def collection_record_path(outdir):
     return Path(outdir) / "collection.json"
 
 
-def write_collection_record(outdir, env):
+def write_collection_record(outdir, env, command):
     """Capture the skill and case identity that collection actually ran against.
 
     Recomputing the skill hash at scoring time cannot detect a skill edited after
     collection, so the hash is captured here and scoring refuses to drift from it.
     """
+    require_clean_authority(env=env)
+    if not isinstance(command, list) or not command or not all(
+            isinstance(part, str) and part for part in command):
+        raise ValueError("collection record requires the parsed direct agent command")
     record = {
+        "schema_version": 2,
+        "collected_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "skill_hash": skill_hash(),
         "cases_sha256": sha256_bytes(CASES.read_bytes()),
+        "agent_command": command,
+        "agent_executable": shutil.which(command[0], path=env.get("PATH")) or command[0],
+        "working_directory": str(HERE.parent.resolve()),
         "authority_roots": {
             name: str(path) for name, path in sorted(authority_roots(env=env).items())
         },
+        "authority_collisions": [],
+        "mechanical_authority_isolation": True,
     }
     collection_record_path(outdir).write_text(
         json.dumps(record, indent=2) + "\n", encoding="utf-8"
     )
     return record
+
+
+def release_collection_problems(record):
+    """Return reasons a collection record cannot support release provenance."""
+    problems = []
+    if not isinstance(record, dict) or record.get("schema_version") != 2:
+        return ["collection record must use schema_version 2"]
+    if not isinstance(record.get("skill_hash"), str):
+        problems.append("skill_hash must be a string")
+    if not isinstance(record.get("cases_sha256"), str):
+        problems.append("cases_sha256 must be a string")
+    command = record.get("agent_command")
+    if not isinstance(command, list) or not command or not all(
+            isinstance(part, str) and part for part in command):
+        problems.append("agent_command must retain the parsed direct command")
+    else:
+        try:
+            if agent_command(shlex.join(command)) != command:
+                problems.append("agent_command does not round-trip through the safe parser")
+        except ValueError as exc:
+            problems.append(f"agent_command is unsafe: {exc}")
+    executable = record.get("agent_executable")
+    if not isinstance(executable, str) or not executable:
+        problems.append("agent_executable must retain the resolved collection executable")
+    elif isinstance(command, list) and command and Path(executable).name != command[0]:
+        problems.append("agent_executable does not match the retained agent command")
+    if record.get("mechanical_authority_isolation") is not True:
+        problems.append("mechanical_authority_isolation must be derived as true")
+    if record.get("authority_collisions") != []:
+        problems.append("authority_collisions must be retained as an empty list")
+    roots = record.get("authority_roots")
+    if not isinstance(roots, dict) or not roots or not all(
+            isinstance(name, str) and isinstance(path, str) and path
+            for name, path in roots.items()):
+        problems.append("authority_roots must retain the checked roots")
+    if not isinstance(record.get("working_directory"), str) or not record["working_directory"]:
+        problems.append("working_directory must be retained")
+    if not isinstance(record.get("collected_at"), str) or not record["collected_at"]:
+        problems.append("collected_at must be retained")
+    return problems
 
 
 def read_collection_record(outdir):
@@ -467,7 +525,7 @@ def cmd_collect(args):
         raise SystemExit(f"behavioral collection refused: {exc}") from exc
     outdir = Path(args.outdir).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
-    write_collection_record(outdir, collection_env)
+    write_collection_record(outdir, collection_env, command)
     failures = []
     for case in selected(validated_cases(), args.case):
         prompt = SKILL_PREAMBLE + case["prompt"]

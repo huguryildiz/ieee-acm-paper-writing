@@ -8,7 +8,7 @@ Standard library only (no PyYAML). Checks:
   4. evals/cases.json parses, uses safe case names, and matches the v2 schema.
   5. Eval criteria share no distinctive 6-word phrase with any skill file (M5 guard).
   6. agents/openai.yaml exists and is non-empty.
-  6b. Claude Code plugin and marketplace manifests are valid and version-aligned.
+  6b. Plugin manifests, citation metadata, README channel, and changelog are version-aligned.
   7. The audit-map renderer accepts each example JSON and reproduces its checked-in HTML.
   8. The interactive showcase stays self-contained (no external asset fetch) and intact.
 
@@ -38,6 +38,7 @@ REQUIRED_EVAL_MODIFIERS = {"html-map"}
 MD_FILES = [
     "README.md",
     "CHANGELOG.md",
+    "CONTRIBUTING.md",
     "docs/papers/README.md",
     "skills/ieee-acm-paper-writing/SKILL.md",
 ]
@@ -484,6 +485,19 @@ def check_claude_plugin_package(root: Path):
         ".claude-plugin/marketplace.json (entry)": entry.get("version"),
         ".codex-plugin/plugin.json": documents["codex plugin.json"].get("version"),
     }
+    citation_path = root / "CITATION.cff"
+    if not citation_path.is_file():
+        err("CITATION.cff: missing citation metadata")
+    else:
+        match = re.search(
+            r"^version:\s*['\"]?([^\s'\"#]+)",
+            citation_path.read_text(encoding="utf-8"),
+            re.MULTILINE,
+        )
+        if not match:
+            err("CITATION.cff: missing top-level version")
+        else:
+            versions["CITATION.cff"] = match.group(1)
     distinct = {value for value in versions.values() if value is not None}
     if len(distinct) > 1:
         detail = ", ".join(f"{name}={value!r}" for name, value in versions.items())
@@ -495,6 +509,11 @@ def check_claude_plugin_package(root: Path):
         if prerelease:
             if declared not in readme:
                 err(f"README.md does not identify rolling plugin candidate {declared}")
+            changelog = root / "CHANGELOG.md"
+            if not changelog.is_file() or not re.search(
+                    rf"^##\s+v{re.escape(declared)}\s+—",
+                    changelog.read_text(encoding="utf-8"), re.M):
+                err(f"CHANGELOG.md has no candidate section for v{declared}")
             stable = r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
             stable_patterns = {
                 "versioned skills installer and stable release URL": (
@@ -522,7 +541,6 @@ def check_claude_plugin_package(root: Path):
                 # A prerelease manifest must still point installers at a version this
                 # repository has actually released, not at an aspirational tag.
                 pinned = stable_versions[0]
-                changelog = root / "CHANGELOG.md"
                 if not changelog.is_file():
                     err("CHANGELOG.md is missing; a prerelease cannot confirm its stable channel")
                 elif not re.search(rf"^##\s+v{re.escape(pinned)}\s+—",
@@ -657,7 +675,7 @@ def main():
         sys.exit(1)
     print(
         "OK: frontmatter, calibration policy, links, eval cases, criteria independence, "
-        "agent interface, Claude plugin manifests, and audit map valid"
+        "agent interface, release metadata, and audit map valid"
     )
 
 
