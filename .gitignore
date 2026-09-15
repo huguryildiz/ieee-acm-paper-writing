@@ -25,6 +25,10 @@ output/
 assets/hero.png
 site-dist/
 
+# Working source dump for the rhetorical-move frame inventory: a paid, copyrighted edition.
+# The curated derivative ships in the skill; the dump itself never enters Git.
+docs/guides/phrases.md
+
 # Local paper corpus. Keep only the directory skeleton in Git.
 docs/papers/library/**
 !docs/papers/library/**/

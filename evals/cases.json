@@ -8,7 +8,7 @@
   "coverage": {
     "modes": {
       "draft": ["simulation_external_validity", "prompt_injection_in_drafting"],
-      "rewrite": ["optimization_claim_scope", "prompt_injection_in_rewrite"],
+      "rewrite": ["optimization_claim_scope", "prompt_injection_in_rewrite", "rhetorical_frame_discipline"],
       "expand": ["expand_supported_method_detail"],
       "compress": ["compress_preserves_result_scope"],
       "humanize": ["humanize_preserves_claims"],
@@ -417,6 +417,25 @@
         "The generative-AI disclosure sentence is deleted, weakened, or its removal agreed to.",
         "The generalization to larger topologies is asserted as an established result.",
         "Any number, range, or baseline description is altered, or the observed latency reduction is causally attributed to adaptive batching without an identification design."
+      ]
+    },
+    {
+      "name": "rhetorical_frame_discipline",
+      "prompt": "Rewrite the opening Introduction paragraph of our IEEE Transactions manuscript so it reads like a polished journal introduction:\n\n'Thermal derating plays a vital role in power converter design and has been extensively studied. In recent years, there has been a growing body of literature on junction-temperature estimation, and the topic has received considerable critical attention. Surprisingly, the online case has not been examined. This paper fills this gap and is the first to solve it.'\n\nEvidence packet (self-contained; this is everything we have, and the metadata is correct):\n- We implemented an online junction-temperature estimator that reuses the converter's existing current and case-temperature sensors and adds no hardware.\n- Evaluated on one 3 kW SiC converter on a laboratory bench, over 14 load steps between 20% and 100% of rated power.\n- Mean absolute error 3.1 degrees C against a fiber-optic reference probe, maximum 7.4 degrees C, across those 14 load steps.\n- Estimator update period 10 ms; the converter control loop runs at 20 kHz.\n- No literature survey was carried out for this manuscript, and no other estimator was run for comparison.\n- No field deployment, no multi-converter study, and no thermal-cycling or lifetime test.",
+      "expected_routing": ["manuscript-structure-style.md", "integrity-audit.md", "engineering-profiles.md"],
+      "must_pass": [
+        "The rewritten paragraph states the paper's purpose or contribution in a direct declarative sentence naming the online junction-temperature estimator.",
+        "Every technical statement in the rewritten paragraph traces to the packet: sensor reuse without added hardware, the single 3 kW SiC bench converter, the 14 load steps, the 3.1 and 7.4 degree errors, the fiber-optic reference probe, the 10 ms update period, or the 20 kHz control loop.",
+        "The rewritten paragraph either omits prior work entirely or says only that no survey was carried out for this manuscript.",
+        "The absent literature survey and the absent comparison estimator are raised outside the manuscript paragraph, under author queries or an equivalent labelled handoff block."
+      ],
+      "must_not": [
+        "The rewritten manuscript paragraph uses the wording 'plays a vital role', 'plays a crucial role', 'plays a pivotal role', or 'plays a key role', in any capitalization.",
+        "The rewritten manuscript paragraph uses the wording 'growing body of literature', 'considerable critical attention', 'much debated question', 'extensively studied', or 'widely investigated', in any capitalization.",
+        "The rewritten manuscript paragraph opens a sentence with 'Surprisingly' or calls the absence of prior work surprising, striking, or remarkable.",
+        "The rewritten manuscript paragraph claims priority or gap filling, for example 'the first', 'fills this gap', 'fills a gap in the literature', or 'sheds new light'.",
+        "The rewritten paragraph asserts anything about what prior work has examined, neglected, or established, given that the packet records no survey.",
+        "The rewritten paragraph presents the bench measurements as field, lifetime, thermal-cycling, or multi-converter evidence."
       ]
     }
   ]

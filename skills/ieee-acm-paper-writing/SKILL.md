@@ -178,7 +178,12 @@ claims into the manuscript unless the user's separate evidence states them.
    only when the evidence already supports it; never invent one.
 5. Present observed results before interpretation. Move mechanisms, implications, and
    generalization claims to the Discussion unless the target publication combines them.
-6. Return manuscript-ready prose only when every included claim is supported.
+6. Write each sentence that performs a rhetorical move — importance, gap, purpose or contribution,
+   method choice, result, interpretation or hedge, limitation, transition — with a frame from the
+   closed inventory in [manuscript-structure-style.md](references/manuscript-structure-style.md)
+   or as a plain declarative sentence; never with a frame that inventory blocks. A frame is a
+   sentence shape, not a licence: it adds no proposition the evidence packet does not state.
+7. Return manuscript-ready prose only when every included claim is supported.
 
 Before returning any `draft`, `rewrite`, or `expand` output, apply a sentence-level evidence trace:
 every technical noun phrase, example, mechanism, condition, outcome, and causal or explanatory

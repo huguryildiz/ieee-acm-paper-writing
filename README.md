@@ -411,7 +411,7 @@ python3 skills/ieee-acm-paper-writing/scripts/render_audit_map.py \
 python3 -m unittest discover -s tests -v
 ```
 
-The behavioral suite defines 27 self-contained adversarial cases. Together they exercise all nine
+The behavioral suite defines 28 self-contained adversarial cases. Together they exercise all nine
 modes plus the `--html-map` modifier and test claim scope, failure accounting, citation support,
 method classification, venue uncertainty, reference formatting, corpus use, content-preserving
 expansion/compression, evidence-aware outlining, humanization, and prompt injection. The
@@ -491,8 +491,9 @@ installable skill tree that ships with this tag. The complete agent-assisted res
 25/27, and 23/27. Every campaign retains a `collection.json`, exact parsed agent
 command, checked authority roots, empty collision set, collection-time skill and case hashes, all 27
 raw responses, all 150 criterion decisions with a verbatim evidence quotation each, and both declared
-HTML-map artifacts. This is the first bundle the evidence validator reports as describing the current
-tree rather than a historical one.
+HTML-map artifacts. It was the first bundle the evidence validator reported as describing the
+current tree; the unreleased rhetorical-move-frame change has since moved the tree on, so the
+validator now reports it as historical.
 
 Receipt originality in that bundle is unverified. It was collected before the create-once receipt
 guard, when a single-case repair rewrote the campaign receipt in place, and the retained responses
