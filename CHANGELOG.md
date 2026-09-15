@@ -2,7 +2,29 @@
 
 ## Unreleased
 
-No change to the installable skill.
+Changes the installable skill: `SKILL.md` and `references/manuscript-structure-style.md`. The
+retained [0.6.4 bundle](evals/results/release-0.6.4-2c76b19/manifest.json) therefore no longer
+describes the current tree, and no campaign has been collected against this one.
+
+### Added
+
+- "Rhetorical-move frames (closed set)" section in `references/manuscript-structure-style.md`: a
+  curated allowlist of engineering sentence frames grouped by move (importance, gap, purpose and
+  contribution, definition, method choice, result, interpretation and hedge, agreement with prior
+  results, limitation, contrast), plus a blocklist of promotional-importance, unbounded-literature,
+  surprise, priority, era-framing, source-praise, and counterfactual-critique patterns, each paired
+  with the plain form that replaces it. Importance and gap frames are available only when the
+  evidence packet states that importance or gap, so a frame can supply sentence shape but never a
+  proposition. The inventory is a de-identified derivative of a public academic phrasebook, handled
+  like `references/corpus-calibration.md`: no source name, no quotation, no attribution. Its working
+  source dump is a paid copyrighted edition, is git-ignored at `docs/guides/phrases.md`, and is not
+  a repo-side provenance digest like the other `docs/guides/` files.
+- Step 6 of "Draft or rewrite" in `SKILL.md` binds that inventory: a sentence carrying a rhetorical
+  move uses an inventory frame or a plain declarative sentence, never a blocked frame, and adds no
+  proposition the evidence packet does not state.
+- Behavioral eval case `rhetorical_frame_discipline` (`rewrite` mode): an introduction paragraph
+  built from blocked frames is rewritten against a packet that establishes neither a literature gap
+  nor field-wide importance. The suite now defines 28 cases.
 
 ### Fixed
 

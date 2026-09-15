@@ -9,6 +9,7 @@ structural style calibration. Official venue requirements override these functio
 - Section contracts
 - Paragraph and prose controls
 - Machine-idiom removal (humanize)
+- Rhetorical-move frames (closed set)
 - Equations, algorithms, figures, and tables
 - Mathematical notation and equation editing
 - Reference-corpus calibration
@@ -238,6 +239,101 @@ Generic illustrations of the controls above. They are patterns to apply, not tex
   - After: *Joint optimization extends the objective by 21.7% on average over the sequential
     baseline across 20 instances (Table IV). The gain comes from the solver's freedom to trade one
     cost against another, which the sequential design fixes in its first stage.*
+
+## Rhetorical-move frames (closed set)
+
+Sentences that perform a rhetorical move — importance, gap, purpose, method choice, result,
+interpretation, limitation, transition — use either a frame from the inventory below or a plain
+declarative sentence. The inventory is a closed set, not a quota: no frame is mandatory, and the
+blocked patterns at the end of this section are never used. It is a derivative distillation of a
+public academic phrasebook, rewritten as engineering templates, and is not citable.
+
+Three conditions govern every use. A frame supplies sentence shape only: fill X, Y, and every
+bracketed slot from the evidence alone, and drop the frame when a slot has no filler there. An
+importance or gap frame becomes available only when the evidence packet states that importance or
+that gap; otherwise open with the technical object itself. Scope a gap to the set actually
+surveyed, meaning what those studies do not report, never what the field has never done.
+
+Frames by move:
+
+- **Establishing importance or motivation** (evidence must state it):
+  - “X is required for Y under [stated condition].”
+  - “X sets the [named bound, cost, or limit] on Y.”
+  - “In [stated setting], X determines Y.”
+- **Stating a gap or unresolved issue** (evidence must state it):
+  - “Previous work on X has not addressed Y.”
+  - “The studies surveyed here report X but not Y.”
+  - “[Prior method] was evaluated on X; its behavior on Y is not reported.”
+  - “Whether X holds under [condition] is unresolved in the surveyed work.”
+  - “The closest study differs from this work in [named axis].”
+- **Stating purpose, scope, and contribution**:
+  - “This paper addresses [task statement].”
+  - “The objective of this study is to [verb] X under [stated conditions].”
+  - “This paper formulates X, implements Y, and evaluates it on Z.”
+  - “The contributions are [artifact], [result], and [evaluated finding].”
+  - “X lies outside the scope of this paper.”
+- **Defining and classifying**:
+  - “The term X denotes Y.”
+  - “Throughout this paper, X refers to Y.”
+  - “X is defined as Y, with [units and validity domain].”
+  - “X is classified into [n] types by [stated criterion].”
+- **Describing method choice and procedure**:
+  - “X was measured with Y.”
+  - “X was selected because [stated reason].”
+  - “For [stated purpose], X was used.”
+  - “The instance set consists of [n] cases with [stated properties].”
+  - “X was computed with [named tool and version].”
+- **Reporting a result**:
+  - “Table [n] reports X for Y.”
+  - “X was [value, unit] under [stated condition].”
+  - “X changed by [value] relative to [named comparator].”
+  - “[n] of [N] runs [outcome].”
+  - “No difference between X and Y was detected at [stated test and level].”
+- **Interpreting and hedging** (hedge strength matches the evidence, never the ambition):
+  - “These results suggest that X.”
+  - “It is therefore possible that X.”
+  - “X is consistent with Y; the present design does not identify the cause.”
+  - “A possible explanation is X, which this study does not test.”
+- **Agreeing or disagreeing with prior results**:
+  - “These results agree with [cited work] for X.”
+  - “These results differ from [cited work], which reported Y.”
+  - “[Cited work] measured X under [different condition], so the two are not directly comparable.”
+- **Stating a limitation, boundary, or the work it requires**:
+  - “A limitation of this study is X.”
+  - “This study did not evaluate X.”
+  - “These results are limited to [stated regime] and were not tested outside it.”
+  - “Generalization of X to Y is not established here.”
+  - “The audited work does not report X, so Y cannot be checked.”
+  - “Establishing whether X holds under Y requires [named experiment].”
+- **Contrasting, comparing, and transitioning**:
+  - “X differs from Y in [named axis].”
+  - “Compared with X, Y [verb] by [quantified difference].”
+  - “In contrast to X, Y does not [property].”
+  - “This interpretation differs from that of [cited work], which [claim].”
+
+### Blocked frames
+
+Do not use the patterns below in any mode. Each asserts something the evidence rarely carries.
+Where the packet does supply the underlying fact, use the plain form named with it; where it does
+not, the sentence has no basis at all.
+
+- Promotional importance: “plays a vital, pivotal, crucial, or key role”; “is fast becoming a key
+  instrument”; “is essential for a wide range of.” Plain form: what X fixes, and under which
+  condition.
+- Unbounded literature claims: “a growing body of literature”; “considerable critical attention”;
+  “a much debated question”; “has been extensively studied.” Plain form: the count and the
+  boundary of the set actually read.
+- Surprise framing: “surprisingly, X has not been examined”; “the most striking result to emerge”;
+  “a remarkable result.” Plain form: the value and its comparator.
+- Priority and originality: “the first study to”; “fills a gap in the literature”; “sheds new
+  light on.” Plain form: the artifact and what it was evaluated against.
+- Era framing: “in recent years, there has been an increasing amount of literature on”; “over the
+  past decades the field has seen a stunning transformation.” Plain form: a dated, sourced
+  observation, or nothing.
+- Evaluative praise of a cited work: “in his excellent study”; “this ground-breaking analysis.”
+  Plain form: what that work did, and what it did not report.
+- Counterfactual critique: “the study would have been more convincing if the authors had.” Plain
+  form: the missing item and what reporting it would make checkable.
 
 ## Equations, algorithms, figures, and tables
 
