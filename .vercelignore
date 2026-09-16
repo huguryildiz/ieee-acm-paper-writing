@@ -8,7 +8,7 @@ __pycache__/
 *.pyc
 .DS_Store
 assets/hero.png
-docs/papers/library/
+support/papers/library/
 out/
 output/
 site-dist/

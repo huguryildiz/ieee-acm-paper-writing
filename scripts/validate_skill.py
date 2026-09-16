@@ -39,11 +39,11 @@ MD_FILES = [
     "README.md",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
-    "docs/papers/README.md",
+    "support/papers/README.md",
     "skills/ieee-acm-paper-writing/SKILL.md",
 ]
 MD_GLOBS = [
-    "docs/guides/*.md",
+    "support/guides/*.md",
     "skills/ieee-acm-paper-writing/references/*.md",
     "skills/ieee-acm-paper-writing/examples/*.md",
     "evals/comparisons/*.md",
@@ -100,12 +100,12 @@ def check_frontmatter(skill_md: Path):
 
 def check_calibration(root: Path):
     calibration = root / "skills" / "ieee-acm-paper-writing" / "references" / "corpus-calibration.md"
-    catalog = root / "docs" / "papers" / "catalog.tsv"
+    catalog = root / "support" / "papers" / "catalog.tsv"
     if not calibration.exists():
         err("skills/ieee-acm-paper-writing/references/corpus-calibration.md: missing")
         return
     if not catalog.exists():
-        err("docs/papers/catalog.tsv: missing; cannot enforce calibration identity policy")
+        err("support/papers/catalog.tsv: missing; cannot enforce calibration identity policy")
         return
 
     text = calibration.read_text(encoding="utf-8")

@@ -105,7 +105,7 @@ class CalibrationPolicyTests(unittest.TestCase):
                            "references" / "corpus-calibration.md")
             calibration.parent.mkdir(parents=True)
             calibration.write_text(text, encoding="utf-8")
-            catalog = root / "docs" / "papers" / "catalog.tsv"
+            catalog = root / "support" / "papers" / "catalog.tsv"
             catalog.parent.mkdir(parents=True)
             catalog.write_text(
                 "domain\tauthor_year\ttitle\tdoi\tlocal_file\tlocal_status\tnotes\n"

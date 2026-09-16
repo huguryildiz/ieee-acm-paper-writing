@@ -384,9 +384,9 @@ a completed audit map; it cannot discover or repair manuscript findings.
 ## Calibration corpus
 
 The local catalog contains 24 papers spanning the [eight engineering domains](#engineering-domains).
-Bibliographic provenance is recorded in [`docs/papers/catalog.tsv`](docs/papers/catalog.tsv);
+Bibliographic provenance is recorded in [`support/papers/catalog.tsv`](support/papers/catalog.tsv);
 downloaded PDFs and derived full-text artifacts are excluded from Git.
-The ignored local `docs/papers/library/huy/` maintainer archive is explicitly excluded from this
+The ignored local `support/papers/library/huy/` maintainer archive is explicitly excluded from this
 declared corpus unless a source is first entered in the catalog and reviewed under the same
 provenance rules.
 
@@ -616,7 +616,7 @@ evals/
 ├── run_evals.py             # Collection, manual scoring, and reporting harness
 ├── comparisons/             # Historical A/B comparison snapshot
 └── results/                 # Retained, hash-validated behavioral evidence
-docs/
+support/
 ├── guides/                  # Repo-side provenance digests of IEEE/ACM style guides
 └── papers/catalog.tsv       # Calibration-corpus provenance (PDFs excluded from Git)
 site/                        # Dependency-free hosted showcase source
