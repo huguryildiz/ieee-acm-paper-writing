@@ -115,6 +115,7 @@ Read only the files needed for the task, but read every selected file completely
 | Trigger | Required reference |
 | --- | --- |
 | Any section drafting, rewrite, outline, compression, or style calibration | [manuscript-structure-style.md](references/manuscript-structure-style.md) |
+| A flow, coherence, or paragraph-structure question in any mode, including `audit` and `section-audit` | [manuscript-structure-style.md](references/manuscript-structure-style.md) |
 | A humanize pass: removing machine-idiom prose patterns while preserving scientific content | [manuscript-structure-style.md](references/manuscript-structure-style.md) |
 | Any scientific claim, audit, submission-readiness check, or cross-section review | [integrity-audit.md](references/integrity-audit.md) |
 | Any supported engineering method or domain | [engineering-profiles.md](references/engineering-profiles.md) |

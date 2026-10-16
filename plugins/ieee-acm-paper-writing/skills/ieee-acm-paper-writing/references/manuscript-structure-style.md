@@ -7,7 +7,7 @@ structural style calibration. Official venue requirements override these functio
 
 - Select a contribution archetype
 - Section contracts
-- Paragraph and prose controls
+- Paragraph and prose controls (including the reverse-outline check)
 - Machine-idiom removal (humanize)
 - Rhetorical-move frames (closed set)
 - Equations, algorithms, figures, and tables
@@ -104,6 +104,21 @@ phantom flows, subtours, or infeasible configurations. Introduce every displayed
 lead-in clause, and when its meaning is not self-evident, follow it with an interpretation that
 names the role of each term rather than restating the algebra.
 
+When the method is built from distinct components (a module, stage, loss term, heuristic, or
+constraint family the authors chose), give each component three parts in this order:
+
+1. **Motivation**: the requirement, failure regime, or limitation it addresses, taken from the
+   problem model or supplied evidence rather than asserted as common knowledge;
+2. **Design**: what the component computes or enforces, its inputs and outputs, and how it
+   connects to the components before and after it;
+3. **Benefit**: what it buys relative to a named alternative or its absence. State the benefit as
+   an observed result only when an isolating ablation or matched comparison supports it;
+   otherwise label it a design rationale or expected effect and route the missing ablation to
+   `Author queries`.
+
+A component with no stated motivation reads as an arbitrary patch; a component whose benefit is
+claimed without isolating evidence is an unsupported result claim, not a style defect.
+
 Put a result close to its assumptions and name the controlled quantity, probability statement,
 asymptotic variable, and comparison object. Put an algorithm after its model and state inputs,
 outputs, initialization, update order, parameters, stopping rule, and returned object.
@@ -167,6 +182,24 @@ legacy exemplars did not foreground them.
   user or the venue's own style asks for it.
 - Preserve technical meaning during compression; do not delete conditions, comparators, units, or
   uncertainty to save words.
+
+### Reverse-outline check
+
+Use this check after drafting or rewriting a section, and in `section-audit` whenever coherence or
+flow is in question. Build it from the text as written, not from what the authors intended:
+
+1. State the section's controlling claim in one sentence.
+2. Extract each paragraph's controlling claim, normally its first sentence.
+3. Under each paragraph, list the support it actually supplies: evidence, derivation, example, or
+   citation.
+4. Map each paragraph claim to the section claim, and each support item to its paragraph claim.
+
+Treat an unmapped item as a defect with a named repair: a paragraph that serves no section claim
+is cut or moved; a paragraph carrying two claims is split; a support item that backs a different
+paragraph is relocated; a claim with no support is narrowed, given its evidence, or turned into an
+author query. Two adjacent paragraphs with the same claim are merged. When reporting the check,
+show the outline itself (one line per paragraph) so the author can see the mapping, and keep it
+outside manuscript prose.
 
 ## Machine-idiom removal (humanize)
 

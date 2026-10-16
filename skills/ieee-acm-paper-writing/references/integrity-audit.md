@@ -11,6 +11,7 @@ submission-readiness or cross-section review.
 - Guarantee, statistical, and causal boundaries
 - Reproducibility and negative evidence
 - Audit procedure and severity
+- Reviewer-objection pre-mortem
 - Cross-section consistency
 
 ## Evidence classes and claim ledger
@@ -176,6 +177,27 @@ For drafting and rewriting, finish with a handoff reconciliation: every absent i
 requested claim wording becomes a separate external `Author queries` entry with the missing item,
 blocked wording, requested action, and fallback if unresolved. Mentioning the absence inside the
 paper is not a substitute for asking the author to resolve it.
+
+## Reviewer-objection pre-mortem
+
+Use this lens in `audit`, `section-audit`, and evidence-grounded review reports when the user asks
+how reviewers will attack a manuscript or what could sink it. It anticipates objections; it does
+not forecast an editorial outcome. Probe five axes:
+
+| Axis | Objections to test |
+| --- | --- |
+| Contribution delta | The targeted failure is routine; the technique is already established for this setting; the gain was predictable from known results. |
+| Clarity and reproducibility | Settings, data, or derivation steps a peer would need are missing; a component appears without motivation. |
+| Effect size | The improvement over the strongest comparator is within run-to-run variation or practically small; absolute performance is still weak for the stated use. |
+| Evaluation completeness | No ablation isolates a claimed component; a standard baseline or metric is absent; the test instances are too easy to separate methods. |
+| Design soundness | The setting or assumptions are unrealistic for the claimed application; the method needs per-case tuning; its new limitation outweighs its benefit. |
+
+Report each objection that the manuscript does not already answer as an ordinary finding: severity
+label, location, the objection, the evidence present or absent, and the repair. A repair is new
+evidence, a narrower claim, or an explicit limitation; never answer an objection with rhetoric,
+added confidence, or a claim the evidence lacks. Say explicitly when an axis cannot be judged from
+the supplied material instead of treating silence as a pass. Do not predict acceptance or
+rejection, assign an acceptance probability, or recommend a decision to the editor.
 
 ## Cross-section consistency
 

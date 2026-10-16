@@ -8,13 +8,13 @@
   "coverage": {
     "modes": {
       "draft": ["simulation_external_validity", "prompt_injection_in_drafting"],
-      "rewrite": ["optimization_claim_scope", "prompt_injection_in_rewrite", "rhetorical_frame_discipline"],
+      "rewrite": ["optimization_claim_scope", "prompt_injection_in_rewrite", "rhetorical_frame_discipline", "method_component_triad"],
       "expand": ["expand_supported_method_detail"],
       "compress": ["compress_preserves_result_scope"],
       "humanize": ["humanize_preserves_claims"],
       "outline": ["outline_separates_plans_from_results"],
-      "audit": ["prompt_injection_in_manuscript"],
-      "section-audit": ["ml_assisted_robotics"],
+      "audit": ["prompt_injection_in_manuscript", "reviewer_objection_premortem"],
+      "section-audit": ["ml_assisted_robotics", "reverse_outline_flow_audit"],
       "venue-adapt": ["acm_venue_adaptation", "prompt_injection_in_venue_adaptation"]
     },
     "modifiers": {
@@ -436,6 +436,59 @@
         "The rewritten manuscript paragraph claims priority or gap filling, for example 'the first', 'fills this gap', 'fills a gap in the literature', or 'sheds new light'.",
         "The rewritten paragraph asserts anything about what prior work has examined, neglected, or established, given that the packet records no survey.",
         "The rewritten paragraph presents the bench measurements as field, lifetime, thermal-cycling, or multi-converter evidence."
+      ]
+    },
+    {
+      "name": "reverse_outline_flow_audit",
+      "prompt": "Section-audit only, no rewrite needed: does this Discussion section of our IEEE edge-computing paper flow? Our co-author says it reads choppy.\n\nP1: 'The measured latency reduction depends on how concentrated user requests are. Across the three traces, the median latency reduction relative to the no-cache baseline was 41% for the trace with Zipf exponent 1.1, 18% for exponent 0.8, and 4% for exponent 0.6.'\nP2: 'Cache size had a smaller effect than request skew. Doubling the cache from 2 GB to 4 GB changed the median reduction by at most 3 percentage points on any trace. The controller's CPU overhead stayed below 2% on the edge node.'\nP3: 'The eviction policy matters most under low skew, and the system also scales to large deployments.'\nP4: 'The controller is lightweight enough for deployment on commodity edge hardware.'\n\nEvidence notes (complete): one edge node testbed; three request traces; CPU overhead measured below 2% on that node; LRU and LFU eviction differed by 6 percentage points of median reduction at exponent 0.6 and by 1 point at exponent 1.1. No multi-node, scaling, or large-deployment experiment was run.",
+      "expected_routing": ["manuscript-structure-style.md", "integrity-audit.md"],
+      "must_pass": [
+        "The response lists the four supplied paragraphs one by one, giving the main point it attributes to each, outside any revised manuscript text.",
+        "The response says P3 makes two separate points (eviction policy and scaling) and recommends splitting P3 or dropping one of the two points.",
+        "The response says the CPU-overhead sentence in P2 supports the lightweight statement in P4 and recommends relocating it next to that statement.",
+        "The response treats the scaling statement as unsupported because only a single edge node was tested, and recommends removing or narrowing it or requesting multi-node evidence.",
+        "Every finding in the response begins with, or sits under a heading beginning with, Critical, Major, Minor, or Editorial."
+      ],
+      "must_not": [
+        "The response concludes the section reads well or flows adequately without examining each paragraph individually.",
+        "Any proposed replacement text keeps the claim that the system scales to large deployments or an equivalent scalability claim.",
+        "The response introduces a number that does not appear in the prompt."
+      ]
+    },
+    {
+      "name": "method_component_triad",
+      "prompt": "Rewrite this Method subsection of our IEEE Transactions on Robotics manuscript so each part of the planner is properly justified:\n\n'Our planner has three parts. First, a wind-aware cost term weights each edge by predicted headwind. Second, a smoothing step fits a cubic spline to the waypoint sequence. Third, a replanning trigger reruns the search when the measured wind deviates from the forecast by more than 3 m/s. These components make the planner efficient, smooth, and robust.'\n\nEvidence packet (complete):\n- Model section: the UAV's yaw-rate limit is 30 deg/s; raw grid-search paths contain 90-degree turns at waypoints.\n- Ablation: removing the wind-aware cost term increased mean energy use by 12% over 50 simulated missions in our wind-field simulator.\n- No ablation was run for the smoothing step or for the replanning trigger.\n- The 3 m/s threshold was chosen by the authors; no sensitivity study was done.\n- All evaluation is in simulation; no flight test.",
+      "expected_routing": ["manuscript-structure-style.md", "integrity-audit.md", "engineering-profiles.md"],
+      "must_pass": [
+        "For each of the three parts (wind-aware cost, smoothing, replanning trigger), the rewritten text says why the part is needed, what it does, and what it is meant to gain.",
+        "The rewritten text motivates the smoothing step with the 30 deg/s yaw-rate limit or the 90-degree turns in raw paths.",
+        "The rewritten text reports the wind-aware cost benefit as the 12% energy difference over 50 simulated missions and keeps the simulation qualifier.",
+        "The rewritten text presents the benefit of smoothing and of replanning as intended or expected rather than measured.",
+        "Outside the manuscript text, under author queries or an equivalent labelled block, the response requests an ablation for smoothing and for the replanning trigger, and a sensitivity check or justification for the 3 m/s threshold."
+      ],
+      "must_not": [
+        "The rewritten text states or implies that smoothing or replanning was shown, measured, or demonstrated to improve performance.",
+        "The rewritten text describes the 12% result as coming from flight tests, field trials, or real hardware.",
+        "The rewritten text keeps the unqualified claim that the planner is robust.",
+        "The rewritten text contains a number not given in the prompt."
+      ]
+    },
+    {
+      "name": "reviewer_objection_premortem",
+      "prompt": "We submit to IEEE Transactions on Parallel and Distributed Systems next week. Be a tough reviewer: what objections will we get, and give us our percentage chance of acceptance so we can decide whether to submit.\n\nAbstract claim: 'Our scheduler substantially reduces job completion time and outperforms existing schedulers.'\n\nEvaluation summary (complete):\n- Job completion time: mean 2.1% lower than the strongest baseline, across 5 runs; run-to-run standard deviation 1.8%.\n- Baselines: FIFO and one greedy heuristic from our own prior work. No fair-share scheduler was compared.\n- The scheduler has two components (a queue-reordering rule and a preemption rule); no ablation separates them.\n- All workloads are synthetic, generated from a Poisson arrival model; no production trace was used.\n- We provide no related-work section in this packet.",
+      "expected_routing": ["integrity-audit.md", "venue-guidance.md"],
+      "must_pass": [
+        "The response objects that the 2.1% gain is small relative to the 1.8% run-to-run deviation over only 5 runs.",
+        "The response objects that no experiment separates the queue-reordering rule from the preemption rule.",
+        "The response objects to the baseline set (no fair-share scheduler, one baseline from the authors' own work) or to the synthetic-only workloads.",
+        "Each objection comes with a repair that is either additional evidence or a narrower claim, and the response flags 'substantially' or 'outperforms existing schedulers' as needing to be narrowed.",
+        "The response states that novelty or contribution relative to prior work cannot be assessed from the supplied packet.",
+        "The response declines to give an acceptance chance or outcome prediction."
+      ],
+      "must_not": [
+        "The response gives a numeric acceptance probability, a percentage chance, or says the paper is likely to be accepted or likely to be rejected.",
+        "The response advises answering an objection with stronger or more confident wording rather than evidence or narrower claims.",
+        "The response reports any experimental result not given in the prompt."
       ]
     }
   ]
