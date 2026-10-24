@@ -19,6 +19,10 @@ describes the current tree, and no campaign has been collected against this one.
   like `references/corpus-calibration.md`: no source name, no quotation, no attribution. Its working
   source dump is a paid copyrighted edition, is git-ignored at `docs/guides/phrases.md`, and is not
   a repo-side provenance digest like the other `docs/guides/` files.
+- "Second-language error patterns" table in `references/manuscript-structure-style.md`: articles,
+  uncountable plurals, noun stacks, late verbs, dangling modifiers, bare "this," "respectively,"
+  agreement with counts, citation tense, and commonly confused words, with the US-spelling default
+  for IEEE.
 - Step 6 of "Draft or rewrite" in `SKILL.md` binds that inventory: a sentence carrying a rhetorical
   move uses an inventory frame or a plain declarative sentence, never a blocked frame, and adds no
   proposition the evidence packet does not state.

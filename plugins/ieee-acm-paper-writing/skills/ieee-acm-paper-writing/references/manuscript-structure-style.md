@@ -8,7 +8,7 @@ structural style calibration. Official venue requirements override these functio
 - Select a contribution archetype
 - Section contracts
 - Paragraph and prose controls (including the reverse-outline check)
-- Machine-idiom removal (humanize)
+- Machine-idiom removal (humanize), plain lexicon, and second-language error patterns
 - Rhetorical-move frames (closed set)
 - Equations, algorithms, figures, and tables
 - Mathematical notation and equation editing
@@ -250,6 +250,39 @@ drafting, rewriting, and humanizing, never at the cost of a term's technical mea
 | aforementioned | this/that + noun |
 | leverage (verb) | use, exploit |
 | methodology | method (unless the methodology itself is the subject) |
+
+### Second-language error patterns
+
+Writers whose first language has no articles or puts the verb last (Turkish among them) produce
+the patterns below systematically. Apply this table during drafting, rewriting, and humanizing.
+Fix the grammar without changing a technical term, number, or claim. US spelling is the IEEE
+default (“-ize,” “modeling,” “behavior”); follow the target venue when it differs.
+
+| Pattern | Correction |
+| --- | --- |
+| Missing or extra article: “Proposed method reduces delay”; “The sensors are battery-limited” meant generically | Use “the” for a referent the reader can identify (the proposed method, the network in Fig. 2), “a/an” for one countable item at first mention, and no article for generic plurals and uncountable nouns (“Sensors are battery-limited”; “Energy is scarce”). |
+| Article before an abbreviation chosen by spelling: “a ILP,” “a SINR constraint” | Choose by the first sound as spoken: “an ILP,” “an SINR constraint,” “a UWSN.” |
+| Pluralized uncountable nouns: “informations,” “researches,” “equipments,” “softwares,” “feedbacks” | Use the uncountable form, or count with a countable noun: “information,” “two studies,” “equipment,” “software,” “feedback.” |
+| Wrong verb with a noun: “make a research,” “do an analysis on” | “conduct research,” “analyze.” |
+| Impersonal passive of intent: “It is aimed to,” “It is aimed that” | “This paper aims to,” or state the objective with a purpose frame. |
+| Distant passive with a trailing relative clause: “In this paper, a method is proposed which …” | “This paper proposes a method that …” |
+| Noun stack of four or more nouns: “void-aware multi-hop routing protocol design problem” | Keep at most three nouns before the head; move the rest after it with “of,” “for,” or “that”: “the design of a void-aware multi-hop routing protocol.” |
+| Verb or main claim held until the end of a long sentence | Put the subject and verb early; move long qualifying phrases after the verb or into a second sentence. |
+| Dangling modifier: “Using the ILP, the lifetime is maximized” | Name the actor the modifier refers to: “Using the ILP, we maximize the lifetime,” or “The ILP maximizes the lifetime.” |
+| Bare “this” or “these” as a subject: “This shows that …” | Add the noun it refers to: “This decrease shows that …” |
+| “respectively” with lists of unequal length or unclear order | Use it only when both lists have the same length and order; otherwise write separate clauses. |
+| Double or absolute comparatives: “more higher,” “more better,” “most optimal” | “higher,” “better,” “optimal” or “best.” |
+| “according to” meaning “as a function of”: “lifetime according to sink number” | “lifetime as a function of the number of sinks.” |
+| Subject–verb agreement with counts: “the number of sinks are” | “The number of sinks is”; “a number of studies have.” |
+| “such as … etc.” or “and so on” | Either “such as” with examples or a complete list; drop “etc.” from formal prose. |
+| “i.e.” and “e.g.” interchanged | “i.e.” restates (that is); “e.g.” gives an example. In IEEE and US style follow each with a comma. |
+| “which” and “that” interchanged | Restrictive clause: “that,” no comma. Nonrestrictive clause: comma plus “which.” |
+| “Firstly / Secondly,” “Besides,” “In addition to this” as openers | “First, second,” “In addition,” or merge the sentence with the previous one. |
+| “the authors in [5],” “In [5], authors propose” | “The authors of [5] proposed,” or “[5] proposed.” |
+| Tense drift when citing: “[5] proposes … and showed …” | Past tense for what a specific cited study did; present tense for established facts and for what this paper does. |
+| Commonly confused pairs: affect/effect, principle/principal, later/latter, precede/proceed, discrete/discreet, complement/compliment, its/it's | “Affect” is the verb and “effect” the noun; “principal” means main; “latter” is the second of two; “precede” means come before; “discrete” means separate; “complement” means complete. |
+| “is comprised of” | “comprises” or “consists of.” |
+| “different than,” “compared to” for a detailed comparison | “different from,” “compared with.” |
 
 ### Before and after
 
