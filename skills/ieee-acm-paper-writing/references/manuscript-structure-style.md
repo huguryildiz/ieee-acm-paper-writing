@@ -138,9 +138,10 @@ certificate quality distinct. Define metrics and denominators; report uncertaint
 
 For each figure, table, or experiment, follow a five-step sequence: identify what is shown and its
 axes; state the dominant trend in one sentence; quantify it with exact values, units, and
-comparator-scoped percentage changes; give the mechanism, grounded in the model and labeled as a
-hypothesis when it is one; and state the design implication. Do not narrate every plotted point;
-cover the dominant trend, the exceptions, and the implication.
+comparator-scoped percentage changes; give the mechanism only when the supplied evidence states it,
+labeled as a hypothesis when the evidence presents it as one, and otherwise route the missing
+analysis to `Author queries`; and state the design implication the evidence supports. Do not
+narrate every plotted point; cover the dominant trend, the exceptions, and the implication.
 
 Use Discussion for mechanisms, alternatives, misspecification, validity, deployment trade-offs,
 negative results, and generalization boundaries. Tie future work to demonstrated limitations.
@@ -252,26 +253,28 @@ drafting, rewriting, and humanizing, never at the cost of a term's technical mea
 
 ### Before and after
 
-Generic illustrations of the controls above. They are patterns to apply, not text to copy.
+Generic illustrations of the controls above. They are patterns to apply, not text to copy. Each
+After assumes that the evidence packet supplies every value, comparator, and table label it uses;
+never fill in a number, comparator, or mechanism the evidence does not state.
 
 - Promotional claim to verifiable statement.
   - Before: *Our novel framework achieves remarkable gains across a plethora of realistic scenarios,
     demonstrating its great potential.*
-  - After: *The proposed method reduces peak per-unit cost by 18.4% on average over 20 randomized
-    instances (Table III).*
-- Redundant motivation to a single statement plus a new layer.
+  - After: *The proposed method reduces peak per-unit cost by 18.4% on average relative to the
+    fixed-schedule baseline over 20 randomized instances (Table III).*
+- Redundant motivation to a single statement.
   - Before: *Energy efficiency is crucial because batteries cannot be replaced. […] Since replacing
     batteries is infeasible, energy-efficient operation is of utmost importance.*
   - After: *Because batteries cannot be replaced in the field, the system lifetime is set by the
-    energy budget of the most heavily loaded unit. This coupling turns a local operating decision
-    into a system-level design problem.*
+    energy budget of the most heavily loaded unit.* The second clause is admissible only when the
+    evidence states that lifetime dependence; without it, stop at the first clause.
 - AI-flavored prose to humanized plain academic English.
   - Before: *Moreover, our comprehensive evaluation demonstrates remarkable improvements,
     highlighting the potential of the approach and paving the way for robust, scalable, and reliable
     deployments.*
-  - After: *Joint optimization extends the objective by 21.7% on average over the sequential
-    baseline across 20 instances (Table IV). The gain comes from the solver's freedom to trade one
-    cost against another, which the sequential design fixes in its first stage.*
+  - After: *Joint optimization improves the objective by 21.7% on average over the sequential
+    baseline across 20 instances (Table IV).* The After attributes the gain to no mechanism; that
+    attribution needs an isolating ablation, and without one it goes to `Author queries`.
 
 ## Rhetorical-move frames (closed set)
 

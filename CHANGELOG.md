@@ -28,6 +28,16 @@ describes the current tree, and no campaign has been collected against this one.
 
 ### Fixed
 
+- The Before/After illustrations in `references/manuscript-structure-style.md` modeled the
+  behavior the skill forbids. The first After reported an 18.4% reduction with no comparator; it now
+  names one. The second and third Afters added a mechanism absent from their Before text; the
+  second now keeps its lifetime clause only when the evidence states it, and the third drops the
+  causal sentence and routes the attribution to `Author queries`. A lead-in states that each After
+  assumes its values come from the evidence packet.
+- The five-step figure and table sequence told the writer to give a mechanism, labeled as a
+  hypothesis when it is one. `SKILL.md` forbids an absent mechanism even under a hypothesis label.
+  The step now requires the mechanism to come from the supplied evidence and otherwise routes the
+  missing analysis to `Author queries`.
 - `run_evals.py collect` claims the campaign receipt once instead of rewriting it on every
   invocation. A `--case` repair into an existing outdir used to restamp `collection.json`, so the
   receipt re-attested responses already in the directory against conditions they never ran under. A
