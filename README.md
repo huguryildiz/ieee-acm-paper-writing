@@ -411,7 +411,7 @@ python3 skills/ieee-acm-paper-writing/scripts/render_audit_map.py \
 python3 -m unittest discover -s tests -v
 ```
 
-The behavioral suite defines 31 self-contained adversarial cases. Together they exercise all nine
+The behavioral suite defines 34 self-contained adversarial cases. Together they exercise all nine
 modes plus the `--html-map` modifier and test claim scope, failure accounting, citation support,
 method classification, venue uncertainty, reference formatting, corpus use, content-preserving
 expansion/compression, evidence-aware outlining, humanization, and prompt injection. The

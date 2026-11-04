@@ -295,7 +295,8 @@ catalog in [manuscript-structure-style.md](references/manuscript-structure-style
    do not write that the result was `because of`, `due to`, `attributable to`, or demonstrates
    the role or effect of the component.
 5. Keep the formal register of the target venue. Humanizing means natural expert prose, not
-   conversational tone.
+   conversational tone. Removing machine idiom must not break real structure: three genuine
+   contributions stay three, and a parallel list that mirrors parallel evidence stays a list.
 6. This mode improves prose quality; it is not a tool for concealing AI assistance. Never
    remove or weaken a generative-AI disclosure, and the target publication's disclosure
    policy continues to apply to the humanized text.

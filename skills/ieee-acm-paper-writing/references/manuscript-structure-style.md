@@ -43,6 +43,10 @@ symbols only when they materially improve retrieval and the target venue permits
 Write a self-contained problem, gap, method, evaluation, verified principal result, and implication.
 Use one paragraph unless a structured abstract is required. Include no citation, numbered equation,
 undefined abbreviation, or result absent from the body.
+Carry the body's qualifier with each result: a placement the body reports as "the best found" is
+not "the best" in the abstract, and a quantity the body computes as a characteristic length is not
+a "range" or "detection distance" there. Name the decision with the same words in the obstacle
+sentence and in the aim sentence.
 
 Adapt the move sequence to the archetype:
 
@@ -74,8 +78,11 @@ abstraction levels.
 ### Related work and background
 
 Organize related work by assumption, method family, decision variable, data regime, guarantee, or
-evaluation setting. End each cluster with the unresolved issue relevant to the present work. Do not
-use a paper-by-paper chronology or claim novelty from rhetorical confidence.
+evaluation setting. Open each cluster with a sentence that names the axis on which its studies
+differ (for example, whether the collecting nodes move). An opener that names no axis ("These works
+make different assumptions") followed by one summary per paper is a chronology in disguise. End each
+cluster with the unresolved issue relevant to the present work. Do not use a paper-by-paper
+chronology or claim novelty from rhetorical confidence.
 
 After the clustered survey, narrow to the closest one or two studies and enumerate their
 differences explicitly — by scope, model realism, and method — each difference checkable. Close
@@ -169,16 +176,23 @@ legacy exemplars did not foreground them.
 - When two objectives or effects conflict, state both directions before motivating a joint
   treatment: name what increasing the design variable improves and what it worsens, then explain
   why optimizing the objectives independently fails.
-- Prefer definition before abbreviation and one term per concept.
+- Prefer definition before abbreviation and one term per concept. Define a term before its first
+  use within a paragraph as well: do not use "fusion center" in one sentence and define it in the
+  next.
 - Use signposting that names logical function: assumption, contrast, consequence, example, or
   limitation. Avoid transitions that announce only section order.
 - Prefer direct technical verbs such as “defines,” “derives,” “measures,” “observes,” “indicates,”
-  and “hypothesizes.”
+  and “hypothesizes.” Avoid metaphorical verbs that hide the mechanism: a role name such as
+  “listener” may stay, but the listener detects or absorbs molecules; it does not “hear” them.
+- State a limitation as a scope, not as a denial of the result: “these observations are limited
+  to the model's assumptions,” not “this is not a result.”
 - Calibrate certainty to evidence. Avoid promotional forecasts and unbounded novelty language.
 - Exclude promotional vocabulary (“cutting-edge,” “powerful,” “seamless”), conversational framing
   (“let's,” “we'll now dive into,” “as you can see”), and project-management terms (“sprint,”
   “backlog,” “TODO”) when they describe the authors' internal workflow rather than a defined study
-  phase or technical object.
+  phase or technical object. The same holds for reading-status notes (“we have not yet read the
+  original works”) and correspondence (“we would like to discuss this”); state a reading limit
+  impersonally: “this assessment is limited to the survey's account.”
 - Prefer commas, parentheses, or separate sentences over em dashes; use an em dash only when the
   user or the venue's own style asks for it.
 - Preserve technical meaning during compression; do not delete conditions, comparators, units, or

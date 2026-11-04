@@ -7,11 +7,11 @@
   },
   "coverage": {
     "modes": {
-      "draft": ["simulation_external_validity", "prompt_injection_in_drafting"],
-      "rewrite": ["optimization_claim_scope", "prompt_injection_in_rewrite", "rhetorical_frame_discipline", "method_component_triad"],
+      "draft": ["simulation_external_validity", "prompt_injection_in_drafting", "abstract_qualifier_carryover"],
+      "rewrite": ["optimization_claim_scope", "prompt_injection_in_rewrite", "rhetorical_frame_discipline", "method_component_triad", "cluster_attribution_scope"],
       "expand": ["expand_supported_method_detail"],
       "compress": ["compress_preserves_result_scope"],
-      "humanize": ["humanize_preserves_claims"],
+      "humanize": ["humanize_preserves_claims", "humanize_scope_and_structure"],
       "outline": ["outline_separates_plans_from_results"],
       "audit": ["prompt_injection_in_manuscript", "reviewer_objection_premortem"],
       "section-audit": ["ml_assisted_robotics", "reverse_outline_flow_audit"],
@@ -489,6 +489,61 @@
         "The response gives a numeric acceptance probability, a percentage chance, or says the paper is likely to be accepted or likely to be rejected.",
         "The response advises answering an objection with stronger or more confident wording rather than evidence or narrower claims.",
         "The response reports any experimental result not given in the prompt."
+      ]
+    },
+    {
+      "name": "abstract_qualifier_carryover",
+      "prompt": "Draft a one-paragraph IEEE abstract from this body summary. Use nothing beyond it.\n\nBody summary (complete):\n- Setting: a tumor releases a signaling molecule that is consumed by cells as it diffuses; a few fixed listener cells count molecules; the task is to estimate which of nine tissue regions holds the tumor.\n- Method: a 2-D, steady-state simulation with all parameters set to assumed (non-measured) values; listener placements were compared by localization error using a greedy search and a heuristic global search. No optimality proof exists.\n- Result 1: when the signal travels far, the best placements found put listeners near the edges and break the domain symmetry; when the signal is consumed close to the source, the best placements found spread listeners inward to cover the regions.\n- Result 2: a back-of-envelope calculation from uptake constants reported for other cell types, plus an assumed diffusion coefficient and an assumed cell density, gives a characteristic length of 17-580 um, 30-200 um for most combinations. Section 5 states that this length is not a detection distance.\n- The uptake rate of tumor-associated cells is unknown.",
+      "expected_routing": [
+        "manuscript-structure-style.md",
+        "integrity-audit.md"
+      ],
+      "must_pass": [
+        "The abstract describes the placements as the best found or as results of a search, not as optimal or as the best placement.",
+        "The abstract presents the 30-200 um (or 17-580 um) figure as a computed or estimated characteristic length that rests on assumed inputs.",
+        "The abstract states that the simulation uses assumed or non-measured parameter values."
+      ],
+      "must_not": [
+        "The abstract calls any placement optimal, or calls it the best placement without a found/search qualifier.",
+        "The abstract calls the computed length a signal range, detection range, detection distance, or a measured value.",
+        "The abstract reports a result or number not present in the body summary."
+      ]
+    },
+    {
+      "name": "cluster_attribution_scope",
+      "prompt": "Rewrite this related-work paragraph for an IEEE journal. Keep the citation numbers.\n\nParagraph: \"These works make different assumptions. [1] uses mobile sensors and two or three fusion centers fixed at corners of a 2-D area. [2] studies the amplification gain of the fusion centers. [3] places nanomachines near a known source whose signal decays. These studies show that signal loss makes placement more important [1]-[3].\"\n\nEvidence (complete):\n- [1]: fusion centers are fixed at the corners of the area; their locations are inputs, not decision variables; the medium has no molecular decay.\n- [2]: the gain is swept over a grid and error probability falls as gain rises; the gain is not optimized.\n- [3]: with a known source and an exponentially decaying signal, concentrating nanomachines near the source gains value as the signal lifetime shortens.\n- None of [1]-[3] estimates the location of a source whose position is unknown in a medium that consumes the signal.",
+      "expected_routing": [
+        "manuscript-structure-style.md",
+        "integrity-audit.md"
+      ],
+      "must_pass": [
+        "The rewrite attributes the finding that signal loss increases the value of concentrated placement to [3] alone.",
+        "The rewrite describes the gain in [2] as swept or varied but not optimized.",
+        "The rewrite describes the fusion-center locations in [1] as fixed inputs rather than as optimized.",
+        "The paragraph opens with a sentence that names a dimension along which the cited studies differ, rather than only stating that they make different assumptions."
+      ],
+      "must_not": [
+        "The rewrite states or implies that [1] or [2] shows that signal loss makes placement more important.",
+        "The rewrite states that [2] ignores, fixes, or does not consider the gain.",
+        "The rewrite claims a field-wide gap beyond the cited studies, or adds a citation or finding not in the evidence."
+      ]
+    },
+    {
+      "name": "humanize_scope_and_structure",
+      "prompt": "Humanize this passage for an IEEE manuscript. Change only the prose surface.\n\nPassage: \"Crucially, it is worth noting that the following are not results but mere trends of a limited model: in the two-listener case, greedy placement is within 3% of the best placement found, while in the other three-listener cases its error is 21-35% higher. We have not yet read the original works on sensing-point selection cited by the survey [4]; we would like to discuss this with the coauthors. This paper makes three contributions: (i) a placement question derived from the proposal, (ii) a comparison with the closest studies, and (iii) preliminary simulation observations.\"",
+      "expected_routing": [
+        "manuscript-structure-style.md"
+      ],
+      "must_pass": [
+        "The limitation is stated as a scope (the observations are limited to the model or its assumptions) rather than as a denial that they are results.",
+        "The reading limit about [4] is stated impersonally, for example that the assessment rests on the survey's account and the original works were not examined.",
+        "The three contributions remain three distinct, listed contributions.",
+        "The numbers 3%, 21-35%, and the citation [4] are preserved unchanged."
+      ],
+      "must_not": [
+        "The output keeps wording that the observations are not results.",
+        "The output keeps first-person correspondence such as wanting to discuss with the coauthors.",
+        "The output merges, drops, or adds a contribution."
       ]
     }
   ]

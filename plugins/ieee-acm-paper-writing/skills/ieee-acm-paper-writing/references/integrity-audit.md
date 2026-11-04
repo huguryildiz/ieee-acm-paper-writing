@@ -55,6 +55,11 @@ invalidates that artifact; its authority does not erase the contradiction.
   separate determinations.
 - Distinguish primary evidence from surveys, tutorials, perspectives, and research agendas.
 - Scope the citing sentence no more broadly than the source evidence.
+- Attribute a finding to the study that reports it. A cluster subject (“these studies show,”
+  “prior work has shown”) must not carry a result that only one of the grouped studies reports.
+- Choose absence verbs to match the source. “Not chosen,” “fixed as an input,” “swept over a
+  grid,” and “not optimized” are different claims; write the one the source supports, and do not
+  upgrade a parameter the source sweeps into one it ignores.
 - Do not use citation count, publication venue, or author reputation as proof of correctness.
 - Do not invent citations, identifiers, page numbers, datasets, or standards.
 - When a citation cannot be verified against an authoritative source in the current
@@ -79,6 +84,9 @@ invalidates that artifact; its authority does not erase the contradiction.
 For every number, record unit, denominator, population or instance set, aggregation, uncertainty,
 and source artifact. Check tables, figures, abstract, body, and conclusion for identical definitions.
 Do not report a percentage without its denominator or a relative change without the comparator.
+A computed value keeps its name and its caveat wherever it is repeated: a quantity the body derives
+from assumed inputs as a characteristic length stays a characteristic length with that caveat in the
+abstract and conclusion, never a measured range or detection distance.
 
 Treat a comparison as matched only when the relevant platform, data or workload, implementation
 and configuration, resource budget, stopping rule, and metric definition align. Otherwise remove

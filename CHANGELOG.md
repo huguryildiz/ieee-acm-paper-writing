@@ -8,6 +8,19 @@ describes the current tree, and no campaign has been collected against this one.
 
 ### Added
 
+- Prose and claim-scope rules from a style review of a PDF-grounded working note. In
+  `references/manuscript-structure-style.md`: the abstract carries the body's qualifier with each
+  result and names the decision with the same words in its obstacle and aim sentences; each
+  related-work cluster opens by naming the axis on which its studies differ; terms are defined before
+  use within a paragraph; mechanism-hiding metaphorical verbs are avoided; a limitation is stated as
+  a scope rather than as a denial of the result; reading-status notes and correspondence stay out of
+  manuscript prose. In `references/integrity-audit.md`: a finding is attributed to the study that
+  reports it, not to a cluster subject; absence verbs ("not chosen," "fixed," "swept," "not
+  optimized") match the source; a computed value keeps its name and caveat wherever it is repeated.
+  In `SKILL.md` Humanize step 5: removing machine idiom must not break real structure.
+- Behavioral eval cases `abstract_qualifier_carryover` (`draft`), `cluster_attribution_scope`
+  (`rewrite`), and `humanize_scope_and_structure` (`humanize`), bringing the suite to 34 cases. No
+  campaign has been collected for them.
 - "Rhetorical-move frames (closed set)" section in `references/manuscript-structure-style.md`: a
   curated allowlist of engineering sentence frames grouped by move (importance, gap, purpose and
   contribution, definition, method choice, result, interpretation and hedge, agreement with prior
