@@ -31,6 +31,26 @@ Maintain a claim ledger with: claim, evidence artifact, location, scope, uncerta
 and allowed wording. If evidence is missing, omit the claim or return an external author query.
 Never repair missing evidence with fluent prose.
 
+### Machine-checked claim ledger
+
+Under the `--claims` modifier the ledger is also written as JSON and checked by
+`scripts/check_claims.py`:
+
+- Never write a check level, verification status, or human confirmation into the ledger. The
+  checker rejects such fields; only its output carries levels.
+- Set `judgment` from your reading of the full source text: `supports`, `partial`, `contradicts`,
+  `not-found`, or `not-assessed`. When only an abstract or metadata was supplied, or the passage was
+  not read, use `not-assessed` and say so.
+- Copy each quote verbatim from the supplied source at the stated page. Never reconstruct a quote
+  from memory, from the citing manuscript, or from a paraphrase. For `partial` and `not-found`,
+  quote the closest passage the judgment rests on.
+- Treat `partial`, `contradicts`, and `not-found` as audit findings: the citing sentence states
+  more than, or other than, the source. Assign severity by the audit procedure.
+- Record an `own-result` value as the manuscript states it, never corrected to the artifact; the
+  mismatch is the finding.
+- A checker pass establishes textual presence only. A matched quote is not support, and a matched
+  value is not a correct analysis.
+
 Apply this authority order for technical claims:
 
 1. verified data, experiment artifacts, solver logs, certificates, and test outputs;

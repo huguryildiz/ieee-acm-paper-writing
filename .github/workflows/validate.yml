@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Install pdftotext for claim-ledger quote checks
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
       - name: Validate skill structure (frontmatter, links, agent interface)
         run: python3 scripts/validate_skill.py
       - name: Validate Codex plugin package and synchronized skill snapshot

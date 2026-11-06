@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "manuscript": "synthetic-results-section.tex",
+  "claims": [
+    {
+      "id": "C1",
+      "text": "Dilated encoders relate any two positions in a number of layers that grows logarithmically with their distance [7].",
+      "location": "Sec. II, paragraph 2",
+      "type": "literature",
+      "evidence": [
+        {
+          "cite_key": "encoder2019",
+          "source_pdf": "sources/encoder2019.pdf",
+          "page": 2,
+          "quote": "the path between any input and output token is largely independent of the distance between the tokens"
+        }
+      ],
+      "judgment": "partial"
+    },
+    {
+      "id": "C2",
+      "text": "The scheduler reaches 92.4% slot utilization on the 12-node testbed.",
+      "location": "Sec. V-B, Table III",
+      "type": "own-result",
+      "evidence": [
+        {
+          "artifact": "results/utilization.csv",
+          "value": "92.4"
+        }
+      ],
+      "judgment": "not-assessed"
+    },
+    {
+      "id": "C3",
+      "text": "Link delays are independent across hops.",
+      "location": "Sec. III-A",
+      "type": "assumption",
+      "evidence": [],
+      "judgment": "not-assessed"
+    }
+  ]
+}

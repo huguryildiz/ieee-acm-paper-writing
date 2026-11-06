@@ -16,8 +16,8 @@ Before drafting or auditing:
 1. Identify the requested mode: `draft`, `rewrite`, `expand`, `compress`, `humanize`,
    `outline`, `audit`, `section-audit`, or `venue-adapt`. Treat style or landmark-paper
    calibration as a modifier of the applicable mode, not as a separate output mode.
-   Treat `--html-map` as an optional output modifier of `audit` or `section-audit`, never
-   as an additional mode.
+   Treat `--html-map` and `--claims` as optional output modifiers of `audit` or
+   `section-audit`, never as additional modes.
 2. Identify the target publication and article type. If none is supplied, apply generic
    IEEE/ACM engineering conventions and label venue-specific compliance as unverified.
 3. Identify the scientific authority: repository specifications, decision records,
@@ -139,6 +139,8 @@ Examples are supporting evidence for behavior, not templates to copy mechanicall
   [audit data](examples/venue-adaptation-audit-map.json), and
   [rendered map](examples/venue-adaptation-audit-map.html) — publisher-production requirements
   kept separate from scientific validation and unresolved venue-specific rules
+- [claim-ledger data](examples/claim-ledger.json) — the `--claims` ledger contract for
+  literature, own-result, and assumption claims
 
 ## Use the de-identified corpus calibration
 
@@ -458,6 +460,45 @@ fixture. The integrity gate carries into the rendering unchanged: keep author qu
 manuscript prose, never invent missing numbers or insert placeholders to fill a panel, and show an unused concern layer as
 `0 · not exercised`, never as a pass. The generated page must remain self-contained with no
 external assets.
+
+### Claim-ledger modifier
+
+Interpret `--claims`, or an unambiguous natural-language request for a machine-checked claim
+ledger, as an optional output modifier of `audit` or `section-audit`. It may be combined with
+`--html-map`. Do not write a ledger when the modifier is absent; with any other mode, explain that it
+is available only for an audit and do not silently change the requested scientific task.
+
+When the modifier is present:
+
+1. Complete the canonical text audit first. The ledger records the audited claims and adds no
+   finding, number, or conclusion.
+2. Apply the machine-checked ledger rules in [integrity-audit.md](references/integrity-audit.md)
+   and write version-1 JSON matching [claim-ledger.json](examples/claim-ledger.json): one entry per
+   load-bearing claim, typed `literature`, `own-result`, or `assumption`. Every path in the ledger
+   is relative to the ledger file and names an artifact the user supplied, never a file you
+   created, downloaded, or reconstructed.
+3. With no explicit output path, write `<source-stem>-claims.json` beside the source manuscript,
+   or `claims.json` in the active workspace. Never overwrite an existing ledger or report unless
+   the user explicitly authorizes replacement.
+4. Run the bundled checker, which needs no network and uses `pdftotext` when installed:
+
+   ```bash
+   python3 <skill-directory>/scripts/check_claims.py <ledger>.json --out <ledger>-checked.json
+   ```
+
+5. Report the checker's level for every claim next to the text audit, copied from its output.
+   Exit status 2 means the ledger is invalid: fix the ledger and rerun. Exit status 1 means a cited
+   key, quote, or value did not match. Treat a `quote-mismatch` as your own transcription error
+   until shown otherwise: re-read the stated page, correct the quote or change the judgment to
+   `not-assessed`, rerun, and state the correction. Report a `key-missing` or `value-mismatch` as an
+   audit finding. If the checker reports that `pdftotext` is unavailable, give the user the install
+   command it prints for their platform and ask for approval; install only on approval, then rerun.
+   Do not substitute another text extractor, and without the install leave affected quotes
+   unchecked. If no execution surface exists, return the ledger and state that no check ran;
+   never assign a level yourself.
+6. Keep the boundary visible: `quote-anchored` means the quoted words occur in the source,
+   `value-matched` means the value occurs in the artifact, and support remains a model judgment
+   pending human confirmation. Never call a manuscript submission-ready on a clean checker run.
 
 ## Final verification
 

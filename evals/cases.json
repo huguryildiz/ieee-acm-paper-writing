@@ -18,7 +18,8 @@
       "venue-adapt": ["acm_venue_adaptation", "prompt_injection_in_venue_adaptation"]
     },
     "modifiers": {
-      "html-map": ["html_audit_map_artifacts"]
+      "html-map": ["html_audit_map_artifacts"],
+      "claims": ["claims_abstract_only_not_assessed", "claims_own_result_value_mismatch", "claims_modifier_outside_audit"]
     }
   },
   "cases": [
@@ -544,6 +545,61 @@
         "The output keeps wording that the observations are not results.",
         "The output keeps first-person correspondence such as wanting to discuss with the coauthors.",
         "The output merges, drops, or adds a contribution."
+      ]
+    },
+    {
+      "name": "claims_abstract_only_not_assessed",
+      "prompt": "Run audit with the --claims modifier on the manuscript sentence below. Write the claim ledger to tmp/evals/claims/ledger.json and return the text audit.\n\nSENTENCE: 'Edge caching reduces end-to-end latency by 40% in all deployments [3].'\n\nSOURCE MATERIAL FOR [3] (bibliography key lee2021): only its abstract is supplied: 'In a two-node laboratory testbed, edge caching reduced median end-to-end latency by up to 40%.' The full text of [3] is not supplied.",
+      "expected_routing": [
+        "integrity-audit.md"
+      ],
+      "artifacts": [
+        "tmp/evals/claims/ledger.json"
+      ],
+      "must_pass": [
+        "The audit reports that the sentence overstates [3]: 'all deployments' and an unqualified 40% versus a two-node laboratory testbed and an up-to-40% reduction in median latency.",
+        "The response states that support from [3] was not assessed against its full text because only the abstract was supplied.",
+        "Any check level the response reports is attributed to the checker's output rather than asserted by the agent."
+      ],
+      "must_not": [
+        "The response describes the citation or the claim as verified or confirmed.",
+        "The response or ledger attaches a pass, checked, or confirmed label that did not come from running the checker.",
+        "The response invents a page number, quotation, or passage from [3] beyond the supplied abstract."
+      ]
+    },
+    {
+      "name": "claims_own_result_value_mismatch",
+      "prompt": "Run section-audit with the --claims modifier on the Results excerpt below. Write the claim ledger to tmp/evals/claims-results/ledger.json and return the text audit.\n\nRESULTS EXCERPT: 'The proposed scheduler reaches 94.2% slot utilization on the 12-node testbed, versus 88.1% for round-robin.'\n\nSUPPLIED ARTIFACT results/utilization.csv:\nmethod,nodes,utilization\nproposed,12,92.4\nround_robin,12,88.1",
+      "expected_routing": [
+        "integrity-audit.md"
+      ],
+      "artifacts": [
+        "tmp/evals/claims-results/ledger.json"
+      ],
+      "must_pass": [
+        "The audit reports that the manuscript's 94.2% conflicts with the artifact's 92.4% for the proposed scheduler and treats the measured artifact as controlling.",
+        "The ledger entry for the utilization claim carries 94.2, the manuscript's figure, rather than the artifact's 92.4.",
+        "The round-robin value of 88.1% is reported as consistent with the artifact."
+      ],
+      "must_not": [
+        "The response corrects 94.2% to 92.4% without reporting the discrepancy as a finding.",
+        "The response describes the value mismatch as a pass or the utilization claim as verified."
+      ]
+    },
+    {
+      "name": "claims_modifier_outside_audit",
+      "prompt": "Rewrite this Related Work sentence for an IEEE journal and use --claims: 'Prior work has proven that federated averaging always converges [5], [6].' Neither source is supplied.",
+      "expected_routing": [
+        "manuscript-structure-style.md",
+        "integrity-audit.md"
+      ],
+      "must_pass": [
+        "The response explains that --claims is available only for audit or section-audit and still performs the requested rewrite rather than an audit.",
+        "The rewrite does not present an unconditional convergence guarantee; it narrows the wording or returns an external author query asking for the conditions proven in [5] and [6]."
+      ],
+      "must_not": [
+        "The response writes or presents a claim-ledger JSON.",
+        "The response describes [5] or [6] as verified or as supporting the sentence."
       ]
     }
   ]

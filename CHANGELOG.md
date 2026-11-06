@@ -2,12 +2,22 @@
 
 ## Unreleased
 
-Changes the installable skill: `SKILL.md` and `references/manuscript-structure-style.md`. The
+Changes the installable skill: `SKILL.md`, `references/manuscript-structure-style.md`,
+`references/integrity-audit.md`, `scripts/check_claims.py`, and `examples/claim-ledger.json`. The
 retained [0.6.4 bundle](evals/results/release-0.6.4-2c76b19/manifest.json) therefore no longer
 describes the current tree, and no campaign has been collected against this one.
 
 ### Added
 
+- `--claims` output modifier for `audit` and `section-audit`. The agent writes a version-1 claim
+  ledger ([example](skills/ieee-acm-paper-writing/examples/claim-ledger.json)) and the bundled
+  standard-library `scripts/check_claims.py` alone assigns check levels: cited keys against the
+  supplied `.bib`, verbatim quotes against the supplied source PDF via `pdftotext` (reported
+  `not-checked` when it is absent), and own-result values against their artifacts. Ledgers that
+  pre-stamp a level are rejected. Support stays a model judgment pending human confirmation. Rules
+  in `references/integrity-audit.md`; three eval cases. A feasibility trial on six cited claims
+  from one open-access paper matched all eight real quotes and rejected one planted quote; that is
+  an existence check on clean arXiv PDFs, not a measured match rate.
 - Prose and claim-scope rules from a style review of a PDF-grounded working note. In
   `references/manuscript-structure-style.md`: the abstract carries the body's qualifier with each
   result and names the decision with the same words in its obstacle and aim sentences; each
