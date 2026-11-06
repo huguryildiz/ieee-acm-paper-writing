@@ -36,7 +36,9 @@ Typical uses include:
 - explaining a formulation or algorithm without changing notation or guarantee boundaries;
 - compressing a manuscript without deleting conditions needed to interpret a result;
 - humanizing repetitive or AI-flavored prose without concealing AI-use disclosures; and
-- auditing claims, citations, equations, baselines, failures, reproducibility, and venue rules.
+- auditing claims, citations, equations, baselines, failures, reproducibility, and venue rules,
+  optionally with a claim ledger whose quotations and numbers a bundled script checks against the
+  supplied PDFs and result files.
 
 It is not a general documentation writer, literature-retrieval system, experiment runner,
 statistical-analysis package, or automatic submission-acceptance judge.
@@ -161,9 +163,10 @@ do not by themselves establish scientific validity.
 
 - an LLM-based agent host that supports the shared Agent Skills format;
 - Node.js 22.20.0 or newer for the `skills` CLI path below - not required for the Claude Code
-  plugin path; and
-- Python 3 only when generating an optional HTML audit map or running the repository-side local
-  workbench.
+  plugin path;
+- Python 3 only when generating an optional HTML audit map, running the optional claim checker, or
+  running the repository-side local workbench; and
+- Poppler's `pdftotext` only when the claim checker should verify quotations against source PDFs.
 
 The installation paths below have been exercised for Codex and Claude Code. This repository does
 not claim equivalent behavioral validation across their underlying models or every other
@@ -265,7 +268,8 @@ cp -R ieee-acm-paper-writing-0.7.0/skills/ieee-acm-paper-writing <target-directo
 | Claude Code | `.claude/skills/` in the repository | `~/.claude/skills/` |
 
 The copied directory is self-contained: every link inside it resolves without the rest of this
-repository, and the audit-map renderer needs only Python 3 with no third-party packages. Start a
+repository. The audit-map renderer and the claim checker need only Python 3 with no third-party
+packages; the checker calls `pdftotext` for quotation checks when it is installed. Start a
 new session in the host afterwards so it discovers the skill.
 
 ### Complete skill invocation reference
@@ -299,7 +303,8 @@ tenth mode or command-line flag:
 @ieee-acm-paper-writing outline evidence.md in the exposition pattern appropriate to <technical area>
 ```
 
-There are no mode-specific CLI flags beyond the optional HTML modifier documented below. State
+There are no mode-specific CLI flags beyond the optional `--html-map` and `--claims` modifiers
+documented below. State
 the target venue, article type, section, evidence sources, output-file request, protected content,
 and scientific constraints in ordinary language.
 
@@ -327,6 +332,8 @@ and scientific constraints in ordinary language.
   [rendered map](skills/ieee-acm-paper-writing/examples/venue-adaptation-audit-map.html) - an
   eight-finding ACM production fixture that separates verified publisher rules, scientific
   validation, and unresolved conference-specific requirements.
+- [Claim-ledger data](skills/ieee-acm-paper-writing/examples/claim-ledger.json) - the `--claims`
+  ledger contract with one literature, one own-result, and one assumption entry.
 
 The example fixtures are synthetic. They demonstrate the expected output contract but are not
 behavioral benchmark results, findings from real manuscripts, or estimates of agent reliability.
@@ -380,6 +387,42 @@ python3 scripts/serve_local_audit.py
 The browser sends JSON only to the local `127.0.0.1` process. Requests require a loopback `Host`
 header, are session-bound, limited to 2 MiB, and not persisted. The workbench can inspect and render
 a completed audit map; it cannot discover or repair manuscript findings.
+
+## Optional claim ledger
+
+`--claims` is a second output modifier for `audit` and `section-audit`, also never produced by
+default. After the text audit, the agent writes a version-1 claim ledger
+([example](skills/ieee-acm-paper-writing/examples/claim-ledger.json)) with one entry per
+load-bearing claim and runs the bundled
+[`check_claims.py`](skills/ieee-acm-paper-writing/scripts/check_claims.py) on it. The checker, not
+the agent, assigns each claim's level.
+
+```text
+@ieee-acm-paper-writing audit --claims manuscript.tex
+@ieee-acm-paper-writing section-audit --claims sections/results.tex
+@ieee-acm-paper-writing audit --claims --html-map manuscript.tex
+```
+
+Supply the artifacts the ledger should point to: the `.bib` file, the full-text PDF of each cited
+source, and the result files behind reported numbers. The checker reads only those files, resolves
+paths relative to the ledger, and makes no network request. By default the ledger is written as
+`<source-stem>-claims.json` beside the manuscript and the report as `<ledger>-checked.json`.
+
+| Level | Meaning |
+| --- | --- |
+| `quote-anchored` | The quotation occurs on the stated page of the supplied PDF |
+| `quote-weak` | The quotation matches only after punctuation and symbols are removed |
+| `cited` | The key is in the `.bib`, but no quotation was checked |
+| `value-matched` | The reported value occurs in the named result file |
+| `unresolved` | No checkable evidence was supplied |
+| `assumption` | A stated assumption, with nothing to check |
+| `key-missing`, `quote-mismatch`, `value-mismatch` | The key, quotation, or value is absent; the checker exits with status 1 |
+
+Quotation checks need Poppler's `pdftotext`. Without it the checker leaves quotations at `cited` and
+prints the install command for the platform, which the agent runs only with the user's approval. A
+matched quotation shows that the words are in the source, not that the source supports the
+sentence: support stays a model judgment that needs human confirmation. A ledger that pre-stamps a
+level is rejected.
 
 ## Calibration corpus
 
@@ -462,9 +505,11 @@ by the selected host.
 
 `--strict` succeeds only when every case has a present agent response, matching response and case
 hashes, complete manual verdicts, and no failed criterion. Missing, unscored, stale, or failed cases
-remain in the denominator. The HTML-map case also declares its paired JSON and HTML files; the
-collector archives and hashes those artifacts, and a missing or replaced artifact makes the score
-stale.
+remain in the denominator. The HTML-map case also declares its paired JSON and HTML files, and the
+`--claims` cases declare their ledgers; the collector archives and hashes those artifacts, and a
+missing or replaced artifact makes the score stale. Two `--claims` cases point the agent at
+synthetic files in `evals/fixtures/claims/` so the checker's quotation and value levels can fire
+during collection.
 
 The retained [release 0.6.3 evidence bundle](evals/results/release-0.6.3-c30b4ee/manifest.json)
 covers all 27 cases on Codex Luna Medium twice and Claude Sonnet Medium once. Its case-local recorded
@@ -487,13 +532,13 @@ campaigns have named strict failures, and no independent human review is claimed
 
 The retained [0.6.4 candidate bundle](evals/results/release-0.6.4-2c76b19/manifest.json) recollects
 the 27-case contract on Claude Sonnet Medium once and Codex Luna Medium twice, against the exact
-installable skill tree that ships with this tag. The complete agent-assisted results are 27/27,
+installable skill tree that shipped with `v0.6.4`. The complete agent-assisted results are 27/27,
 25/27, and 23/27. Every campaign retains a `collection.json`, exact parsed agent
 command, checked authority roots, empty collision set, collection-time skill and case hashes, all 27
 raw responses, all 150 criterion decisions with a verbatim evidence quotation each, and both declared
 HTML-map artifacts. It was the first bundle the evidence validator reported as describing the
-current tree; the unreleased rhetorical-move-frame change has since moved the tree on, so the
-validator now reports it as historical.
+current tree; the `v0.7.0` changes have since moved the tree on, so the validator now reports it as
+historical.
 
 Receipt originality in that bundle is unverified. It was collected before the create-once receipt
 guard, when a single-case repair rewrote the campaign receipt in place, and the retained responses
@@ -519,7 +564,8 @@ involves invented support, concealed disclosure, a lost comparator or scope cond
 author fingerprint, or an unsupported guarantee. Report the denominator and this failed-case list
 with any citation of these numbers; a bare percentage is not a release claim.
 
-Repository CI runs structural validation, evaluation-schema validation, and regression tests. It
+Repository CI runs structural validation, evaluation-schema validation, and regression tests, with
+`pdftotext` installed so the claim checker's PDF test runs rather than skips. It
 also validates the hashes, scoring completeness, denominator, and failed-case declarations in the
 retained bundles, including the historical
 [post-64cec1a behavioral evidence](evals/results/post-64cec1a.md). That bundle describes
@@ -598,6 +644,9 @@ stable tag. The 0.6.4 bundle describes an earlier skill tree and does not attest
 - Venue guidance does not replace the named publication's current official instructions and
   template.
 - An audit-map renderer presents completed findings; it is not an analysis engine.
+- The claim checker confirms only that a quotation or value occurs in a file the user supplied. It
+  does not judge whether the source supports the sentence, and it cannot check a source whose full
+  text was not supplied.
 - The evaluation runner uses manual criterion verdicts and is not an automated model judge or
   comparative benchmark by itself.
 - Rules encoded in an agent skill are behavioral instructions, not a guarantee that every host
@@ -616,7 +665,7 @@ skills/ieee-acm-paper-writing/
 ├── agents/openai.yaml       # Agent interface metadata
 ├── assets/                  # Self-contained HTML audit-map template
 ├── examples/                # Writing, routing, audit data, and renderer fixtures
-├── scripts/                 # Dependency-free audit-map renderer
+├── scripts/                 # Dependency-free audit-map renderer and claim checker
 └── references/              # Integrity, style, domain, corpus, and venue guidance
 .agents/plugins/marketplace.json  # Repository marketplace entry for Codex
 plugins/ieee-acm-paper-writing/   # Native Codex plugin manifest and install-safe snapshots
@@ -624,13 +673,16 @@ evals/
 ├── cases.json               # Schema-v2 behavioral cases
 ├── run_evals.py             # Collection, manual scoring, and reporting harness
 ├── comparisons/             # Historical A/B comparison snapshot
+├── fixtures/claims/         # Synthetic PDF, .bib, and CSV that the --claims cases point at
 └── results/                 # Retained, hash-validated behavioral evidence
 support/
 ├── guides/                  # Repo-side provenance digests of IEEE/ACM style guides
 └── papers/catalog.tsv       # Calibration-corpus provenance (PDFs excluded from Git)
 site/                        # Dependency-free hosted showcase source
 assets/                      # Repo-side icon and showcase screenshots (not installed)
+scripts/build_evidence_bundle.py # Assembles a reviewed campaign into a retained evidence bundle
 scripts/build_site.py        # Builds the Vercel output from tracked site and example files
+scripts/local_audit_ui/      # Static page served by the local audit workbench
 scripts/serve_local_audit.py # Runs the loopback-only local audit workbench
 scripts/sync_codex_plugin.py # Refreshes or checks install-safe plugin snapshots
 scripts/validate_codex_plugin.py # Validates the Codex manifest, marketplace, and snapshots
