@@ -20,7 +20,7 @@ try:
 finally:
     sys.dont_write_bytecode = PREVIOUS_DONT_WRITE_BYTECODE
 
-QUOTE = "the path between any input and output token is largely independent of the distance"
+QUOTE = "under the low-traffic profile adaptive duty cycling extended median node lifetime"
 
 
 def tiny_pdf(lines):
@@ -70,7 +70,7 @@ class SchemaTests(unittest.TestCase):
     def test_rejects_short_quote_and_quote_without_pdf(self):
         with self.assertRaisesRegex(CHECK.LedgerError, "at least 6 words"):
             CHECK.validate_ledger({"version": 1, "claims": [
-                literature(cite_key="k1", source_pdf="a.pdf", quote="largely independent")]})
+                literature(cite_key="k1", source_pdf="a.pdf", quote="median lifetime")]})
         with self.assertRaisesRegex(CHECK.LedgerError, "requires source_pdf"):
             CHECK.validate_ledger({"version": 1, "claims": [literature(cite_key="k1", quote=QUOTE)]})
 
@@ -86,7 +86,7 @@ class SchemaTests(unittest.TestCase):
 class MatchTests(unittest.TestCase):
     def test_match_levels(self):
         self.assertEqual(CHECK.match_level("a  b c", "x a b\nc y"), "exact")
-        self.assertEqual(CHECK.match_level("largely independent", "Largely inde-\npendent"), "normalized")
+        self.assertEqual(CHECK.match_level("median lifetime", "Median life-\ntime"), "normalized")
         self.assertEqual(CHECK.match_level("only O(n/k) operations", "only O( nk ) operations"), "weak")
         self.assertEqual(CHECK.match_level("reduces complexity to O(n)", "unrelated text"), "none")
 
@@ -133,15 +133,15 @@ class CheckTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("pdftotext"), "pdftotext not installed")
     def test_quote_checked_against_real_pdf(self):
         (self.base / "s.pdf").write_bytes(tiny_pdf([
-            "Dependencies over long ranges are learnt easily because",
-            "the path between any input and output token is largely",
-            "independent of the distance between the tokens.",
+            "Results for the low-traffic profile are summarised below:",
+            "under the low-traffic profile adaptive duty cycling extended",
+            "median node lifetime by 18% over fixed cycling.",
         ]))
         anchored = self.run_check(literature(cite_key="k1", source_pdf="s.pdf", page=1, quote=QUOTE),
                                   have_pdftotext=True)
         self.assertEqual(anchored["level"], "quote-anchored")
         invented = literature(cite_key="k1", source_pdf="s.pdf", page=1,
-                              quote="separable layers reduce the complexity to linear time")
+                              quote="adaptive duty cycling doubled node lifetime under heavy traffic")
         self.assertEqual(self.run_check(invented, have_pdftotext=True)["level"], "quote-mismatch")
 
 

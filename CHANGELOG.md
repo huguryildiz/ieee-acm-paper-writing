@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-Changes the installable skill (`SKILL.md` description, `agents/openai.yaml`, one example), so the
+Changes the installable skill (`SKILL.md` description, `agents/openai.yaml`, two examples), so the
 tree no longer matches `v0.7.0`.
 
 ### Fixed
@@ -13,6 +13,9 @@ tree no longer matches `v0.7.0`.
   modifier next to `--html-map`.
 - Eval coverage validation in `evals/run_evals.py` and `scripts/validate_skill.py` now requires at
   least one `claims` case, as it already did for `html-map`.
+- The claim-ledger example and the checker tests carried a sentence fragment close to a published
+  paper's wording; both now use invented duty-cycling text, so no installable file holds a
+  source-traceable quotation.
 
 ## v0.7.0 — 2026-11-06
 

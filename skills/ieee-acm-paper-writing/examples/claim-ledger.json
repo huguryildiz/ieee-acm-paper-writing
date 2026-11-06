@@ -4,15 +4,15 @@
   "claims": [
     {
       "id": "C1",
-      "text": "Dilated encoders relate any two positions in a number of layers that grows logarithmically with their distance [7].",
+      "text": "Adaptive duty cycling extends sensor-node battery life under every traffic load [7].",
       "location": "Sec. II, paragraph 2",
       "type": "literature",
       "evidence": [
         {
-          "cite_key": "encoder2019",
-          "source_pdf": "sources/encoder2019.pdf",
+          "cite_key": "dutycycle2021",
+          "source_pdf": "sources/dutycycle2021.pdf",
           "page": 2,
-          "quote": "the path between any input and output token is largely independent of the distance between the tokens"
+          "quote": "under the low-traffic profile adaptive duty cycling extended median node lifetime by 18% over fixed cycling"
         }
       ],
       "judgment": "partial"
