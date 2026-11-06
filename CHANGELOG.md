@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+Changes the installable skill (`SKILL.md` description, `agents/openai.yaml`, one example), so the
+tree no longer matches `v0.7.0`.
+
+### Fixed
+
+- The venue-adaptation example said it exercised `venue-adapt --html-map`, a combination the router
+  refuses; it now says `audit --html-map` against venue requirements.
+- The `SKILL.md` description and the agent interface's default prompt now name the `--claims`
+  modifier next to `--html-map`.
+- Eval coverage validation in `evals/run_evals.py` and `scripts/validate_skill.py` now requires at
+  least one `claims` case, as it already did for `html-map`.
+
 ## v0.7.0 — 2026-11-06
 
 No change to the installable skill. This tag promotes the `v0.7.0-rc.1` tree

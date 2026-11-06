@@ -53,7 +53,7 @@ REQUIRED_MODES = (
     "draft", "rewrite", "expand", "compress", "humanize", "outline",
     "audit", "section-audit", "venue-adapt",
 )
-REQUIRED_MODIFIERS = ("html-map",)
+REQUIRED_MODIFIERS = ("html-map", "claims")
 SKILL_NAME = "ieee-acm-paper-writing"
 SKILL_HASH_IGNORED_DIRS = {"__pycache__", ".pytest_cache"}
 SKILL_HASH_IGNORED_NAMES = {".DS_Store"}

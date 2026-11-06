@@ -1,9 +1,9 @@
 # Venue-Adaptation Audit Example (Live Test Fixture)
 
-This self-contained fixture exercises `venue-adapt --html-map` on a plausible production-stage
-ACM proceedings package. The package is synthetic. It deliberately withholds the conference and
-track so that general publisher requirements can be separated from venue-specific review,
-anonymity, and length rules.
+This self-contained fixture exercises `audit --html-map` against venue requirements on a plausible
+production-stage ACM proceedings package. The package is synthetic. It deliberately withholds the
+conference and track so that general publisher requirements can be separated from venue-specific
+review, anonymity, and length rules.
 
 General ACM production rules used by the fixture were checked on 3 August 2026 against the
 [official `acmart` class guide](https://portalparts.acm.org/hippo/latex_templates/acmart.pdf) and

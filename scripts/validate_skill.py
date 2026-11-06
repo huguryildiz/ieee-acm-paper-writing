@@ -33,7 +33,7 @@ REQUIRED_EVAL_MODES = {
     "draft", "rewrite", "expand", "compress", "humanize", "outline",
     "audit", "section-audit", "venue-adapt",
 }
-REQUIRED_EVAL_MODIFIERS = {"html-map"}
+REQUIRED_EVAL_MODIFIERS = {"html-map", "claims"}
 
 MD_FILES = [
     "README.md",
