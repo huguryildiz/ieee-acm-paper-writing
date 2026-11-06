@@ -37,6 +37,9 @@ inheriting a review's breadth or a reference work's heading depth.
 Name the technical object, task, and distinguishing method or setting when informative. Avoid
 unsupported priority, universality, superiority, and promotional terms. Use abbreviations or
 symbols only when they materially improve retrieval and the target venue permits them.
+When the results weaken or contradict the property the title names (a method feature that brought
+no measurable gain, a hypothesis that failed), retitle around what the evidence established and
+raise the change in `Author queries`; a title states the supported finding, not the planned one.
 
 ### Abstract
 
@@ -53,6 +56,11 @@ obstacle in a sentence of its own; a contrastive opener such as “However,” f
 sentence establishes what currently works. Use the future tense only for work the manuscript
 proposes and has not performed, and never close the abstract with a finding the body does not
 report.
+When prespecified hypotheses failed or held only in part, state the supported principal finding
+before their outcome and give it more space, and state each hypothesis with its outcome in one
+clause (“the prespecified [threshold] was not met at any tested point”); do not spend most of the
+abstract narrating the test in the order it was run. Keep evidence-status tags, page locators, and
+other audit markers out of the abstract.
 
 Adapt the move sequence to the archetype:
 
@@ -90,7 +98,9 @@ Use paragraphs as argument units:
 
 Make each contribution falsifiable and parallel. Distinguish formulation, implementation, dataset,
 analysis, theorem, empirical result, and synthesis. Do not count one contribution at multiple
-abstraction levels.
+abstraction levels. A procedural step (fixing an experimental design in advance, running
+numerical checks, preregistering criteria) is not a contribution by itself; fold it into the
+evaluation item it makes credible, unless it is released as a reusable artifact.
 
 ### Related work and background
 
@@ -184,6 +194,17 @@ comparator-scoped percentage changes; give the mechanism only when the supplied 
 labeled as a hypothesis when the evidence presents it as one, and otherwise route the missing
 analysis to `Author queries`; and state the design implication the evidence supports. Do not
 narrate every plotted point; cover the dominant trend, the exceptions, and the implication.
+When a paragraph would report values across a grid of settings or more than a handful of
+conditions, propose a table or figure for the values and let the prose carry the trend and the
+exceptions.
+
+When the study fixed hypotheses or decision criteria in advance, lead each result with the
+finding in plain terms (value, comparator, regime) and give its prespecified status after it.
+Protocol vocabulary (an outcome branch such as “claim narrowed,” a point-quality class such as
+“clean” or “cap-stable,” an internal set name) does not reach the reader undefined: define each
+label at first use or replace it with its definition. A reader asks what was found; which branch
+of the decision rule fired is supporting detail. Keep the hypotheses as they were fixed and point
+to their outcome in one sentence rather than rewording them after the run.
 
 Use Discussion for mechanisms, alternatives, misspecification, validity, deployment trade-offs,
 negative results, and generalization boundaries. Tie future work to demonstrated limitations.
@@ -232,6 +253,15 @@ legacy exemplars did not foreground them.
   user or the venue's own style asks for it.
 - Preserve technical meaning during compression; do not delete conditions, comparators, units, or
   uncertainty to save words.
+- Keep one claim per sentence. A sentence that carries more than two qualifying clauses, or a
+  citation group after each of several clauses, is split so that each claim sits beside its own
+  support.
+- Treat evidence-status tags, claim-status markers, and page locators in a working draft as an
+  audit layer, not as prose. Each sentence must still read correctly, and keep its scope, with
+  them removed; a sentence whose limitation lives only in a tag gets that limitation in words.
+- State the boundary of a surveyed set once, in the gap sentence or a table note. Do not repeat
+  “in the studies reviewed,” “to the best of our knowledge,” or an equivalent in every sentence;
+  repeat a scope phrase only when it adds a new boundary.
 
 ### Reverse-outline check
 
@@ -478,12 +508,12 @@ Do not use the patterns below in any mode. Each asserts something the evidence r
 Where the packet does supply the underlying fact, use the plain form named with it; where it does
 not, the sentence has no basis at all.
 
-- Promotional importance: “plays a vital, pivotal, crucial, or key role”; “is fast becoming a key
-  instrument”; “is essential for a wide range of.” Plain form: what X fixes, and under which
-  condition.
+- Promotional importance: “plays a vital, pivotal, crucial, or key role”; “is a key issue in”; “is
+  fast becoming a key instrument”; “is essential for a wide range of”; “of particular concern is.”
+  Plain form: what X fixes, and under which condition.
 - Unbounded literature claims: “a growing body of literature”; “considerable critical attention”;
-  “a much debated question”; “has been extensively studied.” Plain form: the count and the
-  boundary of the set actually read.
+  “a much debated question”; “has been extensively studied”; “the research to date has tended to
+  focus on X rather than Y.” Plain form: the count and the boundary of the set actually read.
 - Surprise framing: “surprisingly, X has not been examined”; “the most striking result to emerge”;
   “a remarkable result.” Plain form: the value and its comparator.
 - Priority and originality: “the first study to”; “fills a gap in the literature”; “sheds new

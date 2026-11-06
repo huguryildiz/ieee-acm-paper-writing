@@ -400,7 +400,9 @@ so a relative result that lost its comparison base is visible rather than silent
 ### Outline mode
 
 Give section and paragraph functions, evidence required, and unresolved dependencies. Do
-not manufacture prose-level claims before the evidence exists.
+not manufacture prose-level claims before the evidence exists. When the user supplies sources,
+add a role line for each: what it supports, what it does not support, and which paragraph uses
+it.
 
 ### Venue-adapt mode
 

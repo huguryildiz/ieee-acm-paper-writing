@@ -31,6 +31,16 @@ describes the current tree, and no campaign has been collected against this one.
   reports it, not to a cluster subject; absence verbs ("not chosen," "fixed," "swept," "not
   optimized") match the source; a computed value keeps its name and caveat wherever it is repeated.
   In `SKILL.md` Humanize step 5: removing machine idiom must not break real structure.
+- Structure and prose rules from a style review of a LaTeX research brief whose prespecified
+  hypotheses failed. In `references/manuscript-structure-style.md`: a title is rewritten when the
+  results weaken the property it names; an abstract states the supported finding before the
+  outcome of failed hypotheses and carries no audit markers; a procedural step is not a
+  contribution by itself; results lead with the finding and define or replace protocol vocabulary;
+  values across a grid go to a table or figure; one claim per sentence; a sentence must keep its
+  scope with evidence tags removed; the boundary of a surveyed set is stated once; "is a key issue
+  in," "of particular concern is," and "the research to date has tended to focus on" join the
+  blocked frames. In `SKILL.md` Outline mode: each supplied source gets a role line (what it
+  supports, what it does not, which paragraph uses it). No eval case covers these rules yet.
 - Behavioral eval cases `abstract_qualifier_carryover` (`draft`), `cluster_attribution_scope`
   (`rewrite`), and `humanize_scope_and_structure` (`humanize`), bringing the suite to 34 cases. No
   campaign has been collected for them.
