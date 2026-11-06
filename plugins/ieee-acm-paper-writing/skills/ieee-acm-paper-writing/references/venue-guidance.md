@@ -78,7 +78,9 @@ Structure and apparatus:
 
 - Abstract: IEEE author-facing material commonly uses a one-paragraph 150-250-word form with no
   citations, numbered equations, or footnotes, but do not enforce that range or structure unless
-  the exact venue confirms it. Likewise, verify whether index terms are required and how they are
+  the exact venue confirms it. When no verified venue rule applies, the 200-word drafting default in
+  `manuscript-structure-style.md` governs; it is an editorial preference, not a compliance finding.
+  Likewise, verify whether index terms are required and how they are
   ordered before treating their form as compliance.
 - Number equations consecutively through the article. Refer to an equation in text as "in (1)";
   write out "Equation (1)" only at the start of a sentence.

@@ -7,7 +7,7 @@ structural style calibration. Official venue requirements override these functio
 
 - Select a contribution archetype
 - Section contracts
-- Paragraph and prose controls (including the reverse-outline check)
+- Paragraph and prose controls (including the reverse-outline and first-reading checks)
 - Machine-idiom removal (humanize), plain lexicon, and second-language error patterns
 - Rhetorical-move frames (closed set)
 - Equations, algorithms, figures, and tables
@@ -47,6 +47,12 @@ Carry the body's qualifier with each result: a placement the body reports as "th
 not "the best" in the abstract, and a quantity the body computes as a characteristic length is not
 a "range" or "detection distance" there. Name the decision with the same words in the obstacle
 sentence and in the aim sentence.
+Open with the technical setting or object the evidence states, not with the authors' own action: the
+first sentence is not “We ...,” “In this paper, we ...,” or “This paper proposes ....” State the
+obstacle in a sentence of its own; a contrastive opener such as “However,” fits when the preceding
+sentence establishes what currently works. Use the future tense only for work the manuscript
+proposes and has not performed, and never close the abstract with a finding the body does not
+report.
 
 Adapt the move sequence to the archetype:
 
@@ -55,7 +61,12 @@ Adapt the move sequence to the archetype:
 - review: scope, organizing question, classification axes, synthesis, open gap;
 - position: inadequate abstraction, consequence, and required replacement property.
 
-Do not impose a universal word count. Verify the current venue rule.
+Follow the target venue's verified abstract limit. When none applies or no venue is chosen, keep the
+abstract to at most 200 words; this is an editorial default, not a compliance criterion. Preserve
+every condition, comparator, unit, and qualifier attached to a retained claim. To fit the limit,
+first shorten wording, then omit secondary claims as complete units. If the required content still
+cannot fit, raise the conflict in `Author queries` and mark the abstract as exceeding the limit
+rather than presenting it as final. Do not add word-count commentary to manuscript prose.
 
 ### Introduction
 
@@ -65,7 +76,13 @@ Use paragraphs as argument units:
 2. specify the obstacle, contradiction, or failure regime;
 3. define the model boundary or taxonomy needed to reason about it;
 4. identify the closest unresolved gap by technical axis;
-5. state contributions as artifacts, results, or evaluated findings;
+5. state the contributions in a paragraph of their own, normally after the gap sentence, opened
+   with “The main contributions of this paper are as follows:”, another frame from the inventory,
+   or a plain declarative sentence; an itemized list is acceptable here. Prefer two to four
+   distinct items, without manufacturing or merging contributions to reach that count. Each item
+   names one scoped artifact, result, or evaluated finding; add its section only when section
+   labels exist. Cut or rescope an item that no supplied evidence or later section supports. Where
+   SKILL.md's sparse-evidence protocol applies, follow its ordering;
 6. preview evidence and scope;
 7. add a paper map only when it improves navigation or the venue's convention expects one; when
    included, use the conventional closing form (“The remainder of this paper is organized as
@@ -84,9 +101,27 @@ make different assumptions") followed by one summary per paper is a chronology i
 cluster with the unresolved issue relevant to the present work. Do not use a paper-by-paper
 chronology or claim novelty from rhetorical confidence.
 
+Two consecutive sentences led by cited works or their authors (“Smith et al. [3] propose ...,” “In
+[5], the authors ...”) trigger a check for paper-by-paper narration. If they summarize studies
+separately, regroup them around a named comparison axis and place each citation beside the clause
+it supports. Keep author-led sentences that already develop that comparison.
+
 After the clustered survey, narrow to the closest one or two studies and enumerate their
 differences explicitly — by scope, model realism, and method — each difference checkable. Close
 with a restrained gap statement scoped to what was actually surveyed, not to the field at large.
+
+In a full Related Work section, consider a comparison table when three or more close studies differ
+on two or more clustering axes and a table shows those differences more clearly than prose. Use one
+row per cited study, a final row for this work, and one column per axis. Fill each cell with the
+status the inspected source or evidence packet supports, using source-matched absence terms (see the
+absence-verb rule in `integrity-audit.md`: “fixed as an input,” “swept, not optimized,” “not
+reported”), and give a page or section locator where one exists. Use “not reported” only for
+silence in the inspected material and state that material's scope in the cell or a table note:
+silence in an excerpt or evidence packet does not establish silence in the complete study. Keep it
+distinct from an explicit “no.” Omit a study or axis whose source could not be inspected and raise
+it in `Author queries`; never print a blank or placeholder cell. Discuss the table in the text,
+scope the gap sentence to the tabulated studies, and put in this work's row only what the
+manuscript delivers.
 
 Include only background required to understand the contribution. Separate established definitions
 from the manuscript's own assumptions and design choices.
@@ -215,6 +250,32 @@ paragraph is relocated; a claim with no support is narrowed, given its evidence,
 author query. Two adjacent paragraphs with the same claim are merged. When reporting the check,
 show the outline itself (one line per paragraph) so the author can see the mapping, and keep it
 outside manuscript prose.
+
+### First-reading check
+
+Write for an engineer who knows the discipline but not this project, then reread the passage using
+only information introduced so far. Apply each item where it is relevant, using only the supplied
+material.
+
+1. Establish the situation before the notation: who decides, what is observed, what can be chosen,
+   what follows, and what is improved. Distinguish objects a reader could confuse, such as a state,
+   a command, and a policy, and state the counting basis whenever a count could refer to more than
+   one of them.
+2. Introduce each central equation with the question it answers. Define its quantities before use
+   and explain the operational meaning of the objective and each constraint beside it; a
+   nomenclature table supports these explanations but does not replace them. Separate physical
+   inputs, adopted settings, decision variables, and computed outputs.
+3. When one calculation or solver feeds another, state each one's purpose, inputs, outputs, and,
+   where it optimizes, its objective; explain the link in words. Distinguish an external input from
+   a solver output such as a dual price; equal objective values do not imply identical solutions.
+4. Where a mechanism is hard to follow and the supplied evidence already contains a concrete
+   instance, trace that instance across the related steps, keeping its values, relationships, and
+   outcomes, and identify it as an illustration rather than validation. Never construct a new
+   example from parameter values; if none is supplied, request one in `Author queries`.
+
+Repair the first missing step from the supplied evidence, or route the missing fact to `Author
+queries`; do not add terminology or unstated assumptions. This check tests clarity; it is not
+evidence that an independent reader understood the text.
 
 ## Machine-idiom removal (humanize)
 
@@ -349,11 +410,17 @@ Frames by move:
   - “[Prior method] was evaluated on X; its behavior on Y is not reported.”
   - “Whether X holds under [condition] is unresolved in the surveyed work.”
   - “The closest study differs from this work in [named axis].”
+- **Synthesizing prior work**:
+  - “[a] and [b] assume X, whereas [c] relaxes this assumption by Y.”
+  - “[a] and [b] both [verb] X; they differ in [named axis].”
+  - “Under [condition], [a] and [b] report X; [c], under [different condition], reports Y.”
+  - “Of the [n] studies surveyed here, [m] treat X as [status].”
 - **Stating purpose, scope, and contribution**:
   - “This paper addresses [task statement].”
   - “The objective of this study is to [verb] X under [stated conditions].”
   - “This paper formulates X, implements Y, and evaluates it on Z.”
   - “The contributions are [artifact], [result], and [evaluated finding].”
+  - “The main contributions of this paper are as follows:” followed by the evidence-backed items.
   - “X lies outside the scope of this paper.”
 - **Defining and classifying**:
   - “The term X denotes Y.”
@@ -366,6 +433,9 @@ Frames by move:
   - “For [stated purpose], X was used.”
   - “The instance set consists of [n] cases with [stated properties].”
   - “X was computed with [named tool and version].”
+  - “To [stated purpose], X was [verb].”
+  - “X was [verb] with [named tool or instrument, and version when applicable].”
+  - “After [step], X was [verb]; [next step] then [verb] Y.”
 - **Reporting a result**:
   - “Table [n] reports X for Y.”
   - “X was [value, unit] under [stated condition].”
@@ -377,10 +447,18 @@ Frames by move:
   - “It is therefore possible that X.”
   - “X is consistent with Y; the present design does not identify the cause.”
   - “A possible explanation is X, which this study does not test.”
+- **Scoping a generalization**:
+  - “Within the [range or instance set] studied, X.”
+  - “For the [n] configurations evaluated, X; behavior outside this range is not reported.”
 - **Agreeing or disagreeing with prior results**:
   - “These results agree with [cited work] for X.”
   - “These results differ from [cited work], which reported Y.”
   - “[Cited work] measured X under [different condition], so the two are not directly comparable.”
+- **Concluding**:
+  - “This paper [formulated / implemented / evaluated] X for Y.”
+  - “On [n] instances of [type], X [result] relative to [comparator].”
+  - “These findings hold under [stated conditions]; [named regime] was not evaluated.”
+  - “The evidence supports X; it does not establish Y.”
 - **Stating a limitation, boundary, or the work it requires**:
   - “A limitation of this study is X.”
   - “This study did not evaluate X.”
