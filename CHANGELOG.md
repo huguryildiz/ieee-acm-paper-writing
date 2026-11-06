@@ -15,7 +15,10 @@ describes the current tree, and no campaign has been collected against this one.
   supplied `.bib`, verbatim quotes against the supplied source PDF via `pdftotext` (reported
   `not-checked` when it is absent), and own-result values against their artifacts. Ledgers that
   pre-stamp a level are rejected. Support stays a model judgment pending human confirmation. Rules
-  in `references/integrity-audit.md`; three eval cases. A feasibility trial on six cited claims
+  in `references/integrity-audit.md`; three eval cases. The agent writes the ledger with a file
+  tool and runs the checker as a standalone command, because hosts that allow only named commands
+  reject a chained call; a single Sonnet run of both checker cases then produced checker reports
+  where the chained form had produced none. A feasibility trial on six cited claims
   from one open-access paper matched all eight real quotes and rejected one planted quote; that is
   an existence check on clean arXiv PDFs, not a measured match rate.
 - Prose and claim-scope rules from a style review of a PDF-grounded working note. In

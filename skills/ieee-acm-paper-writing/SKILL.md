@@ -486,6 +486,11 @@ When the modifier is present:
    python3 <skill-directory>/scripts/check_claims.py <ledger>.json --out <ledger>-checked.json
    ```
 
+   Write the ledger with a file-writing tool, not a shell heredoc. Issue the checker as its own
+   command, never chained with `cd`, `mkdir`, `cat`, or another command: hosts that allow only
+   named commands reject the whole chain. If that standalone call is refused, report that the
+   checker could not run.
+
 5. Report the checker's level for every claim next to the text audit, copied from its output.
    Exit status 2 means the ledger is invalid: fix the ledger and rerun. Exit status 1 means a cited
    key, quote, or value did not match. Treat a `quote-mismatch` as your own transcription error
