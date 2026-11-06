@@ -6,7 +6,7 @@ authors:
   - family-names: "Yıldız"
     given-names: "Hüseyin Uğur"
 license: MIT
-version: 0.7.0-rc.1
+version: 0.7.0
 date-released: "2026-11-06"
 repository-code: "https://github.com/huguryildiz/ieee-acm-paper-writing"
 url: "https://ieee-acm-paper-writing.vercel.app"

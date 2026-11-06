@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.7.0 — 2026-11-06
+
+No change to the installable skill. This tag promotes the `v0.7.0-rc.1` tree
+(`5ba20a5466aec23ac5c5e29a6bcf3ae752777c4c`, skill hash
+`21c4f7505d06edbfd34a3d67aab4fe553f70c7f513439447a354f6a20fc8ff44`) to a stable release. The
+README, landing page, and their tests now pin `v0.7.0` on every stable install channel.
+
+The stable-release gate is explicitly unmet. No campaign over the 38-case set was collected and no
+evidence bundle is retained; the behavioral-evidence, replication, and independent-review
+conditions are therefore not satisfied. CI passed on the release-candidate commit, and a fresh
+clone installed into an empty user directory ran `scripts/check_claims.py` under stock Python 3.9.6
+with and without `pdftotext`. This is a maintainer-accepted stable tag, and the README states the
+limitation.
+
 ## v0.7.0-rc.1 — 2026-11-06
 
 Unqualified release candidate. Stable install channels still pin `v0.6.4`; the rolling plugin

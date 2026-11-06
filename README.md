@@ -190,8 +190,7 @@ codex plugin add ieee-acm-paper-writing@ieee-acm-paper-writing
 ```
 
 For a rolling Git-backed install, replace `.` with `huguryildiz/ieee-acm-paper-writing`. The rolling
-plugin manifests identify candidate `0.7.0-rc.1`; this is a prerelease, not a behavior-qualified
-release. For a release-pinned native install, clone `v0.6.4`, run the two
+plugin manifests identify `0.7.0`. For a release-pinned native install, clone `v0.7.0`, run the two
 commands above from
 that clone, and keep
 the marketplace source local. Start a new Codex thread after installation so the skill is
@@ -230,7 +229,7 @@ through a session command is not something CI can run.
 Run this from the manuscript repository in which the skill should be available:
 
 ```bash
-npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.6.4 -a codex -y
+npx skills@1.5.21 add https://github.com/huguryildiz/ieee-acm-paper-writing/tree/v0.7.0 -a codex -y
 ```
 
 The repository publishes a single skill, so no `--skill` selector is needed. Replace `-a codex`
@@ -239,7 +238,7 @@ rather than the installer's selected strategy, and `--global` only when the skil
 available across all projects.
 
 This project-scoped command installs under `.agents/skills/` for Codex and `.claude/skills/` for
-Claude Code. Both the installer (`1.5.21`) and skill (`v0.6.4`) are pinned. The upstream installer
+Claude Code. Both the installer (`1.5.21`) and skill (`v0.7.0`) are pinned. The upstream installer
 collects anonymous usage telemetry by default; prefix the command with
 `DISABLE_TELEMETRY=1` to opt out for that invocation.
 
@@ -255,9 +254,9 @@ Download a release, then place `skills/ieee-acm-paper-writing/` — the whole di
 directory your host scans:
 
 ```bash
-curl -fsSL https://github.com/huguryildiz/ieee-acm-paper-writing/archive/refs/tags/v0.6.4.tar.gz \
+curl -fsSL https://github.com/huguryildiz/ieee-acm-paper-writing/archive/refs/tags/v0.7.0.tar.gz \
   | tar -xz
-cp -R ieee-acm-paper-writing-0.6.4/skills/ieee-acm-paper-writing <target-directory>/
+cp -R ieee-acm-paper-writing-0.7.0/skills/ieee-acm-paper-writing <target-directory>/
 ```
 
 | Host | Project-scoped target | User-scoped target |
@@ -373,7 +372,7 @@ skill installation. To inspect audit-map JSON without sending it to a hosted ser
 matching release and start the loopback-only server:
 
 ```bash
-git clone --branch v0.6.4 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
+git clone --branch v0.7.0 --depth 1 https://github.com/huguryildiz/ieee-acm-paper-writing.git
 cd ieee-acm-paper-writing
 python3 scripts/serve_local_audit.py
 ```
@@ -580,6 +579,15 @@ not third-party independence, and it is not a re-derivation of each decision. Th
 records `"qualified": false`, and this release is offered as a maintainer-accepted stable tag rather
 than an independently reviewed one. Anyone relying on the behavioral numbers should read the
 bundle's `blocking_findings` before citing them.
+
+**`v0.7.0` was tagged with the behavioral-evidence and independent-review conditions explicitly
+unmet.** It promotes the `v0.7.0-rc.1` skill tree unchanged. No campaign covering the 38-case set
+has been collected against it, and no evidence bundle is retained for it. The only behavioral runs
+are single Sonnet executions of the four `--claims` cases, none retained, so they show that the
+claim-ledger path can work, not how often it does. CI passed on the release commit, and a fresh
+clone installed into an empty user directory ran the bundled checker under the operating system's
+stock Python 3.9 with and without `pdftotext`. The release is offered as a maintainer-accepted
+stable tag. The 0.6.4 bundle describes an earlier skill tree and does not attest this one.
 
 ## Scope and limitations
 
