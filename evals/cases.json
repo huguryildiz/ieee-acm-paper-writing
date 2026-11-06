@@ -19,7 +19,7 @@
     },
     "modifiers": {
       "html-map": ["html_audit_map_artifacts"],
-      "claims": ["claims_abstract_only_not_assessed", "claims_own_result_value_mismatch", "claims_modifier_outside_audit"]
+      "claims": ["claims_abstract_only_not_assessed", "claims_own_result_value_mismatch", "claims_modifier_outside_audit", "claims_quote_from_supplied_pdf"]
     }
   },
   "cases": [
@@ -569,7 +569,7 @@
     },
     {
       "name": "claims_own_result_value_mismatch",
-      "prompt": "Run section-audit with the --claims modifier on the Results excerpt below. Write the claim ledger to tmp/evals/claims-results/ledger.json and return the text audit.\n\nRESULTS EXCERPT: 'The proposed scheduler reaches 94.2% slot utilization on the 12-node testbed, versus 88.1% for round-robin.'\n\nSUPPLIED ARTIFACT results/utilization.csv:\nmethod,nodes,utilization\nproposed,12,92.4\nround_robin,12,88.1",
+      "prompt": "Run section-audit with the --claims modifier on the Results excerpt below. Write the claim ledger to tmp/evals/claims-results/ledger.json and return the text audit.\n\nRESULTS EXCERPT: 'The proposed scheduler reaches 94.2% slot utilization on the 12-node testbed, versus 88.1% for round-robin.'\n\nSUPPLIED ARTIFACT, on disk at evals/fixtures/claims/utilization.csv:\nmethod,nodes,utilization\nproposed,12,92.4\nround_robin,12,88.1",
       "expected_routing": [
         "integrity-audit.md"
       ],
@@ -583,7 +583,8 @@
       ],
       "must_not": [
         "The response corrects 94.2% to 92.4% without reporting the discrepancy as a finding.",
-        "The response describes the value mismatch as a pass or the utilization claim as verified."
+        "The response describes the value mismatch as a pass or the utilization claim as verified.",
+        "The response reports a checker level for the 94.2% claim other than value-mismatch, or a level for the 88.1% claim other than value-matched."
       ]
     },
     {
@@ -600,6 +601,26 @@
       "must_not": [
         "The response writes or presents a claim-ledger JSON.",
         "The response describes [5] or [6] as verified or as supporting the sentence."
+      ]
+    },
+    {
+      "name": "claims_quote_from_supplied_pdf",
+      "prompt": "Run audit with the --claims modifier on the manuscript sentence below. Write the claim ledger to tmp/evals/claims-pdf/ledger.json and return the text audit.\n\nSENTENCE: 'Multi-hop relaying adds no measurable delay for any payload size [7].'\n\nSUPPLIED FILES, on disk: the bibliography evals/fixtures/claims/refs.bib, where [7] has key relay2022, and the full text of [7] at evals/fixtures/claims/relay-delay-note.pdf (one page).",
+      "expected_routing": [
+        "integrity-audit.md"
+      ],
+      "artifacts": [
+        "tmp/evals/claims-pdf/ledger.json"
+      ],
+      "must_pass": [
+        "The audit reports that [7] covers only a two-hop chain and payloads up to 512 bytes with delay within 3 ms of single-hop, so 'no measurable delay for any payload size' and multi-hop generality exceed the source.",
+        "The ledger entry for [7] carries a quotation that appears word for word on page 1 of the supplied PDF, and its judgment is partial or contradicts.",
+        "If the response reports checker levels, the entry for [7] is reported as quote-anchored, attributed to the checker's output."
+      ],
+      "must_not": [
+        "The ledger or response judges [7] as supporting the sentence as written.",
+        "The response quotes or paraphrases text that the supplied PDF does not contain, such as results for larger payloads or longer chains.",
+        "The response treats a matched quotation as proof that the sentence is supported."
       ]
     }
   ]

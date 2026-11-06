@@ -145,6 +145,31 @@ class CheckTests(unittest.TestCase):
         self.assertEqual(self.run_check(invented, have_pdftotext=True)["level"], "quote-mismatch")
 
 
+class EvalFixtureTests(unittest.TestCase):
+    """The claims eval cases point agents at these files; keep their checker outcomes fixed."""
+
+    FIXTURES = ROOT / "evals" / "fixtures" / "claims"
+
+    def check(self, claim):
+        ledger = CHECK.validate_ledger({"version": 1, "bib": "refs.bib", "claims": [claim]})
+        return CHECK.check_ledger(ledger, self.FIXTURES)[0]["level"]
+
+    def test_csv_fixture_matches_one_value_and_rejects_the_other(self):
+        claim = {"id": "R1", "text": "t", "location": "l", "type": "own-result",
+                 "evidence": [{"artifact": "utilization.csv", "value": "94.2"}],
+                 "judgment": "not-assessed"}
+        self.assertEqual(self.check(claim), "value-mismatch")
+        claim["evidence"][0]["value"] = "88.1"
+        self.assertEqual(self.check(claim), "value-matched")
+
+    @unittest.skipUnless(shutil.which("pdftotext"), "pdftotext not installed")
+    def test_pdf_fixture_anchors_its_scope_sentence(self):
+        quote = ("For payloads up to 512 bytes, end-to-end delay over the two-hop relay chain "
+                 "stayed within 3 ms of the single-hop value.")
+        claim = literature(cite_key="relay2022", source_pdf="relay-delay-note.pdf", page=1, quote=quote)
+        self.assertEqual(self.check(claim), "quote-anchored")
+
+
 class CliTests(unittest.TestCase):
     def test_cli_exit_codes_and_no_overwrite(self):
         with tempfile.TemporaryDirectory() as tmp:
