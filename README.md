@@ -190,7 +190,8 @@ codex plugin add ieee-acm-paper-writing@ieee-acm-paper-writing
 ```
 
 For a rolling Git-backed install, replace `.` with `huguryildiz/ieee-acm-paper-writing`. The rolling
-plugin manifests identify `0.6.4`. For a release-pinned native install, clone `v0.6.4`, run the two
+plugin manifests identify candidate `0.7.0-rc.1`; this is a prerelease, not a behavior-qualified
+release. For a release-pinned native install, clone `v0.6.4`, run the two
 commands above from
 that clone, and keep
 the marketplace source local. Start a new Codex thread after installation so the skill is

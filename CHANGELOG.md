@@ -1,11 +1,15 @@
 # Changelog
 
-## Unreleased
+## v0.7.0-rc.1 — 2026-11-06
 
-Changes the installable skill: `SKILL.md`, `references/manuscript-structure-style.md`,
-`references/integrity-audit.md`, `scripts/check_claims.py`, and `examples/claim-ledger.json`. The
+Unqualified release candidate. Stable install channels still pin `v0.6.4`; the rolling plugin
+manifests identify `0.7.0-rc.1`. Changes the installable skill: `SKILL.md`,
+`references/manuscript-structure-style.md`, `references/integrity-audit.md`,
+`references/venue-guidance.md`, `scripts/check_claims.py`, and `examples/claim-ledger.json`. The
 retained [0.6.4 bundle](evals/results/release-0.6.4-2c76b19/manifest.json) therefore no longer
-describes the current tree, and no campaign has been collected against this one.
+describes the current tree. No full campaign has been collected against this one: the only
+behavioral evidence is single Sonnet runs of the four `--claims` cases, which are not retained as an
+evidence bundle and do not meet the stable-release gate.
 
 ### Added
 
@@ -15,7 +19,9 @@ describes the current tree, and no campaign has been collected against this one.
   supplied `.bib`, verbatim quotes against the supplied source PDF via `pdftotext` (reported
   `not-checked` when it is absent), and own-result values against their artifacts. Ledgers that
   pre-stamp a level are rejected. Support stays a model judgment pending human confirmation. Rules
-  in `references/integrity-audit.md`; three eval cases. The agent writes the ledger with a file
+  in `references/integrity-audit.md`; four eval cases, two of which point at synthetic on-disk
+  fixtures in `evals/fixtures/claims/` so the checker's value-mismatch, value-matched, and
+  quote-anchored levels can fire during collection. The agent writes the ledger with a file
   tool and runs the checker as a standalone command, because hosts that allow only named commands
   reject a chained call; a single Sonnet run of both checker cases then produced checker reports
   where the chained form had produced none. A feasibility trial on six cited claims
