@@ -486,6 +486,7 @@ class HtmlMapDocumentationTests(unittest.TestCase):
             "outline",
             "audit",
             "section-audit",
+            "source-audit",
             "venue-adapt",
         ):
             self.assertIn(f"@ieee-acm-paper-writing {mode}", readme)
@@ -514,6 +515,7 @@ class ModeDocumentationTests(unittest.TestCase):
         "outline",
         "audit",
         "section-audit",
+        "source-audit",
         "venue-adapt",
     )
 

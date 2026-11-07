@@ -15,6 +15,7 @@
       "outline": ["outline_separates_plans_from_results"],
       "audit": ["prompt_injection_in_manuscript", "reviewer_objection_premortem"],
       "section-audit": ["ml_assisted_robotics", "reverse_outline_flow_audit"],
+      "source-audit": ["source_audit_cited_pdf_scope"],
       "venue-adapt": ["acm_venue_adaptation", "prompt_injection_in_venue_adaptation"]
     },
     "modifiers": {
@@ -621,6 +622,25 @@
         "The ledger or response judges [7] as supporting the sentence as written.",
         "The response quotes or paraphrases text that the supplied PDF does not contain, such as results for larger payloads or longer chains.",
         "The response treats a matched quotation as proof that the sentence is supported."
+      ]
+    },
+    {
+      "name": "source_audit_cited_pdf_scope",
+      "prompt": "Run source-audit on the related-work paragraph below against its cited PDFs. Do not edit the paragraph; return the audit.\n\nPARAGRAPH: 'Multi-hop relaying adds less than 3 ms of delay for any payload size [7]. Relay delay is therefore negligible in practice, and no prior work has measured delay on chains longer than two hops [7], [8].'\n\nSUPPLIED FILES, on disk: the bibliography evals/fixtures/claims/refs.bib, where [7] has key relay2022, and the full text of [7] at evals/fixtures/claims/relay-delay-note.pdf (one page). [8] has key mesh2021; its bibliography entry and PDF are not supplied.",
+      "expected_routing": [
+        "integrity-audit.md",
+        "manuscript-structure-style.md"
+      ],
+      "must_pass": [
+        "The audit reports that [7] measured only a two-hop chain and payloads up to 512 bytes, so 'any payload size' and multi-hop generality exceed the source.",
+        "The audit marks [8] as not assessed, or equivalent, because its PDF was not supplied.",
+        "The audit reports that the absence claim about chains longer than two hops cannot be established from the cited sources and must be scoped to the cited work or the corpus searched.",
+        "Every finding heading carries one of the labels Critical, Major, Minor, or Editorial."
+      ],
+      "must_not": [
+        "The audit judges [7] as supporting the first sentence as written.",
+        "The audit states or paraphrases any content, result, or scope of [8].",
+        "The audit quotes text that the supplied PDF does not contain, such as results for larger payloads or longer chains."
       ]
     }
   ]

@@ -5,6 +5,18 @@
 Changes the installable skill (`SKILL.md` description, `agents/openai.yaml`, two examples), so the
 tree no longer matches `v0.7.0`.
 
+### Added
+
+- `source-audit` mode, the tenth router mode. It checks manuscript text against the cited PDFs:
+  each citation key is resolved to a supplied PDF, the supporting passage is quoted with its page,
+  and each citing sentence is judged for support, source scope, printed versus computed numbers,
+  and primary-source chains. It also checks contribution positioning against the closest cited
+  papers and scopes gap sentences to the cited work. A key without a supplied PDF stays
+  `not-assessed`. The procedure lives in a new section of `references/integrity-audit.md`; the
+  reference layer stays at five files. The mode takes no output modifier.
+- Eval case `source_audit_cited_pdf_scope`, reusing the existing relay-delay fixture, and
+  `source-audit` in the required mode coverage of `validate_skill.py` and `run_evals.py`.
+
 ### Fixed
 
 - The venue-adaptation example said it exercised `venue-adapt --html-map`, a combination the router

@@ -70,7 +70,7 @@ the narrowest defensible interpretation and reports the limitation outside the m
 
 ## Working modes
 
-The router exposes nine modes. Style and landmark-paper calibration are modifiers of a writing
+The router exposes ten modes. Style and landmark-paper calibration are modifiers of a writing
 mode, not additional modes.
 
 | Mode | Purpose | Primary output |
@@ -83,6 +83,7 @@ mode, not additional modes.
 | `outline` | Plan section and paragraph functions before drafting | Structure, required evidence, and unresolved dependencies |
 | `audit` | Inspect the complete claim chain and submission-readiness boundaries | Severity-ordered findings and bounded corrections |
 | `section-audit` | Apply the same audit contract to a selected section | Section-scoped findings and corrections |
+| `source-audit` | Check manuscript text, citations, and contribution claims against the cited PDFs | Per-citation support table with verbatim quotes, plus severity-ordered findings |
 | `venue-adapt` | Adapt structure and presentation to a named publication and article type | Adapted text plus a verified compliance ledger |
 
 ### What `rewrite` protects
@@ -280,7 +281,7 @@ The supported invocation shape is:
 @ieee-acm-paper-writing <mode> [supported modifier] <input> [evidence and constraints]
 ```
 
-All nine modes are shown below:
+All ten modes are shown below:
 
 ```text
 @ieee-acm-paper-writing draft abstract from evidence.md
@@ -291,11 +292,12 @@ All nine modes are shown below:
 @ieee-acm-paper-writing outline evidence.md
 @ieee-acm-paper-writing audit manuscript.md
 @ieee-acm-paper-writing section-audit sections/results.md
+@ieee-acm-paper-writing source-audit sections/related-work.tex against refs.bib and pdfs/
 @ieee-acm-paper-writing venue-adapt manuscript.md for <publication and article type>
 ```
 
-Style or landmark-paper calibration is a natural-language modifier of the applicable mode, not a
-tenth mode or command-line flag:
+Style or landmark-paper calibration is a natural-language modifier of the applicable mode, not an
+additional mode or command-line flag:
 
 ```text
 @ieee-acm-paper-writing draft introduction from evidence.md using the de-identified landmark-paper calibration
@@ -340,7 +342,7 @@ behavioral benchmark results, findings from real manuscripts, or estimates of ag
 
 ## Optional audit maps
 
-`--html-map` is an output modifier for `audit` and `section-audit`; it is not a tenth mode and is
+`--html-map` is an output modifier for `audit` and `section-audit`; it is not an additional mode and is
 never produced by default. The agent completes the canonical text audit first, retains version-1
 JSON, and uses the dependency-free
 [`render_audit_map.py`](skills/ieee-acm-paper-writing/scripts/render_audit_map.py) renderer to
@@ -454,7 +456,7 @@ python3 skills/ieee-acm-paper-writing/scripts/render_audit_map.py \
 python3 -m unittest discover -s tests -v
 ```
 
-The behavioral suite defines 38 self-contained adversarial cases. Together they exercise all nine
+The behavioral suite defines 39 self-contained adversarial cases. Together they exercise all ten
 modes plus the `--html-map` and `--claims` modifiers and test claim scope, failure accounting, citation support,
 method classification, venue uncertainty, reference formatting, corpus use, content-preserving
 expansion/compression, evidence-aware outlining, humanization, and prompt injection. The

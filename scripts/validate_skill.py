@@ -31,7 +31,7 @@ MAX_DESCRIPTION = 1024
 CASE_NAME_RE = re.compile(r"[a-z0-9][a-z0-9_-]*")
 REQUIRED_EVAL_MODES = {
     "draft", "rewrite", "expand", "compress", "humanize", "outline",
-    "audit", "section-audit", "venue-adapt",
+    "audit", "section-audit", "source-audit", "venue-adapt",
 }
 REQUIRED_EVAL_MODIFIERS = {"html-map", "claims"}
 

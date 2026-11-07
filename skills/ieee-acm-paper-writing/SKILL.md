@@ -1,6 +1,6 @@
 ---
 name: ieee-acm-paper-writing
-description: Draft, rewrite, compress, structure, calibrate, humanize, or audit engineering manuscripts for IEEE and ACM Transactions, journals, and conferences, with optional self-contained HTML audit maps and script-checked claim ledgers. Use for abstracts, introductions, related work, system models, mathematical formulations, algorithms, experimental methods, results, discussions, conclusions, contribution lists, notation and claim audits, evidence-grounded peer-review reports, venue adaptation, machine-idiom humanization of AI-flavored prose, or landmark-paper calibration in communications, signal processing, energy systems, robotics, optimization, simulation, ML-assisted engineering, and computer systems. Do not use for general documentation, grant proposals, marketing copy, or editorial accept/reject advocacy detached from manuscript evidence.
+description: Draft, rewrite, compress, structure, calibrate, humanize, or audit engineering manuscripts for IEEE and ACM Transactions, journals, and conferences, with optional self-contained HTML audit maps and script-checked claim ledgers. Use for abstracts, introductions, related work, system models, mathematical formulations, algorithms, experimental methods, results, discussions, conclusions, contribution lists, notation and claim audits, source audits of manuscript text against the cited PDFs (claim support, source scope, contribution positioning), evidence-grounded peer-review reports, venue adaptation, machine-idiom humanization of AI-flavored prose, or landmark-paper calibration in communications, signal processing, energy systems, robotics, optimization, simulation, ML-assisted engineering, and computer systems. Do not use for general documentation, grant proposals, marketing copy, or editorial accept/reject advocacy detached from manuscript evidence.
 ---
 
 # IEEE/ACM Engineering Paper Writing
@@ -14,7 +14,7 @@ meaning, notation, citations, scope conditions, and uncertainty.
 Before drafting or auditing:
 
 1. Identify the requested mode: `draft`, `rewrite`, `expand`, `compress`, `humanize`,
-   `outline`, `audit`, `section-audit`, or `venue-adapt`. Treat style or landmark-paper
+   `outline`, `audit`, `section-audit`, `source-audit`, or `venue-adapt`. Treat style or landmark-paper
    calibration as a modifier of the applicable mode, not as a separate output mode.
    Treat `--html-map` and `--claims` as optional output modifiers of `audit` or
    `section-audit`, never as additional modes.
@@ -118,6 +118,7 @@ Read only the files needed for the task, but read every selected file completely
 | A flow, coherence, or paragraph-structure question in any mode, including `audit` and `section-audit` | [manuscript-structure-style.md](references/manuscript-structure-style.md) |
 | A humanize pass: removing machine-idiom prose patterns while preserving scientific content | [manuscript-structure-style.md](references/manuscript-structure-style.md) |
 | Any scientific claim, audit, submission-readiness check, or cross-section review | [integrity-audit.md](references/integrity-audit.md) |
+| A `source-audit`, or any request to check manuscript text, citations, or contribution claims against the cited PDFs | [integrity-audit.md](references/integrity-audit.md) and [manuscript-structure-style.md](references/manuscript-structure-style.md) |
 | Any supported engineering method or domain | [engineering-profiles.md](references/engineering-profiles.md) |
 | Landmark- or classic-paper style calibration: writing or restructuring with the exposition patterns of foundational engineering papers, including when the user cannot access those papers | [corpus-calibration.md](references/corpus-calibration.md) |
 | IEEE or ACM venue adaptation, reference-list or citation formatting, or an audit or submission-readiness check against a named target venue | [venue-guidance.md](references/venue-guidance.md) |
@@ -318,6 +319,29 @@ scientific consequence, and a concrete correction. Distinguish:
 Do not treat fluent language as evidence of correctness. Do not downgrade a scientific
 defect to an editorial issue because the proposed prose sounds cautious.
 
+## Source audit against cited PDFs
+
+Use `source-audit` when the user asks to check a manuscript, a section, or changed text against
+the PDFs it cites. Apply the source-audit procedure in
+[integrity-audit.md](references/integrity-audit.md) and the related-work and contribution guidance
+in [manuscript-structure-style.md](references/manuscript-structure-style.md).
+
+1. Inventory the citing sentences and central uncited claims in scope, and resolve each citation key
+   to a supplied PDF. Check title, authors, and version before reading.
+2. Read each supporting passage in context and judge the citing sentence against it, with a verbatim
+   quote and page locator. Check source scope, claim strength, printed versus computed numbers, and
+   whether each number or threshold reaches a primary source.
+3. Check contribution positioning against the closest cited papers read in full, and scope every gap
+   sentence to the cited work and the corpus searched.
+4. Read the reader-facing text for unsupported attribution, cluster claims, undefined terms, and
+   internal notes that belong outside the manuscript.
+
+Audit read-only unless the user requests edits. Never supply a missing PDF's content from memory,
+an abstract, or a search result: mark that citation `not-assessed`. When the user requests edits,
+apply only corrections the PDFs support and keep every other unresolved item under `Author queries`.
+`source-audit` takes no output modifier; for a script-checked ledger of the same claims, run
+`audit --claims`.
+
 ## Adapt to a venue
 
 1. Read the target publication's current official author instructions and template. If they are
@@ -389,6 +413,15 @@ of those four labels. A `Problems` heading followed by unlabeled bullets fails t
 Render every finding heading exactly as `### <Severity> — <finding title>`, where `<Severity>` is
 one of the four capitalized labels. Do not put a number before the severity, move the label to the
 end, or use lowercase severity text.
+
+### Source-audit mode
+
+Follow the audit-mode contract for findings and severity labels. Before the findings, give a
+citation table with one row per checked citation occurrence: location, citation key, PDF and page,
+verbatim quote, judgment (`supports`, `partial`, `contradicts`, `not-found`, or `not-assessed`), and
+the narrowest defensible wording when the judgment is not `supports`. List `not-assessed` keys with
+the reason, and state the limits of the PDF reading. A clean table does not make a manuscript
+submission-ready.
 
 ### Humanize mode
 

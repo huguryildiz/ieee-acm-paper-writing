@@ -7,6 +7,7 @@ submission-readiness or cross-section review.
 
 - Evidence classes and claim ledger
 - Citation and quantitative integrity
+- Source audit against cited PDFs
 - Equation and notation integrity
 - Guarantee, statistical, and causal boundaries
 - Reproducibility and negative evidence
@@ -112,6 +113,86 @@ Treat a comparison as matched only when the relevant platform, data or workload,
 and configuration, resource budget, stopping rule, and metric definition align. Otherwise remove
 superiority language or identify the number as a descriptive cross-setup contrast, then place a
 request for a controlled like-for-like rerun in the external author-query handoff.
+
+## Source audit against cited PDFs
+
+Use this procedure in `source-audit` mode, and in any audit that the user asks to ground in the
+cited full texts. It checks what the manuscript says against what each cited PDF says. It does not
+search for new literature and it does not verify the authors' own results; those stay with the
+claim ledger and the artifact checks above.
+
+### Claim and citation inventory
+
+- For a full audit, list every citation occurrence, including those in captions, tables, footnotes,
+  and equations, plus every central claim that carries no citation. For a scoped audit, list the
+  claims and citations in the requested passage or the changed text.
+- Resolve each citation key to its bibliography entry and then to a supplied local PDF, using the
+  entry's file field or the mapping the user gives. Check that the PDF's title, authors, and version
+  match the entry. A key with no supplied PDF, or a PDF that does not match its entry, is
+  `not-assessed`; report it and never fill its content from memory, an abstract, or a search snippet.
+- Identify whether the supplied PDF is a preprint or the published version. Do not assume the two
+  agree; when both are supplied, compare the claim-bearing passages and report any difference.
+
+### Claim check
+
+- Read the supporting passage with enough surrounding text to know its assumptions, conditions,
+  and setting. For a claim about a model, read the formulation, not only the abstract or the
+  conclusion.
+- Judge each citing sentence as `supports`, `partial`, `contradicts`, `not-found`, or
+  `not-assessed`, with the same meanings as in the machine-checked claim ledger. Quote the passage
+  the judgment rests on verbatim, at most 30 words and one sentence that carries its condition.
+  Give the PDF page, and also the printed page or section when it differs.
+- Read the source's own scope: what was measured or modelled, under which conditions, and at what
+  scale. Narrow a citing sentence that exceeds that scope, or request a source at the scope the
+  sentence needs. One group's practice ("we do X") does not support "X is common".
+- Match the citing verb to the source's claim strength. A method adapted from a source does not
+  inherit the source's guarantees, and a sentence that mixes a published finding with the authors'
+  adaptation is split so that each clause carries its own support.
+- Ask of every number whether the source prints it or the manuscript computed it from the source.
+  A computed value needs its computation shown and must be labelled as computed; it is never
+  presented as a reading from the source.
+- A number, limit, or threshold needs a primary source: a measurement, a derivation, or a standard.
+  Follow the citation chain from a secondary source. If the chain never reaches a primary source,
+  report that the value should be written as a convention or dropped. Secondary sources may still
+  frame a problem.
+- Treat output from search engines, ranking services, and AI research assistants as unverified
+  leads. Never summarize or cite a source whose full text was not opened.
+
+### Contribution positioning
+
+- For each contribution or novelty claim, read the closest cited papers in full, normally the
+  three nearest, and state for each what it does and what the manuscript adds. When the user asks
+  whether the work was already done, say whether the nearest paper does something close or the same
+  thing, and leave that decision to a human reading of the paper.
+- Scope the gap sentence to the cited work and to the corpus actually searched. A comparison table
+  or a set of reviewed papers never establishes field-wide absence; write what the cited work does
+  not address. Place the gap sentence immediately before the contributions.
+- Group related work by decision problem, mechanism, or assumption, and open each group with a
+  sentence that names the axis along which its works differ. A run of one-paper summaries, or two
+  consecutive sentences led by author names, is a revision trigger.
+- Check that every listed contribution is delivered in a later section and revisited in the
+  conclusion. Report a contribution that no section delivers.
+
+### Reader-facing text
+
+- Keep reading-status notes ("not yet read"), reviewer correspondence, and internal labels out of
+  manuscript prose. State a reading limit impersonally, for example that an assessment is limited to
+  a survey's account of the primary work.
+- Define every symbol, acronym, and method name at its first use in the body, and keep one name for
+  each quantity across the manuscript.
+- When the host can run an isolated reader, test a new or substantially revised section on it: give
+  the section text with the equations, captions, and notation it relies on, and ask for every term it
+  could not follow and the section's main claim in its own words. A wrong restatement means the
+  passage needs revision. Report the test as a clarity check, not as independent verification.
+
+### Records and boundaries
+
+- Agreement between AI readers is not human verification. Never record a human reading, reviewer
+  verdict, or author approval that did not happen.
+- Keep checker output separate from judgment: a quote found in a PDF shows textual presence, not
+  support.
+- Report the citations that were checked, those left `not-assessed` and why, and the limits of the
+  PDF reading, such as abstract-only access or an unreadable scan.
 
 ## Equation and notation integrity
 
